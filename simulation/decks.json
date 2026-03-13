@@ -1,0 +1,62 @@
+{
+  "claw": [
+    { "name": "Warband", "tags": ["Discontent"], "count": 2 },
+    { "name": "Raid", "tags": ["Unit", "Rabble", "Discontent"], "count": 4 },
+    { "name": "Scavenge", "tags": ["Unit", "Rabble", "Discontent"], "count": 3 },
+    { "name": "Blood Offering", "tags": [], "count": 1 },
+    { "name": "Poach", "tags": ["Unit", "Rabble", "Hunt", "Discontent"], "count": 4 },
+    { "name": "Worship of the Hunt", "tags": ["Spiritual"], "count": 1 },
+    { "name": "Worship of War", "tags": ["Spiritual"], "count": 1 },
+    { "name": "Incite", "tags": [], "count": 2 },
+    { "name": "Chiefdom", "tags": ["Allegiance"], "count": 2 },
+    { "name": "Racketeering", "tags": ["Discontent"], "count": 2 },
+    { "name": "Marauders", "tags": ["Unit", "Rabble", "Discontent"], "count": 2 },
+    { "name": "Share the Spoils", "tags": [], "count": 2 },
+    { "name": "Duel", "tags": [], "count": 1 },
+    { "name": "Armament", "tags": ["Knowledge"], "count": 1 },
+    { "name": "Outriders", "tags": [], "count": 2 },
+    { "name": "Land Grab", "tags": ["Discontent"], "count": 3 },
+    { "name": "Foray", "tags": ["Discontent"], "count": 2 },
+    { "name": "Ingenuity", "tags": ["Craftsmanship", "Discontent"], "count": 2 },
+    { "name": "Uprising", "tags": ["Discontent"], "count": 3 }
+  ],
+  "tree": [
+    { "name": "Highlander", "tags": ["Culture"], "count": 3 },
+    { "name": "Nomad", "tags": ["Culture"], "count": 3 },
+    { "name": "Eldership", "tags": ["Allegiance", "Knowledge"], "count": 1 },
+    { "name": "Sky Dance", "tags": ["Spiritual"], "count": 1 },
+    { "name": "Harvest", "tags": [], "count": 4 },
+    { "name": "Gathering", "tags": [], "count": 2 },
+    { "name": "Sacred Grove", "tags": ["Nature", "Spiritual"], "count": 1 },
+    { "name": "Oral Tradition", "tags": ["Knowledge"], "count": 1 },
+    { "name": "Herbalism", "tags": ["Knowledge"], "count": 1 },
+    { "name": "Worship of the Rain", "tags": ["Spiritual"], "count": 1 },
+    { "name": "Worship of Fertility", "tags": ["Nature", "Spiritual"], "count": 1 },
+    { "name": "Pasture", "tags": ["Nature", "Land"], "count": 4 },
+    { "name": "Crags", "tags": ["Nature", "Land"], "count": 4 },
+    { "name": "Regrowth", "tags": [], "count": 2 },
+    { "name": "Solstice", "tags": [], "count": 2 },
+    { "name": "Forage", "tags": [], "count": 2 },
+    { "name": "Sowing", "tags": ["Knowledge"], "count": 3 },
+    { "name": "Withered Crop", "tags": [], "count": 3 },
+    { "name": "Pathfinding", "tags": ["Knowledge"], "count": 2 }
+  ],
+  "wheat": [
+    { "name": "Plough", "tags": ["Labour"], "count": 3 },
+    { "name": "Granary", "tags": ["Labour"], "count": 2 },
+    { "name": "Mill", "tags": ["Labour"], "count": 2 },
+    { "name": "Famine", "tags": [], "count": 2 },
+    { "name": "Animal Husbandry", "tags": ["Labour"], "count": 2 },
+    { "name": "Tavern", "tags": [], "count": 2 },
+    { "name": "Feed the Commoners", "tags": [], "count": 1 },
+    { "name": "Apprenticeship", "tags": ["Labour"], "count": 1 },
+    { "name": "Militia", "tags": ["Unit"], "count": 2 }
+  ],
+  "coin": [
+    { "name": "Rumour", "tags": [], "count": 3 },
+    { "name": "Mine", "tags": ["Labour"], "count": 2 }
+  ],
+  "candle": [
+    { "name": "Worship of the Flame", "tags": ["Spiritual"], "count": 1 }
+  ]
+}
