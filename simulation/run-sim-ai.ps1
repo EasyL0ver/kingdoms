@@ -277,11 +277,27 @@ function ApplyOps($opsText) {
                     $cardName = $parts[1]; $player = $parts[2]
                     $card = $Season | Where-Object { $_.Name -eq $cardName } | Select-Object -First 1
                     if ($card) { $null = $Season.Remove($card); $null = $Domains[$player].Add($card) }
+                    if ($Season.Count -eq 0) {
+                        for ($r = 0; $r -lt 4; $r++) {
+                            if ($Ptrs["tree"] -lt $Piles["tree"].Count) {
+                                $null = $Season.Add($Piles["tree"][$Ptrs["tree"]])
+                                $Ptrs["tree"]++
+                            }
+                        }
+                    }
                 }
                 "TAKE_SEASON_DISCARD" {
                     $cardName = $parts[1]; $player = $parts[2]
                     $card = $Season | Where-Object { $_.Name -eq $cardName } | Select-Object -First 1
                     if ($card) { $null = $Season.Remove($card); $null = $Discards[$player].Add($card) }
+                    if ($Season.Count -eq 0) {
+                        for ($r = 0; $r -lt 4; $r++) {
+                            if ($Ptrs["tree"] -lt $Piles["tree"].Count) {
+                                $null = $Season.Add($Piles["tree"][$Ptrs["tree"]])
+                                $Ptrs["tree"]++
+                            }
+                        }
+                    }
                 }
                 "TAKE_FIELDS" {
                     $cardName = $parts[1]; $player = $parts[2]

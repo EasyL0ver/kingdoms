@@ -411,13 +411,17 @@ On Harvest — choose one:
   Place a [Culture] card from your discard into
   any player's Domain. It stays regardless of
   prerequisites.
+```
+
+🤖 On Harvest culture spreader. Best with cultural allies — draw together or force culture on opponents.
+
+```
+🌳  REGROWTH
 Drafted — all Pasture cards in the discard
 return to their owners' Domains. Move to discard.
 ```
 
-> Two separate abilities that fire at different times.
-
-🤖 On Harvest spreads culture. Drafted recovers ALL discarded Pastures — devastating mid-game.
+🤖 Recovers ALL discarded Pastures game-wide. Devastating mid-game when Pastures have been Famined or sacrificed.
 
 ```
 🌳  FORAGE
