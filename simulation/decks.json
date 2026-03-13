@@ -10,6 +10,7 @@
     { "name": "Incite", "tags": [], "count": 2 },
     { "name": "Chiefdom", "tags": ["Allegiance"], "count": 2 },
     { "name": "Racketeering", "tags": ["Discontent"], "count": 2 },
+    { "name": "Tyranny", "tags": ["Trophy", "Discontent"], "count": 2 },
     { "name": "Marauders", "tags": ["Unit", "Rabble", "Discontent"], "count": 2 },
     { "name": "Share the Spoils", "tags": [], "count": 2 },
     { "name": "Duel", "tags": [], "count": 1 },

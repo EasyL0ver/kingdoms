@@ -207,6 +207,15 @@ refuse and trigger Brawl in their Domain.
 🤖 Pure upside — take their offering or refuse and Brawl. Target Mob-heavy Domains.
 
 ```
+🐾  TYRANNY                                    ×2
+[Trophy] [Discontent]
+Activate — draw from Claw equal to your
+[Discontent] count.
+```
+
+🤖 Claw's Pathfinding — snowballs violently. More Claw cards = more Discontent = more draws. A player with Tyranny and 3+ Discontent is the biggest threat on the board — attack them immediately or they'll run away with [Trophy] and end the game via Claw depletion.
+
+```
 🐾  MARAUDERS
 [Unit] [Mob] [Discontent]
 On Feast — discard Marauders, then draw 1
