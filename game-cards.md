@@ -2,6 +2,18 @@
 
 All designed cards in one place, organised by deck.
 
+## Win Conditions
+
+The game ends when any deck pile is fully depleted. The winner depends on which pile ran out:
+
+| Pile depleted | Winner |
+|---|---|
+| 🌳 Tree | Most [Nature] tags in Domain |
+| 🐾 Claw | Most [Trophy] tags in Domain |
+| 🌾 Wheat | Most [Amenity] tags in Domain |
+
+🤖 Each pile has its own victory axis. Pursue the tags that match your strategy, and watch which pile is closest to depletion — that determines what matters at endgame.
+
 ---
 
 ## Domain
@@ -174,7 +186,7 @@ your Domain to any other Domain(s).
 
 ```
 🐾  CHIEFDOM
-[Allegiance]
+[Allegiance] [Trophy]
 Activate — move 1 [Mob] card from your Domain
 or any Domain that shares your culture to any
 other Domain.
@@ -402,7 +414,7 @@ Brawl in your Domain unless the triggering
 player discards a card.
 ```
 
-🤖 Foundation card. Enables Highlander and Mine. 2+ Crags gives strong Brawl defense.
+🤖 Foundation card. Enables Highlander and Mine. 2+ Crags gives strong Brawl defense. Activating Crags to scout Claw is very low tempo — you gain no cards. Almost always better to draw from Claw or take from Season/Fields instead.
 
 ```
 🌳  SOLSTICE
@@ -460,7 +472,7 @@ Activate — take the top cards of the Tree pile
 equal to your number of [Knowledge] cards.
 ```
 
-🤖 Snowball card — more Knowledge = more draws = more Knowledge. Can dominate the game.
+🤖 Snowball card — more Knowledge = more draws = more Knowledge. Can dominate the game. A player with Pathfinding and 3+ Knowledge is the biggest threat on the board — attack them with Brawl, Racketeering, or Incite before they run away with it.
 
 ---
 
@@ -525,7 +537,8 @@ Activate — choose one:
 
 ```
 🌾  TAVERN
-On Feast — you may discard 1 [Discontent] card
+[Amenity]
+On Feast— you may discard 1 [Discontent] card
 from your Domain.
 ```
 
