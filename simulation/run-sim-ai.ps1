@@ -1,4 +1,4 @@
-# Kingdoms — AI-Driven Simulation (v2)
+﻿# Kingdoms — AI-Driven Simulation (v2)
 # Script is a dumb state database. AI makes ALL decisions and resolves ALL game logic.
 # AI returns structured operations; script applies them and tracks state.
 # Usage: .\run-sim-ai.ps1 [-Turns 30] [-Players 3] [-OutFile "my-sim.md"]
@@ -93,7 +93,7 @@ for ($i = 0; $i -lt 7; $i++) {
 # ── Build state snapshot for AI ──
 function BuildStatePrompt($currentPlayer, $turnNum) {
     $sb = [System.Text.StringBuilder]::new()
-    $null = $sb.AppendLine("TURN $turnNum — ${currentPlayer}'s turn.")
+    $null = $sb.AppendLine("TURN $turnNum -- $($currentPlayer)'s turn.")
     $null = $sb.AppendLine("")
 
     foreach ($pl in $PlayerNames) {
@@ -699,7 +699,7 @@ foreach ($pl in $PlayerNames) {
     Log "**$pl** — $($Domains[$pl].Count) cards"
     Log "  Domain: $dom"
     $tagCounts = @{}
-    foreach ($c in $Domains[$pl]) { foreach ($tag in $c.Tags) { $tagCounts[$tag] = ($tagCounts[$tag] ?? 0) + 1 } }
+    foreach ($c in $Domains[$pl]) { foreach ($tag in $c.Tags) { $tagCounts[$tag] = [int]$tagCounts[$tag] + 1 } }
     if ($tagCounts.Count -gt 0) {
         $tagStr = ($tagCounts.GetEnumerator() | Sort-Object Name | ForEach-Object { "[$($_.Name)]`u{00d7}$($_.Value)" }) -join ", "
         Log "  Tags: $tagStr"
