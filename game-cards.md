@@ -163,7 +163,9 @@ discards their Warlord card.
 (Resolution mechanic TBD — random outcome)
 ```
 
-🤖 Dead card without Warlords in play. Skip unless specifically threatening one.
+> Requires Sword deck in play — Warlord cards come from the ⚔️ Sword deck. Without Sword, Duel has no targets.
+
+🤖 Dead card without Sword deck in the game. Only include in sessions that use Sword.
 
 ```
 🐾  WORSHIP OF WAR
@@ -281,6 +283,18 @@ On Brawl — draw 1 from Tree.
 ```
 
 🤖 Passive insurance — compensates for Brawl losses with a Tree draw.
+
+```
+🐾  CULLING
+[Discontent]
+Drafted — the player with the most cards in
+their Domain discards 2 cards of their choice.
+If tied, you choose which player. Discard Culling.
+```
+
+> Automatic anti-snowball. Fires when drawn from Claw — nobody chooses it, it just happens.
+
+🤖 Claw's natural balancer. The biggest Domain gets punished whenever anyone draws this. Makes Claw draws risky for the leader and a potential equaliser for everyone else. Can't be hoarded or timed — pure chaos.
 
 ---
 
@@ -417,13 +431,13 @@ Passive — no activate ability. Counts toward
 🌳  CRAGS
 [Nature] [Land]
 Activate — look at the top 3 cards of the Claw
-pile.
+pile. You may put 1 of them into your discard.
 On Brawl — if you have 2+ Crags, cancel the
 Brawl in your Domain unless the triggering
 player discards a card.
 ```
 
-🤖 Foundation card. Enables Highlander and Mine. 2+ Crags gives strong Brawl defense. Activating Crags to scout Claw is very low tempo — you gain no cards. Almost always better to draw from Claw or take from Season/Fields instead.
+🤖 Foundation card. Enables Highlander and Mine. 2+ Crags gives strong Brawl defense. Activating Crags lets you scout Claw AND remove a dangerous card (Uprising, Tyranny) before someone draws it — or stash a useful card in discard for Herbalism retrieval later.
 
 ```
 🌳  SOLSTICE

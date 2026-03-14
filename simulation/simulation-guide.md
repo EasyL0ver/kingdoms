@@ -176,7 +176,17 @@ TURN [n] — [Player]:
 2. **Score opportunity** — profitable event chain available now
 3. **Build infrastructure** — draw cards that unlock future access
 4. **Deny opponents** — take a Season/Fields card they need
-5. **Scout** — Crags/Forage to gather information
+5. **Recover from discard** — activate a card from discard if prerequisites are now met
+6. **Scout** — Crags/Forage to gather information
+
+### Activate from discard
+
+Some cards have **"Activate from discard"** — an unusual ability that lets you use your turn to move them from your discard pile back to your Domain. This is NOT the same as a normal activate. Watch for:
+
+- **Highlander** — activate from discard if you now have Crags in Domain
+- **Nomad** — activate from discard if you now have Pasture in Domain
+
+These are high-priority plays when prerequisites are met, since recovering a [Culture] card costs only one turn and is otherwise hard to replace. Check your discard every turn for recoverable cards.
 
 ### Scoring heuristic
 
@@ -255,6 +265,8 @@ Sacred Grove, Sky Dance, Worship cards near top. Tests Rite chains and Flame sca
 4. **Rite benefit direction** — benefits go to whoever *triggered* the Rite, not the Worship card owner
 5. **Crags defense cost** — attacker must discard, not the defender
 6. **Missing event chains** — On Rite can trigger Harvest → On Harvest → Feast... follow the full chain
+7. **Brawl baseline** — if NO On Brawl effects fire, Domain owner still discards 1 card of their choice
+8. **Duel needs Sword** — Warlord cards come from the Sword deck; Duel is dead without it
 
 ---
 

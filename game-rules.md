@@ -56,6 +56,8 @@ Events can chain — one trigger can cascade through multiple cards. Events can 
 
 **Event resolution order:** When an event fires, resolve it one Domain at a time in play order (clockwise from the triggering player). Each player makes their own decisions when their Domain resolves.
 
+**Brawl baseline:** When Brawl is triggered in a Domain and no **On Brawl** effects fire, the Domain's owner discards 1 card of their choice. *(Brawl always has consequences — even without [Mob] cards planted, a Brawl strips something.)*
+
 ### The Domain
 
 Every player has a **Domain** — their personal zone. All your cards sit **face-up** here. There is no hidden hand. Your Domain IS your score at end of game.
