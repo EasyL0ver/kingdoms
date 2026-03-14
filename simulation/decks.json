@@ -13,7 +13,6 @@
     { "name": "Tyranny", "tags": ["Trophy", "Discontent"], "count": 2 },
     { "name": "Marauders", "tags": ["Unit", "Mob", "Discontent"], "count": 2 },
     { "name": "Share the Spoils", "tags": [], "count": 2 },
-    { "name": "Duel", "tags": [], "count": 1 },
     { "name": "Armament", "tags": ["Knowledge"], "count": 1 },
     { "name": "Outriders", "tags": [], "count": 2 },
     { "name": "Land Grab", "tags": ["Discontent"], "count": 3 },

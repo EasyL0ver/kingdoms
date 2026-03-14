@@ -157,17 +157,6 @@ They work regardless of their number.
 🤖 Build multiple Hunt cards then Rite into mass Feast. The payoff for a Hunt-heavy strategy.
 
 ```
-🐾  DUEL
-Activate — challenge another Warlord. Loser
-discards their Warlord card.
-(Resolution mechanic TBD — random outcome)
-```
-
-> Requires Sword deck in play — Warlord cards come from the ⚔️ Sword deck. Without Sword, Duel has no targets.
-
-🤖 Dead card without Sword deck in the game. Only include in sessions that use Sword.
-
-```
 🐾  WORSHIP OF WAR
 [Spiritual]
 On Rite — the player who triggered the Rite
