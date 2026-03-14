@@ -1,7 +1,7 @@
 # Kingdoms — AI-Driven Simulation (v2)
 # Script is a dumb state database. AI makes ALL decisions and resolves ALL game logic.
 # AI returns structured operations; script applies them and tracks state.
-# Usage: .\run-sim-ai.ps1 [-Turns 30] [-Players 3] [-OutFile "simulation-13.md"]
+# Usage: .\run-sim-ai.ps1 [-Turns 30] [-Players 3] [-OutFile "my-sim.md"]
 
 param(
     [string]$ApiKey = "",
@@ -238,10 +238,10 @@ CRITICAL RULES:
 - A player does ONE action per turn: take from Season, draw from Claw, activate a card, or activate Wheat zone
 - Only cards with "Activate —" text can be activated. Cards with only "On [Event]" or "Drafted" or passive text CANNOT be activated as an action. They trigger automatically when their condition is met.
 - EVENT RESOLUTION: When an event fires (Rite, Brawl, Feast, Harvest, Rumour), scan ALL Domains for "On [Event]" cards and resolve them. If NO cards respond, the event does NOTHING — no state changes, no OPS. Do NOT repeatedly trigger events with no responders — it wastes turns. Choose a different action instead.
-- CRITICAL — EVENT PAYOFF: Never activate a card just to trigger an event unless something meaningful responds. Brawl without [Mob] cards in the target only strips 1 card (baseline) — almost never worth your whole turn. Rite without On Rite responders that benefit YOU does nothing useful. Feast without On Feast responders is wasted. If the event chain leads to no real state changes, pick a different action — draw cards or build your engine instead.
+- CRITICAL — EVENT PAYOFF: Never activate a card just to trigger an event unless something meaningful responds. Brawl without [Mob] cards in the target does NOTHING — completely wasted turn. Rite without On Rite responders that benefit YOU does nothing useful. Feast without On Feast responders is wasted. If the event chain leads to no real state changes, pick a different action — draw cards or build your engine instead.
 - EVENT TARGETING: Think about WHERE an event fires and WHO benefits.
   - Worship cards (On Rite) ALWAYS benefit the player who TRIGGERED the Rite, NOT the Worship card owner. If Bob holds Worship of War and Alice triggers Rite, ALICE gets to Brawl — Bob's card is used against him. This means: triggering Rite when opponents hold useful Worship cards is powerful — you exploit their cards. Conversely, holding Worship cards when opponents trigger Rite more than you is a liability.
-  - On Brawl cards split into OFFENSIVE and DEFENSIVE. Offensive Mob cards (Raid, Scavenge) fire in the targeted Domain and benefit the ATTACKER — plant these in enemy Domains. Defensive cards (Crags, Militia, Eldership, Foray) fire in YOUR Domain and protect you — keep these in your own Domain.
+  - On Brawl cards split into OFFENSIVE and DEFENSIVE. Offensive Mob cards (Raid, Scavenge) fire in the targeted Domain and benefit the ATTACKER — plant these in enemy Domains. Defensive cards (Crags, Militia, Eldership) fire in YOUR Domain and protect you. Payoff cards like Foray give YOU a benefit when Brawl fires in your Domain — triggering Brawl on YOURSELF is valid if you hold Foray (free Tree draw) or other self-benefiting On Brawl cards.
   - Feast in YOUR Domain feeds your On Feast cards (Tavern, Share the Spoils). Don't trigger Feast if opponents have more On Feast responders than you.
   - Harvest is global — all On Harvest cards everywhere respond. Consider whether opponents' On Harvest cards (Plough, Solstice) outweigh yours before triggering.
 - Events that produce state changes MUST have corresponding OPS. If an event has no responders and no state changes, the activation was pointless.
@@ -739,6 +739,10 @@ Log "API calls: $apiCalls | Piles: Claw $(PileLeft 'claw'), Tree $(PileLeft 'tre
 
 # Write output
 $output = $Log -join "`n"
-$outPath = if ($OutFile) { $OutFile } else { "$PSScriptRoot\simulation-latest.md" }
+$logDir = "$PSScriptRoot\logs"
+if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir | Out-Null }
+$timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
+$defaultFile = "$logDir\sim-$timestamp.md"
+$outPath = if ($OutFile) { $OutFile } else { $defaultFile }
 $output | Set-Content $outPath -Encoding UTF8
 Write-Host "`nSimulation written to $outPath ($apiCalls API calls)" -ForegroundColor Green

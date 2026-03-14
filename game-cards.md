@@ -300,7 +300,7 @@ Activate from discard — if you have a Crags card
 in your Domain, move Highlander to your Domain.
 ```
 
-🤖 Don't draft without Crags. Competes with Nomad for Culture slot.
+🤖 Don't draft without Crags. Competes with Nomad for Culture slot. Can activate from discard if you later get Crags — costs one turn but recovers a hard-to-replace Culture card. Culture is mostly political — it unlocks Gathering's cultural spread, Eldership's Brawl defense, Chiefdom's Mob movement, and Solstice's On Harvest bonus. Without those synergy cards, Culture is just a tag.
 
 ```
 🌳  NOMAD
@@ -311,7 +311,7 @@ Activate from discard — if you have a Pasture card
 in your Domain, move Nomad to your Domain.
 ```
 
-🤖 Don't draft without Pasture. Easier to get than Highlander since Pasture is more common.
+🤖 Don't draft without Pasture. Easier to get than Highlander since Pasture is more common. Can activate from discard if you later get Pasture — costs one turn but recovers a hard-to-replace Culture card. Culture is mostly political — see Highlander for details.
 
 ```
 🌳  ELDERSHIP
@@ -353,7 +353,7 @@ same event in their Domain.
 Move to discard.
 ```
 
-🤖 Most versatile trigger card. Pick the event that benefits your cultural coalition most.
+🤖 Most versatile trigger card. Pick the event that benefits your cultural coalition most. Rumour has no On Rumour responders yet — always pick Brawl or Rite instead.
 
 ```
 🌳  SACRED GROVE
@@ -414,7 +414,7 @@ Passive — no activate ability. Counts toward
 [Nature] requirements and Hunt limits.
 ```
 
-🤖 Foundation card. Enables Nomad, Sowing, and raises Hunt limit. Protect from Famine.
+🤖 Foundation card. Enables Nomad, Sowing, and raises Hunt limit. Protect from Famine. On its own Pasture is passive — it doesn't DO anything on your turn. Only prioritise if you're building toward Sowing (needs 2+ Nature), Nomad culture, or racing Tree pile for [Nature] victory.
 
 ```
 🌳  CRAGS
@@ -426,7 +426,7 @@ Brawl in your Domain unless the triggering
 player discards a card.
 ```
 
-🤖 Foundation card. Enables Highlander and Mine. 2+ Crags gives strong Brawl defense. Activating Crags lets you scout Claw AND remove a dangerous card (Uprising, Tyranny) before someone draws it — or stash a useful card in discard for Herbalism retrieval later.
+🤖 Foundation card. Enables Highlander and Mine. 2+ Crags gives strong Brawl defense. Activating Crags lets you scout Claw AND remove a dangerous card (Uprising, Tyranny) before someone draws it — or stash a useful card in discard for Herbalism retrieval later. But scouting is slow tempo — only prioritise Crags if you're building toward Highlander culture, Mine, or racing Tree pile for [Nature] victory.
 
 ```
 🌳  SOLSTICE
@@ -600,7 +600,7 @@ the Brawl in your Domain.
 Drafted — trigger Rumour. Move to discard.
 ```
 
-🤖 Value depends on On Rumour responders in play. Self-discards.
+🤖 Value depends on On Rumour responders in play. No On Rumour cards exist yet — triggering Rumour currently does nothing. Self-discards.
 
 ```
 🪙  MINE

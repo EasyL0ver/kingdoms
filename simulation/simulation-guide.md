@@ -52,55 +52,7 @@ Shuffle randomly or seed intentionally to test specific scenarios.
 - [ ] Season (4 face-up Tree) and Fields (7 face-up Wheat) set
 - [ ] Player access rights noted (everyone starts with Claw + Tree)
 - [ ] State tracking ready
-- [ ] Target turn count decided (30–40 for 3 players)
-
----
-
-## State Tracking
-
-### Per player
-
-| Field | Description |
-|-------|-------------|
-| **Domain** | Cards in play (ordered list) |
-| **Discard** | Cards discarded from this player |
-| **Access** | Which zones they can activate (starts: Claw, Tree) |
-
-### Global
-
-| Field | Description |
-|-------|-------------|
-| **Season** | Current face-up Tree cards |
-| **Fields** | Current face-up Wheat cards (refill on Harvest only) |
-| **Pile pointers** | Next card index for each blind-draw pile |
-
-After every turn, write out the full state. Format:
-
-```
-- Alice: Card1, Card2, Card3
-- Bob: Card1, Card2
-- Charlie: *(empty)*
-- Season: X, Y, Z, W
-- Fields: A, B, C
-```
-
-### Snapshot (every 5 rounds)
-
-```
-=== STATE AFTER ROUND [n] ===
-DOMAINS:
-  Alice:   [cards]
-  Bob:     [cards]
-  Charlie: [cards]
-DISCARDS:
-  Alice:   [cards]
-  Bob:     [cards]
-  Charlie: [cards]
-SEASON: [cards]  |  FIELDS: [cards]
-Piles remaining: Claw [n], Tree [n], Wheat [n]
-OBSERVATIONS:
-  - [what's working / broken / emerging]
-```
+- [ ] Target turn count decided (50–60 for 3 players)
 
 ---
 
@@ -108,91 +60,43 @@ OBSERVATIONS:
 
 For each turn, resolve in this order:
 
-```
-TURN [N] — [Player Name]
-
-1. DECISION: What does the player activate? (one action per turn)
-   - Draw from a zone (Season/Fields/Claw/Coin/Candle)
+1. **Decision:** What does the player activate? (one action per turn)
+   - Take from Season (Tree zone) or draw blind from Claw
    - Activate a card already in Domain
+   - Activate a gateway-locked zone (Wheat, Coin, Candle) if you have access
 
-2. Drafted: If the card drawn is Drafted, resolve now
+2. **Drafted:** If the card drawn has Drafted text, resolve now
    - Check conditions (e.g., "discard a Pasture or discard this card")
    - Apply effect, move to discard if specified
 
-3. EVENT CHAINS: If an event is triggered:
+3. **Event chains:** If an event is triggered:
    a. Announce the event
    b. Scan relevant Domains for "On [Event]" cards
    c. Resolve each responding card
    d. Check if responses trigger further events (chain reactions)
 
-4. ZONE REFILL: Season refills when empty (4 new cards).
+4. **Zone refill:** Season refills when empty (4 new cards).
    Fields refill on Harvest only.
-
-5. STATE UPDATE: Write out all Domains
-```
-
-### Turn Log Format
-
-```
-TURN [n] — [Player]:
-  Action: [Activates X / Draws from Y]
-  Result: [card drawn, Drafted effects]
-  Chain: [events triggered → responses → results]
-  Domain: [all cards]
-  Discard: [if changed]
-  Notes: [reasoning or narrative]
-```
 
 ---
 
 ## AI Decision-Making
 
-### Phase priorities
-
-**Early game (turns 1–9):**
-1. Grab [Nature][Land] cards from Season (Pasture, Crags)
-2. Pick up [Culture] cards if you have matching Land
-3. Get Sowing or Withered Crop to unlock Wheat
-4. Forage to dig through Tree deck
-5. Avoid Claw draws — too early for combat
-
-**Mid game (turns 10–24):**
-1. Unlock Wheat → economy cards (Mill, Animal Husbandry, Granary)
-2. Build On Feast / On Harvest infrastructure (Tavern, Plough)
-3. Start drawing from Claw for Warband, Poach
-4. Worship cards become high-value (On Rite compounds)
-5. Sacred Grove / Sky Dance for Rite engines
-
-**Late game (turns 25+):**
-1. Incite: plant Mob in enemy Domains, then Brawl them
-2. Warband: trigger Brawl in biggest Domain
-3. Racketeering: extort weaker players
-4. Feast combos: Granary → Feast → Tavern purges Discontent
-5. Rite chains: stack Worship cards for compound effects
-
 ### Decision priority (any turn)
 
 1. **Urgent response** — [Mob] in my Domain, deal with it
-2. **Score opportunity** — profitable event chain available now
-3. **Build infrastructure** — draw cards that unlock future access
-4. **Deny opponents** — take a Season/Fields card they need
-5. **Recover from discard** — activate a card from discard if prerequisites are now met
-6. **Scout** — Crags/Forage to gather information
-
-### Activate from discard
-
-Some cards have **"Activate from discard"** — an unusual ability that lets you use your turn to move them from your discard pile back to your Domain. This is NOT the same as a normal activate. Watch for:
-
-- **Highlander** — activate from discard if you now have Crags in Domain
-- **Nomad** — activate from discard if you now have Pasture in Domain
-
-These are high-priority plays when prerequisites are met, since recovering a [Culture] card costs only one turn and is otherwise hard to replace. Check your discard every turn for recoverable cards.
+2. **Pick up strong cards** — grab high-value cards from Season, Fields, or Claw that fit your strategy or carry winning tags. Season and Fields are precise (you see what you get), Claw is blind but powerful — two cards at once with high upside and risk.
+3. **Score opportunity** — profitable event chain available now
+4. **Build infrastructure** — draw cards that unlock future access
+5. **Deny opponents** — take a Season/Fields card they need
+6. **Recover from discard** — activate a card from discard if prerequisites are now met
+7. **Scout** — Crags/Forage to gather information
 
 ### Event payoff rule
 
 **Never trigger an event without a concrete payoff.** Activating a card that triggers Brawl, Rite, Feast, or Harvest is a wasted turn if nothing meaningful responds:
 
-- **Brawl** is only worth triggering if the target Domain has [Mob] cards (Raid, Scavenge, Marauders) that will fire On Brawl effects. Without Mob, baseline Brawl strips just 1 card — rarely worth your entire turn. Exception: finishing off a Domain with 1-2 cards left.
+- **Brawl** is only worth triggering if the target Domain has [Mob] cards (Raid, Scavenge, Marauders) that will fire On Brawl effects. Without Mob, Brawl does nothing — a completely wasted turn.
 - **Rite** is only worth triggering if On Rite responders will produce a tangible effect for YOU (the triggering player). Worship of Fertility chains into Harvest, but Harvest on full Fields with no On Harvest cards in play does nothing — don't trigger Rite just because you can.
 - **Feast** is only worth triggering if you have On Feast responders (Tavern, Share the Spoils, Marauders) that will actually fire.
 - **Harvest** is primarily about triggering On Harvest effects on Wheat cards (Plough, Solstice), not about refilling Fields.
@@ -204,7 +108,7 @@ If no responders exist, spend your turn drawing cards or building infrastructure
 Think about WHERE an event fires and WHO benefits:
 
 - **Rite** — ALL Worship cards (On Rite) benefit the **triggering player**, NOT the Worship card owner. If Bob holds Worship of War and Alice triggers Rite, *Alice* gets to Brawl — Bob's card is exploited against him. This means: trigger Rite when opponents hold useful Worship cards to steal their effects. Conversely, holding Worship cards when opponents trigger Rite more than you is a liability.
-- **Brawl** — On Brawl cards split into offensive and defensive. **Offensive Mob** (Raid, Scavenge) fire in the targeted Domain and benefit the *attacker* — plant these in enemy Domains via Incite/Chiefdom. **Defensive** cards (Crags, Militia, Eldership, Foray) fire in your *own* Domain and protect you.
+- **Brawl** — On Brawl cards split into offensive and defensive. **Offensive Mob** (Raid, Scavenge) fire in the targeted Domain and benefit the *attacker* — plant these in enemy Domains via Incite/Chiefdom. **Defensive** cards (Crags, Militia, Eldership) fire in your *own* Domain and protect you. **Payoff** cards like Foray give YOU a benefit when Brawl fires in your Domain — if you hold Foray, triggering Brawl on yourself is a valid play for the free Tree draw.
 - **Feast** in YOUR Domain feeds your On Feast cards (Tavern, Share the Spoils). Don't trigger Feast if opponents have more On Feast responders than you.
 - **Harvest** is global — all On Harvest cards everywhere respond. Consider whether opponents' On Harvest cards (Plough, Solstice) outweigh yours before triggering.
 
@@ -225,31 +129,12 @@ Think about WHERE an event fires and WHO benefits:
 - **Geography → Culture:** Crags vs Pasture determines Highlander vs Nomad
 - **Spiritual kingmaker:** Worship of Fertility benefits everyone who triggers Rites
 - **Mob infiltration:** Incite → Brawl combos are the dramatic peak
-- **Feast defense:** Tavern + Granary counters planted Mob
+- **Feast loops:** Tavern purges Discontent on Feast, Share the Spoils draws on Feast
 - **Arms race:** Mutual Warband draws create cold war tension
 
 ### Epilogue
 
 Summarize each player's final domain, tag distribution, strategic identity, key moment, and unresolved threats.
-
----
-
-## Scenario Seeds
-
-### "First Blood" — Brawl
-Stack Claw: first 3 draws are Raid, Raid, Warband. Forces early combat.
-
-### "Harvest Festival" — Food Chain
-Stack Tree: Harvest in round 2. Plough and Tavern in Fields. Tests Feast cascades.
-
-### "Culture Clash" — Culture Mechanics
-Stack Tree: Pasture and Crags alternating, Nomad and Highlander near top.
-
-### "The Long Peace" — Economy
-No Warband/Raid in first 10 Claw cards. Tests Wheat/Coin progression without combat.
-
-### "Holy War" — Religion
-Sacred Grove, Sky Dance, Worship cards near top. Tests Rite chains and Flame scaling.
 
 ---
 
@@ -269,14 +154,5 @@ Sacred Grove, Sky Dance, Worship cards near top. Tests Rite chains and Flame sca
 4. **Rite benefit direction** — benefits go to whoever *triggered* the Rite, not the Worship card owner
 5. **Crags defense cost** — attacker must discard, not the defender
 6. **Missing event chains** — On Rite can trigger Harvest → On Harvest → Feast... follow the full chain
-7. **Brawl baseline** — if NO On Brawl effects fire, Domain owner still discards 1 card of their choice
-8. **Duel needs Sword** — Warlord cards come from the Sword deck; Duel is dead without it
 
----
 
-## Logging Conventions
-
-- Card names in **bold** on first mention per turn
-- Events marked with → arrows for chain reactions
-- Design observations: 🔴 problem, 🟡 concern, 🟢 working well
-- End each simulation with findings summary and suggested changes
