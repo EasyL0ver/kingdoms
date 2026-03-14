@@ -188,21 +188,25 @@ Some cards have **"Activate from discard"** — an unusual ability that lets you
 
 These are high-priority plays when prerequisites are met, since recovering a [Culture] card costs only one turn and is otherwise hard to replace. Check your discard every turn for recoverable cards.
 
-### Scoring heuristic
+### Event payoff rule
 
-| Action | Base | Modifiers |
-|--------|------|-----------|
-| Draw Land (Pasture/Crags) | 10 | +2 first land, -2 if 3+ already |
-| Draw Culture (matching) | 8 | -5 if no matching Land |
-| Unlock Wheat (Sowing/WC) | 8 | -3 if already unlocked |
-| Activate Warband | 8 | +N (target's domain size) |
-| Draw Harvest (Drafted) | 7 | +2 if On Harvest cards exist |
-| Activate Rite trigger | 6 | +2 per Worship card in play |
-| Activate Feast trigger | 6 | +2 per On Feast card you have |
-| Draw from Claw | 5 | +2 after turn 9 |
-| Activate Forage | 5 | always decent |
+**Never trigger an event without a concrete payoff.** Activating a card that triggers Brawl, Rite, Feast, or Harvest is a wasted turn if nothing meaningful responds:
 
-Add ±1-2 random variance to prevent predictable play.
+- **Brawl** is only worth triggering if the target Domain has [Mob] cards (Raid, Scavenge, Marauders) that will fire On Brawl effects. Without Mob, baseline Brawl strips just 1 card — rarely worth your entire turn. Exception: finishing off a Domain with 1-2 cards left.
+- **Rite** is only worth triggering if On Rite responders will produce a tangible effect for YOU (the triggering player). Worship of Fertility chains into Harvest, but Harvest on full Fields with no On Harvest cards in play does nothing — don't trigger Rite just because you can.
+- **Feast** is only worth triggering if you have On Feast responders (Tavern, Share the Spoils, Marauders) that will actually fire.
+- **Harvest** is primarily about triggering On Harvest effects on Wheat cards (Plough, Solstice), not about refilling Fields.
+
+If no responders exist, spend your turn drawing cards or building infrastructure instead.
+
+### Event targeting
+
+Think about WHERE an event fires and WHO benefits:
+
+- **Rite** — ALL Worship cards (On Rite) benefit the **triggering player**, NOT the Worship card owner. If Bob holds Worship of War and Alice triggers Rite, *Alice* gets to Brawl — Bob's card is exploited against him. This means: trigger Rite when opponents hold useful Worship cards to steal their effects. Conversely, holding Worship cards when opponents trigger Rite more than you is a liability.
+- **Brawl** — On Brawl cards split into offensive and defensive. **Offensive Mob** (Raid, Scavenge) fire in the targeted Domain and benefit the *attacker* — plant these in enemy Domains via Incite/Chiefdom. **Defensive** cards (Crags, Militia, Eldership, Foray) fire in your *own* Domain and protect you.
+- **Feast** in YOUR Domain feeds your On Feast cards (Tavern, Share the Spoils). Don't trigger Feast if opponents have more On Feast responders than you.
+- **Harvest** is global — all On Harvest cards everywhere respond. Consider whether opponents' On Harvest cards (Plough, Solstice) outweigh yours before triggering.
 
 ---
 

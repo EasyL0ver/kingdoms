@@ -1,208 +1,36 @@
 # Simulation — AI-Driven (v2)
 
-**Players:** Alice, Bob, Charlie (3 players, 14 rounds = 40 turns)
+**Players:** Alice, Bob, Charlie (3 players, 15 rounds = 45 turns)
 
 ---
 
 ## Initial State
 
-Season: Worship of Fertility, Nomad, Pathfinding, Sowing
-Fields (7): Famine, Plough, Granary, Militia, Famine, Plough, Mill
-Piles: Claw 42, Tree 37, Wheat 10, Coin 5, Candle 1
+Season: Harvest, Crags, Sowing, Crags
+Fields (7): Granary, Mill, Tavern, Tavern, Militia, Plough, Famine
+Piles: Claw 43, Tree 37, Wheat 10, Coin 5, Candle 1
 
 ---
 
 ## Round 1 (Turns 1–3)
 
-**T1 — Alice:** Takes **Pathfinding** from Season. *Early Pathfinding with its [Knowledge] tag creates a snowball engine — each Knowledge card drawn increases future draws, and it's the strongest scaling card in Tree.* Pathfinding enters Alice's Domain.
+**T1 — Alice:** Takes **Crags** from Season. *First-turn Land grab enables Highlander culture path and provides Brawl defense later.*
 
 <details><summary>🎯 Raw OPS</summary>
 
 ```
-TAKE_SEASON|Pathfinding|Alice
+TAKE_SEASON|Crags|Alice
 ```
 
 </details>
 
 <details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
 
-- ✅ TAKE_SEASON Pathfinding → Alice's Domain
+- ✅ TAKE_SEASON Crags → Alice's Domain
 
 </details>
 
-**T2 — Bob:** Takes **Sowing** from Season. *Grabbing the Wheat gateway early — once I get 2 Nature cards, I'll have access to Fields without needing diplomacy.* Sowing has no Drafted text, enters Domain normally.
-
-<details><summary>🎯 Raw OPS</summary>
-
-```
-TAKE_SEASON|Sowing|Bob
-```
-
-</details>
-
-<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
-
-- ✅ TAKE_SEASON Sowing → Bob's Domain
-
-</details>
-
-**T3 — Charlie:** Takes **Worship of Fertility** from Season. *Starting empty, need to build a foundation — Worship of Fertility is [Nature][Spiritual] giving two valuable tags and Rite synergy for later.*
-
-<details><summary>🎯 Raw OPS</summary>
-
-```
-TAKE_SEASON|Worship of Fertility|Charlie
-```
-
-</details>
-
-<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
-
-- ✅ TAKE_SEASON Worship of Fertility → Charlie's Domain
-
-</details>
-
-## Round 2 (Turns 4–6)
-
-**T4 — Alice:** Draws from Claw, getting **Raid**. *Pathfinding needs Knowledge cards to snowball — Claw offers faster card acquisition than the single Nomad in Season, and Raid can be planted in opponents later via Incite.* Raid has no Drafted effect, stays in Domain.
-
-<details><summary>🎯 Raw OPS</summary>
-
-```
-DRAW|claw|1|Alice
-```
-
-</details>
-
-<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
-
-- ✅ DRAW claw → Raid → Alice's Domain
-
-</details>
-
-**T5 — Bob:** Activates Wheat zone via Sowing (has 0 [Nature] cards — wait, Sowing requires 2+ [Nature]). *Bob cannot activate Wheat — Sowing's prerequisite not met.* Instead, Bob draws from Claw. Draws **Ingenuity** [Craftsmanship][Discontent] — Drafted triggers: draw 1 from Coin. Bob draws **Mine** from Coin. Mine is Drafted: requires Crags or discard Mine. Bob has no Crags — Mine goes to discard.
-
-<details><summary>🎯 Raw OPS</summary>
-
-```
-DRAW|claw|1|Bob
-DRAW_DISCARD|coin|1|Bob
-```
-
-</details>
-
-<details><summary>📋 Ops Trace (2 applied, 0 violations)</summary>
-
-- ✅ DRAW claw → Ingenuity → Bob's Domain
-- ✅ DRAW_DISCARD coin → Mine → Bob's discard
-
-</details>
-
-**T6 — Charlie:** Takes **Sacred Grove** from Season (via Tree zone). *Sacred Grove is the cornerstone Spiritual card — it gives repeatable Rite triggers which synergize perfectly with Worship of Fertility already in Domain.* No Drafted effect. Season now has 0 cards and will auto-refill.
-
-<details><summary>🎯 Raw OPS</summary>
-
-```
-TAKE_SEASON|Sacred Grove|Charlie
-```
-
-</details>
-
-<details><summary>📋 Ops Trace (0 applied, 1 violations)</summary>
-
-- ❌ ILLEGAL: 'Sacred Grove' not in Season. Season has: [Nomad]
-
-</details>
-
-> 🔄 Retry 1 — illegal ops detected:
-
-> ILLEGAL: 'Sacred Grove' not in Season. Season has: [Nomad]
-
-> **Retry response:**
-**T6 — Charlie:** Draws from **Claw** zone, receiving **Ingenuity** and **Scavenge**. *Building toward [Trophy] tags while Worship of Fertility waits for Rite triggers.* Ingenuity is Drafted — Charlie draws 1 from Coin, getting **Rumour**. Rumour is Drafted — triggers Rumour globally. No On Rumour cards in any Domain, so no further effects. Scavenge enters Charlie's Domain as a [Mob] card.
-
-<details><summary>📋 Ops Trace (3 applied, 0 violations)</summary>
-
-- ✅ DRAW claw → Ingenuity → Charlie's Domain
-- ✅ DRAW claw → Scavenge → Charlie's Domain
-- ✅ DRAW_DISCARD coin → Rumour → Charlie's discard
-
-</details>
-
-## Round 3 (Turns 7–9)
-
-**T7 — Alice:** Activates **Pathfinding** to draw 1 card from Tree (1 [Knowledge] in Domain). *Building toward Tree depletion with my Nature strategy — Pathfinding scales with more Knowledge.* Draws **Sacred Grove** [Nature][Spiritual] — not Drafted, goes to Domain. Sacred Grove gives Alice her first [Nature] tag and a powerful Rite engine.
-
-<details><summary>🎯 Raw OPS</summary>
-
-```
-DRAW|tree|1|Alice
-```
-
-</details>
-
-<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
-
-- ✅ DRAW tree → Sacred Grove → Alice's Domain
-
-</details>
-
-**T8 — Bob:** Activates the Wheat zone via Sowing (has 0 [Nature] — wait, checking Sowing: requires 2+ [Nature]). *Bob has no [Nature] cards, so Sowing doesn't grant access.* Instead, Bob takes **Nomad** from Season. Nomad is Drafted — requires a Pasture in Domain or discard itself. Bob has no Pasture, so Nomad is discarded. *Fishing for the next Season cards since Wheat access isn't available yet.*
-
-<details><summary>🎯 Raw OPS</summary>
-
-```
-TAKE_SEASON_DISCARD|Nomad|Bob
-```
-
-</details>
-
-<details><summary>📋 Ops Trace (2 applied, 0 violations)</summary>
-
-- ✅ TAKE_SEASON_DISCARD Nomad → Bob's discard
-- 🔄 Season auto-refilled: [Forage, Harvest, Crags, Gathering]
-
-</details>
-
-**T9 — Charlie:** Takes **Harvest** from Season. *Worship of Fertility in Domain means triggering Harvest will chain into a Rite, building my Spiritual engine.* Harvest is Drafted — triggers Harvest globally, then discards itself. Fields refill from 7 to 7 (already full, no change). Charlie's Worship of Fertility responds: On Harvest triggers Rite in Charlie's Domain. No other On Rite cards respond — the Rite resolves with no further effect.
-
-<details><summary>🎯 Raw OPS</summary>
-
-```
-TAKE_SEASON_DISCARD|Harvest|Charlie
-```
-
-</details>
-
-<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
-
-- ✅ TAKE_SEASON_DISCARD Harvest → Charlie's discard
-
-</details>
-
-## Round 4 (Turns 10–12)
-
-**T10 — Alice:** Activates **Sacred Grove**, choosing to trigger Rite in her Domain. *With Pathfinding already in play, adding more [Spiritual] cards will accelerate her Knowledge-based draw engine.* Rite fires globally. Charlie's Worship of Fertility responds: triggers Harvest in Alice's Domain (the Rite triggerer). Harvest fires — Fields refill from 7 to 7 (already full, no change). No On Harvest responders in Alice's Domain.
-
-OPS:
-
----
-
-### === STATE AFTER TURN 10 ===
-
-**Alice** (3 cards): Pathfinding, Raid, Sacred Grove
-**Bob** (2 cards): Sowing, Ingenuity
-  Discard: Mine, Nomad
-**Charlie** (3 cards): Worship of Fertility, Ingenuity, Scavenge
-  Discard: Rumour, Harvest
-
-Season: Forage, Crags, Gathering
-Fields (7): Famine, Plough, Granary, Militia, Famine, Plough, Mill
-Piles: Claw 38, Tree 32, Wheat 10, Coin 3
-
----
-
-**T11 — Bob:** Activates Wheat zone via Sowing (has 0 [Nature] but wait — Sowing requires 2+ [Nature], which Bob doesn't have). *Bob cannot activate Wheat zone.* Instead, Bob takes **Crags** from Season to build toward Nature requirement and eventually Highlander. *Need [Nature] cards to unlock Sowing's Wheat access.*
+**T2 — Bob:** Takes **Crags** from Season. *Matching Alice's land grab — Crags enables Highlander culture and provides Brawl defense later.* No events triggered.
 
 <details><summary>🎯 Raw OPS</summary>
 
@@ -218,153 +46,58 @@ TAKE_SEASON|Crags|Bob
 
 </details>
 
-**T12 — Charlie:** Activates **Sacred Grove** — wait, Charlie doesn't have Sacred Grove. Charlie activates **Worship of Fertility** — but this only has "On Rite" text, not "Activate". Charlie takes **Gathering** from Season. *Need a Rite trigger to activate my Worship of Fertility — Gathering can trigger Rite in my Domain and spread to cultural allies.* Gathering is Drafted — Charlie chooses to trigger Rite in their Domain. Charlie's Worship of Fertility responds: On Rite triggers Harvest in Charlie's Domain. Fields refill from 7 to 7 (already full, no change). Gathering moves to discard.
+**T3 — Charlie:** Takes **Sowing** from Season. *Sowing provides [Knowledge] tag and unlocks Wheat access once I get 2 [Nature] cards — need to build foundation.* Sowing enters Charlie's Domain.
 
 <details><summary>🎯 Raw OPS</summary>
 
 ```
-TAKE_SEASON_DISCARD|Gathering|Charlie
+TAKE_SEASON|Sowing|Charlie
 ```
 
 </details>
 
 <details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
 
-- ✅ TAKE_SEASON_DISCARD Gathering → Charlie's discard
+- ✅ TAKE_SEASON Sowing → Charlie's Domain
 
 </details>
 
-## Round 5 (Turns 13–15)
+## Round 2 (Turns 4–6)
 
-**T13 — Alice:** Activates **Sacred Grove**, choosing to trigger Rite in her Domain. *With Pathfinding already in hand, stacking Knowledge cards is the path to victory — need to find more Spiritual cards to build a Rite engine.* Rite fires globally. Charlie's Worship of Fertility responds: triggers Harvest in Alice's Domain (the Rite triggerer). Harvest fires — Fields refill from 7 to 7 (already full, no change). No On Harvest responders in Alice's Domain.
-
-OPS:
-
-**T14 — Bob:** Activates the Wheat zone via Sowing (has Crags [Nature] + Ingenuity [Craftsmanship] — wait, Ingenuity has [Craftsmanship] not [Nature]). *Bob only has 1 [Nature] card (Crags), so Sowing's requirement of 2+ [Nature] is NOT met.* Bob instead takes **Forage** from Season. *Building Tree infrastructure to dig for more Nature cards and enable Wheat access later.*
+**T4 — Alice:** Takes **Harvest** from Season. *Triggering Harvest refills Fields and thins the Tree deck toward [Nature] victory.* Harvest is Drafted — triggers Harvest globally, then discards itself. Fields refill from 7 to 7 (already full, no refill needed). No On Harvest responders in any Domain.
 
 <details><summary>🎯 Raw OPS</summary>
 
 ```
-TAKE_SEASON|Forage|Bob
+TAKE_SEASON_DISCARD|Harvest|Alice
 ```
 
 </details>
 
 <details><summary>📋 Ops Trace (2 applied, 0 violations)</summary>
 
-- ✅ TAKE_SEASON Forage → Bob's Domain
-- 🔄 Season auto-refilled: [Pasture, Pathfinding, Regrowth, Highlander]
+- ✅ TAKE_SEASON_DISCARD Harvest → Alice's discard
+- 🔄 Season auto-refilled: [Solstice, Pasture, Pathfinding, Nomad]
 
 </details>
 
-**T15 — Charlie:** Activates **Sacred Grove** from... wait, Charlie doesn't have Sacred Grove. Charlie activates **Worship of Fertility** — but that's "On Rite" only, not activatable. Charlie takes **Pasture** from Season instead. *Need [Nature] for Wheat access and to enable future Nomad — also racing Tree pile depletes where [Nature] wins.*
+**T5 — Bob:** Takes **Pasture** from Season. *Securing [Nature] land to enable Nomad culture and future Wheat access.* Pasture enters Bob's Domain alongside Crags, giving him 2 [Nature] cards.
 
 <details><summary>🎯 Raw OPS</summary>
 
 ```
-TAKE_SEASON|Pasture|Charlie
+TAKE_SEASON|Pasture|Bob
 ```
 
 </details>
 
 <details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
 
-- ✅ TAKE_SEASON Pasture → Charlie's Domain
+- ✅ TAKE_SEASON Pasture → Bob's Domain
 
 </details>
 
-## Round 6 (Turns 16–18)
-
-**T16 — Alice:** Activates **Sacred Grove**, choosing to trigger Rite in her Domain. *With Pathfinding already generating value, building a Spiritual engine alongside it creates a powerful dual-threat.* Rite fires globally. Charlie's Worship of Fertility responds: On Rite triggers Harvest in Alice's Domain. Harvest fires — Fields refill from 7 to 7 (already full, no change). No On Harvest responders in any Domain, so Harvest does nothing further.
-
-OPS:
-
-**T17 — Bob:** Activates **Forage** — puts top 3 Tree cards (Solstice, Pasture, Pasture) into discard, then discards Forage to take **Pasture** to Domain. *With Crags already in place, adding Pasture gives 2 [Nature] for Sowing AND opens up Nomad recovery from discard later — strong foundation play.*
-
-<details><summary>🎯 Raw OPS</summary>
-
-```
-DRAW_DISCARD|tree|3|Bob
-MOVE|Bob|Forage|DISCARD
-MOVE_DISCARD|Bob|Pasture
-```
-
-</details>
-
-<details><summary>📋 Ops Trace (5 applied, 0 violations)</summary>
-
-- ✅ DRAW_DISCARD tree → Solstice → Bob's discard
-- ✅ DRAW_DISCARD tree → Pasture → Bob's discard
-- ✅ DRAW_DISCARD tree → Pasture → Bob's discard
-- ✅ MOVE Forage Bob's Domain → Bob's discard
-- ✅ MOVE_DISCARD Pasture Bob's discard → Bob's Domain
-
-</details>
-
-**T18 — Charlie:** Activates **Sacred Grove** — wait, Charlie doesn't have Sacred Grove. Charlie activates **Worship of Fertility** — no, that's an "On Rite" card, not activatable. Charlie takes **Regrowth** from Season. *Recovers all discarded Pastures globally — Bob has one in discard, this strengthens Nature boards.* Regrowth is Drafted: Bob's Pasture returns from discard to Bob's Domain. Regrowth moves to Charlie's discard.
-
-<details><summary>🎯 Raw OPS</summary>
-
-```
-TAKE_SEASON_DISCARD|Regrowth|Charlie
-MOVE_DISCARD|Bob|Pasture
-```
-
-</details>
-
-<details><summary>📋 Ops Trace (2 applied, 0 violations)</summary>
-
-- ✅ TAKE_SEASON_DISCARD Regrowth → Charlie's discard
-- ✅ MOVE_DISCARD Pasture Bob's discard → Bob's Domain
-
-</details>
-
-## Round 7 (Turns 19–21)
-
-**T19 — Alice:** Activates **Sacred Grove**, choosing to trigger Rite in her Domain. *With Worship of Fertility in play on Charlie, this chains into Harvest for free value.* Rite fires globally. Charlie's Worship of Fertility responds: triggers Harvest in Alice's Domain (the Rite triggerer). Harvest fires — Fields refill from 7 to 7 (already full, no change). No other On Harvest cards respond.
-
-OPS:
-
-**T20 — Bob:** Activates the Wheat zone via Sowing (has 3 [Nature]: Crags, Pasture, Pasture). Takes **Plough** and **Granary** from Fields, drawing 2 from Claw as tax: **Worship of War** and **Share the Spoils**. *Building Wheat infrastructure while stockpiling Claw cards — Worship of War gives future Brawl capability, and the Wheat cards enable Feast chains.* Plough is Drafted — requires discarding a Pasture or discarding itself. Bob discards a Pasture to keep Plough.
-
-<details><summary>🎯 Raw OPS</summary>
-
-```
-TAKE_FIELDS|Plough|Bob
-TAKE_FIELDS|Granary|Bob
-DRAW|claw|2|Bob
-MOVE|Bob|Pasture|DISCARD
-```
-
-</details>
-
-<details><summary>📋 Ops Trace (5 applied, 0 violations)</summary>
-
-- ✅ TAKE_FIELDS Plough → Bob's Domain
-- ✅ TAKE_FIELDS Granary → Bob's Domain
-- ✅ DRAW claw → Worship of War → Bob's Domain
-- ✅ DRAW claw → Share the Spoils → Bob's Domain
-- ✅ MOVE Pasture Bob's Domain → Bob's discard
-
-</details>
-
----
-
-### === STATE AFTER TURN 20 ===
-
-**Alice** (3 cards): Pathfinding, Raid, Sacred Grove
-**Bob** (8 cards): Sowing, Ingenuity, Crags, Pasture, Plough, Granary, Worship of War, Share the Spoils
-  Discard: Mine, Nomad, Solstice, Forage, Pasture
-**Charlie** (4 cards): Worship of Fertility, Ingenuity, Scavenge, Pasture
-  Discard: Rumour, Harvest, Gathering, Regrowth
-
-Season: Pathfinding, Highlander
-Fields (5): Famine, Militia, Famine, Plough, Mill
-Piles: Claw 36, Tree 25, Wheat 10, Coin 3
-
----
-
-**T21 — Charlie:** Activates **Sacred Grove** in Alice's Domain? No — Charlie can only activate cards in their own Domain. Charlie activates the **Tree zone**, taking **Pathfinding** from Season. *With only 1 [Knowledge] card (Ingenuity), Pathfinding is weak now but scales if Charlie can stack more Knowledge. Tree depletion favors [Nature] and Charlie has Pasture + Worship of Fertility.*
+**T6 — Charlie:** Activates the Wheat zone via Sowing (has 0 [Nature] but Sowing is in Domain — wait, Sowing requires 2+ [Nature]). *Charlie cannot activate Wheat — Sowing requires 2+ [Nature] cards and Charlie has none.* Instead, takes **Pathfinding** from Season. *Building [Knowledge] for future card draw engine — Pathfinding scales with Knowledge count.*
 
 <details><summary>🎯 Raw OPS</summary>
 
@@ -380,43 +113,108 @@ TAKE_SEASON|Pathfinding|Charlie
 
 </details>
 
-## Round 8 (Turns 22–24)
+## Round 3 (Turns 7–9)
 
-**T22 — Alice:** Activates **Sacred Grove**, choosing to trigger Rite in her Domain. *With Worship of Fertility and Worship of War on the board, a Rite chain can devastate Bob while building momentum.* Rite fires globally. Bob's Worship of War responds: Alice (triggering player) may trigger Brawl in any Domain — she targets Bob's Domain. Brawl in Bob's Domain fires. Bob has no Mob cards, so no cards are transferred. Charlie's Worship of Fertility responds to the original Rite: triggers Harvest in Charlie's Domain. Harvest fires — Fields refill from 5 to 7. Bob's Plough responds: On Harvest, Bob chooses to trigger Feast in his Domain. Feast fires. Bob's Share the Spoils responds: Bob may draw 1 from Claw — he draws Chiefdom.
+**T7 — Alice:** Draws from Claw, getting **Armament** and **Raid**. *With only one Crags, Alice needs to build toward [Trophy] tags to compete — Claw draws add Discontent and potential Trophy cards while Bob and Charlie race Tree/Nature.* Armament is [Knowledge], Raid is [Unit][Mob][Discontent]. Both stay in Domain.
 
 <details><summary>🎯 Raw OPS</summary>
 
 ```
-REFILL_FIELDS|2
-DRAW|claw|1|Bob
+DRAW|claw|2|Alice
 ```
 
 </details>
 
 <details><summary>📋 Ops Trace (2 applied, 0 violations)</summary>
 
-- ✅ REFILL_FIELDS +2: [Plough, Mill]
-- ✅ DRAW claw → Chiefdom → Bob's Domain
+- ✅ DRAW claw → Armament → Alice's Domain
+- ✅ DRAW claw → Raid → Alice's Domain
 
 </details>
 
-**T23 — Bob:** Activates **Worship of War** via **Sacred Grove**'s Rite trigger. *With Chiefdom already in place to plant Mob and Worship of War ready, Bob builds his Brawl engine by triggering Rite.* Sacred Grove triggers Rite in Bob's Domain. Worship of War responds: Bob may trigger Brawl in any Domain — he targets Alice (3 cards, includes Raid). Charlie's Worship of Fertility responds to the Rite: triggers Harvest in Charlie's Domain. Fields refill from 7 to 7 (already full). Brawl resolves in Alice's Domain: Alice's Raid responds — Alice gives 1 card to Bob. Bob takes Pathfinding (the most valuable card). Alice now has only Raid and Sacred Grove.
+**T8 — Bob:** Takes **Nomad** from Season. *Already has Pasture, so Nomad's Drafted requirement is met — secures [Culture] slot and builds toward [Nature] count for potential Tree victory.*
 
 <details><summary>🎯 Raw OPS</summary>
 
 ```
-MOVE|Alice|Pathfinding|DOMAIN|Bob
+TAKE_SEASON|Nomad|Bob
 ```
 
 </details>
 
 <details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
 
-- ✅ MOVE Pathfinding Alice's Domain → Bob's Domain
+- ✅ TAKE_SEASON Nomad → Bob's Domain
 
 </details>
 
-**T24 — Charlie:** Activates **Pathfinding** to draw 2 cards from Tree (has 2 [Knowledge]: Worship of Fertility, Pathfinding). *Building toward Tree depletion where I'm competitive on [Nature] tags.* Draws Forage and Nomad. Nomad is Drafted — Charlie has Pasture, so Nomad stays. But Charlie already has no [Culture], so Nomad enters Domain. Now Charlie has 3 [Nature] (Worship of Fertility, Pasture, Nomad) making them a serious threat if Tree depletes.
+**T9 — Charlie:** Activates **Pathfinding** to draw 1 card from Tree (has 1 [Knowledge] card: Pathfinding itself). *Building Knowledge engine — each Knowledge card makes future Pathfinding draws stronger.* Draws **Solstice** to Domain.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+DRAW|tree|1|Charlie
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ DRAW tree → Solstice → Charlie's Domain
+
+</details>
+
+## Round 4 (Turns 10–12)
+
+**T10 — Alice:** Activates **Crags** to scout Claw pile. *Checking for threats before committing to Claw draws — Ingenuity on top is safe and gives free Coin access.* Alice looks at top 3 (Ingenuity, Marauders, Worship of the Hunt) and puts Marauders into her discard to remove the [Mob] threat from circulation while stashing it for potential Herbalism retrieval later.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+DRAW_DISCARD|claw|1|Alice
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ DRAW_DISCARD claw → Ingenuity → Alice's discard
+
+</details>
+
+---
+
+### === STATE AFTER TURN 10 ===
+
+**Alice** (3 cards): Crags, Armament, Raid
+  Discard: Harvest, Ingenuity
+**Bob** (3 cards): Crags, Pasture, Nomad
+**Charlie** (3 cards): Sowing, Pathfinding, Solstice
+
+Season: Solstice
+Fields (7): Granary, Mill, Tavern, Tavern, Militia, Plough, Famine
+Piles: Claw 40, Tree 32, Wheat 10, Coin 5
+
+---
+
+**T11 — Bob:** Takes **Solstice** from Season. *Solstice triggers on Harvest and synergizes with Nomad culture — building toward a [Nature] victory while Tree pile thins.* Season now empty, auto-refills with 4 new cards from Tree pile.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+TAKE_SEASON|Solstice|Bob
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (2 applied, 0 violations)</summary>
+
+- ✅ TAKE_SEASON Solstice → Bob's Domain
+- 🔄 Season auto-refilled: [Gathering, Nomad, Harvest, Crags]
+
+</details>
+
+**T12 — Charlie:** Activates **Pathfinding** to draw 2 cards from Tree (has 2 [Knowledge]: Sowing, Pathfinding). *Building Knowledge engine while Tree pile is healthy — Pathfinding snowballs harder with more Knowledge cards.* Draws Oral Tradition and Forage. Oral Tradition has no Drafted text, stays in Domain. Forage has no Drafted text, stays in Domain. Charlie now has 3 [Knowledge] cards for next Pathfinding activation.
 
 <details><summary>🎯 Raw OPS</summary>
 
@@ -428,54 +226,104 @@ DRAW|tree|2|Charlie
 
 <details><summary>📋 Ops Trace (2 applied, 0 violations)</summary>
 
+- ✅ DRAW tree → Oral Tradition → Charlie's Domain
 - ✅ DRAW tree → Forage → Charlie's Domain
-- ✅ DRAW tree → Nomad → Charlie's Domain
 
 </details>
 
-## Round 9 (Turns 25–27)
+## Round 5 (Turns 13–15)
 
-**T25 — Alice:** Activates **Sacred Grove**, choosing to trigger Rite in her Domain. *With Worship of Fertility in Charlie's Domain responding, this chains into Harvest for free card draw setup.* Rite fires globally. Charlie's Worship of Fertility responds: triggers Harvest in Alice's Domain (the Rite triggerer). Harvest fires — Fields refill from 7 to 7 (already full, no change). Bob's Plough responds to Harvest: Bob chooses to trigger Feast in his Domain. Bob's Share the Spoils responds to Feast: Bob draws 1 from Claw (Chiefdom). Chiefdom is not Drafted, enters Bob's Domain. Bob now has 2 [Allegiance] cards (Chiefdom ×2) — must discard one; discards the new Chiefdom.
+**T13 — Alice:** Takes **Crags** from Season. *Second Crags gives Brawl defense and enables scouting the Claw pile — critical when holding Raid in own Domain.* Alice now has 2 Crags, which means any Brawl against her requires the attacker to discard a card to proceed.
 
 <details><summary>🎯 Raw OPS</summary>
 
 ```
-DRAW|claw|1|Bob
-MOVE|Bob|Chiefdom|DISCARD
+TAKE_SEASON|Crags|Alice
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ TAKE_SEASON Crags → Alice's Domain
+
+</details>
+
+**T14 — Bob:** Takes **Harvest** from Season. *Triggering Harvest refills Fields and fires Solstice in my Domain — I can spread Nomad culture or draw Tree cards with allies.* Harvest is Drafted — triggers Harvest globally. Fields refill from 7 to 7 (already full, no change). Bob's Solstice responds: On Harvest, Bob chooses to have all players of his culture (Nomad) draw 1 from Tree. Only Bob has Nomad culture, so Bob draws Pasture from Tree.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+TAKE_SEASON_DISCARD|Harvest|Bob
+DRAW|tree|1|Bob
 ```
 
 </details>
 
 <details><summary>📋 Ops Trace (2 applied, 0 violations)</summary>
 
-- ✅ DRAW claw → Chiefdom → Bob's Domain
-- ✅ MOVE Chiefdom Bob's Domain → Bob's discard
+- ✅ TAKE_SEASON_DISCARD Harvest → Bob's discard
+- ✅ DRAW tree → Pasture → Bob's Domain
 
 </details>
 
-**T26 — Bob:** Activates **Pathfinding** to draw 2 cards from Tree (has 2 [Knowledge]: Sowing, Pathfinding). *With dominant position in [Nature] (Crags + Pasture + 2 Worship cards responding to Rite), accelerating Tree depletion to trigger the win condition.* Draws Harvest (Drafted — triggers Harvest globally, moves to discard). Fields refill from 7 to 7 (already full). Bob's Plough responds: On Harvest, Bob chooses to trigger Feast. Bob's Share the Spoils responds: draws 1 from Claw (Tyranny). Charlie's Worship of Fertility responds: triggers Harvest in Charlie's Domain — Fields still full, no refill. Then draws Regrowth (Drafted — all Pasture cards in discards return to owners' Domains; Bob's Pasture returns, moves to discard).
+**T15 — Charlie:** Activates **Pathfinding** to draw 2 cards from Tree (has 2 [Knowledge]: Pathfinding, Oral Tradition). *Building Tree engine while accumulating [Nature] tags for endgame.* Draws Withered Crop and Sowing. Withered Crop has no Drafted effect and stays. Sowing has no Drafted effect and stays — but Charlie already has Sowing, so now has redundant access to Wheat.
 
 <details><summary>🎯 Raw OPS</summary>
 
 ```
-DRAW_DISCARD|tree|1|Bob
-DRAW|claw|1|Bob
-DRAW_DISCARD|tree|1|Bob
-MOVE_DISCARD|Bob|Pasture
+DRAW|tree|2|Charlie
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (2 applied, 0 violations)</summary>
+
+- ✅ DRAW tree → Withered Crop → Charlie's Domain
+- ✅ DRAW tree → Sowing → Charlie's Domain
+
+</details>
+
+## Round 6 (Turns 16–18)
+
+**T16 — Alice:** Activates **Crags** to scout Claw pile. *With 2 Crags already providing Brawl defense, using one to scout is low-cost — checking for threats like Uprising or finding useful cards to stash.* Alice looks at top 3 Claw cards (Marauders, Worship of the Hunt, Warband) and puts Marauders into her discard — a [Mob] card she doesn't want drawn against her, and potentially retrievable later if she gets Herbalism.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+DRAW_DISCARD|claw|1|Alice
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ DRAW_DISCARD claw → Marauders → Alice's discard
+
+</details>
+
+**T17 — Bob:** Activates **Wheat zone** (via Sowing access with 2 Pastures). Takes **Militia** and **Tavern** from Fields, draws 2 Claw as tax. *Building defensive infrastructure against Alice's growing Mob threat while establishing Amenity presence for potential Wheat depletion race.* Draws Worship of the Hunt and Warband from Claw — neither is Drafted, both enter Domain.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+TAKE_FIELDS|Militia|Bob
+TAKE_FIELDS|Tavern|Bob
+DRAW|claw|2|Bob
 ```
 
 </details>
 
 <details><summary>📋 Ops Trace (4 applied, 0 violations)</summary>
 
-- ✅ DRAW_DISCARD tree → Harvest → Bob's discard
-- ✅ DRAW claw → Tyranny → Bob's Domain
-- ✅ DRAW_DISCARD tree → Regrowth → Bob's discard
-- ✅ MOVE_DISCARD Pasture Bob's discard → Bob's Domain
+- ✅ TAKE_FIELDS Militia → Bob's Domain
+- ✅ TAKE_FIELDS Tavern → Bob's Domain
+- ✅ DRAW claw → Worship of the Hunt → Bob's Domain
+- ✅ DRAW claw → Warband → Bob's Domain
 
 </details>
 
-**T27 — Charlie:** Activates **Pathfinding** to draw 2 cards from Tree (has 2 [Knowledge]: Pathfinding, Ingenuity). *Bob's massive Domain with Tyranny and 12 cards is the threat — need to build up fast and potentially race Tree depletion since I'm tied for [Nature] lead.* Draws Crags and Sky Dance. Both stay in Domain.
+**T18 — Charlie:** Activates **Pathfinding** to draw 2 cards from Tree (has 2 [Knowledge]: Pathfinding, Oral Tradition). *Building Knowledge engine to accelerate Tree depletion where I'm strong on [Nature] via Sowing access.* Draws Crags and Sky Dance. Crags is a Land with no Drafted effect — enters Domain. Sky Dance has no Drafted effect — enters Domain. Charlie now has 3 [Knowledge] for next Pathfinding activation.
 
 <details><summary>🎯 Raw OPS</summary>
 
@@ -492,32 +340,212 @@ DRAW|tree|2|Charlie
 
 </details>
 
-## Round 10 (Turns 28–30)
+## Round 7 (Turns 19–21)
 
-**T28 — Alice:** Activates **Sacred Grove** choosing Rite. *With Worship of Fertility responding, this chains into Harvest for Fields refill.* Rite triggers globally. Charlie's Worship of Fertility responds: triggers Harvest in Alice's Domain. No On Harvest responders in Alice's Domain, but Fields refill from 7 to 7 (already full, so 0 new cards). Bob's Worship of War responds: Alice may trigger Brawl in any Domain — targets Bob's massive Domain. Brawl in Bob's Domain: Bob's Share the Spoils responds (On Feast, not On Brawl — no effect). No Mob cards in Bob's Domain to give cards to Alice. Brawl resolves with no transfers.
-
-OPS:
-
-**T29 — Bob:** Activates **Tyranny** to draw 4 cards from Claw (matching his 4 [Discontent] cards: Ingenuity, Plough, Tyranny, Chiefdom). *With 2 Trophies already and a massive Domain, accelerating Claw depletion while gaining more [Trophy] cards is the winning move.* Draws Armament, Poach, Outriders, and the next card (Worship of the Hunt). Armament and Poach carry [Discontent], further fueling future Tyranny activations.
+**T19 — Alice:** Activates **Crags** to scout the Claw pile. *With 2 Crags in Domain, Alice has solid Brawl defense — time to check what's coming before committing to combat.* Alice looks at top 3 Claw cards (Raid, Raid, Chiefdom) and puts Raid into her discard to remove a dangerous Mob card from circulation.
 
 <details><summary>🎯 Raw OPS</summary>
 
 ```
-DRAW|claw|4|Bob
+DRAW_DISCARD|claw|1|Alice
 ```
 
 </details>
 
-<details><summary>📋 Ops Trace (4 applied, 0 violations)</summary>
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
 
-- ✅ DRAW claw → Armament → Bob's Domain
-- ✅ DRAW claw → Poach → Bob's Domain
-- ✅ DRAW claw → Outriders → Bob's Domain
-- ✅ DRAW claw → Incite → Bob's Domain
+- ✅ DRAW_DISCARD claw → Raid → Alice's discard
 
 </details>
 
-**T30 — Charlie:** Activates **Sky Dance** to trigger Rite. *With Worship of Fertility responding, this chains into Harvest → Fields refill, building toward [Nature] victory.* Rite fires globally. Charlie's Worship of Fertility responds: triggers Harvest in Charlie's Domain. Fields refill from 7 to 7 (already full, no change). No other On Harvest responders.
+**T20 — Bob:** Activates **Warband** to trigger Brawl in Charlie's Domain (largest with 9 cards). *Charlie is snowballing with Pathfinding and needs to be stopped before he runs away with Tree.* Charlie has no Brawl defenses — no Militia, no Eldership, no double Crags. No [Mob] cards in Charlie's Domain to respond. Brawl baseline fires: Charlie must discard 1 card of his choice. Charlie discards Sowing (keeping Withered Crop for Wheat access, protecting Pathfinding and Sky Dance).
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+MOVE|Charlie|Sowing|DISCARD
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ MOVE Sowing Charlie's Domain → Charlie's discard
+
+</details>
+
+---
+
+### === STATE AFTER TURN 20 ===
+
+**Alice** (4 cards): Crags, Armament, Raid, Crags
+  Discard: Harvest, Ingenuity, Marauders, Raid
+**Bob** (9 cards): Crags, Pasture, Nomad, Solstice, Pasture, Militia, Tavern, Worship of the Hunt, Warband
+  Discard: Harvest
+**Charlie** (8 cards): Pathfinding, Solstice, Oral Tradition, Forage, Withered Crop, Sowing, Crags, Sky Dance
+  Discard: Sowing
+
+Season: Gathering, Nomad
+Fields (5): Granary, Mill, Tavern, Plough, Famine
+Piles: Claw 36, Tree 21, Wheat 10, Coin 5
+
+---
+
+**T21 — Charlie:** Activates **Pathfinding**. *With 3 [Knowledge] cards (Pathfinding, Oral Tradition, Sowing), this draws 3 from Tree — far better than a single Season pick.* Charlie draws Herbalism, Worship of Fertility, and Forage. Herbalism and Forage have Activate abilities (kept). Worship of Fertility is [Spiritual] with On Rite (kept). No Drafted effects on any of these cards.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+DRAW|tree|3|Charlie
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (3 applied, 0 violations)</summary>
+
+- ✅ DRAW tree → Herbalism → Charlie's Domain
+- ✅ DRAW tree → Worship of Fertility → Charlie's Domain
+- ✅ DRAW tree → Forage → Charlie's Domain
+
+</details>
+
+## Round 8 (Turns 22–24)
+
+**T22 — Alice:** Activates **Crags** to scout the Claw pile. *With 2 Crags providing Brawl defense and no Wheat access, scouting Claw to remove threats or stash useful cards is the best play.* Alice looks at the top 3 Claw cards (Raid, Chiefdom, Scavenge) and puts Chiefdom into her discard — a strong [Allegiance] card she can't use but could retrieve later with Herbalism if she ever gets access.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+DRAW_DISCARD|claw|1|Alice
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ DRAW_DISCARD claw → Raid → Alice's discard
+
+</details>
+
+**T23 — Bob:** Activates **Warband** to trigger Brawl in Charlie's Domain (11 cards, largest on board). *Charlie's Pathfinding engine is running away with the game — must strip cards before he depletes Tree.* Brawl fires in Charlie's Domain. No [Mob] cards present, no On Brawl responders — Brawl baseline applies: Charlie discards 1 card of choice. Charlie discards Forage (least essential duplicate).
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+MOVE|Charlie|Forage|DISCARD
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ MOVE Forage Charlie's Domain → Charlie's discard
+
+</details>
+
+**T24 — Charlie:** Activates **Sky Dance** to trigger Rite. *With Worship of Fertility responding, this chains into Harvest for Fields refill and potential Feast cascade.* Rite fires globally. Charlie's Worship of Fertility responds: triggers Harvest in Charlie's Domain. Fields refill from 5 to 7 (draws Apprenticeship, Plough from Wheat pile). No On Harvest cards in Charlie's Domain, so Harvest resolves with just the refill. Bob's Worship of the Hunt also responds to the Rite — Charlie (the Rite triggerer) may activate all [Hunt] cards in their Domain, but Charlie has no [Hunt] cards, so this does nothing.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+REFILL_FIELDS|2
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ REFILL_FIELDS +2: [Apprenticeship, Plough]
+
+</details>
+
+## Round 9 (Turns 25–27)
+
+**T25 — Alice:** Draws from Claw, getting **Chiefdom**. *With 2 Crags giving Brawl defense and multiple Raids in discard, taking an [Allegiance][Trophy] card that can plant Mob fits a Claw-depletion strategy.* Chiefdom enters Alice's Domain — she now has a repeatable way to move Mob cards. Her 2 Crags mean opponents must discard to Brawl her successfully.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+DRAW|claw|1|Alice
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ DRAW claw → Chiefdom → Alice's Domain
+
+</details>
+
+**T26 — Bob:** Activates **Warband** to trigger Brawl in Charlie's Domain (largest with 10 cards). *Charlie's runaway Pathfinding engine is the biggest threat — must strip cards before he dominates Tree.* Brawl fires in Charlie's Domain. No [Mob] cards present, so baseline Brawl applies: Charlie discards 1 card of choice. Charlie discards Withered Crop (least useful — already has Sowing for Wheat access).
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+MOVE|Charlie|Withered Crop|DISCARD
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ MOVE Withered Crop Charlie's Domain → Charlie's discard
+
+</details>
+
+**T27 — Charlie:** Activates **Sky Dance** to trigger Rite. *With Worship of Fertility responding, this chains into Harvest for Fields refill and potential On Harvest value.* Rite fires in Charlie's Domain. Charlie's Worship of Fertility responds: triggers Harvest in Charlie's Domain. Fields refill from 7 to 7 (already full, no refill needed). Bob's Solstice and Charlie's Solstice both have On Harvest — Bob chooses to have all players of his culture (Nomad) draw 1 from Tree; only Bob has Nomad culture, so Bob draws Nomad. Charlie's Solstice: Charlie chooses all players of his culture to draw from Tree, but Charlie has no [Culture] card — effect fizzles.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+DRAW|tree|1|Bob
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ DRAW tree → Nomad → Bob's Domain
+
+</details>
+
+## Round 10 (Turns 28–30)
+
+**T28 — Alice:** Activates **Chiefdom** to move Raid from her Domain to Charlie's Domain. *Charlie has no Brawl defense and holds the most valuable engine — planting Mob now sets up a devastating Warband strike next turn.* Alice chooses her own Raid and transfers it to Charlie's Domain.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+MOVE|Alice|Raid|DOMAIN|Charlie
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ MOVE Raid Alice's Domain → Charlie's Domain
+
+</details>
+
+**T29 — Bob:** Activates **Warband** to trigger Brawl in Charlie's Domain (largest at 10 cards). *Charlie's Pathfinding engine is the biggest threat — stripping cards now before he runs away with Tree.* Charlie has Raid [Mob] in Domain — it fights for Bob, giving Bob one of Charlie's cards. Charlie chooses to give up Forage (least valuable). No other On Brawl effects fire.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+MOVE|Charlie|Forage|DOMAIN|Bob
+MOVE|Charlie|Raid|DISCARD
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (2 applied, 0 violations)</summary>
+
+- ✅ MOVE Forage Charlie's Domain → Bob's Domain
+- ✅ MOVE Raid Charlie's Domain → Charlie's discard
+
+</details>
+
+**T30 — Charlie:** Activates **Sky Dance** to trigger Rite. *With Worship of Fertility responding, this chains into Harvest for Fields refill and potential Feast triggers.* Rite fires in Charlie's Domain. Charlie's Worship of Fertility responds: triggers Harvest in Charlie's Domain. Fields refill from 7 to 7 (already full, no refill needed). No On Harvest cards in any Domain respond.
 
 OPS:
 
@@ -525,179 +553,283 @@ OPS:
 
 ### === STATE AFTER TURN 30 ===
 
-**Alice** (2 cards): Raid, Sacred Grove
-**Bob** (16 cards): Sowing, Ingenuity, Crags, Pasture, Plough, Granary, Worship of War, Share the Spoils, Pathfinding, Chiefdom, Tyranny, Pasture, Armament, Poach, Outriders, Incite
-  Discard: Mine, Nomad, Solstice, Forage, Chiefdom, Harvest, Regrowth
-**Charlie** (9 cards): Worship of Fertility, Ingenuity, Scavenge, Pasture, Pathfinding, Forage, Nomad, Crags, Sky Dance
-  Discard: Rumour, Harvest, Gathering, Regrowth
+**Alice** (4 cards): Crags, Armament, Crags, Chiefdom
+  Discard: Harvest, Ingenuity, Marauders, Raid, Raid
+**Bob** (11 cards): Crags, Pasture, Nomad, Solstice, Pasture, Militia, Tavern, Worship of the Hunt, Warband, Nomad, Forage
+  Discard: Harvest
+**Charlie** (8 cards): Pathfinding, Solstice, Oral Tradition, Sowing, Crags, Sky Dance, Herbalism, Worship of Fertility
+  Discard: Sowing, Forage, Withered Crop, Raid
 
-Season: Highlander
-Fields (7): Famine, Militia, Famine, Plough, Mill, Plough, Mill
-Piles: Claw 29, Tree 19, Wheat 8, Coin 3
+Season: Gathering, Nomad
+Fields (7): Granary, Mill, Tavern, Plough, Famine, Apprenticeship, Plough
+Piles: Claw 34, Tree 17, Wheat 8, Coin 5
 
 ---
 
 ## Round 11 (Turns 31–33)
 
-**T31 — Alice:** Activates **Sacred Grove**, choosing to trigger Rite in her Domain. *With Worship of Fertility in Charlie's Domain, this will trigger Harvest and refill Fields while I fish for better cards.* Rite fires globally. Charlie's Worship of Fertility responds: triggers Harvest in Alice's Domain. Harvest fires — Fields refill from 7 to 7 (already full, no change). Bob's Plough responds to Harvest: Bob chooses to trigger Feast in his Domain. Bob's Share the Spoils responds to Feast: Bob draws 1 from Claw (Scavenge). Bob's Poach responds to Feast: triggers Feast in Bob's Domain (hunt limit = 2 from his Pastures, 1 used). Poach discards, Bob draws 1 from Claw (Raid). Second Feast from Poach — Share the Spoils responds again: Bob draws 1 from Claw (Warband).
+**T31 — Alice:** Activates **Chiefdom** to move **Raid** from her discard to Bob's Domain. *Planting Mob in Bob's Domain — he has the most cards and is a threat with 2 Pastures and Worship of the Hunt. Setting up for a future Brawl.*
 
 <details><summary>🎯 Raw OPS</summary>
 
 ```
-MOVE|Bob|Poach|DISCARD
-DRAW|claw|3|Bob
-```
-
-</details>
-
-<details><summary>📋 Ops Trace (4 applied, 0 violations)</summary>
-
-- ✅ MOVE Poach Bob's Domain → Bob's discard
-- ✅ DRAW claw → Scavenge → Bob's Domain
-- ✅ DRAW claw → Raid → Bob's Domain
-- ✅ DRAW claw → Warband → Bob's Domain
-
-</details>
-
-**T32 — Bob:** Activates **Chiefdom** to move **Scavenge** from his Domain to Alice's Domain. *Stacking Alice with Mob cards before unleashing Brawl — she already has Raid, adding Scavenge makes her Domain a juicy target for next turn's Warband.* No events triggered.
-
-<details><summary>🎯 Raw OPS</summary>
-
-```
-MOVE|Bob|Scavenge|DOMAIN|Alice
-```
-
-</details>
-
-<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
-
-- ✅ MOVE Scavenge Bob's Domain → Alice's Domain
-
-</details>
-
-**T33 — Charlie:** Activates **Sky Dance** to trigger Rite. *Bob's massive Domain with Worship of War is the existential threat — need to build Spiritual engine before he destroys everyone.* Rite fires globally. Charlie's Worship of Fertility responds: triggers Harvest in Charlie's Domain. Fields refill from 7 to 7 (already full, no change). No On Harvest responders in Charlie's Domain, so Harvest does nothing further. Bob's Worship of War responds: Bob may trigger Brawl in any Domain — Bob targets Alice (smallest Domain, has 2 Mob cards). Brawl in Alice's Domain: Alice's Raid responds (gives 1 card to Bob), Alice's Scavenge responds (gives 1 card from discard to Bob — but Alice's discard is empty, so no effect).
-
-<details><summary>🎯 Raw OPS</summary>
-
-```
+MOVE_DISCARD|Alice|Raid
 MOVE|Alice|Raid|DOMAIN|Bob
-MOVE|Alice|Scavenge|DOMAIN|Bob
 ```
 
 </details>
 
 <details><summary>📋 Ops Trace (2 applied, 0 violations)</summary>
 
+- ✅ MOVE_DISCARD Raid Alice's discard → Alice's Domain
 - ✅ MOVE Raid Alice's Domain → Bob's Domain
-- ✅ MOVE Scavenge Alice's Domain → Bob's Domain
+
+</details>
+
+**T32 — Bob:** Activates **Warband** to trigger Brawl in Charlie's Domain (8 cards, the largest). *Charlie's Pathfinding engine is the biggest threat — time to strip it before he runs away with the game.* Brawl fires in Charlie's Domain. Charlie has no On Brawl responders and no Mob cards, so the Brawl baseline applies: Charlie discards 1 card of his choice. Charlie discards Sowing (already has Herbalism for recovery, and his Nature count is weak anyway).
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+MOVE|Charlie|Sowing|DISCARD
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ MOVE Sowing Charlie's Domain → Charlie's discard
+
+</details>
+
+**T33 — Charlie:** Activates **Sky Dance** to trigger Rite. *With Worship of Fertility responding, this chains into Harvest which refills Fields and could trigger further effects.* Rite fires in Charlie's Domain. Charlie's Worship of Fertility responds: triggers Harvest in Charlie's Domain. Harvest event fires — Fields refill from 7 to 7 (already full, no refill needed). Bob's Solstice responds to Harvest: Bob chooses to have all players of his culture (Nomad) draw 1 from Tree — but Charlie has no culture card, so only Bob draws. Bob draws Regrowth (Drafted) — all Pasture cards in discard return to owners' Domains. No Pastures in any discard. Regrowth moves to discard.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+DRAW_DISCARD|tree|1|Bob
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ DRAW_DISCARD tree → Regrowth → Bob's discard
 
 </details>
 
 ## Round 12 (Turns 34–36)
 
-**T34 — Alice:** Activates **Sacred Grove**, choosing to trigger Rite in her Domain. *Desperate play — need to find Spiritual cards to have any chance, and Rite might chain into something useful.* Rite fires. Charlie's Worship of Fertility responds: triggers Harvest in Alice's Domain. Harvest fires — Fields refill from 7 to 7 (already full, no change). Charlie's Sky Dance could trigger another Rite but Alice has no On Harvest cards and no further benefit. Bob's Worship of War responds to the original Rite: Bob may trigger Brawl in any Domain — Bob targets Alice. Brawl fires in Alice's Domain. No [Mob] cards in Alice's Domain, so no On Brawl effects trigger. The Brawl does nothing to Alice.
-
-OPS:
-
-**T35 — Bob:** Activates **Warband** from Domain, triggering Brawl in Charlie's Domain (the largest with 9 cards). *Charlie has the most [Nature] and [Trophy] — destroying his position before Tree depletes is critical.* Charlie's Scavenge responds: gives Bob 1 card from Charlie's discard. Bob chooses Gathering (most versatile). Charlie has no Eldership or Militia to cancel.
+**T34 — Alice:** Activates **Chiefdom** to move **Raid** from Bob's Domain to Charlie's Domain. *Positioning Mob in Charlie's undefended Domain for a future Brawl — Charlie has no Militia or Eldership, making them vulnerable.* Charlie now holds a [Mob] card that will backfire when Brawl is triggered against them.
 
 <details><summary>🎯 Raw OPS</summary>
 
 ```
-MOVE|Charlie|Scavenge|DISCARD
-MOVE_DISCARD|Charlie|Gathering
-MOVE|Charlie|Gathering|DOMAIN|Bob
-```
-
-</details>
-
-<details><summary>📋 Ops Trace (3 applied, 0 violations)</summary>
-
-- ✅ MOVE Scavenge Charlie's Domain → Charlie's discard
-- ✅ MOVE_DISCARD Gathering Charlie's discard → Charlie's Domain
-- ✅ MOVE Gathering Charlie's Domain → Bob's Domain
-
-</details>
-
-**T36 — Charlie:** Activates **Sky Dance** to trigger Rite. *With Worship of Fertility responding, this chains into Harvest and refills Fields while building toward Nature victory.* Rite fires globally. Charlie's Worship of Fertility responds: triggers Harvest in Charlie's Domain. Fields refill from 7 to 7 (already full, no change). No other Rite responders. Bob's Plough responds to Harvest: Bob chooses Feast in his Domain. Bob's Share the Spoils responds: Bob draws Marauders from Claw.
-
-<details><summary>🎯 Raw OPS</summary>
-
-```
-DRAW|claw|1|Bob
+MOVE|Bob|Raid|DOMAIN|Charlie
 ```
 
 </details>
 
 <details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
 
-- ✅ DRAW claw → Marauders → Bob's Domain
+- ✅ MOVE Raid Bob's Domain → Charlie's Domain
+
+</details>
+
+**T35 — Bob:** Activates **Warband** to trigger Brawl in Charlie's Domain (most cards with 8). *Charlie's Pathfinding engine is the biggest threat — stripping cards now before he runs away with the game.* Charlie has Raid which responds On Brawl: Charlie must give 1 card to Bob. Charlie gives Oral Tradition (least useful without Coin access). No other On Brawl responders.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+MOVE|Charlie|Oral Tradition|DOMAIN|Bob
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ MOVE Oral Tradition Charlie's Domain → Bob's Domain
+
+</details>
+
+**T36 — Charlie:** Activates **Sky Dance** to trigger Rite. *With Worship of Fertility responding, this chains into Harvest which refills Fields and builds toward Wheat depletion where I'm competitive.* Rite fires in Charlie's Domain. Worship of Fertility responds: triggers Harvest in Charlie's Domain. Harvest event fires — Fields refill from 7 to 7 (already full, no change). Bob's Solstice has On Harvest but only triggers on actual Harvest events, not from Rite chains. Charlie's Solstice also has On Harvest — Charlie chooses to have all players of his culture draw 1 from Tree. Charlie has no Culture card, so only Charlie benefits: draws Sacred Grove.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+DRAW|tree|1|Charlie
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ DRAW tree → Sacred Grove → Charlie's Domain
 
 </details>
 
 ## Round 13 (Turns 37–39)
 
-**T37 — Alice:** Activates **Sacred Grove**, choosing to trigger Rite in her Domain. *Desperate play — only card left, fishing for any advantage against Bob's massive lead.* Rite fires globally. Bob's Worship of War responds: Bob may trigger Brawl in any Domain — he targets Alice. Brawl in Alice's Domain with no Mob cards means nothing happens. Charlie's Worship of Fertility responds: triggers Harvest in Charlie's Domain. Fields refill from 7 to 7 (already full, no change). Charlie's Domain has no On Harvest cards.
-
-OPS:
-
-**T38 — Bob:** Activates **Warband** to trigger Brawl in Charlie's Domain (largest aside from his own at 8 cards). *Charlie's Pathfinding is the only threat left — strip it now.* Brawl fires in Charlie's Domain. Bob's Raid cards in his OWN Domain don't respond (they only respond when Brawl is in THEIR Domain). Charlie has no [Mob] cards and no Brawl defense. The Brawl resolves with no responders — no state change occurs. Bob wasted his turn.
-
-OPS:
-
-**T39 — Charlie:** Activates **Sky Dance** to trigger Rite. *Building toward [Nature] victory with Worship of Fertility compounding Harvest triggers.* Rite fires globally. Charlie's Worship of Fertility responds: triggers Harvest in Charlie's Domain. Fields refill from 7 to 7 (already full, no change). No other On Harvest responders in Charlie's Domain. Bob's Plough responds to Harvest: Bob chooses to trigger Feast in his Domain. Bob's Share the Spoils responds: Bob draws 1 from Claw (Raid).
+**T37 — Alice:** Activates **Chiefdom** to move **Raid** from Charlie's Domain to Bob's Domain. *Bob has the most cards and is leading [Nature] — planting Mob there sets up a devastating Brawl next turn.* Charlie loses a [Discontent] but Bob gains a liability.
 
 <details><summary>🎯 Raw OPS</summary>
 
 ```
-DRAW|claw|1|Bob
+MOVE|Charlie|Raid|DOMAIN|Bob
 ```
 
 </details>
 
 <details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
 
-- ✅ DRAW claw → Raid → Bob's Domain
+- ✅ MOVE Raid Charlie's Domain → Bob's Domain
 
 </details>
 
-## Round 14 (Turns 40–40)
+**T38 — Bob:** Activates **Warband** to trigger Brawl in Charlie's Domain (7 cards, tied with Bob but Charlie is the bigger threat with Pathfinding engine). *Charlie's Pathfinding + Knowledge stack is snowballing — must strip cards before he runs away with Tree.* Brawl fires in Charlie's Domain. No [Mob] cards present, so baseline Brawl applies: Charlie discards 1 card of their choice. Charlie discards Herbalism (least essential to their Rite engine).
 
-**T40 — Alice:** Activates **Sacred Grove**, choosing to trigger Rite in her Domain. *Desperate play — need to find Spiritual cards or leverage Charlie's Worship responders somehow.* Rite fires globally. Charlie's Worship of Fertility responds: triggers Harvest in Alice's Domain — but Alice has no On Harvest cards, so nothing happens. Fields refill from 7 to 7 (already full, no change). No other Rite responders exist. Alice gains nothing tangible but the Harvest event fired.
+<details><summary>🎯 Raw OPS</summary>
 
-OPS:
+```
+MOVE|Charlie|Herbalism|DISCARD
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ MOVE Herbalism Charlie's Domain → Charlie's discard
+
+</details>
+
+**T39 — Charlie:** Activates **Sky Dance** to trigger Rite. *With Worship of Fertility and Sacred Grove responding, this chains into Harvest for Fields refill and potential scoring acceleration.* Rite fires globally. Charlie's Worship of Fertility responds: triggers Harvest in Charlie's Domain. Charlie's Sacred Grove could respond but Charlie chooses not to use it. Fields refill from 7 to 7 (already full, no change). Bob's Solstice responds to Harvest: Bob chooses to have all players of Nomad culture draw 1 from Tree. Bob draws Pasture. No other players share Nomad culture.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+DRAW|tree|1|Bob
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ DRAW tree → Pasture → Bob's Domain
+
+</details>
+
+## Round 14 (Turns 40–42)
+
+**T40 — Alice:** Activates **Chiefdom** to move Bob's **Raid** from his Domain to Charlie's Domain. *Planting Mob in Charlie's Domain sets up a devastating Brawl — Charlie has zero Brawl defense and Alice can trigger Warband next turn via Claw draw.* The [Mob] card shifts allegiance, now primed to punish Charlie when Brawl fires.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+MOVE|Bob|Raid|DOMAIN|Charlie
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ MOVE Raid Bob's Domain → Charlie's Domain
+
+</details>
 
 ---
 
 ### === STATE AFTER TURN 40 ===
 
-**Alice** (1 cards): Sacred Grove
-**Bob** (22 cards): Sowing, Ingenuity, Crags, Pasture, Plough, Granary, Worship of War, Share the Spoils, Pathfinding, Chiefdom, Tyranny, Pasture, Armament, Outriders, Incite, Raid, Warband, Raid, Scavenge, Gathering, Marauders, Raid
-  Discard: Mine, Nomad, Solstice, Forage, Chiefdom, Harvest, Regrowth, Poach
-**Charlie** (8 cards): Worship of Fertility, Ingenuity, Pasture, Pathfinding, Forage, Nomad, Crags, Sky Dance
-  Discard: Rumour, Harvest, Regrowth, Scavenge
+**Alice** (4 cards): Crags, Armament, Crags, Chiefdom
+  Discard: Harvest, Ingenuity, Marauders, Raid
+**Bob** (13 cards): Crags, Pasture, Nomad, Solstice, Pasture, Militia, Tavern, Worship of the Hunt, Warband, Nomad, Forage, Oral Tradition, Pasture
+  Discard: Harvest, Regrowth
+**Charlie** (7 cards): Pathfinding, Solstice, Crags, Sky Dance, Worship of Fertility, Sacred Grove, Raid
+  Discard: Sowing, Forage, Withered Crop, Raid, Sowing, Herbalism
 
-Season: Highlander
-Fields (7): Famine, Militia, Famine, Plough, Mill, Plough, Mill
-Piles: Claw 24, Tree 19, Wheat 8, Coin 3
+Season: Gathering, Nomad
+Fields (7): Granary, Mill, Tavern, Plough, Famine, Apprenticeship, Plough
+Piles: Claw 34, Tree 14, Wheat 8, Coin 5
 
 ---
+
+**T41 — Bob:** Activates **Warband** to trigger Brawl in Charlie's Domain (7 cards, tied with Bob but Charlie is the bigger threat with Pathfinding engine). *Charlie's spiritual-knowledge combo will run away with the game if unchecked.* Brawl fires in Charlie's Domain. Charlie's Raid responds: gives 1 card to Bob (the triggering player). Charlie chooses to give Raid itself (least valuable). No other On Brawl effects — Charlie discards 1 card of choice (Sky Dance, to protect Pathfinding).
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+MOVE|Charlie|Raid|DOMAIN|Bob
+MOVE|Charlie|Sky Dance|DISCARD
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (2 applied, 0 violations)</summary>
+
+- ✅ MOVE Raid Charlie's Domain → Bob's Domain
+- ✅ MOVE Sky Dance Charlie's Domain → Charlie's discard
+
+</details>
+
+**T42 — Charlie:** Activates **Sacred Grove**, choosing to trigger Rite in their Domain. *With Worship of Fertility responding, this chains into Harvest for Fields refill and potential tag acceleration.* Rite fires → Charlie's Worship of Fertility responds: triggers Harvest in Charlie's Domain. Harvest event fires → Fields refill from 7 to 7 (already full, no change). Bob's Solstice has On Harvest but Charlie triggered it, so Bob could choose to help cultural allies — but Bob is Nomad culture while Charlie has no culture card, so no cultural benefit applies.
+
+OPS:
+
+## Round 15 (Turns 43–45)
+
+**T43 — Alice:** Activates **Chiefdom** to move **Raid** from Bob's Domain to Charlie's Domain. *Charlie has no Brawl defense and is leading the [Nature] race — planting Mob sets up a devastating strike next turn.* Chiefdom allows moving 1 [Mob] card from any Domain sharing Alice's culture (Highlander) to any other Domain. Bob has Nomad culture, so Alice moves from her own discard... wait, Chiefdom says "from your Domain or any Domain that shares your culture" — Alice has no Mob in her Domain, and Bob (Nomad) doesn't share Highlander culture. Alice cannot use Chiefdom effectively here.
+
+Alice instead activates **Crags** to scout Claw. *Looking for Tyranny or useful [Trophy] cards to race Claw depletion — Alice has Chiefdom [Trophy] already.* Alice looks at top 3: Scavenge, Tyranny, Uprising. She puts Tyranny into her discard — removing it from play prevents anyone from snowballing, and she could potentially recover it with Herbalism if she acquires one.
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+DRAW_DISCARD|claw|1|Alice
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ DRAW_DISCARD claw → Scavenge → Alice's discard
+
+</details>
+
+**T44 — Bob:** Activates **Warband** to trigger Brawl in Alice's Domain (the largest with 4 cards). *Alice is building [Trophy] tags and has Chiefdom — need to strip her before Claw depletes.* Alice has no Brawl defense (2 Crags but that requires attacker to discard, and Bob doesn't care). Alice has no On Brawl responders. Brawl baseline fires — Alice must discard 1 card of her choice. Alice discards Armament (least useful without Sword deck access).
+
+<details><summary>🎯 Raw OPS</summary>
+
+```
+MOVE|Alice|Armament|DISCARD
+```
+
+</details>
+
+<details><summary>📋 Ops Trace (1 applied, 0 violations)</summary>
+
+- ✅ MOVE Armament Alice's Domain → Alice's discard
+
+</details>
+
+**T45 — Charlie:** Activates **Sacred Grove**, choosing to trigger Rite. *With Worship of Fertility responding, this chains into Harvest → Fields refill, building toward [Nature] win.* Rite fires in Charlie's Domain. Worship of Fertility responds: triggers Harvest in Charlie's Domain. Fields refill from 7 to 7 (already full, no refill needed). Bob's Worship of the Hunt responds to Rite: Bob may activate all [Hunt] cards — Bob has no [Hunt] cards, so no effect.
+
+OPS:
 
 ---
 
 ## Epilogue
 
-**Alice** — 1 cards
-  Domain: Sacred Grove
-  Tags: [Nature]×1, [Spiritual]×1
+**Alice** — 3 cards
+  Domain: Crags, Crags, Chiefdom
+  Tags: [Allegiance]×1, [Land]×2, [Nature]×2
 
-**Bob** — 22 cards
-  Domain: Sowing, Ingenuity, Crags, Pasture, Plough, Granary, Worship of War, Share the Spoils, Pathfinding, Chiefdom, Tyranny, Pasture, Armament, Outriders, Incite, Raid, Warband, Raid, Scavenge, Gathering, Marauders, Raid
-  Tags: [Allegiance]×1, [Craftsmanship]×1, [Discontent]×8, [Knowledge]×3, [Labour]×2, [Land]×3, [Nature]×3, [Rabble]×5, [Spiritual]×1, [Trophy]×1, [Unit]×5
+**Bob** — 14 cards
+  Domain: Crags, Pasture, Nomad, Solstice, Pasture, Militia, Tavern, Worship of the Hunt, Warband, Nomad, Forage, Oral Tradition, Pasture, Raid
+  Tags: [Culture]×2, [Discontent]×2, [Knowledge]×1, [Land]×4, [Mob]×1, [Nature]×4, [Spiritual]×1, [Unit]×2
 
-**Charlie** — 8 cards
-  Domain: Worship of Fertility, Ingenuity, Pasture, Pathfinding, Forage, Nomad, Crags, Sky Dance
-  Tags: [Craftsmanship]×1, [Culture]×1, [Discontent]×1, [Knowledge]×1, [Land]×2, [Nature]×3, [Spiritual]×2
+**Charlie** — 5 cards
+  Domain: Pathfinding, Solstice, Crags, Worship of Fertility, Sacred Grove
+  Tags: [Knowledge]×1, [Land]×1, [Nature]×3, [Spiritual]×2
 
 ### Stats
-API calls: 41 | Piles: Claw 24, Tree 19, Wheat 8, Coin 3, Candle 1
+API calls: 45 | Piles: Claw 33, Tree 14, Wheat 8, Coin 5, Candle 1
