@@ -213,7 +213,7 @@ Activate — draw from Claw equal to your
 [Discontent] count.
 ```
 
-🤖 Claw's Pathfinding — snowballs violently. More Claw cards = more Discontent = more draws. A player with Tyranny and 3+ Discontent is the biggest threat on the board — attack them immediately or they'll run away with [Trophy] and end the game via Claw depletion.
+🤖 Claw's Pathfinding — snowballs violently. More Claw cards = more Discontent = more draws. A player with Tyranny and 3+ Discontent is the biggest threat on the board — attack them immediately or they'll run away with [Trophy] and end the game via Claw depletion. With Tyranny, hoarding [Mob] cards in your OWN Domain is actually good — they carry [Discontent] which fuels bigger Tyranny draws, and you want Brawl responders defending your position. Counter: triggering Brawl on the Tyranny player's Domain turns their own Mob cards against them — each [Mob] gives YOU a card and strips their Discontent count.
 
 ```
 🐾  MARAUDERS

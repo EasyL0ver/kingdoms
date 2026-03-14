@@ -478,6 +478,7 @@ function ApplyOps($opsText) {
     }
 
     # Log the ops trace
+    $script:lastApplied = $applied
     if ($applied.Count -gt 0 -or $violations.Count -gt 0) {
         Log "<details><summary>📋 Ops Trace ($($applied.Count) applied, $($violations.Count) violations)</summary>`n"
         foreach ($a in $applied) { Log "- $a" }
@@ -642,6 +643,12 @@ Re-do this turn. Only reference cards that ACTUALLY EXIST in the zones listed ab
     $firstLine = ($narrativePart -split "`n")[0]
 
     Write-Host "T$t $p -> $firstLine" -ForegroundColor Cyan
+    # Print applied ops to console
+    if ($script:lastApplied) {
+        foreach ($a in $script:lastApplied) {
+            Write-Host "  $a" -ForegroundColor DarkGray
+        }
+    }
 
     # State snapshot every 10 turns
     if ($t % 10 -eq 0) {
