@@ -160,6 +160,14 @@ function AskClaude($systemBlocks, $userPrompt, $maxTokens) {
         }
     } catch {
         Write-Warning "API call failed: $_"
+        if ($_.Exception.Response) {
+            try {
+                $stream = $_.Exception.Response.GetResponseStream()
+                $reader = New-Object System.IO.StreamReader($stream)
+                $responseBody = $reader.ReadToEnd()
+                Write-Warning "API response body: $responseBody"
+            } catch { }
+        }
         return $null
     }
 }
