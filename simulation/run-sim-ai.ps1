@@ -93,7 +93,7 @@ for ($i = 0; $i -lt 7; $i++) {
 # ── Build state snapshot for AI ──
 function BuildStatePrompt($currentPlayer, $turnNum) {
     $sb = [System.Text.StringBuilder]::new()
-    $null = $sb.AppendLine("TURN $turnNum — $currentPlayer's turn.")
+    $null = $sb.AppendLine("TURN $turnNum — ${currentPlayer}'s turn.")
     $null = $sb.AppendLine("")
 
     foreach ($pl in $PlayerNames) {
