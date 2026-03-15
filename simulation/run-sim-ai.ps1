@@ -12,6 +12,8 @@ param(
 )
 
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+[Console]::InputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
 
 # Load API key from file if not passed
 if (-not $ApiKey) {
@@ -150,7 +152,7 @@ function AskClaude($systemBlocks, $userPrompt, $maxTokens) {
                     Write-Host "  cache: created=$($u.cache_creation_input_tokens) read=$($u.cache_read_input_tokens) new=$($u.input_tokens)" -ForegroundColor DarkGray
                     $script:showCacheStats = $false
                 }
-                return $resp.content[0].text
+                return $resp.content[0].text -replace [char]0x2014, '--' -replace [char]0x2013, '-' -replace [char]0x00d7, 'x'
             } catch {
                 $errText = "$_"
                 if ($errText -match "rate_limit" -and $attempt -lt 3) {
