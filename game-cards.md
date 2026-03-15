@@ -171,6 +171,7 @@ may trigger Brawl in any player's Domain.
 🐾  INCITE
 Drafted — move up to 3 [Mob] cards from
 your Domain to any other Domain(s).
+Discard Incite.
 ```
 
 🤖 Best setup card in the game. Load an opponent's Domain with Mob then Brawl it.
