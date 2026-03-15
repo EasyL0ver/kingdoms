@@ -11,6 +11,8 @@ param(
     [string]$Model = "claude-sonnet-4-20250514"
 )
 
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
 # Load API key from file if not passed
 if (-not $ApiKey) {
     $keyFile = "$PSScriptRoot\api-key.txt"
@@ -754,5 +756,5 @@ if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir | Out
 $timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
 $defaultFile = "$logDir\sim-$timestamp.md"
 $outPath = if ($OutFile) { $OutFile } else { $defaultFile }
-$output | Set-Content $outPath -Encoding UTF8
+[System.IO.File]::WriteAllText($outPath, $output, [System.Text.UTF8Encoding]::new($false))
 Write-Host "`nSimulation written to $outPath ($apiCalls API calls)" -ForegroundColor Green
