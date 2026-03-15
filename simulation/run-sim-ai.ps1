@@ -141,7 +141,8 @@ function AskClaude($systemBlocks, $userPrompt, $maxTokens) {
     try {
         for ($attempt = 1; $attempt -le 3; $attempt++) {
             try {
-                $resp = Invoke-RestMethod -Uri "https://api.anthropic.com/v1/messages" -Method POST -Headers $headers -Body $body -TimeoutSec 60
+                $bodyBytes = [System.Text.Encoding]::UTF8.GetBytes($body)
+                $resp = Invoke-RestMethod -Uri "https://api.anthropic.com/v1/messages" -Method POST -Headers $headers -Body $bodyBytes -TimeoutSec 60
                 if ($script:showCacheStats) {
                     $u = $resp.usage
                     Write-Host "  cache: created=$($u.cache_creation_input_tokens) read=$($u.cache_read_input_tokens) new=$($u.input_tokens)" -ForegroundColor DarkGray
