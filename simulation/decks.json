@@ -40,7 +40,7 @@
     { "name": "Forage", "tags": [], "count": 2 },
     { "name": "Sowing", "tags": ["Knowledge"], "count": 3 },
     { "name": "Withered Crop", "tags": [], "count": 3 },
-    { "name": "Pathfinding", "tags": ["Knowledge"], "count": 2 }
+    { "name": "Remembrance", "tags": ["Knowledge"], "count": 2 }
   ],
   "wheat": [
     { "name": "Plough", "tags": ["Labour"], "count": 3 },

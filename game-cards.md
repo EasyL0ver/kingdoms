@@ -201,10 +201,12 @@ refuse and trigger Brawl in their Domain.
 🐾  TYRANNY                                    ×2
 [Trophy] [Discontent]
 Activate — draw from Claw equal to your
-[Discontent] count.
+[Discontent] count, then trigger Brawl in
+your Domain (taken cards are discarded,
+not given to opponents).
 ```
 
-🤖 Claw's Pathfinding — snowballs violently. More Claw cards = more Discontent = more draws. A player with Tyranny and 3+ Discontent is the biggest threat on the board — attack them immediately or they'll run away with [Trophy] and end the game via Claw depletion. With Tyranny, hoarding [Mob] cards in your OWN Domain is actually good — they carry [Discontent] which fuels bigger Tyranny draws, and you want Brawl responders defending your position. Counter: triggering Brawl on the Tyranny player's Domain turns their own Mob cards against them — each [Mob] gives YOU a card and strips their Discontent count.
+🤖 Massive draw engine with a built-in punishment — your own [Mob] cards fire against you on the self-Brawl. More Discontent = bigger draws but also more Mob in your Domain turning on you. Timing is everything: fire too early and it's weak, fire too late and the Brawl strips half your gains. Counter: plant extra [Mob] in the Tyranny player's Domain with Incite/Chiefdom — they'll lose even more when they trigger it.
 
 ```
 🐾  MARAUDERS
@@ -478,13 +480,14 @@ a Harvest card in your discard.
 🤖 Easier to meet mid-game after Harvest has been drawn.
 
 ```
-🌳  PATHFINDING
+🌳  REMEMBRANCE
 [Knowledge]
-Activate — take the top cards of the Tree pile
-equal to your number of [Knowledge] cards.
+Activate — return cards from your discard
+to your Domain equal to your [Knowledge]
+count.
 ```
 
-🤖 Snowball card — more Knowledge = more draws = more Knowledge. Can dominate the game. A player with Pathfinding and 3+ Knowledge is the biggest threat on the board — attack them with Brawl, Racketeering, or Incite before they run away with it.
+🤖 Knowledge payoff card — rewards having a stocked discard pile. Early losses from Brawl, Uprising, Culling, and Drafted effects become fuel for a massive comeback. Build Knowledge mid-game, then fire Remembrance late to recover your best cards. Weak if your discard is empty or full of junk. Counter: thin the Remembrance player's discard by stealing from it (Herbalism) before they can reclaim.
 
 ---
 
