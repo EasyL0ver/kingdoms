@@ -20,7 +20,9 @@
     { "name": "Culling", "tags": ["Discontent"], "count": 2 },
     { "name": "Ingenuity", "tags": ["Craftsmanship", "Discontent"], "count": 2 },
     { "name": "Uprising", "tags": ["Discontent"], "count": 3 },
-    { "name": "Ransack", "tags": [], "count": 2 }
+    { "name": "Ransack", "tags": [], "count": 2 },
+    { "name": "Spoils of War", "tags": ["Trophy", "Mob"], "count": 2 },
+    { "name": "Dusk Rite", "tags": ["Spiritual", "Discontent"], "count": 1 }
   ],
   "tree": [
     { "name": "Highlander", "tags": ["Culture"], "count": 3 },

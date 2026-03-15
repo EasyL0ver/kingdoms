@@ -295,6 +295,29 @@ If tied, you choose which player. Discard Culling.
 
 🤖 Claw's natural balancer. The biggest Domain gets punished whenever anyone draws this. Makes Claw draws risky for the leader and a potential equaliser for everyone else. Can't be hoarded or timed — pure chaos.
 
+```
+🐾  SPOILS OF WAR
+[Trophy] [Mob]
+Drafted — place Spoils of War in another
+player's Domain.
+On Brawl — moves to the triggerer's Domain,
+then triggerer draws from Claw and from Tree
+equal to their [Trophy] count.
+```
+
+🤖 The ultimate Trophy payoff card. Plant it on an enemy to mark them as a target — it's [Mob] so it makes them Brawl-vulnerable too. When you trigger Brawl and claim it, you draw from both Claw and Tree scaled by your total [Trophy] count. Rewards building the Trophy hunter archetype and bridges Claw+Tree. Gets exponentially stronger with Tyranny and Chiefdom.
+
+```
+🐾  DUSK RITE
+[Spiritual] [Discontent]
+Activate — remove any number of cards from
+your discard from the game. Draw from Claw
+and Tree equal to the number removed.
+Then trigger Rite. Discard Dusk Rite.
+```
+
+🤖 One-shot graveyard nuke — the shamans invoke the dead for a massive power surge. Burns your discard permanently (Remembrance can't recover removed cards), draws from both piles, and triggers Rite for Worship card cascades. Hold it until your graveyard is stacked and your Rite engine is ready. The dark payoff for the Claw+Tree archetype.
+
 ---
 
 ## 🌳 Tree Deck Cards
