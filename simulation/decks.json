@@ -16,10 +16,11 @@
     { "name": "Armament", "tags": ["Knowledge"], "count": 1 },
     { "name": "Outriders", "tags": [], "count": 2 },
     { "name": "Land Grab", "tags": ["Discontent"], "count": 3 },
-    { "name": "Foray", "tags": ["Discontent"], "count": 2 },
+    { "name": "Rite of Passage", "tags": ["Discontent"], "count": 2 },
     { "name": "Culling", "tags": ["Discontent"], "count": 2 },
     { "name": "Ingenuity", "tags": ["Craftsmanship", "Discontent"], "count": 2 },
-    { "name": "Uprising", "tags": ["Discontent"], "count": 3 }
+    { "name": "Uprising", "tags": ["Discontent"], "count": 3 },
+    { "name": "Ransack", "tags": [], "count": 2 }
   ],
   "tree": [
     { "name": "Highlander", "tags": ["Culture"], "count": 3 },

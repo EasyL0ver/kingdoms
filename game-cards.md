@@ -268,12 +268,20 @@ that would be taken are discarded instead.
 🤖 Purges your own Mob without anyone profiting. Draft when your Domain is polluted.
 
 ```
-🐾  FORAY
+🐾  RITE OF PASSAGE
 [Discontent]
 On Brawl — draw 1 from Tree.
 ```
 
-🤖 Passive insurance — compensates for Brawl losses with a Tree draw.
+🤖 Fighting is part of this tribe's culture — every Brawl teaches them something about the wild. Passive insurance that compensates for Brawl losses with a Tree draw. Makes self-Brawl (Tyranny) less punishing and rewards staying in Brawl-heavy games.
+
+```
+🐾  RANSACK
+Activate — discard a card from your Domain,
+then activate Claw zone and Tree zone.
+```
+
+🤖 Sacrifice outlet and Claw-Tree bridge card. Dump stolen junk or dead Mob cards, get 2 Claw + 1 Tree. Enables the raider-explorer archetype — your tribe repurposes plunder into fresh supplies and wilderness knowledge.
 
 ```
 🐾  CULLING
