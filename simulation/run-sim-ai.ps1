@@ -220,7 +220,6 @@ Structured commands using PIPE-DELIMITED format. Each field separated by |. Avai
   MOVE|{player}|{cardname}|DOMAIN|{other}     — Domain to another player's Domain
   MOVE_DISCARD|{player}|{cardname}            — own Discard to own Domain
   REFILL_FIELDS|{count}                       — draw N from Wheat to Fields (max 7)
-  REMOVE_GAME|{player}|{cardname}             — remove card from game entirely
   REMOVE_GAME_DISCARD|{player}|{cardname}     — remove card from discard from game entirely
 
 Card names must match EXACTLY as shown in the state (e.g. "Animal Husbandry" not "Animal"). Do NOT include tags like [Culture] in card names.
@@ -464,16 +463,6 @@ function ApplyOps($opsText) {
                         }
                     }
                     $null = $applied.Add("✅ REFILL_FIELDS +$($added.Count): [$($added -join ', ')]")
-                }
-                "REMOVE_GAME" {
-                    $player = $parts[1]; $cardName = $parts[2]
-                    $card = $Domains[$player] | Where-Object { $_.Name -eq $cardName } | Select-Object -First 1
-                    if ($card) {
-                        $null = $Domains[$player].Remove($card)
-                        $null = $applied.Add("✅ REMOVE_GAME $cardName from ${player}")
-                    } else {
-                        $null = $violations.Add("ILLEGAL: '$cardName' not in ${player}'s Domain for REMOVE_GAME")
-                    }
                 }
                 "REMOVE_GAME_DISCARD" {
                     $player = $parts[1]; $cardName = $parts[2]
