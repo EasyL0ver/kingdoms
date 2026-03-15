@@ -230,13 +230,17 @@ Card names must match EXACTLY as shown in the state (e.g. "Animal Husbandry" not
 CRITICAL RULES:
 - Drawn cards with Drafted keyword must be resolved immediately (check the card text!)
 - When cards are Drafted and say "move to discard", use DRAW_DISCARD not DRAW
+- DRAFTED-ONLY CARDS CANNOT BE ACTIVATED: Cards like Incite, Harvest, Gathering, Uprising, Culling, Feed the Commoners have NO "Activate —" text. They fire ONCE when drawn and CANNOT be used again from Domain. Do NOT activate them as an action.
+- DRAFTED CONDITIONS ARE MANDATORY: "discard a Pasture or discard Plough" means if you have no Pasture, Plough MUST discard. Same for Animal Husbandry (needs Pasture), Mine (needs Crags), Highlander (needs Crags), Nomad (needs Pasture). Check the prerequisite BEFORE keeping the card.
 - Event chains: if a card triggers an event, check ALL Domains for On {event} cards and resolve them
+- BRAWL SCOPE: On Brawl cards ONLY respond if they are in the Domain WHERE Brawl was triggered. If Brawl fires in Bob's Domain, ONLY Bob's On Brawl cards respond. Cards in other Domains do NOT respond.
 - [Mob] cards in a Domain fight for the ATTACKER during Brawl, not the owner
 - Domain holds max 1 [Culture], 1 [Allegiance], 1 [Religion] — if gaining a second, discard the existing one
 - Season auto-refills when it reaches 0 cards — do NOT emit any refill ops for Season
 - REFILL_FIELDS only when Harvest event fires. Fields max is always 5. Use count = (5 minus current Fields count)
 - Wheat zone: player takes cards from Fields (NOT the pile), and draws 1 Claw per card taken as tax. Use TAKE_FIELDS for each card, then DRAW claw N for the tax. Reasonable to take 1-3 cards, not all of them.
 - Activating Sowing itself is NOT a valid action. Sowing passively grants Wheat access if you have 2+ [Nature]. The action is activating the Wheat zone.
+- Chiefdom can only move [Mob] from YOUR Domain or a Domain sharing your culture. Cannot reach into unrelated Domains.
 - Play strategically but differently for each player — varied strategies make better playtests
 - WIN CONDITIONS: The game ends when any zone is fully depleted (pile empty AND face-up cards gone for Tree/Wheat). Tree depleted → most [Nature] wins. Claw depleted → most [Trophy] wins. Wheat depleted → most [Amenity] wins. Players should pursue tags matching their strategy and race/block pile depletion accordingly.
 - STRATEGY HEURISTICS:

@@ -154,5 +154,10 @@ Summarize each player's final domain, tag distribution, strategic identity, key 
 4. **Rite benefit direction** — benefits go to whoever *triggered* the Rite, not the Worship card owner
 5. **Crags defense cost** — attacker must discard, not the defender
 6. **Missing event chains** — On Rite can trigger Harvest → On Harvest → Feast... follow the full chain
+7. **Brawl scope** — On Brawl cards ONLY respond if they are in the Domain where Brawl was triggered. If Brawl fires in Bob's Domain, only Bob's On Brawl cards respond — NOT cards in Alice's or Charlie's Domain
+8. **Drafted-only cards cannot be activated** — Incite, Harvest, Gathering, Uprising, Culling, Feed the Commoners have NO Activate text. They fire once when drawn and cannot be used again from Domain. Only cards with "Activate —" text can be activated as an action
+9. **Drafted conditions are mandatory** — "discard a Pasture or discard Plough" means if you have no Pasture, Plough MUST discard itself. Same for Animal Husbandry, Mine (needs Crags), Highlander (needs Crags), Nomad (needs Pasture)
+10. **Chiefdom scope** — can only move [Mob] from YOUR Domain or a Domain sharing your culture. Cannot reach into any Domain without cultural connection
+11. **Spoils of War payout** — draws from Claw AND Tree equal to the triggerer's TOTAL [Trophy] count, not just 1
 
 

@@ -50,7 +50,7 @@ For example, to draw from the Tree deck:
 
 Cards use four keywords: **Activate**, **Drafted**, **On [Event]**, and **Trigger [Event]**. 
 
-- **Drafted** resolves the moment a card is drawn from any deck, before it enters your Domain. The card text says what happens and whether it stays or goes to discard.
+- **Drafted** resolves the moment a card is drawn from any deck, before it enters your Domain. It fires exactly once. The card text says what happens — some cards have conditions that must be met or the card discards itself (e.g. "discard a Pasture or discard Plough"). Cards that ONLY have Drafted text (no Activate text) cannot be activated later from your Domain — they fire on draw and that's it. If the Drafted text says "discard [this card]" or "move to discard", the card goes to your discard after resolving. Otherwise it stays in your Domain.
 
 Events can chain — one trigger can cascade through multiple cards. Events can fire globally (all Domains), locally (your Domain only), or targeted (specific player's Domain) — the scope is written on the card.
 
