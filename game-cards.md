@@ -61,10 +61,10 @@ When all Season cards are taken, reveal the next
 ```
 🌾  WHEAT ZONE
 [Zone]
-7 Wheat cards face-up (the Fields).
+5 Wheat cards face-up (the Fields).
 Activate — take any number of cards from the
 Fields. For each card taken, draw 1 from Claw.
-On Harvest — refill the Fields to 7 from the
+On Harvest — refill the Fields to 5 from the
 Wheat pile.
 ```
 
@@ -620,6 +620,15 @@ the Brawl in your Domain.
 > Can also sacrifice itself to cancel a Brawl targeting you.
 
 🤖 Best defensive card. Activate proactively to clean Mob. Save the On Brawl cancel for big threats.
+
+```
+🌾  WELL
+[Amenity]
+Any player may activate — activate Tree
+zone twice.
+```
+
+🤖 Public utility — anyone can use it, but it sits in YOUR Domain earning [Amenity]. Creates political protection (opponents don't want to destroy the village with the well). Double Tree activation is strong value that attracts allies and deters aggression.
 
 ---
 

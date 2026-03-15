@@ -82,8 +82,8 @@ for ($i = 0; $i -lt 4; $i++) {
     }
 }
 
-# Setup Fields (7 from Wheat)
-for ($i = 0; $i -lt 7; $i++) {
+# Setup Fields (5 from Wheat)
+for ($i = 0; $i -lt 5; $i++) {
     if ($Ptrs["wheat"] -lt $Piles["wheat"].Count) {
         $null = $Fields.Add($Piles["wheat"][$Ptrs["wheat"]])
         $Ptrs["wheat"]++
@@ -219,7 +219,7 @@ Structured commands using PIPE-DELIMITED format. Each field separated by |. Avai
   MOVE|{player}|{cardname}|DISCARD            — Domain to own Discard
   MOVE|{player}|{cardname}|DOMAIN|{other}     — Domain to another player's Domain
   MOVE_DISCARD|{player}|{cardname}            — own Discard to own Domain
-  REFILL_FIELDS|{count}                       — draw N from Wheat to Fields (max 7)
+  REFILL_FIELDS|{count}                       — draw N from Wheat to Fields (max 5)
   REMOVE_GAME_DISCARD|{player}|{cardname}     — remove card from discard from game entirely
 
 Card names must match EXACTLY as shown in the state (e.g. "Animal Husbandry" not "Animal"). Do NOT include tags like [Culture] in card names.
@@ -231,7 +231,7 @@ CRITICAL RULES:
 - [Mob] cards in a Domain fight for the ATTACKER during Brawl, not the owner
 - Domain holds max 1 [Culture], 1 [Allegiance], 1 [Religion] — if gaining a second, discard the existing one
 - Season auto-refills when it reaches 0 cards — do NOT emit any refill ops for Season
-- REFILL_FIELDS only when Harvest event fires. Fields max is always 7. Use count = (7 minus current Fields count)
+- REFILL_FIELDS only when Harvest event fires. Fields max is always 5. Use count = (5 minus current Fields count)
 - Wheat zone: player takes cards from Fields (NOT the pile), and draws 1 Claw per card taken as tax. Use TAKE_FIELDS for each card, then DRAW claw N for the tax. Reasonable to take 1-3 cards, not all of them.
 - Activating Sowing itself is NOT a valid action. Sowing passively grants Wheat access if you have 2+ [Nature]. The action is activating the Wheat zone.
 - Play strategically but differently for each player — varied strategies make better playtests
@@ -256,7 +256,7 @@ CRITICAL RULES:
 - Poach has a global hunt limit: only 1 [Hunt] card can work across ALL Domains per round. Each Pasture the activating player has increases this by 1. If the limit is reached, Poach does nothing.
 
 Example output:
-**T5 — Bob:** Takes **Harvest** from Season. *Need to refill Fields early while Wheat pile is full.* Harvest is Drafted — triggers Harvest globally. Fields refill from 3 to 7. Alice's Plough responds: On Harvest triggers Feast in Alice's Domain. Alice's Tavern responds: discards Raid [Discontent].
+**T5 — Bob:** Takes **Harvest** from Season. *Need to refill Fields early while Wheat pile is full.* Harvest is Drafted — triggers Harvest globally. Fields refill from 3 to 5. Alice's Plough responds: On Harvest triggers Feast in Alice's Domain. Alice's Tavern responds: discards Raid [Discontent].
 
 OPS:
 TAKE_SEASON_DISCARD|Harvest|Bob
@@ -454,7 +454,7 @@ function ApplyOps($opsText) {
                     $count = [int]$parts[1]
                     $added = [System.Collections.ArrayList]@()
                     for ($i = 0; $i -lt $count; $i++) {
-                        if ($Fields.Count -ge 7) { break }
+                        if ($Fields.Count -ge 5) { break }
                         if ($Ptrs["wheat"] -lt $Piles["wheat"].Count) {
                             $c = $Piles["wheat"][$Ptrs["wheat"]]
                             $null = $Fields.Add($c)

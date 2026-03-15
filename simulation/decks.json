@@ -51,10 +51,11 @@
     { "name": "Mill", "tags": ["Labour"], "count": 2 },
     { "name": "Famine", "tags": [], "count": 2 },
     { "name": "Animal Husbandry", "tags": ["Labour"], "count": 2 },
-    { "name": "Tavern", "tags": [], "count": 2 },
+    { "name": "Tavern", "tags": ["Amenity"], "count": 2 },
     { "name": "Feed the Commoners", "tags": [], "count": 1 },
     { "name": "Apprenticeship", "tags": ["Labour"], "count": 1 },
-    { "name": "Militia", "tags": ["Unit"], "count": 2 }
+    { "name": "Militia", "tags": ["Unit"], "count": 2 },
+    { "name": "Well", "tags": ["Amenity"], "count": 2 }
   ],
   "coin": [
     { "name": "Rumour", "tags": [], "count": 3 },
