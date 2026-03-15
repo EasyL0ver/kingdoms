@@ -630,6 +630,21 @@ zone twice.
 
 🤖 Public utility — anyone can use it, but it sits in YOUR Domain earning [Amenity]. Creates political protection (opponents don't want to destroy the village with the well). Double Tree activation is strong value that attracts allies and deters aggression.
 
+```
+🌾  MAYPOLE
+[Amenity]
+```
+
+🤖 Pure [Amenity] tag — no effect, just contributes to the Wheat depletion victory condition. A happy village has a maypole.
+
+```
+🌾  VILLAGE GOSSIP
+On Rumour — look at the top card of any
+pile. You may put it on the bottom.
+```
+
+🤖 The first Rumour responder. Scouts what's coming from any pile — check Claw before drawing, bury dangerous cards (Uprising, Tyranny), or confirm a good Tree draw. Low tempo but high information value.
+
 ---
 
 ## 🪙 Coin Deck Cards

@@ -55,7 +55,9 @@
     { "name": "Feed the Commoners", "tags": [], "count": 1 },
     { "name": "Apprenticeship", "tags": ["Labour"], "count": 1 },
     { "name": "Militia", "tags": ["Unit"], "count": 2 },
-    { "name": "Well", "tags": ["Amenity"], "count": 2 }
+    { "name": "Well", "tags": ["Amenity"], "count": 2 },
+    { "name": "Maypole", "tags": ["Amenity"], "count": 2 },
+    { "name": "Village Gossip", "tags": [], "count": 2 }
   ],
   "coin": [
     { "name": "Rumour", "tags": [], "count": 3 },
