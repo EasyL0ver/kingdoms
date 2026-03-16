@@ -187,6 +187,9 @@ class HeuristicWinRate(GameObserver):
         self.games: dict[str, int] = {}    # strategy_label → total games
         self._player_labels: dict[str, str] = {}
         self.total_games = 0
+        # Per win-condition breakdown: (label, depleted_pile) → wins
+        self.wins_by_condition: dict[tuple[str, str], int] = {}
+        self.games_by_condition: dict[tuple[str, str], int] = {}
 
     @staticmethod
     def _label(strategy) -> str:
@@ -204,12 +207,16 @@ class HeuristicWinRate(GameObserver):
 
     def on_game_end(self, state, depleted, winner):
         is_tie = winner is None or winner.startswith("Tie")
+        d = depleted or "none"
         for name, label in self._player_labels.items():
             self.games[label] = self.games.get(label, 0) + 1
+            key = (label, d)
+            self.games_by_condition[key] = self.games_by_condition.get(key, 0) + 1
             if is_tie:
                 self.ties[label] = self.ties.get(label, 0) + 1
             elif name == winner:
                 self.wins[label] = self.wins.get(label, 0) + 1
+                self.wins_by_condition[key] = self.wins_by_condition.get(key, 0) + 1
             else:
                 self.losses[label] = self.losses.get(label, 0) + 1
 
@@ -242,6 +249,21 @@ class HeuristicWinRate(GameObserver):
         if n_players > 0:
             expected = 1.0 / n_players
             lines.append(f"\n  Expected (random baseline): {expected:.1%}")
+
+        # Per win-condition breakdown
+        conditions = sorted(set(d for _, d in self.games_by_condition if d != "none"))
+        if conditions:
+            labels = sorted(set(l for l, _ in self.games_by_condition))
+            lines.append(f"\n  {'Win condition':<15}", )
+            for cond in conditions:
+                lines.append(f"  {cond + ' depletes':<15} ", )
+                for label in labels:
+                    key = (label, cond)
+                    w = self.wins_by_condition.get(key, 0)
+                    g = self.games_by_condition.get(key, 0)
+                    if g > 0:
+                        wr = w / g
+                        lines.append(f"    {label:<28} {w:>5}/{g:<5} ({wr:>5.1%})")
 
         return "\n".join(lines)
 
