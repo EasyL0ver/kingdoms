@@ -34,30 +34,26 @@ def _build_strategies(names: list[str], heuristic_specs: list[str] | None,
         return {n: RandomStrategy(rng) for n in names}
 
     # Parse specs: [("aggressive", 2), ("prefer_trophies", 1), ...]
-    assignments: list[tuple[str, int]] = []
+    # Supports '+' for composing: "play_to_win+event_payoff:2"
+    assignments: list[tuple[list[str], int]] = []
     for spec in heuristic_specs:
         if ":" in spec:
-            hname, count_str = spec.rsplit(":", 1)
-            assignments.append((hname.strip(), int(count_str)))
+            hnames_str, count_str = spec.rsplit(":", 1)
+            hnames = [h.strip() for h in hnames_str.split("+")]
+            assignments.append((hnames, int(count_str)))
         else:
-            assignments.append((spec.strip(), 1))
+            assignments.append(([spec.strip()], 1))
 
     # Assign heuristics to players in order
     strategies: dict = {}
     name_idx = 0
-    for hname, count in assignments:
-        heuristic = get_heuristic(hname)
+    for hnames, count in assignments:
         for _ in range(count):
             if name_idx >= len(names):
                 break
             player_name = names[name_idx]
-            # Check if player already has a strategy (multiple heuristics)
-            if player_name in strategies:
-                existing = strategies[player_name]
-                existing.heuristics.append(get_heuristic(hname))
-            else:
-                strategies[player_name] = HeuristicStrategy(
-                    [get_heuristic(hname)], rng)
+            heuristics = [get_heuristic(h) for h in hnames]
+            strategies[player_name] = HeuristicStrategy(heuristics, rng)
             name_idx += 1
 
     # Remaining players get pure random

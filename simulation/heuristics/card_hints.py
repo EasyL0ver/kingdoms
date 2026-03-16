@@ -1,32 +1,75 @@
 """Card heuristic metadata — strategy hints separate from game rules.
 
-Each CardHeuristics mirrors the card behavior hooks, describing zone
-interactions per trigger:
+Each CardHeuristics mirrors the card behavior hooks, describing effects
+per trigger using typed Effect classes:
 
   on_activate:          effects when player activates this card
   on_event_<type>:      effects when a specific event fires
   on_move_from_pile:    effects when this card moves from a pile
 
-Effect strings use verb + zone format:
-  "draw claw"      — draws blind from claw pile
-  "activate tree"  — triggers the tree zone activation flow
-  "take season"    — takes card(s) from season face-up area
-  "peek claw"      — peeks/scries top of claw pile
-  "draw coin"      — draws blind from coin pile
+Effect classes are purely descriptive — they say WHAT happens, not whether
+it's good or bad.  Heuristics interpret sentiment based on game state.
 """
 from __future__ import annotations
 
+from dataclasses import dataclass
 
+
+# ---------------------------------------------------------------------------
+# Effect classes — describe what a card does
+# ---------------------------------------------------------------------------
+@dataclass(frozen=True)
+class Draw:
+    """Draws blind from a zone pile."""
+    zone: str
+
+@dataclass(frozen=True)
+class Activate:
+    """Triggers a zone's activation flow."""
+    zone: str
+
+@dataclass(frozen=True)
+class Take:
+    """Takes from a face-up area (season, fields, wares)."""
+    area: str
+
+@dataclass(frozen=True)
+class Peek:
+    """Peeks/scries the top of a zone pile."""
+    zone: str
+
+@dataclass(frozen=True)
+class Give:
+    """Gives a card to another player."""
+    pass
+
+@dataclass(frozen=True)
+class Cancel:
+    """Cancels the current event."""
+    pass
+
+@dataclass(frozen=True)
+class Discard:
+    """Discards a card (own or from a pile)."""
+    pass
+
+# Union type for convenience
+Effect = Draw | Activate | Take | Peek | Give | Cancel | Discard
+
+
+# ---------------------------------------------------------------------------
+# CardHeuristics
+# ---------------------------------------------------------------------------
 class CardHeuristics:
     """Strategy metadata for a single card."""
     name: str = ""
-    on_activate: list[str] = []
-    on_event_brawl: list[str] = []
-    on_event_feast: list[str] = []
-    on_event_rite: list[str] = []
-    on_event_harvest: list[str] = []
-    on_event_rumour: list[str] = []
-    on_move_from_pile: list[str] = []
+    on_activate: list[Effect] = []
+    on_event_brawl: list[Effect] = []
+    on_event_feast: list[Effect] = []
+    on_event_rite: list[Effect] = []
+    on_event_harvest: list[Effect] = []
+    on_event_rumour: list[Effect] = []
+    on_move_from_pile: list[Effect] = []
 
 
 # ---------------------------------------------------------------------------
@@ -54,7 +97,7 @@ def get_card_heuristics(card_name: str) -> CardHeuristics | None:
 @_register_card_h
 class _Domain(CardHeuristics):
     name = "Domain"
-    on_activate = ["activate claw", "activate tree"]
+    on_activate = [Activate("claw"), Activate("tree")]
 
 # ---------------------------------------------------------------------------
 # Claw deck
@@ -63,52 +106,62 @@ class _Domain(CardHeuristics):
 @_register_card_h
 class _Tyranny(CardHeuristics):
     name = "Tyranny"
-    on_activate = ["draw claw"]
+    on_activate = [Draw("claw")]
 
 @_register_card_h
 class _Marauders(CardHeuristics):
     name = "Marauders"
-    on_event_feast = ["draw claw"]
+    on_event_feast = [Draw("claw"), Discard()]
 
 @_register_card_h
 class _ShareTheSpoils(CardHeuristics):
     name = "Share the Spoils"
-    on_event_feast = ["draw claw"]
+    on_event_feast = [Draw("claw")]
 
 @_register_card_h
 class _Outriders(CardHeuristics):
     name = "Outriders"
-    on_activate = ["draw claw"]
+    on_activate = [Draw("claw")]
 
 @_register_card_h
 class _Ransack(CardHeuristics):
     name = "Ransack"
-    on_activate = ["draw claw", "take season"]
+    on_activate = [Draw("claw"), Take("season")]
 
 @_register_card_h
 class _SpoilsOfWar(CardHeuristics):
     name = "Spoils of War"
-    on_event_brawl = ["draw claw", "draw tree"]
+    on_event_brawl = [Draw("claw"), Draw("tree"), Give()]
 
 @_register_card_h
 class _DuskRite(CardHeuristics):
     name = "Dusk Rite"
-    on_activate = ["draw claw", "draw tree"]
+    on_activate = [Draw("claw"), Draw("tree")]
 
 @_register_card_h
 class _LandGrab(CardHeuristics):
     name = "Land Grab"
-    on_activate = ["take season"]
+    on_activate = [Take("season")]
 
 @_register_card_h
 class _RiteOfPassage(CardHeuristics):
     name = "Rite of Passage"
-    on_event_brawl = ["draw tree"]
+    on_event_brawl = [Draw("tree")]
 
 @_register_card_h
 class _Ingenuity(CardHeuristics):
     name = "Ingenuity"
-    on_move_from_pile = ["draw coin"]
+    on_move_from_pile = [Draw("coin")]
+
+@_register_card_h
+class _Raid(CardHeuristics):
+    name = "Raid"
+    on_event_brawl = [Give()]
+
+@_register_card_h
+class _Scavenge(CardHeuristics):
+    name = "Scavenge"
+    on_event_brawl = [Give()]
 
 # ---------------------------------------------------------------------------
 # Tree deck
@@ -117,47 +170,47 @@ class _Ingenuity(CardHeuristics):
 @_register_card_h
 class _Eldership(CardHeuristics):
     name = "Eldership"
-    on_event_brawl = ["draw tree"]
+    on_event_brawl = [Cancel(), Draw("tree")]
 
 @_register_card_h
 class _OralTradition(CardHeuristics):
     name = "Oral Tradition"
-    on_activate = ["draw candle"]
+    on_activate = [Draw("candle")]
 
 @_register_card_h
 class _Crags(CardHeuristics):
     name = "Crags"
-    on_activate = ["peek claw"]
+    on_activate = [Peek("claw")]
 
 @_register_card_h
 class _Forage(CardHeuristics):
     name = "Forage"
-    on_activate = ["draw tree"]
+    on_activate = [Draw("tree")]
 
 @_register_card_h
 class _SacredGrove(CardHeuristics):
     name = "Sacred Grove"
-    on_activate = ["peek tree"]
+    on_activate = [Peek("tree")]
 
 @_register_card_h
 class _Solstice(CardHeuristics):
     name = "Solstice"
-    on_event_harvest = ["draw tree"]
+    on_event_harvest = [Draw("tree")]
 
 @_register_card_h
 class _Sowing(CardHeuristics):
     name = "Sowing"
-    on_activate = ["activate wheat"]
+    on_activate = [Activate("wheat")]
 
 @_register_card_h
 class _WitheredCrop(CardHeuristics):
     name = "Withered Crop"
-    on_activate = ["activate wheat"]
+    on_activate = [Activate("wheat")]
 
 @_register_card_h
 class _WorshipOfTheRain(CardHeuristics):
     name = "Worship of the Rain"
-    on_event_rite = ["draw tree"]
+    on_event_rite = [Draw("tree")]
 
 # ---------------------------------------------------------------------------
 # Wheat deck
@@ -166,32 +219,43 @@ class _WorshipOfTheRain(CardHeuristics):
 @_register_card_h
 class _Mill(CardHeuristics):
     name = "Mill"
-    on_activate = ["draw coin"]
+    on_activate = [Draw("coin")]
 
 @_register_card_h
 class _Plough(CardHeuristics):
     name = "Plough"
-    on_event_harvest = ["activate wheat"]
+    on_event_harvest = [Activate("wheat")]
 
 @_register_card_h
 class _AnimalHusbandry(CardHeuristics):
     name = "Animal Husbandry"
-    on_activate = ["draw coin", "activate wheat"]
+    on_activate = [Draw("coin"), Activate("wheat")]
 
 @_register_card_h
 class _Apprenticeship(CardHeuristics):
     name = "Apprenticeship"
-    on_activate = ["activate coin"]
+    on_activate = [Activate("coin")]
 
 @_register_card_h
 class _Well(CardHeuristics):
     name = "Well"
-    on_activate = ["activate tree", "activate tree"]
+    on_activate = [Activate("tree"), Activate("tree")]
 
 @_register_card_h
 class _VillageGossip(CardHeuristics):
     name = "Village Gossip"
-    on_event_rumour = ["peek claw", "peek tree", "peek wheat", "peek coin", "peek candle"]
+    on_event_rumour = [Peek("claw"), Peek("tree"), Peek("wheat"),
+                       Peek("coin"), Peek("candle")]
+
+@_register_card_h
+class _Militia(CardHeuristics):
+    name = "Militia"
+    on_event_brawl = [Cancel(), Discard()]
+
+@_register_card_h
+class _Tavern(CardHeuristics):
+    name = "Tavern"
+    on_event_feast = [Discard()]
 
 # ---------------------------------------------------------------------------
 # Coin / Candle
@@ -200,9 +264,9 @@ class _VillageGossip(CardHeuristics):
 @_register_card_h
 class _Mine(CardHeuristics):
     name = "Mine"
-    on_activate = ["draw coin"]
+    on_activate = [Draw("coin")]
 
 @_register_card_h
 class _WorshipOfTheFlame(CardHeuristics):
     name = "Worship of the Flame"
-    on_activate = ["activate claw", "activate tree"]
+    on_activate = [Activate("claw"), Activate("tree")]

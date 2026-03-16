@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from heuristics import Heuristic, _register_heuristic, _card_tag_score
-from heuristics.card_hints import get_card_heuristics
+from heuristics.card_hints import get_card_heuristics, Draw, Activate, Take, Peek
 from strategy import Intent
 
 if TYPE_CHECKING:
@@ -56,14 +56,12 @@ def _best_zone(state, player) -> str | None:
     return best
 
 
-def _extract_zones(effects: list[str]) -> set[str]:
-    """Extract zone names from effect strings like 'draw claw', 'activate tree'."""
-    zones = set()
-    for effect in effects:
-        parts = effect.split()
-        if len(parts) >= 2:
-            zones.add(parts[-1])
-    return zones
+def _effect_zone(effect) -> str | None:
+    """Extract the zone from an effect, if it has one."""
+    if isinstance(effect, (Draw, Activate, Take, Peek)):
+        zone = effect.zone if isinstance(effect, (Draw, Activate, Peek)) else effect.area
+        return zone
+    return None
 
 
 def _card_all_zones(ch) -> set[str]:
@@ -74,7 +72,12 @@ def _card_all_zones(ch) -> set[str]:
         + ch.on_event_harvest + ch.on_event_rumour
         + ch.on_move_from_pile
     )
-    return _extract_zones(all_effects)
+    zones = set()
+    for effect in all_effects:
+        z = _effect_zone(effect)
+        if z:
+            zones.add(z)
+    return zones
 
 
 def _card_helps_zone(card_name: str, zone: str) -> bool:
