@@ -155,11 +155,15 @@ class HeuristicStrategy(Strategy):
         picked = []
         remaining = list(options)
         for _ in range(n):
+            if not remaining:
+                break
             weights = [max(1.0 + self._lookup(scores, o), self.MIN_WEIGHT)
                        for o in remaining]
             choice = self.rng.choices(remaining, weights=weights, k=1)[0]
             picked.append(choice)
-            remaining = [o for o in remaining if o is not choice]
+            # Remove only the first occurrence
+            idx = next(i for i, o in enumerate(remaining) if o is choice)
+            remaining.pop(idx)
         return picked
 
     def choose_yes_no(self, state, player, ctx):

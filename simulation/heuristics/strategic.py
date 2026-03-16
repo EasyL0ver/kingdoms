@@ -132,10 +132,15 @@ class PlayToWin(Heuristic):
         if ctx.intent == Intent.GAIN:
             bonus = 1.5 + 2.0 * depletion
             scores = _card_tag_score(options, tag, bonus)
+            owned_names = {c.name for c in player.domain}
             for o in options:
                 if hasattr(o, "name"):
                     zscore = _card_zone_score(o.name, best, state, player)
-                    if zscore != 0.0:
+                    if zscore > 0.0:
+                        # Extra bonus if we don't own this card yet
+                        multiplier = 2.0 if o.name not in owned_names else 1.0
+                        scores.append((o, zscore * multiplier * (1.0 + depletion)))
+                    elif zscore < 0.0:
                         scores.append((o, zscore * (1.0 + depletion)))
             return scores
 
@@ -159,22 +164,22 @@ class PlayToWin(Heuristic):
 
         tag = _WIN_TAGS[best]
         depletion = _zone_depletion(state, best)
+        advantage = _zone_advantage(state, player, best)
 
         scores = []
         for a in actions:
             if not hasattr(a, "card") or not a.card:
                 continue
             card = a.card
+            # Strongly prefer Domain activation — drafts from our winning zone
+            if hasattr(card, "name") and card.name == "Domain":
+                scores.append((a, 2.0 + 1.5 * depletion + 0.5 * advantage))
             # Prefer activating cards with our winning tag
-            if hasattr(card, "tags") and tag in card.tags:
+            elif hasattr(card, "tags") and tag in card.tags:
                 scores.append((a, 1.0 + 1.5 * depletion))
             # Prefer/avoid cards based on zone alignment
-            if hasattr(card, "name"):
+            if hasattr(card, "name") and card.name != "Domain":
                 zscore = _card_zone_score(card.name, best, state, player)
                 if zscore != 0.0:
                     scores.append((a, zscore * (1.5 + depletion)))
-            # Prefer Domain activation when our zone is close
-            if hasattr(card, "name") and card.name == "Domain":
-                if depletion > 0.5:
-                    scores.append((a, 1.0 + depletion))
         return scores
