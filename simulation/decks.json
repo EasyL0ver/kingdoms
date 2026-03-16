@@ -60,7 +60,7 @@
     { "name": "Village Gossip", "tags": [], "count": 2 }
   ],
   "coin": [
-    { "name": "Rumour", "tags": [], "count": 3 },
+    { "name": "Rumour", "tags": [], "count": 30 },
     { "name": "Mine", "tags": ["Labour"], "count": 2 }
   ],
   "candle": [
