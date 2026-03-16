@@ -4,7 +4,7 @@ from __future__ import annotations
 from state import GameState, Player, Card, Action
 from strategy import Strategy, Intent, DecisionContext
 from cards import CardContext, CardBehavior, get_behavior
-import cards.claw, cards.tree, cards.wheat, cards.coin_candle
+import cards.claw, cards.tree, cards.wheat, cards.coin_candle, cards.zones
 
 
 # Event responder sets — which events each card can respond to.
@@ -41,14 +41,12 @@ class GameEngine:
         actions: list[Action] = []
         s = self.state
 
-        # Take from Season
-        for card in s.season:
-            actions.append(Action("take_season", card=card,
-                                  label=f"Take {card.name} from Season"))
-
-        # Draw from Claw (always available)
-        if s.pile_remaining("claw") > 0:
-            actions.append(Action("draw_claw", label="Draw 2 from Claw"))
+        domain_card = player.domain_card
+        beh = self.behavior(domain_card)
+        ctx = self.make_ctx(player, domain_card)
+        if beh.can_activate(ctx):
+            actions.append(Action("activate", card=domain_card,
+                                  label="Activate Domain"))
 
         # Activate cards in Domain and Discard — ask each card's behavior
         for card in player.domain:
@@ -67,8 +65,14 @@ class GameEngine:
 
         # Well — any player's Well can be activated by current player
         for p in s.players:
+            if p is player:
+                continue
             for card in p.domain:
-                if card.name == "Well" and s.pile_remaining("tree") > 0:
+                if card.name != "Well":
+                    continue
+                beh = self.behavior(card)
+                ctx = self.make_ctx(player, card)
+                if beh.can_activate(ctx):
                     actions.append(Action("activate_well", card=card, owner=p,
                                           label=f"Activate {p.name}'s Well"))
 
@@ -90,7 +94,7 @@ class GameEngine:
         s.log(f"Fields ({len(s.fields)}): {', '.join(c.name for c in s.fields)}")
         s.log(f"Wares ({len(s.wares)}): {', '.join(c.name for c in s.wares)}")
         piles = ", ".join(f"{d} {s.pile_remaining(d)}"
-                          for d in ("claw", "tree", "wheat", "coin", "candle") if d in s.piles)
+                          for d in ("claw", "tree", "wheat", "coin", "candle") if d in s.zone_cards)
         s.log(f"Piles: {piles}")
         s.log("\n---\n")
 
@@ -130,53 +134,23 @@ class GameEngine:
         s.log(f"**T{s.turn_num} — {player.name}:** {action.label}")
 
         match action.type:
-            case "take_season":
-                self._do_take_season(player, action.card)
-            case "draw_claw":
-                self._do_draw_claw(player)
-            case "activate":
+            case "activate" | "activate_well":
                 beh = self.behavior(action.card)
                 ctx = self.make_ctx(player, action.card)
                 beh.on_activate(ctx)
-            case "activate_well":
-                self._do_activate_well(player, action.owner)
             case "pass":
                 s.log("  *(no valid actions)*")
 
         s.log("")
 
-    # ── Core Actions ──
-
-    def _do_take_season(self, player: Player, card: Card):
-        if card in self.state.season:
-            self.state.season.remove(card)
-            self.receive_card(player, card)
-            self.state.refill_season()
-
-    def _do_draw_claw(self, player: Player):
-        for _ in range(2):
-            card = self.state.draw_from_pile("claw")
-            if card:
-                self.state.log(f"  draws {card.name} from Claw")
-                self.receive_card(player, card)
-            if self.state.game_over:
-                break
-
-    def _do_activate_well(self, player: Player, well_owner: Player):
-        s = self.state
-        s.log(f"  → activates {well_owner.name}'s Well (Tree zone ×2)")
-        for i in range(2):
-            if s.season:
-                pick = self.strat(player).choose_from(
-                    s, player, list(s.season),
-                    DecisionContext(Intent.GAIN, source="Well",
-                                    consequence=f"take from Season ({i+1}/2)"))
-                s.season.remove(pick)
-                s.log(f"  → takes {pick.name} from Season")
-                self.receive_card(player, pick)
-                s.refill_season()
-
     # ── Public helpers for card behaviors ──
+
+    def activate_zone(self, player: Player, zone_name: str):
+        zone_card = self.state.zone_cards[zone_name]
+        beh = self.behavior(zone_card)
+        ctx = self.make_ctx(player, zone_card)
+        beh.on_activate(ctx)
+
 
     def _card_is_placed(self, card: Card) -> bool:
         """Check if a card is already in some player's domain or discard."""
@@ -205,66 +179,6 @@ class GameEngine:
                 self.receive_card(player, card)
         return drawn
 
-    def activate_wheat_zone(self, player: Player):
-        """Take cards from Fields + Claw tax. Called by gateway cards."""
-        s = self.state
-        if not s.fields:
-            s.log("  → Fields empty, nothing to take")
-            return
-        max_take = min(3, len(s.fields))
-        to_take = self.strat(player).choose_n(
-            s, player, list(s.fields), 1, max_take,
-            DecisionContext(Intent.GAIN, source="Wheat zone",
-                            consequence="Claw tax: draw 1 per card taken"))
-        for c in to_take:
-            if c in s.fields:
-                s.fields.remove(c)
-                self.receive_card(player, c)
-                s.log(f"  → takes {c.name} from Fields")
-        tax = len(to_take)
-        s.log(f"  → Claw tax: draws {tax}")
-        for _ in range(tax):
-            claw = s.draw_from_pile("claw")
-            if claw:
-                s.log(f"    → tax: {claw.name}")
-                self.receive_card(player, claw)
-
-    def activate_coin_zone(self, player: Player):
-        """Coin zone: Buy or Trade. Called by gateway cards."""
-        s = self.state
-        options = []
-        if s.wares:
-            options.append("buy")
-        if player.domain and s.pile_remaining("coin") > 0:
-            options.append("trade")
-        if not options:
-            s.log("  → Coin zone: nothing to do")
-            return
-        choice = self.strat(player).choose_from(
-            s, player, options,
-            DecisionContext(Intent.PICK_OPTION, source="Coin zone",
-                            consequence="Buy from Wares or Trade"))
-        if choice == "buy" and s.wares:
-            pick = self.strat(player).choose_from(
-                s, player, list(s.wares),
-                DecisionContext(Intent.GAIN, source="Coin zone",
-                                consequence="take from Wares"))
-            s.wares.remove(pick)
-            player.add_to_domain(pick, s)
-            s.log(f"  → buys {pick.name} from Wares")
-            s.refill_wares()
-        elif choice == "trade" and player.domain:
-            to_trade = self.strat(player).choose_from(
-                s, player, list(player.domain),
-                DecisionContext(Intent.SACRIFICE, source="Coin zone",
-                                consequence="put in Wares, draw blind from Coin"))
-            player.remove_from_domain(to_trade)
-            s.wares.append(to_trade)
-            coin = s.draw_from_pile("coin")
-            if coin:
-                s.log(f"  → trades {to_trade.name} into Wares, draws {coin.name} from Coin")
-                self.receive_card(player, coin)
-
     # ── Generic Event Resolution ──
 
     def resolve_event(self, event: str, triggerer: Player,
@@ -278,13 +192,15 @@ class GameEngine:
         self._event_cancelled = False
         s = self.state
 
-        # For Harvest: refill Fields before resolving responders
-        if event == "Harvest":
-            old_count = len(s.fields)
-            s.refill_fields(5)
-            new_count = len(s.fields)
-            if new_count > old_count:
-                s.log(f"  → Fields refilled: {old_count} → {new_count}")
+        # Broadcast to zone cards first (e.g., Wheat Zone refills on Harvest)
+        for zone_name, zone_card in s.zone_cards.items():
+            if s.game_over or self._event_cancelled:
+                break
+            beh = self.behavior(zone_card)
+            if type(beh).on_event is not CardBehavior.on_event:
+                ctx = self.make_ctx(triggerer, zone_card, event=event,
+                                    triggerer=triggerer, target=target, uprising=uprising)
+                beh.on_event(ctx)
 
         # Pre-count Rite Spiritual responders (for Worship of the Flame)
         rite_spiritual_count = 0
@@ -382,7 +298,7 @@ class GameEngine:
         s.log(f"Fields ({len(s.fields)}): {', '.join(c.name for c in s.fields)}")
         s.log(f"Wares ({len(s.wares)}): {', '.join(c.name for c in s.wares)}")
         piles = ", ".join(f"{d} {s.pile_remaining(d)}"
-                          for d in ("claw", "tree", "wheat", "coin", "candle") if d in s.piles)
+                          for d in ("claw", "tree", "wheat", "coin", "candle") if d in s.zone_cards)
         s.log(f"Piles: {piles}")
         s.log("\n---\n")
 
@@ -432,6 +348,6 @@ class GameEngine:
                 s.log(f"### Game ended — {s.depleted_pile} depleted (no scoring axis defined)")
 
         piles = ", ".join(f"{d} {s.pile_remaining(d)}"
-                          for d in ("claw", "tree", "wheat", "coin", "candle") if d in s.piles)
+                          for d in ("claw", "tree", "wheat", "coin", "candle") if d in s.zone_cards)
         s.log(f"\n### Stats")
         s.log(f"Turns: {s.turn_num} | Piles: {piles}")

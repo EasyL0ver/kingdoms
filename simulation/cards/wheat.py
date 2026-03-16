@@ -32,7 +32,7 @@ class Plough(CardBehavior):
         else:
             if ctx.state.fields:
                 ctx.state.log(f"  → {ctx.player.name}'s Plough: activates Wheat zone")
-                ctx.engine.activate_wheat_zone(ctx.player)
+                ctx.engine.activate_zone(ctx.player, "wheat")
         return True
 
 
@@ -118,7 +118,7 @@ class AnimalHusbandry(CardBehavior):
                             consequence="Wheat zone, Coin draw, or Feast"))
         if choice == "wheat" and len(ctx.state.fields) > 0:
             ctx.state.log(f"  → activates Wheat zone via AH")
-            ctx.engine.activate_wheat_zone(ctx.player)
+            ctx.engine.activate_zone(ctx.player, "wheat")
         elif choice == "coin":
             coin = ctx.state.draw_from_pile("coin")
             if coin:
@@ -183,7 +183,7 @@ class Apprenticeship(CardBehavior):
 
     def on_activate(self, ctx):
         ctx.state.log(f"  → activates Coin zone via Apprenticeship")
-        ctx.engine.activate_coin_zone(ctx.player)
+        ctx.engine.activate_zone(ctx.player, "coin")
 
 
 @_register
@@ -222,8 +222,17 @@ class Well(CardBehavior):
     name = 'Well'
     tags = ['Amenity']
     deck = 'wheat'
-    # Well is special — any player can activate it. Handled by engine.
-    pass
+
+    def can_activate(self, ctx):
+        return len(ctx.state.season) > 0
+
+    def on_activate(self, ctx):
+        tree_zone = ctx.state.zone_cards["tree"]
+        tree_beh = ctx.engine.behavior(tree_zone)
+        ctx.state.log("  → activates Well (Tree zone ×2)")
+        for _ in range(2):
+            tree_ctx = ctx.engine.make_ctx(ctx.player, tree_zone)
+            tree_beh.on_activate(tree_ctx)
 
 
 @_register
@@ -242,7 +251,7 @@ class VillageGossip(CardBehavior):
     def on_event(self, ctx):
         if not ctx.responds_to("Rumour"):
             return False
-        decks = [d for d in ctx.state.piles if ctx.state.pile_remaining(d) > 0]
+        decks = [d for d in ctx.state.zone_cards if ctx.state.pile_remaining(d) > 0]
         if not decks:
             return False
         deck = ctx.engine.strat(ctx.player).choose_from(
@@ -255,8 +264,9 @@ class VillageGossip(CardBehavior):
                     ctx.state, ctx.player,
                     DecisionContext(Intent.ACCEPT_REJECT, source="Village Gossip",
                                     consequence=f"send {top[0].name} to bottom of {deck}")):
-                ctx.state.piles[deck].pop(ctx.state.pile_ptrs[deck])
-                ctx.state.piles[deck].append(top[0])
+                zone = ctx.state.zone_cards[deck]
+                zone.pile.pop(zone.pile_ptr)
+                zone.pile.append(top[0])
                 ctx.state.log(f"  → Village Gossip: {ctx.player.name} sends {top[0].name} to bottom of {deck}")
             else:
                 ctx.state.log(f"  → Village Gossip: {ctx.player.name} peeks at {deck} top, leaves it")

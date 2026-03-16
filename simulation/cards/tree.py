@@ -140,17 +140,18 @@ class SacredGrove(CardBehavior):
             spiritual = [c for c in top3 if c.has_tag("Spiritual")]
             if spiritual:
                 for sc in spiritual:
-                    ctx.state.pile_ptrs["tree"] += 1
+                    ctx.state.zone_cards["tree"].pile_ptr += 1
                     ctx.player.add_to_domain(sc, ctx.state)
                     ctx.state.log(f"  → takes {sc.name} (Spiritual) from Tree top")
                 remaining = [c for c in top3 if c not in spiritual]
                 for c in remaining:
-                    ctx.state.pile_ptrs["tree"] += 1
+                    ctx.state.zone_cards["tree"].pile_ptr += 1
                 if remaining:
-                    ptr = ctx.state.pile_ptrs["tree"]
+                    zone = ctx.state.zone_cards["tree"]
+                    ptr = zone.pile_ptr
                     for i, c in enumerate(remaining):
-                        ctx.state.piles["tree"].insert(ptr - len(remaining) + i, c)
-                    ctx.state.pile_ptrs["tree"] -= len(remaining)
+                        zone.pile.insert(ptr - len(remaining) + i, c)
+                    zone.pile_ptr -= len(remaining)
             else:
                 ctx.state.log(f"  → scries top 3 Tree: {', '.join(c.name for c in top3)}. No Spiritual found.")
 
@@ -272,10 +273,11 @@ class Crags(CardBehavior):
                     ctx.state, ctx.player, top3,
                     DecisionContext(Intent.GAIN, source="Crags",
                                     consequence="goes to your discard (scout)"))
-                idx = ctx.state.piles["claw"].index(pick)
-                ctx.state.piles["claw"].pop(idx)
-                if idx < ctx.state.pile_ptrs["claw"]:
-                    ctx.state.pile_ptrs["claw"] -= 1
+                zone = ctx.state.zone_cards["claw"]
+                idx = zone.pile.index(pick)
+                zone.pile.pop(idx)
+                if idx < zone.pile_ptr:
+                    zone.pile_ptr -= 1
                 ctx.player.discard.append(pick)
                 ctx.state.log(f"  → puts {pick.name} in discard")
 
@@ -408,7 +410,7 @@ class Sowing(CardBehavior):
 
     def on_activate(self, ctx):
         ctx.state.log(f"  → activates Wheat zone via Sowing")
-        ctx.engine.activate_wheat_zone(ctx.player)
+        ctx.engine.activate_zone(ctx.player, "wheat")
 
 
 @_register
@@ -423,7 +425,7 @@ class WitheredCrop(CardBehavior):
 
     def on_activate(self, ctx):
         ctx.state.log(f"  → activates Wheat zone via Withered Crop")
-        ctx.engine.activate_wheat_zone(ctx.player)
+        ctx.engine.activate_zone(ctx.player, "wheat")
 
 
 @_register

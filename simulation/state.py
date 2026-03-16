@@ -11,7 +11,11 @@ from pathlib import Path
 class Card:
     name: str
     tags: list[str]
-    deck: str  # "claw", "tree", "wheat", "coin", "candle"
+    deck: str  # "claw", "tree", "wheat", "coin", "candle", "zone"
+    # Zone card properties — only used by zone cards
+    face_up: list[Card] = field(default_factory=list)
+    pile: list[Card] = field(default_factory=list)
+    pile_ptr: int = 0
 
     def has_tag(self, tag: str) -> bool:
         return tag in self.tags
@@ -22,6 +26,7 @@ class Player:
     name: str
     domain: list[Card] = field(default_factory=list)
     discard: list[Card] = field(default_factory=list)
+    domain_card: Card = field(default_factory=lambda: Card(name="Domain", tags=[], deck="zone"))
 
     def domain_names(self) -> list[str]:
         return [c.name for c in self.domain]
@@ -124,11 +129,13 @@ class GameState:
     def __init__(self, player_names: list[str], seed: int | None = None):
         self.rng = random.Random(seed)
         self.players = [Player(name=n) for n in player_names]
-        self.piles: dict[str, list[Card]] = {}
-        self.pile_ptrs: dict[str, int] = {}
-        self.season: list[Card] = []
-        self.fields: list[Card] = []
-        self.wares: list[Card] = []
+        self.zone_cards: dict[str, Card] = {
+            "claw": Card(name="Claw Zone", tags=["Zone"], deck="zone"),
+            "tree": Card(name="Tree Zone", tags=["Zone"], deck="zone"),
+            "wheat": Card(name="Wheat Zone", tags=["Zone"], deck="zone"),
+            "coin": Card(name="Coin Zone", tags=["Zone"], deck="zone"),
+            "candle": Card(name="Candle Zone", tags=["Zone"], deck="zone"),
+        }
         self.hunt_uses_this_round = 0
         self.round_num = 0
         self.turn_num = 0
@@ -142,6 +149,19 @@ class GameState:
     def get_log(self) -> str:
         return "\n".join(self._log)
 
+    # Zone face-up areas — owned by zone cards, aliased here for convenience
+    @property
+    def season(self) -> list[Card]:
+        return self.zone_cards["tree"].face_up
+
+    @property
+    def fields(self) -> list[Card]:
+        return self.zone_cards["wheat"].face_up
+
+    @property
+    def wares(self) -> list[Card]:
+        return self.zone_cards["coin"].face_up
+
     def load_decks(self, decks_path: str | Path):
         data = json.loads(Path(decks_path).read_text(encoding="utf-8"))
         for deck_name, card_list in data.items():
@@ -150,74 +170,59 @@ class GameState:
                 for _ in range(entry["count"]):
                     cards.append(Card(name=entry["name"], tags=list(entry["tags"]), deck=deck_name))
             self.rng.shuffle(cards)
-            self.piles[deck_name] = cards
-            self.pile_ptrs[deck_name] = 0
+            zone = self.zone_cards[deck_name]
+            zone.pile = cards
+            zone.pile_ptr = 0
 
     def pile_remaining(self, deck: str) -> int:
-        if deck not in self.piles:
+        zone = self.zone_cards.get(deck)
+        if not zone:
             return 0
-        return len(self.piles[deck]) - self.pile_ptrs.get(deck, 0)
+        return len(zone.pile) - zone.pile_ptr
 
     def draw_from_pile(self, deck: str) -> Card | None:
         if self.pile_remaining(deck) <= 0:
             return None
-        idx = self.pile_ptrs[deck]
-        card = self.piles[deck][idx]
-        self.pile_ptrs[deck] = idx + 1
+        zone = self.zone_cards[deck]
+        card = zone.pile[zone.pile_ptr]
+        zone.pile_ptr += 1
         return card
 
     def peek_pile(self, deck: str, n: int = 1) -> list[Card]:
+        zone = self.zone_cards.get(deck)
+        if not zone:
+            return []
         result = []
-        ptr = self.pile_ptrs.get(deck, 0)
         for i in range(n):
-            idx = ptr + i
-            if idx < len(self.piles.get(deck, [])):
-                result.append(self.piles[deck][idx])
+            idx = zone.pile_ptr + i
+            if idx < len(zone.pile):
+                result.append(zone.pile[idx])
         return result
 
     def put_on_bottom(self, deck: str, card: Card):
         """Put a card on the bottom of a pile (used by Village Gossip)."""
-        if deck in self.piles:
-            self.piles[deck].append(card)
+        zone = self.zone_cards.get(deck)
+        if zone:
+            zone.pile.append(card)
 
     def setup_zones(self):
-        """Set up Season (4 from Tree), Fields (5 from Wheat), Wares (3 from Coin)."""
-        for _ in range(4):
-            c = self.draw_from_pile("tree")
-            if c:
-                self.season.append(c)
-        for _ in range(5):
-            c = self.draw_from_pile("wheat")
-            if c:
-                self.fields.append(c)
-        for _ in range(3):
-            c = self.draw_from_pile("coin")
-            if c:
-                self.wares.append(c)
+        """Set up face-up areas: Season (4), Fields (5), Wares (3)."""
+        from cards import get_behavior
+        get_behavior("Tree Zone").refill(self)
+        get_behavior("Wheat Zone").refill(self)
+        get_behavior("Coin Zone").refill(self)
 
     def refill_season(self):
-        if len(self.season) == 0:
-            for _ in range(4):
-                c = self.draw_from_pile("tree")
-                if c:
-                    self.season.append(c)
-            if self.season:
-                names = ", ".join(c.name for c in self.season)
-                self.log(f"  🔄 Season refilled: {names}")
+        from cards import get_behavior
+        get_behavior("Tree Zone").refill(self)
 
     def refill_fields(self, target: int = 5):
-        while len(self.fields) < target:
-            c = self.draw_from_pile("wheat")
-            if not c:
-                break
-            self.fields.append(c)
+        from cards import get_behavior
+        get_behavior("Wheat Zone").refill(self, target)
 
     def refill_wares(self, target: int = 3):
-        while len(self.wares) < target:
-            c = self.draw_from_pile("coin")
-            if not c:
-                break
-            self.wares.append(c)
+        from cards import get_behavior
+        get_behavior("Coin Zone").refill(self, target)
 
     def check_game_end(self) -> str | None:
         """Check if any zone is fully depleted. Returns pile name or None.
@@ -230,7 +235,7 @@ class GameState:
         if self.pile_remaining("coin") == 0 and len(self.wares) == 0:
             return "coin"
         for deck in ("claw", "candle"):
-            if deck in self.piles and self.pile_remaining(deck) == 0:
+            if deck in self.zone_cards and self.pile_remaining(deck) == 0:
                 return deck
         return None
 
