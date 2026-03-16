@@ -245,6 +245,7 @@ class GameEngine:
                         rite_spiritual_count += 1
 
         # Scan all domains in play order, collect responders, let owner order them
+        responder_count = 0
         for p in s.play_order_from(triggerer):
             if s.game_over or self._event_cancelled:
                 break
@@ -282,7 +283,8 @@ class GameEngine:
                 beh = self.behavior(card)
                 ctx = self.make_ctx(p, card, event=event, triggerer=triggerer,
                                     target=target, uprising=uprising)
-                beh.on_event(ctx)
+                if beh.on_event(ctx):
+                    responder_count += 1
 
         # Worship of the Flame: after all other Rite responders, draw per Spiritual count
         if event == "Rite" and not self._event_cancelled and not s.game_over:
@@ -304,7 +306,7 @@ class GameEngine:
                                     s.log(f"    → draws {drawn.name} from {deck}")
                                     self.receive_card(triggerer, drawn)
 
-        self._notify("on_event_fired", s, event, triggerer, target, self._event_cancelled)
+        self._notify("on_event_fired", s, event, triggerer, target, self._event_cancelled, responder_count)
         self._event_depth -= 1
 
     # ── Logging ──

@@ -23,7 +23,8 @@ class GameObserver(ABC):
         pass
 
     def on_event_fired(self, state: GameState, event: str, triggerer: Player,
-                       target: Player | None, cancelled: bool):
+                       target: Player | None, cancelled: bool,
+                       responder_count: int = 0):
         pass
 
     def on_game_end(self, state: GameState, depleted: str | None, winner: str | None):
@@ -269,11 +270,12 @@ class HeuristicWinRate(GameObserver):
 
 
 class EventFrequency(GameObserver):
-    """Tracks event frequency, cancellations, and chains."""
+    """Tracks event frequency, cancellations, and responder counts."""
 
     def __init__(self):
         self.event_count: dict[str, int] = {}
         self.event_cancelled: dict[str, int] = {}
+        self.event_responders: dict[str, int] = {}  # total responder count per event
         self.total_games = 0
         self._game_events: dict[str, int] = {}
 
@@ -281,10 +283,12 @@ class EventFrequency(GameObserver):
         self.total_games += 1
         self._game_events = {}
 
-    def on_event_fired(self, state, event, triggerer, target, cancelled):
+    def on_event_fired(self, state, event, triggerer, target, cancelled,
+                       responder_count=0):
         self.event_count[event] = self.event_count.get(event, 0) + 1
         if cancelled:
             self.event_cancelled[event] = self.event_cancelled.get(event, 0) + 1
+        self.event_responders[event] = self.event_responders.get(event, 0) + responder_count
         self._game_events[event] = self._game_events.get(event, 0) + 1
 
     def report(self) -> str:
@@ -294,14 +298,18 @@ class EventFrequency(GameObserver):
         lines.append(f"{'='*70}")
         lines.append(f"EVENT FREQUENCY ({self.total_games} games)")
         lines.append(f"{'='*70}")
-        lines.append(f"\n{'Event':<15} {'Total':>7} {'PerGame':>8} {'Cancelled':>10} {'CancelRate':>11}")
-        lines.append(f"{'-'*15} {'-'*7} {'-'*8} {'-'*10} {'-'*11}")
+        lines.append(f"\n{'Event':<15} {'Total':>7} {'PerGame':>8} {'Cancelled':>10} "
+                     f"{'CancelRate':>11} {'AvgResp':>8}")
+        lines.append(f"{'-'*15} {'-'*7} {'-'*8} {'-'*10} {'-'*11} {'-'*8}")
 
         for event in sorted(self.event_count, key=lambda e: self.event_count[e], reverse=True):
             count = self.event_count[event]
             per_game = count / self.total_games
             cancelled = self.event_cancelled.get(event, 0)
             cancel_rate = cancelled / count if count > 0 else 0
-            lines.append(f"{event:<15} {count:>7} {per_game:>8.1f} {cancelled:>10} {cancel_rate:>10.1%}")
+            total_resp = self.event_responders.get(event, 0)
+            avg_resp = total_resp / count if count > 0 else 0
+            lines.append(f"{event:<15} {count:>7} {per_game:>8.1f} {cancelled:>10} "
+                         f"{cancel_rate:>10.1%} {avg_resp:>8.2f}")
 
         return "\n".join(lines)
