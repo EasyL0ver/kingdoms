@@ -2,7 +2,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from heuristics import Heuristic, _register_heuristic, _player_rank
+from heuristics import Heuristic, _register_heuristic
 from strategy import Intent
 
 if TYPE_CHECKING:
@@ -52,16 +52,6 @@ class Hoarder(Heuristic):
     """
     name = "hoarder"
 
-    def score_action(self, state, player, actions, ctx):
-        scores = []
-        for a in actions:
-            if hasattr(a, "type"):
-                if a.type == "pass":
-                    scores.append((a, -1.0))
-                elif a.type == "activate":
-                    scores.append((a, 1.0))
-        return scores
-
     def score_option(self, state, player, options, ctx):
         if ctx.intent == Intent.SACRIFICE:
             scores = []
@@ -83,31 +73,3 @@ class Hoarder(Heuristic):
                 return -1.0
             return 0.3
         return 0.0
-
-
-@_register_heuristic
-class Opportunist(Heuristic):
-    """Draft when behind, pass when ahead.
-
-    State-aware: compares player domain size to opponents.
-    """
-    name = "opportunist"
-
-    def score_action(self, state, player, actions, ctx):
-        rank = _player_rank(state, player)
-        scores = []
-        draft_bias = 3.0 * rank - 1.0  # -1.0 (ahead) to +2.0 (behind)
-        for a in actions:
-            if hasattr(a, "type"):
-                if a.type == "activate":
-                    scores.append((a, draft_bias))
-                elif a.type == "pass":
-                    scores.append((a, -draft_bias))
-        return scores
-
-    def score_option(self, state, player, options, ctx):
-        if ctx.intent == Intent.GAIN:
-            rank = _player_rank(state, player)
-            if rank > 0.6:
-                return [(o, 1.0) for o in options]
-        return []

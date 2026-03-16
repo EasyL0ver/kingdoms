@@ -205,16 +205,6 @@ def _claw_depletion_ratio(state) -> float:
     return 1.0 - (remaining / total)
 
 
-def _player_rank(state, player) -> float:
-    """0.0 = first place (most cards), 1.0 = last place."""
-    sizes = sorted([_player_domain_size(p) for p in state.players], reverse=True)
-    my_size = _player_domain_size(player)
-    if sizes[0] == sizes[-1]:
-        return 0.5
-    rank = sizes.index(my_size)
-    return rank / (len(sizes) - 1)
-
-
 def _leader_player(state, player):
     """Return the opponent with the most domain cards (or None)."""
     opponents = [p for p in state.players if p is not player]
