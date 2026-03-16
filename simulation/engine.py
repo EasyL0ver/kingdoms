@@ -91,7 +91,7 @@ class GameEngine:
 
     def run_game(self, max_turns: int = 200) -> str | None:
         s = self.state
-        self._notify("on_game_start", s)
+        self._notify("on_game_start", s, self.strategies)
         s.log(f"# Kingdoms Simulation\n")
         s.log(f"**Players:** {', '.join(p.name for p in s.players)} "
               f"({len(s.players)} players, max {max_turns} turns)\n")

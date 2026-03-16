@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 class GameObserver(ABC):
     """Base class for game observers. Override the hooks you care about."""
 
-    def on_game_start(self, state: GameState):
+    def on_game_start(self, state: GameState, strategies: dict | None = None):
         pass
 
     def on_turn_end(self, state: GameState, player: Player, action: Action):
@@ -126,7 +126,7 @@ class ActivationStats(GameObserver):
         self._game_activations: dict[str, dict[str, int]] = {}  # player → card → count
         self._current_players: list[str] = []
 
-    def on_game_start(self, state):
+    def on_game_start(self, state, strategies=None):
         self.total_games += 1
         self._game_activations = {p.name: {} for p in state.players}
         self._current_players = [p.name for p in state.players]
@@ -177,6 +177,75 @@ class ActivationStats(GameObserver):
         return "\n".join(lines)
 
 
+class HeuristicWinRate(GameObserver):
+    """Tracks win rates per heuristic strategy vs random baseline."""
+
+    def __init__(self):
+        self.wins: dict[str, int] = {}     # strategy_label → wins
+        self.losses: dict[str, int] = {}   # strategy_label → losses
+        self.ties: dict[str, int] = {}     # strategy_label → ties
+        self.games: dict[str, int] = {}    # strategy_label → total games
+        self._player_labels: dict[str, str] = {}
+        self.total_games = 0
+
+    @staticmethod
+    def _label(strategy) -> str:
+        from heuristics import HeuristicStrategy
+        if isinstance(strategy, HeuristicStrategy):
+            return "+".join(h.name for h in strategy.heuristics)
+        return "random"
+
+    def on_game_start(self, state, strategies=None):
+        self.total_games += 1
+        self._player_labels = {}
+        if strategies:
+            for name, strat in strategies.items():
+                self._player_labels[name] = self._label(strat)
+
+    def on_game_end(self, state, depleted, winner):
+        is_tie = winner is None or winner.startswith("Tie")
+        for name, label in self._player_labels.items():
+            self.games[label] = self.games.get(label, 0) + 1
+            if is_tie:
+                self.ties[label] = self.ties.get(label, 0) + 1
+            elif name == winner:
+                self.wins[label] = self.wins.get(label, 0) + 1
+            else:
+                self.losses[label] = self.losses.get(label, 0) + 1
+
+    def report(self) -> str:
+        if not self.games:
+            return "No heuristic data recorded."
+        lines = []
+        lines.append(f"{'='*70}")
+        lines.append(f"HEURISTIC WIN RATES ({self.total_games} games)")
+        lines.append(f"{'='*70}")
+        lines.append(f"\n{'Strategy':<30} {'Wins':>6} {'Losses':>7} {'Ties':>6} "
+                     f"{'WinRate':>8} {'Decisive':>9}")
+        lines.append(f"{'-'*30} {'-'*6} {'-'*7} {'-'*6} {'-'*8} {'-'*9}")
+
+        rows = []
+        for label in sorted(self.games):
+            w = self.wins.get(label, 0)
+            l = self.losses.get(label, 0)
+            t = self.ties.get(label, 0)
+            decisive = w + l
+            wr = w / decisive if decisive > 0 else 0
+            rows.append((label, w, l, t, wr, decisive))
+
+        rows.sort(key=lambda r: r[4], reverse=True)
+        for label, w, l, t, wr, decisive in rows:
+            lines.append(f"{label:<30} {w:>6} {l:>7} {t:>6} {wr:>7.1%} {decisive:>9}")
+
+        # Expected win rate for reference
+        n_players = len(self._player_labels)
+        if n_players > 0:
+            expected = 1.0 / n_players
+            lines.append(f"\n  Expected (random baseline): {expected:.1%}")
+
+        return "\n".join(lines)
+
+
 class EventFrequency(GameObserver):
     """Tracks event frequency, cancellations, and chains."""
 
@@ -186,7 +255,7 @@ class EventFrequency(GameObserver):
         self.total_games = 0
         self._game_events: dict[str, int] = {}
 
-    def on_game_start(self, state):
+    def on_game_start(self, state, strategies=None):
         self.total_games += 1
         self._game_events = {}
 
