@@ -32,7 +32,7 @@ class Raid(CardBehavior):
     tags = ['Unit', 'Mob', 'Discontent']
     deck = 'claw'
     def on_event(self, ctx):
-        if ctx.event != "Brawl" or ctx.target is not ctx.player:
+        if not ctx.responds_to("Brawl", targeted=True):
             return False
         giveable = [c for c in ctx.player.domain if c is not ctx.card]
         if not giveable:
@@ -61,7 +61,7 @@ class Scavenge(CardBehavior):
     tags = ['Unit', 'Mob', 'Discontent']
     deck = 'claw'
     def on_event(self, ctx):
-        if ctx.event != "Brawl" or ctx.target is not ctx.player:
+        if not ctx.responds_to("Brawl", targeted=True):
             return False
         if not ctx.player.discard:
             return True
@@ -120,7 +120,7 @@ class WorshipOfTheHunt(CardBehavior):
     tags = ['Spiritual']
     deck = 'claw'
     def on_event(self, ctx):
-        if ctx.event != "Rite":
+        if not ctx.responds_to("Rite"):
             return False
         hunts = ctx.triggerer.cards_with_tag("Hunt")
         for h in hunts:
@@ -135,7 +135,7 @@ class WorshipOfWar(CardBehavior):
     tags = ['Spiritual']
     deck = 'claw'
     def on_event(self, ctx):
-        if ctx.event != "Rite":
+        if not ctx.responds_to("Rite"):
             return False
         targets = list(ctx.state.players)
         target = ctx.engine.strat(ctx.triggerer).choose_from(
@@ -171,7 +171,7 @@ class Incite(CardBehavior):
                 target.add_to_domain(mob, ctx.state)
                 ctx.state.log(f"  → Incite: moves {mob.name} to {target.name}")
         ctx.state.log(f"  → Incite discarded")
-        ctx.player.discard.append(ctx.card)
+        ctx.discard_self()
 
 
 @_register
@@ -258,14 +258,8 @@ class Tyranny(CardBehavior):
 
     def on_activate(self, ctx):
         discontent_count = ctx.player.count_tag("Discontent")
-        drawn = []
-        for _ in range(discontent_count):
-            c = ctx.state.draw_from_pile("claw")
-            if c:
-                drawn.append(c)
+        drawn = ctx.engine.draw_and_receive(ctx.player, "claw", discontent_count)
         ctx.state.log(f"  → draws {len(drawn)} from Claw ({discontent_count} Discontent)")
-        for c in drawn:
-            ctx.engine.receive_card(ctx.player, c)
         if ctx.state.game_over:
             return
         ctx.state.log(f"  → triggers self-Brawl (spoils discarded, not given)")
@@ -278,13 +272,12 @@ class Marauders(CardBehavior):
     tags = ['Unit', 'Mob', 'Discontent']
     deck = 'claw'
     def on_event(self, ctx):
-        if ctx.event != "Feast" or ctx.target is not ctx.player:
+        if not ctx.responds_to("Feast", targeted=True):
             return False
         ctx.player.discard_from_domain(ctx.card)
-        claw = ctx.state.draw_from_pile("claw")
-        if claw:
-            ctx.state.log(f"  → Marauders: self-destructs, draws {claw.name} from Claw")
-            ctx.engine.receive_card(ctx.player, claw)
+        drawn = ctx.engine.draw_and_receive(ctx.player, "claw")
+        if drawn:
+            ctx.state.log(f"  → Marauders: self-destructs, draws {drawn[0].name} from Claw")
         else:
             ctx.state.log(f"  → Marauders: self-destructs")
         return True
@@ -296,12 +289,11 @@ class ShareTheSpoils(CardBehavior):
     tags = []
     deck = 'claw'
     def on_event(self, ctx):
-        if ctx.event != "Feast" or ctx.target is not ctx.player:
+        if not ctx.responds_to("Feast", targeted=True):
             return False
-        claw = ctx.state.draw_from_pile("claw")
-        if claw:
-            ctx.state.log(f"  → Share the Spoils: draws {claw.name} from Claw")
-            ctx.engine.receive_card(ctx.player, claw)
+        drawn = ctx.engine.draw_and_receive(ctx.player, "claw")
+        if drawn:
+            ctx.state.log(f"  → Share the Spoils: draws {drawn[0].name} from Claw")
         return True
 
 
@@ -392,12 +384,11 @@ class RiteOfPassage(CardBehavior):
     tags = ['Discontent']
     deck = 'claw'
     def on_event(self, ctx):
-        if ctx.event != "Brawl" or ctx.target is not ctx.player:
+        if not ctx.responds_to("Brawl", targeted=True):
             return False
-        tree = ctx.state.draw_from_pile("tree")
-        if tree:
-            ctx.state.log(f"  → Rite of Passage: {ctx.player.name} draws {tree.name} from Tree")
-            ctx.engine.receive_card(ctx.player, tree)
+        drawn = ctx.engine.draw_and_receive(ctx.player, "tree")
+        if drawn:
+            ctx.state.log(f"  → Rite of Passage: {ctx.player.name} draws {drawn[0].name} from Tree")
         return True
 
 
@@ -426,7 +417,7 @@ class Culling(CardBehavior):
             for c in to_discard:
                 target.discard_from_domain(c)
                 ctx.state.log(f"  → Culling: {target.name} discards {c.name}")
-        ctx.player.discard.append(ctx.card)
+        ctx.discard_self()
 
 
 @_register
@@ -437,10 +428,9 @@ class Ingenuity(CardBehavior):
     def on_location_change(self, ctx, from_loc, to_loc):
         if from_loc != "pile":
             return
-        coin = ctx.state.draw_from_pile("coin")
-        if coin:
-            ctx.state.log(f"  → Ingenuity: draws {coin.name} from Coin")
-            ctx.engine.receive_card(ctx.player, coin)
+        drawn = ctx.engine.draw_and_receive(ctx.player, "coin")
+        if drawn:
+            ctx.state.log(f"  → Ingenuity: draws {drawn[0].name} from Coin")
 
 
 @_register
@@ -474,7 +464,7 @@ class SpoilsOfWar(CardBehavior):
             ctx.state.log(f"  → Spoils of War placed in {target.name}'s Domain")
 
     def on_event(self, ctx):
-        if ctx.event != "Brawl" or ctx.target is not ctx.player:
+        if not ctx.responds_to("Brawl", targeted=True):
             return False
         if ctx.uprising:
             ctx.state.log(f"  → Spoils of War: no effect (Uprising)")
@@ -483,14 +473,8 @@ class SpoilsOfWar(CardBehavior):
         ctx.triggerer.add_to_domain(ctx.card, ctx.state)
         trophy_count = ctx.triggerer.count_tag("Trophy")
         ctx.state.log(f"  → Spoils of War → {ctx.triggerer.name}, draws {trophy_count} Claw + {trophy_count} Tree")
-        for _ in range(trophy_count):
-            c = ctx.state.draw_from_pile("claw")
-            if c:
-                ctx.engine.receive_card(ctx.triggerer, c)
-        for _ in range(trophy_count):
-            c = ctx.state.draw_from_pile("tree")
-            if c:
-                ctx.engine.receive_card(ctx.triggerer, c)
+        ctx.engine.draw_and_receive(ctx.triggerer, "claw", trophy_count)
+        ctx.engine.draw_and_receive(ctx.triggerer, "tree", trophy_count)
         return True
 
 
@@ -513,16 +497,10 @@ class DuskRite(CardBehavior):
                 ctx.player.discard.remove(c)
             removed_count = len(to_remove)
             ctx.state.log(f"  → removes {removed_count} cards from discard permanently")
-            for _ in range(removed_count):
-                c = ctx.state.draw_from_pile("claw")
-                if c:
-                    ctx.state.log(f"  → draws {c.name} from Claw")
-                    ctx.engine.receive_card(ctx.player, c)
-            for _ in range(removed_count):
-                c = ctx.state.draw_from_pile("tree")
-                if c:
-                    ctx.state.log(f"  → draws {c.name} from Tree")
-                    ctx.engine.receive_card(ctx.player, c)
+            for c in ctx.engine.draw_and_receive(ctx.player, "claw", removed_count):
+                ctx.state.log(f"  → draws {c.name} from Claw")
+            for c in ctx.engine.draw_and_receive(ctx.player, "tree", removed_count):
+                ctx.state.log(f"  → draws {c.name} from Tree")
             ctx.player.discard_from_domain(ctx.card)
             ctx.state.log(f"  → discards Dusk Rite, triggers Rite")
             ctx.engine.resolve_event("Rite", ctx.player)

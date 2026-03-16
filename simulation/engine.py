@@ -195,6 +195,16 @@ class GameEngine:
         if not self._card_is_placed(card):
             player.add_to_domain(card, self.state)
 
+    def draw_and_receive(self, player: Player, pile: str, count: int = 1) -> list[Card]:
+        """Draw cards from a pile and hand each to receive_card."""
+        drawn: list[Card] = []
+        for _ in range(count):
+            card = self.state.draw_from_pile(pile)
+            if card:
+                drawn.append(card)
+                self.receive_card(player, card)
+        return drawn
+
     def activate_wheat_zone(self, player: Player):
         """Take cards from Fields + Claw tax. Called by gateway cards."""
         s = self.state

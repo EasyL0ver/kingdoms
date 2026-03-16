@@ -31,6 +31,18 @@ class CardContext:
             return "discard"
         return "unknown"
 
+    def responds_to(self, event: str, targeted: bool = False) -> bool:
+        """Check if this context matches the given event and optional self-targeting."""
+        if self.event != event:
+            return False
+        if targeted and self.target is not self.player:
+            return False
+        return True
+
+    def discard_self(self):
+        """Send this card to its owner's discard pile."""
+        self.player.discard.append(self.card)
+
 
 class CardBehavior:
     """Base class for card-specific logic.

@@ -60,10 +60,9 @@ class Mill(CardBehavior):
 
     def on_activate(self, ctx):
         ctx.player.discard_from_domain(ctx.card)
-        coin = ctx.state.draw_from_pile("coin")
-        if coin:
-            ctx.state.log(f"  → discards Mill, draws {coin.name} from Coin")
-            ctx.engine.receive_card(ctx.player, coin)
+        drawn = ctx.engine.draw_and_receive(ctx.player, "coin")
+        if drawn:
+            ctx.state.log(f"  → discards Mill, draws {drawn[0].name} from Coin")
 
 
 @_register
@@ -90,7 +89,7 @@ class Famine(CardBehavior):
                                     consequence=f"{target.name} loses this card"))
                 target.discard_from_domain(victim)
                 ctx.state.log(f"  → Famine: {target.name} discards {victim.name}")
-        ctx.player.discard.append(ctx.card)
+        ctx.discard_self()
 
 
 @_register
@@ -136,7 +135,7 @@ class Tavern(CardBehavior):
     tags = ['Amenity']
     deck = 'wheat'
     def on_event(self, ctx):
-        if ctx.event != "Feast" or ctx.target is not ctx.player:
+        if not ctx.responds_to("Feast", targeted=True):
             return False
         discontent = ctx.player.cards_with_tag("Discontent")
         if discontent:
@@ -205,7 +204,7 @@ class Militia(CardBehavior):
         ctx.state.log(f"  → Militia discards {mob.name}")
 
     def on_event(self, ctx):
-        if ctx.event != "Brawl" or ctx.target is not ctx.player:
+        if not ctx.responds_to("Brawl", targeted=True):
             return False
         if ctx.engine.strat(ctx.player).choose_yes_no(
                 ctx.state, ctx.player,
@@ -241,7 +240,7 @@ class VillageGossip(CardBehavior):
     tags = []
     deck = 'wheat'
     def on_event(self, ctx):
-        if ctx.event != "Rumour":
+        if not ctx.responds_to("Rumour"):
             return False
         decks = [d for d in ctx.state.piles if ctx.state.pile_remaining(d) > 0]
         if not decks:

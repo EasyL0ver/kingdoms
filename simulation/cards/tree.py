@@ -47,7 +47,7 @@ class Eldership(CardBehavior):
     tags = ['Allegiance', 'Knowledge']
     deck = 'tree'
     def on_event(self, ctx):
-        if ctx.event != "Brawl" or ctx.target is not ctx.player:
+        if not ctx.responds_to("Brawl", targeted=True):
             return False
         if not ctx.triggerer.shares_culture(ctx.player):
             return False
@@ -56,10 +56,9 @@ class Eldership(CardBehavior):
                 DecisionContext(Intent.ACCEPT_REJECT, source="Eldership",
                                 opponent=ctx.triggerer,
                                 consequence="cancel Brawl, triggerer draws Tree")):
-            tree = ctx.state.draw_from_pile("tree")
-            if tree:
-                ctx.state.log(f"  → Eldership cancels Brawl. {ctx.triggerer.name} draws {tree.name}")
-                ctx.engine.receive_card(ctx.triggerer, tree)
+            drawn = ctx.engine.draw_and_receive(ctx.triggerer, "tree")
+            if drawn:
+                ctx.state.log(f"  → Eldership cancels Brawl. {ctx.triggerer.name} draws {drawn[0].name}")
             else:
                 ctx.state.log(f"  → Eldership cancels Brawl")
             ctx.engine.cancel_event()
@@ -90,7 +89,7 @@ class Harvest(CardBehavior):
             return
         ctx.state.log(f"  → Drafted: Harvest triggers!")
         ctx.engine.resolve_event("Harvest", ctx.player)
-        ctx.player.discard.append(ctx.card)
+        ctx.discard_self()
 
 
 @_register
@@ -116,7 +115,7 @@ class Gathering(CardBehavior):
         else:
             ctx.state.log(f"  → Gathering: Rite in {ctx.player.name}'s Domain")
             ctx.engine.resolve_event("Rite", ctx.player)
-        ctx.player.discard.append(ctx.card)
+        ctx.discard_self()
 
 
 @_register
@@ -214,7 +213,7 @@ class WorshipOfTheRain(CardBehavior):
     tags = ['Spiritual']
     deck = 'tree'
     def on_event(self, ctx):
-        if ctx.event != "Rite":
+        if not ctx.responds_to("Rite"):
             return False
         if not ctx.state.season:
             return False
@@ -238,7 +237,7 @@ class WorshipOfFertility(CardBehavior):
     tags = ['Nature', 'Spiritual']
     deck = 'tree'
     def on_event(self, ctx):
-        if ctx.event != "Rite":
+        if not ctx.responds_to("Rite"):
             return False
         ctx.state.log(f"  → {ctx.player.name}'s Worship of Fertility: triggers Harvest for {ctx.triggerer.name}")
         ctx.engine.resolve_event("Harvest", ctx.triggerer)
@@ -281,7 +280,7 @@ class Crags(CardBehavior):
                 ctx.state.log(f"  → puts {pick.name} in discard")
 
     def on_event(self, ctx):
-        if ctx.event != "Brawl" or ctx.target is not ctx.player:
+        if not ctx.responds_to("Brawl", targeted=True):
             return False
         crags_count = sum(1 for c in ctx.player.domain if c.name == "Crags")
         if crags_count < 2:
@@ -315,7 +314,7 @@ class Solstice(CardBehavior):
     tags = []
     deck = 'tree'
     def on_event(self, ctx):
-        if ctx.event != "Harvest":
+        if not ctx.responds_to("Harvest"):
             return False
         options = ["culture_draw", "culture_place"]
         choice = ctx.engine.strat(ctx.player).choose_from(
@@ -325,10 +324,9 @@ class Solstice(CardBehavior):
         if choice == "culture_draw":
             for ally in ctx.state.players:
                 if ctx.player.shares_culture(ally) or ally is ctx.player:
-                    tree = ctx.state.draw_from_pile("tree")
-                    if tree:
-                        ctx.state.log(f"  → Solstice: {ally.name} draws {tree.name} from Tree")
-                        ctx.engine.receive_card(ally, tree)
+                    drawn = ctx.engine.draw_and_receive(ally, "tree")
+                    if drawn:
+                        ctx.state.log(f"  → Solstice: {ally.name} draws {drawn[0].name} from Tree")
         else:
             culture_cards = [c for c in ctx.player.discard if c.has_tag("Culture")]
             if culture_cards:
@@ -360,7 +358,7 @@ class Regrowth(CardBehavior):
                 p.discard.remove(pas)
                 p.add_to_domain(pas, ctx.state)
                 ctx.state.log(f"  → Regrowth: returns Pasture to {p.name}")
-        ctx.player.discard.append(ctx.card)
+        ctx.discard_self()
 
 
 @_register

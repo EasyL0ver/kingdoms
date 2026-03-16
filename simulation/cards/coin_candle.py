@@ -13,7 +13,7 @@ class Rumour(CardBehavior):
             return
         ctx.state.log(f"  → Drafted: Rumour triggers!")
         ctx.engine.resolve_event("Rumour", ctx.player)
-        ctx.player.discard.append(ctx.card)
+        ctx.discard_self()
 
 
 @_register
@@ -25,10 +25,9 @@ class Mine(CardBehavior):
         return ctx.location == "domain" and ctx.state.pile_remaining("coin") > 0
 
     def on_activate(self, ctx):
-        coin = ctx.state.draw_from_pile("coin")
-        if coin:
-            ctx.state.log(f"  → Mine draws {coin.name} from Coin")
-            ctx.engine.receive_card(ctx.player, coin)
+        drawn = ctx.engine.draw_and_receive(ctx.player, "coin")
+        if drawn:
+            ctx.state.log(f"  → Mine draws {drawn[0].name} from Coin")
 
     def on_location_change(self, ctx, from_loc, to_loc):
         if from_loc != "pile":
@@ -47,7 +46,7 @@ class WorshipOfTheFlame(CardBehavior):
     tags = ['Spiritual']
     deck = 'candle'
     def on_event(self, ctx):
-        if ctx.event != "Rite":
+        if not ctx.responds_to("Rite"):
             return False
         # Draws handled by engine after counting all Spiritual responders
         # Just signal that we responded
