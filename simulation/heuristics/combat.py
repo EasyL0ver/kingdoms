@@ -18,7 +18,7 @@ class Aggressive(Heuristic):
     """
     name = "aggressive"
 
-    def score_action(self, state, player, actions, ctx):
+    def score_activate(self, state, player, actions, ctx):
         scores = []
         for a in actions:
             if hasattr(a, "card") and a.card and hasattr(a.card, "tags"):
@@ -26,7 +26,7 @@ class Aggressive(Heuristic):
                     scores.append((a, 2.0))
         return scores
 
-    def score_option(self, state, player, options, ctx):
+    def score_resolution_choice(self, state, player, options, ctx):
         if ctx.intent == Intent.PICK_TARGET:
             leader = _leader_player(state, player)
             if leader and leader in options:
@@ -40,11 +40,8 @@ class Aggressive(Heuristic):
                     elif o in ("rite",):
                         scores[o] = -0.5
             return scores
-        return {}
-
-    def score_yes_no(self, state, player, ctx):
         if ctx.intent == Intent.ACCEPT_REJECT:
             if "brawl" in ctx.source.lower() or "event:Brawl" in ctx.tags:
-                return 1.5
-            return 0.5
-        return 0.0
+                return {True: 1.5, False: -1.5}
+            return {True: 0.5, False: -0.5}
+        return {}

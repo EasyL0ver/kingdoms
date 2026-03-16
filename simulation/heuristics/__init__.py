@@ -4,6 +4,12 @@ Each Heuristic is a scoring function that adjusts weights on options.
 HeuristicStrategy composes multiple heuristics: scores are summed per option,
 then a weighted-random pick is made (every option always has >0 probability).
 
+Heuristic hooks mirror game decision categories:
+  score_draft:              choosing which cards to take (GAIN, TURN_ACTION)
+  score_activate:           choosing which card to activate
+  score_resolution_choice:  resolving effects — targets, modes, sacrifices, yes/no
+  score_order:              choosing resolution sequence
+
 Usage (CLI):
     python sim.py -n 1000 --heuristic prefer_trophies:2 --heuristic aggressive:1
     # 2 players get prefer_trophies, 1 gets aggressive, rest stay pure random
@@ -47,6 +53,9 @@ def list_heuristics() -> list[str]:
 # ---------------------------------------------------------------------------
 # Base class
 # ---------------------------------------------------------------------------
+# Intents routed to score_draft
+_DRAFT_INTENTS = {Intent.GAIN, Intent.TURN_ACTION}
+
 class Heuristic(ABC):
     """A scoring function that biases decisions.
 
@@ -57,18 +66,24 @@ class Heuristic(ABC):
     """
     name: str  # registry key, set on subclass
 
-    def score_action(self, state: GameState, player: Player,
-                     actions: list[Action], ctx: DecisionContext) -> list | dict:
+    def score_activate(self, state: GameState, player: Player,
+                       actions: list[Action], ctx: DecisionContext) -> list | dict:
+        """Score which card to activate this turn."""
         return {}
 
-    def score_option(self, state: GameState, player: Player,
-                     options: list, ctx: DecisionContext) -> list | dict:
+    def score_draft(self, state: GameState, player: Player,
+                    options: list, ctx: DecisionContext) -> list | dict:
+        """Score which cards to take/gain."""
         return {}
 
-    def score_yes_no(self, state: GameState, player: Player,
-                     ctx: DecisionContext) -> float:
-        """Positive = prefer yes, negative = prefer no. 0 = no opinion."""
-        return 0.0
+    def score_resolution_choice(self, state: GameState, player: Player,
+                                options: list, ctx: DecisionContext) -> list | dict:
+        """Score choices when resolving card effects.
+
+        Covers: PICK_OPTION, SACRIFICE, GIVE_AWAY, PICK_TARGET, ACCEPT_REJECT.
+        For yes/no decisions, options are [True, False].
+        """
+        return {}
 
     def score_order(self, state: GameState, player: Player,
                     items: list, ctx: DecisionContext) -> list | dict:
@@ -82,10 +97,8 @@ class Heuristic(ABC):
 class HeuristicStrategy(Strategy):
     """Composes heuristics into a weighted-random strategy.
 
-    Scoring uses list-index alignment (not dict keys) so options don't need
-    to be hashable.  Each heuristic returns a dict that maps *option objects*
-    (by identity) to score adjustments; the strategy falls back to ``id()``
-    look-ups when ``dict.get`` fails due to unhashable types.
+    Routes each Strategy method to the appropriate heuristic hook based on
+    intent, then merges scores and picks via weighted random.
     """
 
     MIN_WEIGHT = 0.01  # every option always has some probability
@@ -107,12 +120,7 @@ class HeuristicStrategy(Strategy):
         return 0.0
 
     def _merge_scores(self, heuristic_results: list[dict | list]) -> list[tuple]:
-        """Merge multiple scoring results into a flat (option, score) list.
-
-        Each heuristic can return either:
-          - a list of (option, score) tuples, OR
-          - a dict {option: score} (only when options are hashable)
-        """
+        """Merge multiple scoring results into a flat (option, score) list."""
         merged: dict[int, tuple] = {}  # id(option) → (option, total)
         for result in heuristic_results:
             items = result.items() if isinstance(result, dict) else result
@@ -133,17 +141,28 @@ class HeuristicStrategy(Strategy):
     # Strategy interface
     # ------------------------------------------------------------------
     def choose_action(self, state, player, actions, ctx):
-        raw = [h.score_action(state, player, actions, ctx) for h in self.heuristics]
+        raw = [h.score_activate(state, player, actions, ctx)
+               for h in self.heuristics]
         scores = self._merge_scores(raw)
         return self._weighted_pick(actions, scores)
 
     def choose_from(self, state, player, options, ctx):
-        raw = [h.score_option(state, player, options, ctx) for h in self.heuristics]
+        if ctx.intent in _DRAFT_INTENTS:
+            raw = [h.score_draft(state, player, options, ctx)
+                   for h in self.heuristics]
+        else:
+            raw = [h.score_resolution_choice(state, player, options, ctx)
+                   for h in self.heuristics]
         scores = self._merge_scores(raw)
         return self._weighted_pick(options, scores)
 
     def choose_n(self, state, player, options, min_n, max_n, ctx):
-        raw = [h.score_option(state, player, options, ctx) for h in self.heuristics]
+        if ctx.intent in _DRAFT_INTENTS:
+            raw = [h.score_draft(state, player, options, ctx)
+                   for h in self.heuristics]
+        else:
+            raw = [h.score_resolution_choice(state, player, options, ctx)
+                   for h in self.heuristics]
         scores = self._merge_scores(raw)
 
         n = self.rng.randint(min_n, min(max_n, len(options)))
@@ -161,16 +180,16 @@ class HeuristicStrategy(Strategy):
                        for o in remaining]
             choice = self.rng.choices(remaining, weights=weights, k=1)[0]
             picked.append(choice)
-            # Remove only the first occurrence
             idx = next(i for i, o in enumerate(remaining) if o is choice)
             remaining.pop(idx)
         return picked
 
     def choose_yes_no(self, state, player, ctx):
-        total = sum(h.score_yes_no(state, player, ctx) for h in self.heuristics)
-        yes_weight = max(1.0 + total, self.MIN_WEIGHT)
-        no_weight = max(1.0 - total, self.MIN_WEIGHT)
-        return self.rng.choices([True, False], weights=[yes_weight, no_weight], k=1)[0]
+        yes, no = True, False
+        raw = [h.score_resolution_choice(state, player, [yes, no], ctx)
+               for h in self.heuristics]
+        scores = self._merge_scores(raw)
+        return self._weighted_pick([yes, no], scores)
 
     def choose_order(self, state, player, items, ctx):
         raw = [h.score_order(state, player, items, ctx) for h in self.heuristics]

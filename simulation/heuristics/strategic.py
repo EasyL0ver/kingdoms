@@ -56,37 +56,57 @@ def _best_zone(state, player) -> str | None:
     return best
 
 
+def _extract_zones(effects: list[str]) -> set[str]:
+    """Extract zone names from effect strings like 'draw claw', 'activate tree'."""
+    zones = set()
+    for effect in effects:
+        parts = effect.split()
+        if len(parts) >= 2:
+            zones.add(parts[-1])
+    return zones
+
+
+def _card_all_zones(ch) -> set[str]:
+    """Collect all zones a card interacts with across all hooks."""
+    all_effects = (
+        ch.on_activate
+        + ch.on_event_brawl + ch.on_event_feast + ch.on_event_rite
+        + ch.on_event_harvest + ch.on_event_rumour
+        + ch.on_move_from_pile
+    )
+    return _extract_zones(all_effects)
+
+
 def _card_helps_zone(card_name: str, zone: str) -> bool:
-    """Check if a card draws from or gates the given zone."""
+    """Check if a card interacts with the given zone via any hook."""
     ch = get_card_heuristics(card_name)
     if not ch:
         return False
-    return zone in ch.draws or zone in ch.gates
+    return zone in _card_all_zones(ch)
 
 
 def _card_zone_score(card_name: str, best_zone: str, state, player) -> float:
     """Score a card based on how well it aligns with the player's winning zone.
 
-    Positive if it helps the best zone. Negative if it also draws from zones
-    where opponents lead (accelerating an unfavorable win condition).
+    Positive if it helps the best zone. Negative if it also interacts with
+    zones where opponents lead (accelerating an unfavorable win condition).
     """
     ch = get_card_heuristics(card_name)
     if not ch:
         return 0.0
 
+    zones = _card_all_zones(ch)
     score = 0.0
-    helps_best = best_zone in ch.draws or best_zone in ch.gates
-    if helps_best:
+    if best_zone in zones:
         score += 1.0
 
-    # Penalize cards that draw from zones where we're NOT leading
-    for drawn_zone in ch.draws:
-        if drawn_zone == best_zone:
+    # Penalize interaction with zones where we're NOT leading
+    for zone in zones:
+        if zone == best_zone:
             continue
-        if drawn_zone in _WIN_TAGS:
-            adv = _zone_advantage(state, player, drawn_zone)
+        if zone in _WIN_TAGS:
+            adv = _zone_advantage(state, player, zone)
             if adv < 0:
-                # We're behind on this axis — drawing here helps opponents
                 score -= 1.5
 
     return score
@@ -99,12 +119,33 @@ class PlayToWin(Heuristic):
     State-aware: evaluates each player's standing on all three scoring axes
     (Trophy/Nature/Amenity) and biases toward the zone where they lead.
 
-    Uses CardHeuristics metadata to identify which cards draw from or gate
-    the target zone, giving them activation and drafting priority.
+    Uses CardHeuristics metadata (on_activate, on_event_*, on_move_from_pile)
+    to identify which cards interact with the target zone.
     """
     name = "play_to_win"
 
-    def score_option(self, state, player, options, ctx):
+    def score_draft(self, state, player, options, ctx):
+        best = _best_zone(state, player)
+        if not best:
+            return {}
+
+        tag = _WIN_TAGS[best]
+        depletion = _zone_depletion(state, best)
+
+        bonus = 1.5 + 2.0 * depletion
+        scores = _card_tag_score(options, tag, bonus)
+        owned_names = {c.name for c in player.domain}
+        for o in options:
+            if hasattr(o, "name"):
+                zscore = _card_zone_score(o.name, best, state, player)
+                if zscore > 0.0:
+                    multiplier = 2.0 if o.name not in owned_names else 1.0
+                    scores.append((o, zscore * multiplier * (1.0 + depletion)))
+                elif zscore < 0.0:
+                    scores.append((o, zscore * (1.0 + depletion)))
+        return scores
+
+    def score_resolution_choice(self, state, player, options, ctx):
         best = _best_zone(state, player)
         if not best:
             return {}
@@ -113,7 +154,6 @@ class PlayToWin(Heuristic):
         depletion = _zone_depletion(state, best)
         advantage = _zone_advantage(state, player, best)
 
-        # PICK_OPTION: differentiate zone-activation choices from ability modes
         if ctx.intent == Intent.PICK_OPTION:
             scores = {}
             has_zone_options = any(
@@ -121,7 +161,6 @@ class PlayToWin(Heuristic):
             )
 
             if has_zone_options:
-                # Zone activation choice (Domain, Worship of the Flame, Village Gossip)
                 for o in options:
                     if not isinstance(o, str):
                         continue
@@ -136,7 +175,6 @@ class PlayToWin(Heuristic):
                         else:
                             scores[o] = -1.0
             else:
-                # Ability mode choice (brawl/rite, feast/wheat, scry, etc.)
                 for o in options:
                     if not isinstance(o, str):
                         continue
@@ -149,23 +187,6 @@ class PlayToWin(Heuristic):
 
             return scores
 
-        # When gaining cards, prefer cards with our winning tag OR that help our zone
-        if ctx.intent == Intent.GAIN:
-            bonus = 1.5 + 2.0 * depletion
-            scores = _card_tag_score(options, tag, bonus)
-            owned_names = {c.name for c in player.domain}
-            for o in options:
-                if hasattr(o, "name"):
-                    zscore = _card_zone_score(o.name, best, state, player)
-                    if zscore > 0.0:
-                        # Extra bonus if we don't own this card yet
-                        multiplier = 2.0 if o.name not in owned_names else 1.0
-                        scores.append((o, zscore * multiplier * (1.0 + depletion)))
-                    elif zscore < 0.0:
-                        scores.append((o, zscore * (1.0 + depletion)))
-            return scores
-
-        # When sacrificing, protect cards that help our zone
         if ctx.intent == Intent.SACRIFICE:
             penalty = -(1.5 + 2.0 * depletion)
             scores = _card_tag_score(options, tag, penalty)
@@ -178,29 +199,21 @@ class PlayToWin(Heuristic):
 
         return {}
 
-    def score_action(self, state, player, actions, ctx):
+    def score_activate(self, state, player, actions, ctx):
         best = _best_zone(state, player)
         if not best:
             return []
 
-        tag = _WIN_TAGS[best]
         depletion = _zone_depletion(state, best)
-        advantage = _zone_advantage(state, player, best)
 
         scores = []
         for a in actions:
             if not hasattr(a, "card") or not a.card:
                 continue
-            card = a.card
-            # Strongly prefer Domain activation — drafts from our winning zone
-            if hasattr(card, "name") and card.name == "Domain":
-                scores.append((a, 2.0 + 1.5 * depletion + 0.5 * advantage))
-            # Prefer activating cards with our winning tag
-            elif hasattr(card, "tags") and tag in card.tags:
-                scores.append((a, 1.0 + 1.5 * depletion))
-            # Prefer/avoid cards based on zone alignment
-            if hasattr(card, "name") and card.name != "Domain":
-                zscore = _card_zone_score(card.name, best, state, player)
-                if zscore != 0.0:
-                    scores.append((a, zscore * (1.5 + depletion)))
+            name = getattr(a.card, "name", "")
+            if not name:
+                continue
+            zscore = _card_zone_score(name, best, state, player)
+            if zscore != 0.0:
+                scores.append((a, zscore * (1.5 + depletion)))
         return scores

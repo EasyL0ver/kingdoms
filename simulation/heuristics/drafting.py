@@ -15,7 +15,7 @@ class FavorClaw(Heuristic):
     """Prefer drafting from the Claw zone over Tree."""
     name = "favor_claw"
 
-    def score_option(self, state, player, options, ctx):
+    def score_resolution_choice(self, state, player, options, ctx):
         if ctx.source != "Domain" or ctx.intent != Intent.PICK_OPTION:
             return {}
         scores = {}
@@ -32,7 +32,7 @@ class FavorTree(Heuristic):
     """Prefer drafting from the Tree zone over Claw."""
     name = "favor_tree"
 
-    def score_option(self, state, player, options, ctx):
+    def score_resolution_choice(self, state, player, options, ctx):
         if ctx.source != "Domain" or ctx.intent != Intent.PICK_OPTION:
             return {}
         scores = {}
@@ -52,24 +52,22 @@ class Hoarder(Heuristic):
     """
     name = "hoarder"
 
-    def score_option(self, state, player, options, ctx):
+    def score_draft(self, state, player, options, ctx):
+        scores = []
+        for o in options:
+            if hasattr(o, "tags"):
+                scores.append((o, 0.5 * len(o.tags)))
+        return scores
+
+    def score_resolution_choice(self, state, player, options, ctx):
         if ctx.intent == Intent.SACRIFICE:
             scores = []
             for o in options:
                 if hasattr(o, "tags"):
                     scores.append((o, -0.5 * len(o.tags)))
             return scores
-        if ctx.intent == Intent.GAIN:
-            scores = []
-            for o in options:
-                if hasattr(o, "tags"):
-                    scores.append((o, 0.5 * len(o.tags)))
-            return scores
-        return []
-
-    def score_yes_no(self, state, player, ctx):
         if ctx.intent == Intent.ACCEPT_REJECT:
             if "sacrifice" in ctx.consequence.lower():
-                return -1.0
-            return 0.3
-        return 0.0
+                return {True: -1.0, False: 1.0}
+            return {True: 0.3, False: -0.3}
+        return {}

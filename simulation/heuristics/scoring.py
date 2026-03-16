@@ -19,14 +19,12 @@ class PreferTrophies(Heuristic):
     """
     name = "prefer_trophies"
 
-    def score_option(self, state, player, options, ctx):
-        if ctx.intent not in (Intent.GAIN, Intent.TURN_ACTION):
-            return {}
+    def score_draft(self, state, player, options, ctx):
         depletion = _claw_depletion_ratio(state)
         bonus = 2.0 + 3.0 * depletion  # 2.0 early → 5.0 late
         return _card_tag_score(options, "Trophy", bonus)
 
-    def score_action(self, state, player, actions, ctx):
+    def score_activate(self, state, player, actions, ctx):
         scores = []
         for a in actions:
             if hasattr(a, "card") and a.card and hasattr(a.card, "tags"):
@@ -48,10 +46,19 @@ class SpiritualFocus(Heuristic):
     def _spiritual_count(self, player) -> int:
         return sum(1 for c in player.domain if "Spiritual" in c.tags)
 
-    def score_option(self, state, player, options, ctx):
-        if ctx.intent in (Intent.GAIN, Intent.TURN_ACTION):
-            synergy = 1.0 + 0.5 * self._spiritual_count(player)
-            return _card_tag_score(options, "Spiritual", synergy)
+    def score_draft(self, state, player, options, ctx):
+        synergy = 1.0 + 0.5 * self._spiritual_count(player)
+        return _card_tag_score(options, "Spiritual", synergy)
+
+    def score_activate(self, state, player, actions, ctx):
+        scores = []
+        for a in actions:
+            if hasattr(a, "card") and a.card and hasattr(a.card, "tags"):
+                if "Spiritual" in a.card.tags:
+                    scores.append((a, 1.5 + 0.5 * self._spiritual_count(player)))
+        return scores
+
+    def score_resolution_choice(self, state, player, options, ctx):
         if ctx.intent == Intent.PICK_OPTION:
             scores = {}
             for o in options:
@@ -64,12 +71,4 @@ class SpiritualFocus(Heuristic):
                 if hasattr(o, "tags") and "Spiritual" in o.tags:
                     scores.append((o, -2.0))
             return scores
-        return []
-
-    def score_action(self, state, player, actions, ctx):
-        scores = []
-        for a in actions:
-            if hasattr(a, "card") and a.card and hasattr(a.card, "tags"):
-                if "Spiritual" in a.card.tags:
-                    scores.append((a, 1.5 + 0.5 * self._spiritual_count(player)))
-        return scores
+        return {}
