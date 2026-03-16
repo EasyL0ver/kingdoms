@@ -17,9 +17,11 @@ sys.path.insert(0, str(Path(__file__).parent))
 from state import GameState
 from engine import GameEngine
 from strategy import RandomStrategy
+from observers import CardWinCorrelation, ActivationStats, EventFrequency
 
 
-def run_single_game(players: int, max_turns: int, seed: int | None, verbose: bool = True) -> dict:
+def run_single_game(players: int, max_turns: int, seed: int | None,
+                    verbose: bool = True, observers: list | None = None) -> dict:
     """Run one game. Returns result dict."""
     names = ["Alice", "Bob", "Charlie", "Dave", "Eve"][:players]
     state = GameState(names, seed=seed)
@@ -28,31 +30,18 @@ def run_single_game(players: int, max_turns: int, seed: int | None, verbose: boo
 
     rng_strategy = state.rng  # share RNG for reproducibility
     strategies = {name: RandomStrategy(rng_strategy) for name in names}
-    engine = GameEngine(state, strategies)
+    engine = GameEngine(state, strategies, observers=observers)
 
     t0 = time.perf_counter()
     depleted = engine.run_game(max_turns)
     elapsed = time.perf_counter() - t0
 
-    # Compute scores
-    win_tags = {"tree": "Nature", "claw": "Trophy", "wheat": "Amenity"}
-    scores = {}
-    win_tag = win_tags.get(depleted, None)
-    if win_tag:
-        for p in state.players:
-            scores[p.name] = p.count_tag(win_tag)
-
-    winner = None
-    if scores:
-        max_score = max(scores.values())
-        winners = [n for n, s in scores.items() if s == max_score]
-        winner = winners[0] if len(winners) == 1 else f"Tie({'/'.join(winners)})"
+    winner = engine._compute_winner()
 
     result = {
         "depleted": depleted,
         "turns": state.turn_num,
         "winner": winner,
-        "scores": scores,
         "elapsed": elapsed,
         "log": state.get_log(),
     }
@@ -83,11 +72,14 @@ def main():
             print(f"Result: {result['depleted']} depleted, {result['turns']} turns, "
                   f"winner: {result['winner']}, {result['elapsed']:.3f}s")
     else:
-        # Batch mode
+        # Batch mode with observers
+        observers = [CardWinCorrelation(), ActivationStats(), EventFrequency()]
         stats = {"wins": {}, "depleted": {}, "turns": [], "elapsed": []}
+
         for i in range(args.games):
             seed = (args.seed + i) if args.seed is not None else None
-            result = run_single_game(args.players, args.turns, seed, verbose=False)
+            result = run_single_game(args.players, args.turns, seed,
+                                     verbose=False, observers=observers)
             stats["turns"].append(result["turns"])
             stats["elapsed"].append(result["elapsed"])
             d = result["depleted"] or "none"
@@ -111,6 +103,10 @@ def main():
         avg_time = sum(stats["elapsed"]) / len(stats["elapsed"])
         print(f"\nAvg turns: {avg_turns:.1f} | Avg time: {avg_time:.3f}s | "
               f"Total: {sum(stats['elapsed']):.1f}s")
+
+        # Observer reports
+        for obs in observers:
+            print(f"\n{obs.report()}")
 
 
 if __name__ == "__main__":

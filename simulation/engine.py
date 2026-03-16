@@ -14,12 +14,18 @@ EVENT_NAMES = {"Brawl", "Rite", "Feast", "Harvest", "Rumour"}
 
 
 class GameEngine:
-    def __init__(self, state: GameState, strategies: dict[str, Strategy]):
+    def __init__(self, state: GameState, strategies: dict[str, Strategy],
+                 observers: list | None = None):
         self.state = state
         self.strategies = strategies
+        self.observers = observers or []
         self._event_depth = 0
         self._max_event_depth = 10
         self._event_cancelled = False
+
+    def _notify(self, method: str, *args, **kwargs):
+        for obs in self.observers:
+            getattr(obs, method)(*args, **kwargs)
 
     def strat(self, player: Player) -> Strategy:
         return self.strategies[player.name]
@@ -85,6 +91,7 @@ class GameEngine:
 
     def run_game(self, max_turns: int = 200) -> str | None:
         s = self.state
+        self._notify("on_game_start", s)
         s.log(f"# Kingdoms Simulation\n")
         s.log(f"**Players:** {', '.join(p.name for p in s.players)} "
               f"({len(s.players)} players, max {max_turns} turns)\n")
@@ -123,7 +130,20 @@ class GameEngine:
                 s.log(f"\n### 🏁 GAME ENDS — {depleted} zone fully depleted! (Turn {t})\n")
 
         self._log_epilogue()
+        winner = self._compute_winner()
+        self._notify("on_game_end", s, s.depleted_pile, winner)
         return s.depleted_pile
+
+    def _compute_winner(self) -> str | None:
+        s = self.state
+        win_tags = {"tree": "Nature", "claw": "Trophy", "wheat": "Amenity"}
+        win_tag = win_tags.get(s.depleted_pile)
+        if not win_tag:
+            return None
+        scores = {p.name: p.count_tag(win_tag) for p in s.players}
+        max_score = max(scores.values())
+        winners = [n for n, sc in scores.items() if sc == max_score]
+        return winners[0] if len(winners) == 1 else f"Tie({'/'.join(winners)})"
 
     def resolve_turn(self, player: Player):
         s = self.state
@@ -137,9 +157,12 @@ class GameEngine:
             case "activate" | "activate_well":
                 beh = self.behavior(action.card)
                 ctx = self.make_ctx(player, action.card)
+                self._notify("on_activate", s, player, action.card)
                 beh.on_activate(ctx)
             case "pass":
                 s.log("  *(no valid actions)*")
+
+        self._notify("on_turn_end", s, player, action)
 
         s.log("")
 
@@ -168,6 +191,8 @@ class GameEngine:
         # If the card didn't place itself, put it in domain by default
         if not self._card_is_placed(card):
             player.add_to_domain(card, self.state)
+
+        self._notify("on_card_received", self.state, player, card)
 
     def draw_and_receive(self, player: Player, pile: str, count: int = 1) -> list[Card]:
         """Draw cards from a pile and hand each to receive_card."""
@@ -279,6 +304,7 @@ class GameEngine:
                                     s.log(f"    → draws {drawn.name} from {deck}")
                                     self.receive_card(triggerer, drawn)
 
+        self._notify("on_event_fired", s, event, triggerer, target, self._event_cancelled)
         self._event_depth -= 1
 
     # ── Logging ──
