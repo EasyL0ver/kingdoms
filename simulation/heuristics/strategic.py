@@ -113,11 +113,14 @@ class PlayToWin(Heuristic):
         depletion = _zone_depletion(state, best)
         advantage = _zone_advantage(state, player, best)
 
-        # Domain zone choice: strongly prefer our best zone
-        if ctx.source == "Domain" and ctx.intent == Intent.PICK_OPTION:
+        # PICK_OPTION: score string options based on zone alignment
+        if ctx.intent == Intent.PICK_OPTION:
             scores = {}
             for o in options:
-                if isinstance(o, str) and o in _WIN_TAGS:
+                if not isinstance(o, str):
+                    continue
+                # Zone names (Domain choosing claw/tree, Worship of the Flame, Village Gossip)
+                if o in _WIN_TAGS:
                     if o == best:
                         scores[o] = 2.0 + 2.0 * depletion + 0.5 * max(advantage, 0)
                     else:
@@ -126,6 +129,13 @@ class PlayToWin(Heuristic):
                             scores[o] = 0.5 + 0.5 * other_adv
                         else:
                             scores[o] = -1.0
+                # Options that activate/gate our target zone
+                elif o == "wheat" and best == "wheat":
+                    scores[o] = 2.0 + depletion
+                elif o == "scry" and best == "tree":
+                    scores[o] = 1.5  # scry burns through tree pile
+                elif o == "rite":
+                    scores[o] = 0.5  # mild preference — Rite draws from tree
             return scores
 
         # When gaining cards, prefer cards with our winning tag OR that help our zone
