@@ -41,8 +41,13 @@ def _zone_depletion(state, zone: str) -> float:
 
 
 def _best_zone(state, player) -> str | None:
-    """Return the zone where this player has the strongest lead."""
-    best, best_adv = None, -999
+    """Return the zone where this player is strictly ahead of all opponents.
+
+    Only returns a zone if advantage > 0 (player leads). Among multiple
+    leading zones, picks the one with the biggest lead.
+    Returns None if the player doesn't lead on any axis.
+    """
+    best, best_adv = None, 0  # threshold: must be strictly > 0
     for zone in _WIN_TAGS:
         adv = _zone_advantage(state, player, zone)
         if adv > best_adv:
