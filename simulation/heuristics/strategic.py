@@ -113,14 +113,20 @@ class PlayToWin(Heuristic):
         depletion = _zone_depletion(state, best)
         advantage = _zone_advantage(state, player, best)
 
-        # PICK_OPTION: score string options based on zone alignment
+        # PICK_OPTION: differentiate zone-activation choices from ability modes
         if ctx.intent == Intent.PICK_OPTION:
             scores = {}
-            for o in options:
-                if not isinstance(o, str):
-                    continue
-                # Zone names (Domain choosing claw/tree, Worship of the Flame, Village Gossip)
-                if o in _WIN_TAGS:
+            has_zone_options = any(
+                isinstance(o, str) and o in _WIN_TAGS for o in options
+            )
+
+            if has_zone_options:
+                # Zone activation choice (Domain, Worship of the Flame, Village Gossip)
+                for o in options:
+                    if not isinstance(o, str):
+                        continue
+                    if o not in _WIN_TAGS:
+                        continue
                     if o == best:
                         scores[o] = 2.0 + 2.0 * depletion + 0.5 * max(advantage, 0)
                     else:
@@ -129,13 +135,18 @@ class PlayToWin(Heuristic):
                             scores[o] = 0.5 + 0.5 * other_adv
                         else:
                             scores[o] = -1.0
-                # Options that activate/gate our target zone
-                elif o == "wheat" and best == "wheat":
-                    scores[o] = 2.0 + depletion
-                elif o == "scry" and best == "tree":
-                    scores[o] = 1.5  # scry burns through tree pile
-                elif o == "rite":
-                    scores[o] = 0.5  # mild preference — Rite draws from tree
+            else:
+                # Ability mode choice (brawl/rite, feast/wheat, scry, etc.)
+                for o in options:
+                    if not isinstance(o, str):
+                        continue
+                    if o == "wheat" and best == "wheat":
+                        scores[o] = 2.0 + depletion
+                    elif o == "scry" and best == "tree":
+                        scores[o] = 1.5
+                    elif o == "rite":
+                        scores[o] = 0.5
+
             return scores
 
         # When gaining cards, prefer cards with our winning tag OR that help our zone
