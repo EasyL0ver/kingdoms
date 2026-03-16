@@ -55,6 +55,8 @@ def list_heuristics() -> list[str]:
 # ---------------------------------------------------------------------------
 # Intents routed to score_draft
 _DRAFT_INTENTS = {Intent.GAIN, Intent.TURN_ACTION}
+# Intents that mirror draft scoring (negated — protect high-value cards)
+_REVERSE_DRAFT_INTENTS = {Intent.SACRIFICE, Intent.GIVE_AWAY}
 
 class Heuristic(ABC):
     """A scoring function that biases decisions.
@@ -132,6 +134,11 @@ class HeuristicStrategy(Strategy):
                     merged[oid] = (opt, score)
         return list(merged.values())
 
+    @staticmethod
+    def _negate_scores(scores: list[tuple]) -> list[tuple]:
+        """Negate all scores — high draft value becomes strong protection."""
+        return [(opt, -score) for opt, score in scores]
+
     def _weighted_pick(self, options: list, scores: list[tuple]):
         weights = [max(1.0 + self._lookup(scores, o), self.MIN_WEIGHT)
                    for o in options]
@@ -150,6 +157,15 @@ class HeuristicStrategy(Strategy):
         if ctx.intent in _DRAFT_INTENTS:
             raw = [h.score_draft(state, player, options, ctx)
                    for h in self.heuristics]
+        elif ctx.intent in _REVERSE_DRAFT_INTENTS:
+            # Mirror of draft: protect cards we'd want to draft
+            raw = [h.score_draft(state, player, options, ctx)
+                   for h in self.heuristics]
+            raw_res = [h.score_resolution_choice(state, player, options, ctx)
+                       for h in self.heuristics]
+            scores = self._negate_scores(self._merge_scores(raw))
+            scores += self._merge_scores(raw_res)
+            return self._weighted_pick(options, scores)
         else:
             raw = [h.score_resolution_choice(state, player, options, ctx)
                    for h in self.heuristics]
@@ -160,10 +176,18 @@ class HeuristicStrategy(Strategy):
         if ctx.intent in _DRAFT_INTENTS:
             raw = [h.score_draft(state, player, options, ctx)
                    for h in self.heuristics]
+            scores = self._merge_scores(raw)
+        elif ctx.intent in _REVERSE_DRAFT_INTENTS:
+            raw = [h.score_draft(state, player, options, ctx)
+                   for h in self.heuristics]
+            raw_res = [h.score_resolution_choice(state, player, options, ctx)
+                       for h in self.heuristics]
+            scores = self._negate_scores(self._merge_scores(raw))
+            scores += self._merge_scores(raw_res)
         else:
             raw = [h.score_resolution_choice(state, player, options, ctx)
                    for h in self.heuristics]
-        scores = self._merge_scores(raw)
+            scores = self._merge_scores(raw)
 
         n = self.rng.randint(min_n, min(max_n, len(options)))
         if n == 0:
