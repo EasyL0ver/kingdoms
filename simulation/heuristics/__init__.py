@@ -50,18 +50,19 @@ def list_heuristics() -> list[str]:
 class Heuristic(ABC):
     """A scoring function that biases decisions.
 
-    Return a dict of {option: score_adjustment} from each hook.
+    Return a list of (option, score_adjustment) tuples from each hook.
     Positive values make an option more likely; negative less likely.
     Omitted options get 0 adjustment (base weight 1.0 still applies).
+    For hashable options, a dict {option: score} is also accepted.
     """
     name: str  # registry key, set on subclass
 
     def score_action(self, state: GameState, player: Player,
-                     actions: list[Action], ctx: DecisionContext) -> dict:
+                     actions: list[Action], ctx: DecisionContext) -> list | dict:
         return {}
 
     def score_option(self, state: GameState, player: Player,
-                     options: list, ctx: DecisionContext) -> dict:
+                     options: list, ctx: DecisionContext) -> list | dict:
         return {}
 
     def score_yes_no(self, state: GameState, player: Player,
@@ -70,7 +71,7 @@ class Heuristic(ABC):
         return 0.0
 
     def score_order(self, state: GameState, player: Player,
-                    items: list, ctx: DecisionContext) -> dict:
+                    items: list, ctx: DecisionContext) -> list | dict:
         """Higher score = earlier in order."""
         return {}
 
@@ -223,226 +224,6 @@ def _leader_player(state, player):
 
 
 # ---------------------------------------------------------------------------
-# Starter heuristics
+# Auto-import heuristic modules to trigger @_register_heuristic
 # ---------------------------------------------------------------------------
-
-@_register_heuristic
-class PreferTrophies(Heuristic):
-    """Bias toward Trophy-tagged cards when gaining.
-
-    State-aware: bonus increases as the claw pile depletes (end-game trophy race).
-    """
-    name = "prefer_trophies"
-
-    def score_option(self, state, player, options, ctx):
-        if ctx.intent not in (Intent.GAIN, Intent.TURN_ACTION):
-            return {}
-        # Base trophy bonus, amplified as claw depletes
-        depletion = _claw_depletion_ratio(state)
-        bonus = 2.0 + 3.0 * depletion  # 2.0 early → 5.0 late
-        return _card_tag_score(options, "Trophy", bonus)
-
-    def score_action(self, state, player, actions, ctx):
-        # Prefer activating cards that have Trophy tag
-        scores = []
-        for a in actions:
-            if hasattr(a, "card") and a.card and hasattr(a.card, "tags"):
-                if "Trophy" in a.card.tags:
-                    depletion = _claw_depletion_ratio(state)
-                    scores.append((a, 1.5 + 2.0 * depletion))
-        return scores
-
-
-@_register_heuristic
-class FavorClaw(Heuristic):
-    """Prefer drafting from the Claw zone over Tree."""
-    name = "favor_claw"
-
-    def score_option(self, state, player, options, ctx):
-        if ctx.source != "Domain" or ctx.intent != Intent.PICK_OPTION:
-            return {}
-        scores = {}
-        for o in options:
-            if o == "claw":
-                scores[o] = 3.0
-            elif o == "tree":
-                scores[o] = -0.5
-        return scores
-
-
-@_register_heuristic
-class FavorTree(Heuristic):
-    """Prefer drafting from the Tree zone over Claw."""
-    name = "favor_tree"
-
-    def score_option(self, state, player, options, ctx):
-        if ctx.source != "Domain" or ctx.intent != Intent.PICK_OPTION:
-            return {}
-        scores = {}
-        for o in options:
-            if o == "tree":
-                scores[o] = 3.0
-            elif o == "claw":
-                scores[o] = -0.5
-        return scores
-
-
-@_register_heuristic
-class Aggressive(Heuristic):
-    """Prefer fights, target the leader, accept offensive abilities.
-
-    State-aware: targets the player with the most domain cards.
-    """
-    name = "aggressive"
-
-    def score_action(self, state, player, actions, ctx):
-        # Prefer activating cards that trigger Brawl
-        scores = []
-        for a in actions:
-            if hasattr(a, "card") and a.card and hasattr(a.card, "tags"):
-                if "Mob" in a.card.tags:
-                    scores.append((a, 2.0))
-        return scores
-
-    def score_option(self, state, player, options, ctx):
-        if ctx.intent == Intent.PICK_TARGET:
-            # Target the leader
-            leader = _leader_player(state, player)
-            if leader and leader in options:
-                return [(leader, 3.0)]
-        if ctx.intent == Intent.PICK_OPTION:
-            # Prefer aggressive options
-            scores = {}
-            for o in options:
-                if isinstance(o, str):
-                    if o in ("brawl",):
-                        scores[o] = 2.0
-                    elif o in ("rite",):
-                        scores[o] = -0.5
-            return scores
-        return {}
-
-    def score_yes_no(self, state, player, ctx):
-        # Accept fights, accept risky options
-        if ctx.intent == Intent.ACCEPT_REJECT:
-            if "brawl" in ctx.source.lower() or "event:Brawl" in ctx.tags:
-                return 1.5  # prefer yes (fight)
-            return 0.5  # generally prefer yes
-        return 0.0
-
-
-@_register_heuristic
-class Hoarder(Heuristic):
-    """Prefer gaining cards, avoid sacrificing valuable ones.
-
-    State-aware: protects cards with more tags (assumed more valuable).
-    """
-    name = "hoarder"
-
-    def score_action(self, state, player, actions, ctx):
-        # Prefer activating (drafting) over passing
-        scores = []
-        for a in actions:
-            if hasattr(a, "type"):
-                if a.type == "pass":
-                    scores.append((a, -1.0))
-                elif a.type == "activate":
-                    scores.append((a, 1.0))
-        return scores
-
-    def score_option(self, state, player, options, ctx):
-        if ctx.intent == Intent.SACRIFICE:
-            # Protect cards with more tags (more valuable)
-            scores = []
-            for o in options:
-                if hasattr(o, "tags"):
-                    tag_count = len(o.tags)
-                    scores.append((o, -0.5 * tag_count))
-            return scores
-        if ctx.intent == Intent.GAIN:
-            # Prefer cards with more tags
-            scores = []
-            for o in options:
-                if hasattr(o, "tags"):
-                    scores.append((o, 0.5 * len(o.tags)))
-            return scores
-        return []
-
-    def score_yes_no(self, state, player, ctx):
-        if ctx.intent == Intent.ACCEPT_REJECT:
-            # Say yes to gaining, no to sacrificing
-            if "sacrifice" in ctx.consequence.lower():
-                return -1.0
-            return 0.3
-        return 0.0
-
-
-@_register_heuristic
-class Opportunist(Heuristic):
-    """Draft when behind, pass when ahead.
-
-    State-aware: compares player domain size to opponents.
-    """
-    name = "opportunist"
-
-    def score_action(self, state, player, actions, ctx):
-        rank = _player_rank(state, player)  # 0=first, 1=last
-        scores = []
-        # When behind (rank close to 1.0), draft more
-        # When ahead (rank close to 0.0), be more selective
-        draft_bias = 3.0 * rank - 1.0  # -1.0 (ahead) to +2.0 (behind)
-        for a in actions:
-            if hasattr(a, "type"):
-                if a.type == "activate":
-                    scores.append((a, draft_bias))
-                elif a.type == "pass":
-                    scores.append((a, -draft_bias))
-        return scores
-
-    def score_option(self, state, player, options, ctx):
-        if ctx.intent == Intent.GAIN:
-            rank = _player_rank(state, player)
-            if rank > 0.6:
-                # Behind — prefer any card
-                return [(o, 1.0) for o in options]
-        return []
-
-
-@_register_heuristic
-class SpiritualFocus(Heuristic):
-    """Favor Spiritual cards and Rites.
-
-    State-aware: increased preference when player already has Spiritual cards
-    (synergy bonus).
-    """
-    name = "spiritual_focus"
-
-    def _spiritual_count(self, player) -> int:
-        return sum(1 for c in player.domain if "Spiritual" in c.tags)
-
-    def score_option(self, state, player, options, ctx):
-        if ctx.intent in (Intent.GAIN, Intent.TURN_ACTION):
-            synergy = 1.0 + 0.5 * self._spiritual_count(player)
-            return _card_tag_score(options, "Spiritual", synergy)
-        if ctx.intent == Intent.PICK_OPTION:
-            scores = {}
-            for o in options:
-                if isinstance(o, str) and o == "rite":
-                    scores[o] = 2.0 + 0.5 * self._spiritual_count(player)
-            return scores
-        if ctx.intent == Intent.SACRIFICE:
-            # Protect Spiritual cards
-            scores = []
-            for o in options:
-                if hasattr(o, "tags") and "Spiritual" in o.tags:
-                    scores.append((o, -2.0))
-            return scores
-        return []
-
-    def score_action(self, state, player, actions, ctx):
-        scores = []
-        for a in actions:
-            if hasattr(a, "card") and a.card and hasattr(a.card, "tags"):
-                if "Spiritual" in a.card.tags:
-                    scores.append((a, 1.5 + 0.5 * self._spiritual_count(player)))
-        return scores
+from heuristics import combat, drafting, scoring  # noqa: E402, F401
