@@ -22,21 +22,25 @@ from dataclasses import dataclass
 class Draw:
     """Draws blind from a zone pile."""
     zone: str
+    scales_with: str = ""  # tag whose count amplifies this effect
 
 @dataclass(frozen=True)
 class Activate:
     """Triggers a zone's activation flow."""
     zone: str
+    scales_with: str = ""
 
 @dataclass(frozen=True)
 class Take:
     """Takes from a face-up area (season, fields, wares)."""
     area: str
+    scales_with: str = ""
 
 @dataclass(frozen=True)
 class Peek:
     """Peeks/scries the top of a zone pile."""
     zone: str
+    scales_with: str = ""
 
 @dataclass(frozen=True)
 class Give:
@@ -62,6 +66,7 @@ class Trigger:
     """
     event: str
     scope: str
+    scales_with: str = ""
 
 # Union type for convenience
 Effect = Draw | Activate | Take | Peek | Give | Cancel | Discard | Trigger
@@ -116,7 +121,7 @@ class _Domain(CardHeuristics):
 @_register_card_h
 class _Tyranny(CardHeuristics):
     name = "Tyranny"
-    on_activate = [Draw("claw"), Trigger("brawl", "self")]
+    on_activate = [Draw("claw", scales_with="Discontent"), Trigger("brawl", "self")]
 
 @_register_card_h
 class _Marauders(CardHeuristics):
@@ -141,7 +146,8 @@ class _Ransack(CardHeuristics):
 @_register_card_h
 class _SpoilsOfWar(CardHeuristics):
     name = "Spoils of War"
-    on_event_brawl = [Draw("claw"), Draw("tree"), Give()]
+    on_event_brawl = [Draw("claw", scales_with="Trophy"),
+                      Draw("tree", scales_with="Trophy"), Give()]
 
 @_register_card_h
 class _DuskRite(CardHeuristics):
@@ -186,7 +192,7 @@ class _BloodOffering(CardHeuristics):
 @_register_card_h
 class _Poach(CardHeuristics):
     name = "Poach"
-    on_activate = [Trigger("feast", "self")]
+    on_activate = [Trigger("feast", "self", scales_with="Pasture")]
 
 @_register_card_h
 class _WorshipOfWar(CardHeuristics):
@@ -276,7 +282,7 @@ class _Solstice(CardHeuristics):
 @_register_card_h
 class _Sowing(CardHeuristics):
     name = "Sowing"
-    on_activate = [Activate("wheat")]
+    on_activate = [Activate("wheat", scales_with="Nature")]
 
 @_register_card_h
 class _WitheredCrop(CardHeuristics):
@@ -287,6 +293,11 @@ class _WitheredCrop(CardHeuristics):
 class _WorshipOfTheRain(CardHeuristics):
     name = "Worship of the Rain"
     on_event_rite = [Draw("tree")]
+
+@_register_card_h
+class _Remembrance(CardHeuristics):
+    name = "Remembrance"
+    on_activate = [Take("discard", scales_with="Knowledge")]
 
 # ---------------------------------------------------------------------------
 # Wheat deck
