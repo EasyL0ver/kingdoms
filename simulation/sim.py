@@ -86,8 +86,9 @@ def main():
             stats["depleted"][d] = stats["depleted"].get(d, 0) + 1
             w = result["winner"] or "none"
             stats["wins"][w] = stats["wins"].get(w, 0) + 1
-            if not args.quiet and (i + 1) % 10 == 0:
-                print(f"  {i+1}/{args.games} games...", file=sys.stderr)
+            if (i + 1) % 1000 == 0 or (i + 1) == args.games:
+                print(f"\r  {i+1}/{args.games} games...", end="", file=sys.stderr, flush=True)
+        print("", file=sys.stderr)  # newline after progress
 
         # Print summary
         print(f"\n{'='*50}")
