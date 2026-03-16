@@ -216,4 +216,4 @@ def _leader_player(state, player):
 # ---------------------------------------------------------------------------
 # Auto-import heuristic modules to trigger @_register_heuristic
 # ---------------------------------------------------------------------------
-from heuristics import combat, drafting, scoring  # noqa: E402, F401
+from heuristics import combat, drafting, scoring, strategic  # noqa: E402, F401
