@@ -53,8 +53,18 @@ class Discard:
     """Discards a card (own or from a pile)."""
     pass
 
+@dataclass(frozen=True)
+class Trigger:
+    """Triggers an event in a specific scope.
+
+    Scopes: "target" (opponent you pick), "self" (your domain),
+    "cultural" (cultural allies' domains), "all" (everyone).
+    """
+    event: str
+    scope: str
+
 # Union type for convenience
-Effect = Draw | Activate | Take | Peek | Give | Cancel | Discard
+Effect = Draw | Activate | Take | Peek | Give | Cancel | Discard | Trigger
 
 
 # ---------------------------------------------------------------------------
@@ -106,7 +116,7 @@ class _Domain(CardHeuristics):
 @_register_card_h
 class _Tyranny(CardHeuristics):
     name = "Tyranny"
-    on_activate = [Draw("claw")]
+    on_activate = [Draw("claw"), Trigger("brawl", "self")]
 
 @_register_card_h
 class _Marauders(CardHeuristics):
@@ -136,7 +146,7 @@ class _SpoilsOfWar(CardHeuristics):
 @_register_card_h
 class _DuskRite(CardHeuristics):
     name = "Dusk Rite"
-    on_activate = [Draw("claw"), Draw("tree")]
+    on_activate = [Draw("claw"), Draw("tree"), Trigger("rite", "all")]
 
 @_register_card_h
 class _LandGrab(CardHeuristics):
@@ -162,6 +172,51 @@ class _Raid(CardHeuristics):
 class _Scavenge(CardHeuristics):
     name = "Scavenge"
     on_event_brawl = [Give()]
+
+@_register_card_h
+class _Warband(CardHeuristics):
+    name = "Warband"
+    on_activate = [Trigger("brawl", "target")]
+
+@_register_card_h
+class _BloodOffering(CardHeuristics):
+    name = "Blood Offering"
+    on_activate = [Discard(), Trigger("rite", "all")]
+
+@_register_card_h
+class _Poach(CardHeuristics):
+    name = "Poach"
+    on_activate = [Trigger("feast", "self")]
+
+@_register_card_h
+class _WorshipOfWar(CardHeuristics):
+    name = "Worship of War"
+    on_event_rite = [Trigger("brawl", "target")]
+
+@_register_card_h
+class _WorshipOfTheHunt(CardHeuristics):
+    name = "Worship of the Hunt"
+    on_event_rite = [Trigger("feast", "self")]
+
+@_register_card_h
+class _Chiefdom(CardHeuristics):
+    name = "Chiefdom"
+    on_activate = [Give()]
+
+@_register_card_h
+class _Racketeering(CardHeuristics):
+    name = "Racketeering"
+    on_activate = [Trigger("brawl", "target")]
+
+@_register_card_h
+class _Incite(CardHeuristics):
+    name = "Incite"
+    on_move_from_pile = [Give()]
+
+@_register_card_h
+class _Culling(CardHeuristics):
+    name = "Culling"
+    on_move_from_pile = [Discard()]
 
 # ---------------------------------------------------------------------------
 # Tree deck
@@ -190,7 +245,28 @@ class _Forage(CardHeuristics):
 @_register_card_h
 class _SacredGrove(CardHeuristics):
     name = "Sacred Grove"
-    on_activate = [Peek("tree")]
+    on_activate = [Peek("tree"), Trigger("rite", "all")]
+
+@_register_card_h
+class _SkyDance(CardHeuristics):
+    name = "Sky Dance"
+    on_activate = [Trigger("rite", "all")]
+
+@_register_card_h
+class _Gathering(CardHeuristics):
+    name = "Gathering"
+    on_move_from_pile = [Trigger("brawl", "self"), Trigger("brawl", "cultural"),
+                         Trigger("rite", "all")]
+
+@_register_card_h
+class _Harvest(CardHeuristics):
+    name = "Harvest"
+    on_move_from_pile = [Trigger("harvest", "all")]
+
+@_register_card_h
+class _WorshipOfFertility(CardHeuristics):
+    name = "Worship of Fertility"
+    on_event_rite = [Trigger("harvest", "all")]
 
 @_register_card_h
 class _Solstice(CardHeuristics):
@@ -224,12 +300,17 @@ class _Mill(CardHeuristics):
 @_register_card_h
 class _Plough(CardHeuristics):
     name = "Plough"
-    on_event_harvest = [Activate("wheat")]
+    on_event_harvest = [Activate("wheat"), Trigger("feast", "self")]
 
 @_register_card_h
 class _AnimalHusbandry(CardHeuristics):
     name = "Animal Husbandry"
-    on_activate = [Draw("coin"), Activate("wheat")]
+    on_activate = [Draw("coin"), Activate("wheat"), Trigger("feast", "self")]
+
+@_register_card_h
+class _Granary(CardHeuristics):
+    name = "Granary"
+    on_activate = [Discard(), Trigger("feast", "self")]
 
 @_register_card_h
 class _Apprenticeship(CardHeuristics):
@@ -265,6 +346,11 @@ class _Tavern(CardHeuristics):
 class _Mine(CardHeuristics):
     name = "Mine"
     on_activate = [Draw("coin")]
+
+@_register_card_h
+class _Rumour(CardHeuristics):
+    name = "Rumour"
+    on_move_from_pile = [Trigger("rumour", "all")]
 
 @_register_card_h
 class _WorshipOfTheFlame(CardHeuristics):

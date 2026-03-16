@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from heuristics import Heuristic, _register_heuristic, _card_tag_score
-from heuristics.card_hints import get_card_heuristics, Draw, Activate, Take, Peek
+from heuristics.card_hints import get_card_heuristics, Draw, Activate, Take, Peek, Trigger
 from strategy import Intent
 
 if TYPE_CHECKING:

@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 from heuristics import Heuristic, _register_heuristic
 from heuristics.card_hints import (
     get_card_heuristics, Draw, Activate, Take, Peek, Give, Cancel, Discard,
+    Trigger,
 )
 from strategy import Intent
 
