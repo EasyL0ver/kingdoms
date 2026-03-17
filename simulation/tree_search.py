@@ -622,8 +622,6 @@ class TreeSearchStrategy(Strategy):
         from engine import GameEngine
         sim_engine = GameEngine(sim_state, strats, observers=[])
 
-        snap = (len(sim_player.domain), len(sim_player.discard))
-
         try:
             beh = sim_engine.behavior(sim_card)
             ctx = sim_engine.make_ctx(sim_player, sim_card)
