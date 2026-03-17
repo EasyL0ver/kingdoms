@@ -25,6 +25,15 @@ class Evaluator(ABC):
         ...
 
 
+def _obj_key(obj):
+    """Return a stable identity key for any option object."""
+    if hasattr(obj, "id"):
+        return ("card", obj.id)
+    if hasattr(obj, "name") and hasattr(obj, "domain"):
+        return ("player", obj.name)
+    return ("val", obj)
+
+
 _EVALUATOR_REGISTRY: dict[str, type[Evaluator]] = {}
 
 
@@ -329,28 +338,35 @@ class _OpponentStrategy(Strategy):
 # ── Scripted strategy for replay ──────────────────────────────────────
 
 class ScriptedStrategy(Strategy):
-    """Returns predetermined choices in sequence. Used for replaying branches."""
+    """Returns predetermined choices in sequence. Records chosen IDs for replay."""
 
     name = "scripted"
 
     def __init__(self, choices: list):
         self._choices = list(choices)
         self._idx = 0
+        self.chosen_keys: list = []
 
     def resolve(self, state, player, options, ctx):
         if not options:
             return None
         if len(options) == 1:
-            return options[0]
+            result = options[0]
+            self.chosen_keys.append(_obj_key(result))
+            return result
         if self._idx < len(self._choices):
             pick = self._choices[self._idx]
             self._idx += 1
-            # Find the matching option — pick can be an index or the object itself
             if isinstance(pick, int) and pick < len(options):
-                return options[pick]
+                result = options[pick]
+                self.chosen_keys.append(_obj_key(result))
+                return result
             if pick in options:
+                self.chosen_keys.append(_obj_key(pick))
                 return pick
-        return options[0]
+        result = options[0]
+        self.chosen_keys.append(_obj_key(result))
+        return result
 
     def sequence(self, state, player, items, ctx):
         return list(items)
@@ -379,17 +395,21 @@ class RecordingStrategy(Strategy):
 
     def __init__(self, rng: random.Random | None = None):
         self.rng = rng or random.Random()
-        self.decisions: list[tuple[list, int]] = []  # (options, chosen_index)
+        self.decisions: list[tuple[list, int]] = []
+        self.chosen_keys: list = []
 
     def resolve(self, state, player, options, ctx):
         if not options:
             return None
         if len(options) == 1:
-            return options[0]
-        # Default: pick first option, record the decision
+            result = options[0]
+            self.chosen_keys.append(_obj_key(result))
+            return result
         chosen = 0
         self.decisions.append((list(range(len(options))), chosen))
-        return options[chosen]
+        result = options[chosen]
+        self.chosen_keys.append(_obj_key(result))
+        return result
 
     def sequence(self, state, player, items, ctx):
         return list(items)
@@ -433,51 +453,26 @@ class TreeSearchStrategy(Strategy):
                  evaluators: list[Evaluator] | None = None):
         self.rng = rng or random.Random()
         self.evaluators = evaluators
+        self._best_keys: list = []
+        self._replay_idx = 0
 
     def resolve(self, state, player, options, ctx):
         if ctx.event == "Dawn" and ctx.source == "Presence":
             return self._search(state, player, options)
-        # Sub-decisions during real execution: evaluate each option
         if not options:
             return None
         if len(options) == 1:
             return options[0]
-        return self._eval_pick(state, player, options, ctx)
+        return self._replay_pick(options)
 
-    def _eval_pick(self, state, player, options, ctx):
-        """Pick the option that leads to the best evaluated state."""
-        match ctx.intent:
-            case Intent.GAIN:
-                if hasattr(options[0], "tags"):
-                    best, best_s = options[0], float("-inf")
-                    for card in options:
-                        player.domain.append(card)
-                        s = evaluate(state, player, self.evaluators)
-                        player.domain.pop()
-                        if s > best_s:
-                            best_s = s
-                            best = card
-                    return best
-            case Intent.DISCARD | Intent.GIVE_AWAY:
-                if hasattr(options[0], "tags"):
-                    best, best_s = options[0], float("-inf")
-                    for card in options:
-                        if card in player.domain:
-                            player.domain.remove(card)
-                            s = evaluate(state, player, self.evaluators)
-                            player.domain.append(card)
-                        else:
-                            s = evaluate(state, player, self.evaluators)
-                        if s > best_s:
-                            best_s = s
-                            best = card
-                    return best
-            case Intent.TARGET:
-                if hasattr(options[0], "domain"):
-                    return max(options, key=lambda p: evaluate(state, p, self.evaluators))
-            case Intent.OPTION:
-                if options == [True, False]:
-                    return True
+    def _replay_pick(self, options):
+        """Pick the option matching the next best key from tree search."""
+        if self._replay_idx < len(self._best_keys):
+            target_key = self._best_keys[self._replay_idx]
+            self._replay_idx += 1
+            for opt in options:
+                if _obj_key(opt) == target_key:
+                    return opt
         return options[0]
 
     def sequence(self, state, player, items, ctx):
@@ -502,69 +497,66 @@ class TreeSearchStrategy(Strategy):
     def _search(self, state: GameState, player: Player, actions: list[Action]) -> Action:
         best_action = None
         best_score = float("-inf")
+        best_keys: list = []
 
         for action in actions:
-            score, _ = self._evaluate_action(state, player, action)
+            score, chosen_keys = self._evaluate_action(state, player, action)
             if score > best_score:
                 best_score = score
                 best_action = action
+                best_keys = chosen_keys
 
         baseline = evaluate(state, player, self.evaluators)
         if best_score <= baseline:
+            self._best_keys = []
+            self._replay_idx = 0
             return self.rng.choice(actions)
 
+        self._best_keys = best_keys
+        self._replay_idx = 0
         return best_action or actions[0]
 
     def _evaluate_action(self, state: GameState, player: Player,
                          action: Action) -> tuple[float, list]:
         """Evaluate an action by branching on sub-decisions.
 
-        Returns (best_leaf_score, list_of_choice_indices).
+        Returns (best_leaf_score, list_of_chosen_keys).
         """
         if action.type == "pass":
             return evaluate(state, player, self.evaluators), []
 
-        # Discovery run — find decision points and get baseline leaf score
-        decision_points, discovery_score = self._discover_decisions(state, player, action)
+        decision_points, discovery_score, discovery_keys = self._discover_decisions(state, player, action)
 
         if decision_points is None:
-            # Action couldn't run at all
             return float("-inf"), []
 
         if not decision_points:
-            # No sub-decisions — discovery score IS the leaf score
-            return discovery_score, []
+            return discovery_score, discovery_keys
 
-        # Generate all combinations of choices (capped)
         combos = self._generate_combos(decision_points)
 
-        # Start with discovery run's score (combo [0,0,...] = first option each time)
         best_score = discovery_score
-        best_combo = [0] * len(decision_points)
+        best_keys = discovery_keys
 
-        # Try remaining combos (skip [0,0,...] since discovery already covered it)
         for combo in combos[1:]:
-            score = self._run_with_choices(state, player, action, combo)
+            score, chosen_keys = self._run_with_choices(state, player, action, combo)
             if score > best_score:
                 best_score = score
-                best_combo = combo
+                best_keys = chosen_keys
 
-        return best_score, best_combo
+        return best_score, best_keys
 
     def _discover_decisions(self, state: GameState, player: Player,
-                            action: Action) -> tuple[list[int] | None, float]:
+                            action: Action) -> tuple[list[int] | None, float, list]:
         """Run action once with RecordingStrategy to discover decision points.
 
-        Returns (decision_point_counts, leaf_score).
-        decision_point_counts is None if the action can't execute.
-        The leaf score is always the evaluated result of this run — even if
-        nothing changed (the current state might still be the best play).
+        Returns (decision_point_counts, leaf_score, chosen_keys).
         """
         sim_state = copy.deepcopy(state)
         sim_player = sim_state.player_by_name(player.name)
         sim_card = self._find_card(sim_state, sim_player, action)
         if not sim_card:
-            return None, float("-inf")
+            return None, float("-inf"), []
 
         sim_state.log = lambda msg: None
         recorder = RecordingStrategy()
@@ -579,20 +571,18 @@ class TreeSearchStrategy(Strategy):
             ctx = sim_engine.make_ctx(sim_player, sim_card)
             beh.on_order(ctx)
         except Exception:
-            return None, float("-inf")
+            return None, float("-inf"), []
 
         leaf_score = evaluate(sim_state, sim_player, self.evaluators)
 
-        # No branching needed if no multi-option decisions were made
         if not recorder.decisions:
-            return [], leaf_score
+            return [], leaf_score, recorder.chosen_keys
 
-        # Return option counts, capped
         points = [
             min(len(opts), self.MAX_OPTIONS_PER_DECISION)
             for opts, _ in recorder.decisions[:self.MAX_DECISIONS]
         ]
-        return points, leaf_score
+        return points, leaf_score, recorder.chosen_keys
 
 
 
@@ -606,18 +596,18 @@ class TreeSearchStrategy(Strategy):
         return combos
 
     def _run_with_choices(self, state: GameState, player: Player,
-                          action: Action, choices: list[int]) -> float:
-        """Run action on a deepcopy with predetermined choices, return leaf score."""
+                          action: Action, choices: list[int]) -> tuple[float, list[int | None]]:
+        """Run action on a deepcopy with predetermined choices, return (leaf_score, chosen_ids)."""
         sim_state = copy.deepcopy(state)
         sim_player = sim_state.player_by_name(player.name)
         sim_card = self._find_card(sim_state, sim_player, action)
         if not sim_card:
-            return float("-inf")
+            return float("-inf"), []
 
         sim_state.log = lambda msg: None
-        # Active player uses scripted choices; opponents play smart
+        scripted = ScriptedStrategy(choices)
         strats = {p.name: _OpponentStrategy(self.evaluators) for p in sim_state.players}
-        strats[sim_player.name] = ScriptedStrategy(choices)
+        strats[sim_player.name] = scripted
 
         from engine import GameEngine
         sim_engine = GameEngine(sim_state, strats, observers=[])
@@ -627,9 +617,9 @@ class TreeSearchStrategy(Strategy):
             ctx = sim_engine.make_ctx(sim_player, sim_card)
             beh.on_order(ctx)
         except Exception:
-            return float("-inf")
+            return float("-inf"), []
 
-        return evaluate(sim_state, sim_player, self.evaluators)
+        return evaluate(sim_state, sim_player, self.evaluators), scripted.chosen_keys
 
     @staticmethod
     def _find_card(sim_state: GameState, sim_player: Player, action: Action) -> Card | None:

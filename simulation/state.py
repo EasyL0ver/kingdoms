@@ -6,6 +6,13 @@ import copy
 from dataclasses import dataclass, field
 from pathlib import Path
 
+_next_card_id = 0
+
+def _new_card_id() -> int:
+    global _next_card_id
+    _next_card_id += 1
+    return _next_card_id
+
 
 @dataclass
 class Card:
@@ -16,6 +23,7 @@ class Card:
     face_up: list[Card] = field(default_factory=list)
     pile: list[Card] = field(default_factory=list)
     pile_ptr: int = 0
+    id: int = field(default_factory=_new_card_id)
 
     def has_tag(self, tag: str) -> bool:
         return tag in self.tags
