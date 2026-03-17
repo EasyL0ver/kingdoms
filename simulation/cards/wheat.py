@@ -234,3 +234,21 @@ class VillageGossip(CardBehavior):
             else:
                 ctx.state.log(f"  → Village Gossip: {ctx.player.name} peeks at {deck} top, leaves it")
         return True
+
+
+@_register
+class Orchard(CardBehavior):
+    name = 'Orchard'
+    tags = ['Nature', 'Land']
+    deck = 'wheat'
+
+    def on_order(self, ctx):
+        if ctx.location != "domain" or not ctx.state.fields:
+            return
+        card = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, list(ctx.state.fields),
+            DecisionContext(event="Order", source="Orchard", intent=Intent.GAIN))
+        if card and card in ctx.state.fields:
+            ctx.state.fields.remove(card)
+            ctx.engine.receive_card(ctx.player, card)
+            ctx.state.log(f"  → Orchard: {ctx.player.name} picks {card.name} from Fields (no tax)")

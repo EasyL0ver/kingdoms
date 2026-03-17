@@ -57,7 +57,8 @@
     { "name": "Militia", "tags": ["Unit"], "count": 2 },
     { "name": "Well", "tags": ["Amenity"], "count": 2 },
     { "name": "Maypole", "tags": ["Amenity"], "count": 2 },
-    { "name": "Village Gossip", "tags": [], "count": 2 }
+    { "name": "Village Gossip", "tags": [], "count": 2 },
+    { "name": "Orchard", "tags": ["Nature", "Land"], "count": 3 }
   ],
   "coin": [
     { "name": "Rumour", "tags": [], "count": 30 },
