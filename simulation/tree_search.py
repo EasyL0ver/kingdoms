@@ -284,7 +284,9 @@ class CardSynergy(Evaluator):
                     if has_harvest_discard and has_fields:
                         s += 2.0
                 case "Animal Husbandry":
-                    s += 1.5  # always flexible (wheat/coin/feast)
+                    s += 1.5  # coin draw + feast, Pasture bonus on harvest
+                    if any(c.name == "Pasture" for c in player.domain):
+                        s += 1.0
                 case "Militia":
                     if has_mobs:
                         s += 1.0  # can discard Mobs + Brawl defense
