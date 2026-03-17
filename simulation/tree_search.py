@@ -289,8 +289,7 @@ class CardSynergy(Evaluator):
 
                 # ── Wheat cards ── (continued)
                 case "Stewardship":
-                    # Free zone order every Dawn — extremely strong persistent effect
-                    s += 4.0
+                    s += 2.0
 
         # Discard synergies — cards that can self-rescue
         for card in player.discard:
