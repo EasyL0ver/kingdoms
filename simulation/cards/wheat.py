@@ -283,3 +283,35 @@ class Orchard(CardBehavior):
             ctx.state.fields.remove(card)
             ctx.engine.receive_card(ctx.player, card)
             ctx.state.log(f"  → Orchard: {ctx.player.name} picks {card.name} from Fields (no tax)")
+
+
+@_register
+class Stewardship(CardBehavior):
+    name = 'Stewardship'
+    tags = []
+    deck = 'wheat'
+
+    def on_dawn(self, ctx):
+        # Collect orderable wheat/tree cards in domain
+        options = []
+        for card in ctx.player.domain:
+            if card is ctx.card:
+                continue
+            if card.deck in ("wheat", "tree") and ctx.engine._has_on_order(card):
+                options.append(card)
+        # Also offer wheat zone directly if fields available
+        if ctx.state.fields:
+            options.append("wheat_zone")
+        if not options:
+            return
+        choice = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, options,
+            DecisionContext(event="Dawn", source="Stewardship", intent=Intent.OPTION))
+        if choice == "wheat_zone":
+            ctx.state.log(f"  → Stewardship: {ctx.player.name} orders Wheat zone")
+            ctx.engine.order_zone(ctx.player, "wheat")
+        elif hasattr(choice, "name"):
+            ctx.state.log(f"  → Stewardship: {ctx.player.name} orders {choice.name}")
+            beh = ctx.engine.behavior(choice)
+            order_ctx = ctx.engine.make_ctx(ctx.player, choice)
+            beh.on_order(order_ctx)
