@@ -10,8 +10,10 @@ Usage:
     python sim.py --list-evaluators   # Show available evaluators
 """
 import argparse
+import json
 import sys
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Allow running from simulation/ directory
@@ -104,6 +106,104 @@ def run_single_game(players: int, max_turns: int, seed: int | None,
     return result
 
 
+def _collect_benchmark(args, stats, observers, eval_names) -> dict:
+    """Collect structured benchmark data from a batch run."""
+    card_obs = next((o for o in observers if isinstance(o, CardWinCorrelation)), None)
+    order_obs = next((o for o in observers if isinstance(o, OrderStats)), None)
+    strat_obs = next((o for o in observers if isinstance(o, StrategyWinRate)), None)
+    event_obs = next((o for o in observers if isinstance(o, EventFrequency)), None)
+
+    data = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "config": {
+            "games": args.games,
+            "players": args.players,
+            "max_turns": args.turns,
+            "seed": args.seed,
+            "strategies": args.strategies or [],
+            "evaluators": eval_names,
+        },
+        "summary": {
+            "avg_turns": sum(stats["turns"]) / len(stats["turns"]),
+            "avg_time": sum(stats["elapsed"]) / len(stats["elapsed"]),
+            "total_time": sum(stats["elapsed"]),
+            "pile_depletion": stats["depleted"],
+            "winners": stats["wins"],
+        },
+    }
+
+    if card_obs and card_obs.total_winners > 0:
+        base_rate = card_obs.total_winners / (card_obs.total_winners + card_obs.total_losers)
+        cards = {}
+        for name in card_obs.card_in_any:
+            iw = card_obs.card_in_winner.get(name, 0)
+            il = card_obs.card_in_loser.get(name, 0)
+            total = card_obs.card_in_any[name]
+            wr = iw / total if total > 0 else 0
+            cards[name] = {"win_rate": round(wr, 3), "in_win": iw, "in_lose": il,
+                           "lift": round(wr - base_rate, 3), "games": total}
+        data["card_winrates"] = cards
+
+    if order_obs:
+        orders = {}
+        for name, count in order_obs.orders.items():
+            iw = order_obs.orders_in_wins.get(name, 0)
+            orders[name] = {"total": count,
+                            "per_game": round(count / order_obs.total_games, 2),
+                            "in_wins": iw,
+                            "win_share": round(iw / count, 3) if count else 0}
+        data["order_stats"] = orders
+
+    if strat_obs:
+        strats = {}
+        for label in strat_obs.games:
+            w = strat_obs.wins.get(label, 0)
+            l = strat_obs.losses.get(label, 0)
+            t = strat_obs.ties.get(label, 0)
+            decisive = w + l
+            strats[label] = {"wins": w, "losses": l, "ties": t,
+                             "win_rate": round(w / decisive, 3) if decisive else 0,
+                             "decisive": decisive}
+        # Per win-condition breakdown
+        by_condition = {}
+        for (label, cond), g in strat_obs.games_by_condition.items():
+            if cond == "none":
+                continue
+            w = strat_obs.wins_by_condition.get((label, cond), 0)
+            by_condition.setdefault(cond, {})[label] = {
+                "wins": w, "games": g,
+                "win_rate": round(w / g, 3) if g else 0}
+        strats["by_win_condition"] = by_condition
+        data["strategy_winrates"] = strats
+
+    if event_obs:
+        events = {}
+        for event, count in event_obs.event_count.items():
+            cancelled = event_obs.event_cancelled.get(event, 0)
+            resp = event_obs.event_responders.get(event, 0)
+            events[event] = {"total": count,
+                             "per_game": round(count / event_obs.total_games, 1),
+                             "cancelled": cancelled,
+                             "cancel_rate": round(cancelled / count, 3) if count else 0,
+                             "avg_responders": round(resp / count, 2) if count else 0}
+        data["events"] = events
+
+    return data
+
+
+def _save_benchmark(data: dict, bench_dir: str | None):
+    """Save benchmark data to a JSON file in the benchmarks directory."""
+    d = Path(bench_dir) if bench_dir else Path(__file__).parent / "benchmarks"
+    d.mkdir(parents=True, exist_ok=True)
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    strats = "_".join(data["config"]["strategies"]) if data["config"]["strategies"] else "random"
+    strats = strats.replace(":", "")
+    filename = f"{ts}_{data['config']['games']}g_{strats}.json"
+    path = d / filename
+    path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+    print(f"\nBenchmark saved to {path}", file=sys.stderr)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Kingdoms simulation")
     parser.add_argument("-n", "--games", type=int, default=1, help="Number of games to run")
@@ -122,6 +222,9 @@ def main():
                         help="Show available strategies and exit")
     parser.add_argument("--list-evaluators", action="store_true",
                         help="Show available evaluators and exit")
+    parser.add_argument("--bench-dir", type=str, default=None,
+                        metavar="DIR",
+                        help="Save benchmark output to timestamped file in DIR (default: simulation/benchmarks)")
     args = parser.parse_args()
 
     if args.list_strategies:
@@ -199,6 +302,10 @@ def main():
         # Observer reports
         for obs in observers:
             print(f"\n{obs.report()}")
+
+        # Save benchmark data
+        bench = _collect_benchmark(args, stats, observers, eval_names)
+        _save_benchmark(bench, args.bench_dir)
 
 
 if __name__ == "__main__":
