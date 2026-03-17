@@ -493,6 +493,9 @@ class BloodFeud(CardBehavior):
             ctx.player.remove_from_domain(mob)
             ctx.active_player.add_to_domain(mob, ctx.state)
             ctx.state.log(f"  → Blood Feud: moves {mob.name} to {ctx.active_player.name}")
+        # Discard self before retaliating
+        ctx.player.discard_from_domain(ctx.card)
+        ctx.state.log(f"  → Blood Feud discarded")
         # Retaliate — brawl the attacker back
         ctx.state.log(f"  → Blood Feud: {ctx.player.name} retaliates!")
         ctx.engine.resolve_event("Brawl", ctx.player, ctx.active_player)
