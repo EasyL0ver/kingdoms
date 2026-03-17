@@ -530,6 +530,16 @@ class TreeSearchStrategy(Strategy):
             remaining.remove(choice)
         return picked
 
+    @staticmethod
+    def _hide_pile_order(sim_state: GameState):
+        """Shuffle undrawn portion of every pile so the sim can't see draw order."""
+        for zone in sim_state.zone_cards.values():
+            ptr = zone.pile_ptr
+            if ptr < len(zone.pile) - 1:
+                undrawn = zone.pile[ptr:]
+                random.shuffle(undrawn)
+                zone.pile[ptr:] = undrawn
+
     # ── Core search ──
 
     def _search(self, state: GameState, player: Player, actions: list[Action]) -> Action:
@@ -582,6 +592,7 @@ class TreeSearchStrategy(Strategy):
         Returns (decision_point_counts, leaf_score, chosen_keys).
         """
         sim_state = copy.deepcopy(state)
+        self._hide_pile_order(sim_state)
         sim_player = sim_state.player_by_name(player.name)
         sim_card = self._find_card(sim_state, sim_player, action)
         if not sim_card:
@@ -628,6 +639,7 @@ class TreeSearchStrategy(Strategy):
                           action: Action, choices: list[int]) -> tuple[float, list[int | None]]:
         """Run action on a deepcopy with predetermined choices, return (leaf_score, chosen_ids)."""
         sim_state = copy.deepcopy(state)
+        self._hide_pile_order(sim_state)
         sim_player = sim_state.player_by_name(player.name)
         sim_card = self._find_card(sim_state, sim_player, action)
         if not sim_card:
