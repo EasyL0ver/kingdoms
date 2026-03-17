@@ -531,7 +531,16 @@ class TreeSearchStrategy(Strategy):
         return options[0]
 
     def sequence(self, state, player, items, ctx):
-        return list(items)
+        # Cancellers first on Brawl, info cards first on Rumour
+        PRIORITY = {
+            "Brawl": {"Militia": 0, "Eldership": 1, "Crags": 2},
+            "Rumour": {"Village Gossip": 0},
+        }
+        priorities = PRIORITY.get(ctx.event, {})
+        if not priorities:
+            return list(items)
+        default = len(priorities)
+        return sorted(items, key=lambda c: priorities.get(c.name, default))
 
     def resolve_n(self, state, player, options, min_n, max_n, ctx):
         n = min(max_n, len(options))
