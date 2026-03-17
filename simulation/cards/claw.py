@@ -512,9 +512,9 @@ class Enforcers(CardBehavior):
             return False
         if ctx.uprising:
             return False
-        # Both sides draw 3 claw — arms race
-        for c in ctx.engine.draw_and_receive(ctx.player, "claw", 3):
+        # Both sides draw 2 claw — arms race
+        for c in ctx.engine.draw_and_receive(ctx.player, "claw", 2):
             ctx.state.log(f"  → Enforcers: {ctx.player.name} draws {c.name}")
-        for c in ctx.engine.draw_and_receive(ctx.active_player, "claw", 3):
+        for c in ctx.engine.draw_and_receive(ctx.active_player, "claw", 2):
             ctx.state.log(f"  → Enforcers: {ctx.active_player.name} draws {c.name}")
         return True
