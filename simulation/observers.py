@@ -177,8 +177,8 @@ class OrderStats(GameObserver):
         return "\n".join(lines)
 
 
-class HeuristicWinRate(GameObserver):
-    """Tracks win rates per heuristic strategy vs random baseline."""
+class StrategyWinRate(GameObserver):
+    """Tracks win rates per strategy type."""
 
     def __init__(self):
         self.wins: dict[str, int] = {}     # strategy_label → wins
@@ -193,10 +193,7 @@ class HeuristicWinRate(GameObserver):
 
     @staticmethod
     def _label(strategy) -> str:
-        from heuristics import HeuristicStrategy
-        if isinstance(strategy, HeuristicStrategy):
-            return "+".join(h.name for h in strategy.heuristics)
-        return "random"
+        return getattr(strategy, "name", type(strategy).__name__)
 
     def on_game_start(self, state, strategies=None):
         self.total_games += 1
@@ -225,7 +222,7 @@ class HeuristicWinRate(GameObserver):
             return "No heuristic data recorded."
         lines = []
         lines.append(f"{'='*70}")
-        lines.append(f"HEURISTIC WIN RATES ({self.total_games} games)")
+        lines.append(f"STRATEGY WIN RATES ({self.total_games} games)")
         lines.append(f"{'='*70}")
         lines.append(f"\n{'Strategy':<30} {'Wins':>6} {'Losses':>7} {'Ties':>6} "
                      f"{'WinRate':>8} {'Decisive':>9}")

@@ -4,9 +4,8 @@ Usage:
     python sim.py                     # Single game, 3 players, random strategy
     python sim.py -n 100              # 100 games, print summary stats
     python sim.py --players 4 --seed 42
-    python sim.py -n 50 --turns 200 --out logs/batch.md
-    python sim.py -n 1000 --heuristic prefer_trophies:2 --heuristic aggressive:1
-    python sim.py --list-heuristics   # Show available heuristics
+    python sim.py -n 1000 --strategy tree_search:2
+    python sim.py --list-strategies   # Show available strategies
 """
 import argparse
 import sys
@@ -19,45 +18,46 @@ sys.path.insert(0, str(Path(__file__).parent))
 from state import GameState
 from engine import GameEngine
 from strategy import RandomStrategy
-from observers import CardWinCorrelation, OrderStats, EventFrequency, HeuristicWinRate
-from heuristics import HeuristicStrategy, get_heuristic, list_heuristics
+from tree_search import TreeSearchStrategy
+from observers import CardWinCorrelation, OrderStats, EventFrequency, StrategyWinRate
+
+STRATEGIES = {
+    "random": ("Uniformly random choices", lambda rng: RandomStrategy(rng)),
+    "tree_search": ("Depth-1 lookahead, evaluates all actions", lambda rng: TreeSearchStrategy(rng)),
+}
 
 
-def _build_strategies(names: list[str], heuristic_specs: list[str] | None,
+def _build_strategies(names: list[str], strategy_specs: list[str] | None,
                       rng) -> dict:
-    """Build per-player strategy dict from --heuristic specs.
+    """Build per-player strategy dict from --strategy specs.
 
-    Each spec is 'name:count', e.g. 'aggressive:2' means 2 players get it.
-    Players are assigned in order; remaining get pure RandomStrategy.
+    Each spec is 'name:count', e.g. 'tree_search:2' means 2 players get it.
+    Players are assigned in order; remaining get RandomStrategy.
     """
-    if not heuristic_specs:
+    if not strategy_specs:
         return {n: RandomStrategy(rng) for n in names}
 
-    # Parse specs: [("aggressive", 2), ("prefer_trophies", 1), ...]
-    # Supports '+' for composing: "play_to_win+event_payoff:2"
-    assignments: list[tuple[list[str], int]] = []
-    for spec in heuristic_specs:
+    assignments: list[tuple[str, int]] = []
+    for spec in strategy_specs:
         if ":" in spec:
-            hnames_str, count_str = spec.rsplit(":", 1)
-            hnames = [h.strip() for h in hnames_str.split("+")]
-            assignments.append((hnames, int(count_str)))
+            sname, count_str = spec.rsplit(":", 1)
+            assignments.append((sname.strip(), int(count_str)))
         else:
-            assignments.append(([spec.strip()], 1))
+            assignments.append((spec.strip(), 1))
 
-    # Assign heuristics to players in order
     strategies: dict = {}
-    name_idx = 0
-    for hnames, count in assignments:
+    idx = 0
+    for sname, count in assignments:
+        if sname not in STRATEGIES:
+            raise ValueError(f"Unknown strategy '{sname}'. Available: {list(STRATEGIES)}")
+        factory = STRATEGIES[sname][1]
         for _ in range(count):
-            if name_idx >= len(names):
+            if idx >= len(names):
                 break
-            player_name = names[name_idx]
-            heuristics = [get_heuristic(h) for h in hnames]
-            strategies[player_name] = HeuristicStrategy(heuristics, rng)
-            name_idx += 1
+            strategies[names[idx]] = factory(rng)
+            idx += 1
 
-    # Remaining players get pure random
-    for i in range(name_idx, len(names)):
+    for i in range(idx, len(names)):
         strategies[names[i]] = RandomStrategy(rng)
 
     return strategies
@@ -65,15 +65,15 @@ def _build_strategies(names: list[str], heuristic_specs: list[str] | None,
 
 def run_single_game(players: int, max_turns: int, seed: int | None,
                     verbose: bool = True, observers: list | None = None,
-                    heuristic_specs: list[str] | None = None) -> dict:
+                    strategy_specs: list[str] | None = None) -> dict:
     """Run one game. Returns result dict."""
     names = ["Alice", "Bob", "Charlie", "Dave", "Eve"][:players]
     state = GameState(names, seed=seed)
     state.load_decks(Path(__file__).parent / "decks.json")
     state.setup_zones()
 
-    rng_strategy = state.rng  # share RNG for reproducibility
-    strategies = _build_strategies(names, heuristic_specs, rng_strategy)
+    rng_strategy = state.rng
+    strategies = _build_strategies(names, strategy_specs, rng_strategy)
     engine = GameEngine(state, strategies, observers=observers)
 
     t0 = time.perf_counter()
@@ -97,32 +97,30 @@ def run_single_game(players: int, max_turns: int, seed: int | None,
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Kingdoms simulation (no AI)")
+    parser = argparse.ArgumentParser(description="Kingdoms simulation")
     parser.add_argument("-n", "--games", type=int, default=1, help="Number of games to run")
     parser.add_argument("--players", type=int, default=3, help="Number of players (2-5)")
     parser.add_argument("--turns", type=int, default=200, help="Max turns per game")
     parser.add_argument("--seed", type=int, default=None, help="RNG seed (for reproducibility)")
     parser.add_argument("--out", type=str, default=None, help="Output file for log (single game only)")
     parser.add_argument("-q", "--quiet", action="store_true", help="Suppress per-game output")
-    parser.add_argument("--heuristic", action="append", dest="heuristics",
+    parser.add_argument("--strategy", action="append", dest="strategies",
                         metavar="NAME:COUNT",
-                        help="Assign heuristic to N players (e.g. aggressive:2). Repeatable.")
-    parser.add_argument("--list-heuristics", action="store_true",
-                        help="Show available heuristics and exit")
+                        help="Assign strategy to N players (e.g. tree_search:2). Repeatable.")
+    parser.add_argument("--list-strategies", action="store_true",
+                        help="Show available strategies and exit")
     args = parser.parse_args()
 
-    if args.list_heuristics:
-        print("Available heuristics:")
-        for name in list_heuristics():
-            h = get_heuristic(name)
-            doc = h.__class__.__doc__ or ""
-            print(f"  {name:20s} — {doc.strip().splitlines()[0]}")
+    if args.list_strategies:
+        print("Available strategies:")
+        for name, (desc, _) in STRATEGIES.items():
+            print(f"  {name:20s} — {desc}")
         return
 
     if args.games == 1:
         result = run_single_game(args.players, args.turns, args.seed,
                                   verbose=not args.quiet,
-                                  heuristic_specs=args.heuristics)
+                                  strategy_specs=args.strategies)
         if args.out:
             Path(args.out).parent.mkdir(parents=True, exist_ok=True)
             Path(args.out).write_text(result["log"], encoding="utf-8")
@@ -133,39 +131,34 @@ def main():
     else:
         # Batch mode with observers
         observers = [CardWinCorrelation(), OrderStats(), EventFrequency(),
-                     HeuristicWinRate()]
+                     StrategyWinRate()]
         stats = {"wins": {}, "depleted": {}, "turns": [], "elapsed": []}
 
         for i in range(args.games):
             seed = (args.seed + i) if args.seed is not None else None
             result = run_single_game(args.players, args.turns, seed,
                                      verbose=False, observers=observers,
-                                     heuristic_specs=args.heuristics)
+                                     strategy_specs=args.strategies)
             stats["turns"].append(result["turns"])
             stats["elapsed"].append(result["elapsed"])
             d = result["depleted"] or "none"
             stats["depleted"][d] = stats["depleted"].get(d, 0) + 1
             w = result["winner"] or "none"
             stats["wins"][w] = stats["wins"].get(w, 0) + 1
-            if (i + 1) % 1000 == 0 or (i + 1) == args.games:
+            if (i + 1) % 100 == 0 or (i + 1) == args.games:
                 print(f"\r  {i+1}/{args.games} games...", end="", file=sys.stderr, flush=True)
-        print("", file=sys.stderr)  # newline after progress
+        print("", file=sys.stderr)
 
         # Print summary
         print(f"\n{'='*50}")
         print(f"BATCH RESULTS: {args.games} games, {args.players} players, max {args.turns} turns")
-        if args.heuristics:
-            print(f"Heuristics: {', '.join(args.heuristics)}")
-            # Show per-player assignments
+        if args.strategies:
+            print(f"Strategies: {', '.join(args.strategies)}")
             names = ["Alice", "Bob", "Charlie", "Dave", "Eve"][:args.players]
-            sample_strats = _build_strategies(names, args.heuristics, None)
+            sample_strats = _build_strategies(names, args.strategies, None)
             for name in names:
                 s = sample_strats[name]
-                if isinstance(s, HeuristicStrategy):
-                    h_names = [h.name for h in s.heuristics]
-                    print(f"  {name}: {', '.join(h_names)}")
-                else:
-                    print(f"  {name}: random")
+                print(f"  {name}: {getattr(s, 'name', 'unknown')}")
         print(f"{'='*50}")
         print(f"\nPile depletion frequency:")
         for pile, count in sorted(stats["depleted"].items(), key=lambda x: -x[1]):
