@@ -223,11 +223,10 @@ class GameState:
             zone.pile.append(card)
 
     def setup_zones(self):
-        """Set up face-up areas: Season (4), Fields (5), Wares (3)."""
+        """Set up face-up areas: Season (4), Fields (5). Wares start empty."""
         from cards import get_behavior
         get_behavior("Tree Zone").refill(self)
         get_behavior("Wheat Zone").refill(self)
-        get_behavior("Coin Zone").refill(self)
 
     def refill_season(self, target: int = 4):
         from cards import get_behavior

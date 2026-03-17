@@ -4,17 +4,6 @@ from strategy import Intent, DecisionContext
 
 
 @_register
-class Rumour(CardBehavior):
-    name = 'Rumour'
-    tags = []
-    deck = 'coin'
-    def on_dawn(self, ctx):
-        ctx.state.log(f"  → Dawn: Rumour triggers!")
-        ctx.engine.resolve_event("Rumour", ctx.player)
-        ctx.discard_self()
-
-
-@_register
 class Mine(CardBehavior):
     name = 'Mine'
     tags = ['Labour']

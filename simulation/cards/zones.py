@@ -150,10 +150,13 @@ class CoinZone(CardBehavior):
             if coin:
                 s.log(f"  → trades {to_trade.name} into Wares, draws {coin.name} from Coin")
                 ctx.engine.receive_card(ctx.player, coin)
+            s.log(f"  → Trade triggers Rumour!")
+            ctx.engine.resolve_event("Rumour", ctx.player)
 
-    def refill(self, state, target: int = 3):
-        """Refill Wares up to target."""
+    def refill(self, state, target: int = None):
+        """Refill Wares from coin pile. No limit by default."""
         zone = state.zone_cards["coin"]
-        while len(zone.face_up) < target and zone.pile_ptr < len(zone.pile):
+        limit = target if target is not None else len(zone.pile)
+        while len(zone.face_up) < limit and zone.pile_ptr < len(zone.pile):
             zone.face_up.append(zone.pile[zone.pile_ptr])
             zone.pile_ptr += 1

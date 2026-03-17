@@ -67,7 +67,6 @@
     { "name": "Compost", "tags": [], "count": 3 }
   ],
   "coin": [
-    { "name": "Rumour", "tags": [], "count": 30 },
     { "name": "Mine", "tags": ["Labour"], "count": 2 }
   ],
   "candle": [
