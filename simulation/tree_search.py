@@ -248,6 +248,78 @@ class CardSynergy(Evaluator):
         return s
 
 
+# ── Smart opponent strategy for simulation ───────────────────────────
+
+class _OpponentStrategy(Strategy):
+    """Evaluator-aware strategy for opponents during simulation.
+
+    Makes realistic choices: discard worst card, gain best card, target leader.
+    No branching/deepcopy — just inline evaluation.
+    """
+
+    name = "opponent"
+
+    def __init__(self, evaluators: list[Evaluator] | None = None):
+        self.evaluators = evaluators
+
+    def resolve(self, state, player, options, ctx):
+        if not options:
+            return None
+        if len(options) == 1:
+            return options[0]
+
+        match ctx.intent:
+            case Intent.GAIN:
+                if hasattr(options[0], "tags"):
+                    best, best_s = options[0], float("-inf")
+                    for card in options:
+                        player.domain.append(card)
+                        s = evaluate(state, player, self.evaluators)
+                        player.domain.pop()
+                        if s > best_s:
+                            best_s = s
+                            best = card
+                    return best
+            case Intent.DISCARD | Intent.GIVE_AWAY:
+                if hasattr(options[0], "tags"):
+                    best, best_s = options[0], float("-inf")
+                    for card in options:
+                        if card in player.domain:
+                            player.domain.remove(card)
+                            s = evaluate(state, player, self.evaluators)
+                            player.domain.append(card)
+                        else:
+                            s = evaluate(state, player, self.evaluators)
+                        if s > best_s:
+                            best_s = s
+                            best = card
+                    return best
+            case Intent.TARGET:
+                if hasattr(options[0], "domain"):
+                    return max(options, key=lambda p: evaluate(state, p, self.evaluators))
+            case Intent.OPTION:
+                if options == [True, False]:
+                    return True
+        return options[0]
+
+    def sequence(self, state, player, items, ctx):
+        return list(items)
+
+    def resolve_n(self, state, player, options, min_n, max_n, ctx):
+        n = min(max_n, len(options))
+        if n <= min_n:
+            return list(options[:n])
+        picked = []
+        remaining = list(options)
+        for _ in range(n):
+            if not remaining:
+                break
+            choice = self.resolve(state, player, remaining, ctx)
+            picked.append(choice)
+            remaining.remove(choice)
+        return picked
+
+
 # ── Scripted strategy for replay ──────────────────────────────────────
 
 class ScriptedStrategy(Strategy):
@@ -490,7 +562,7 @@ class TreeSearchStrategy(Strategy):
 
         sim_state.log = lambda msg: None
         recorder = RecordingStrategy()
-        strats = {p.name: RecordingStrategy() for p in sim_state.players}
+        strats = {p.name: _OpponentStrategy(self.evaluators) for p in sim_state.players}
         strats[sim_player.name] = recorder
 
         from engine import GameEngine
@@ -537,8 +609,8 @@ class TreeSearchStrategy(Strategy):
             return float("-inf")
 
         sim_state.log = lambda msg: None
-        # Active player uses scripted choices; others use default (first option)
-        strats = {p.name: ScriptedStrategy([]) for p in sim_state.players}
+        # Active player uses scripted choices; opponents play smart
+        strats = {p.name: _OpponentStrategy(self.evaluators) for p in sim_state.players}
         strats[sim_player.name] = ScriptedStrategy(choices)
 
         from engine import GameEngine
