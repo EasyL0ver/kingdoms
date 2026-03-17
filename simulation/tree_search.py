@@ -46,10 +46,16 @@ def list_evaluators() -> list[str]:
 
 def evaluate(state: GameState, player: Player,
              evaluators: list[Evaluator] | None = None) -> float:
-    """Sum scores from all evaluators."""
+    """Score a position: own score minus best opponent's score (weighted)."""
     if not evaluators:
         evaluators = [get_evaluator(n) for n in _EVALUATOR_REGISTRY]
-    return sum(e.score(state, player) for e in evaluators)
+    my_score = sum(e.score(state, player) for e in evaluators)
+    best_opp = max(
+        (sum(e.score(state, p) for e in evaluators)
+         for p in state.players if p is not player),
+        default=0.0,
+    )
+    return my_score - 0.3 * best_opp
 
 
 # ── Built-in evaluators ──────────────────────────────────────────────
@@ -624,10 +630,6 @@ class TreeSearchStrategy(Strategy):
             beh.on_order(ctx)
         except Exception:
             return float("-inf")
-
-        # No-op: penalize slightly
-        if (len(sim_player.domain), len(sim_player.discard)) == snap:
-            return evaluate(sim_state, sim_player, self.evaluators) - 0.5
 
         return evaluate(sim_state, sim_player, self.evaluators)
 
