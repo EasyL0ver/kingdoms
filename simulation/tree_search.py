@@ -248,29 +248,22 @@ class CardSynergy(Evaluator):
         return s
 
 
-# ── Greedy sub-decision strategy ──────────────────────────────────────
+# ── Simulation sub-decision strategy ─────────────────────────────────
 
-class GreedyStrategy(Strategy):
-    """Simple greedy resolver for sub-decisions during simulation."""
+class SimStrategy(Strategy):
+    """Evaluator-aware strategy for sub-decisions during simulation.
 
-    name = "greedy"
+    At each decision point, temporarily applies each option to the state,
+    evaluates using the full evaluator suite, and picks the best.
+    This gives real branching at every sub-decision without nested deepcopy.
+    """
 
-    def __init__(self, rng: random.Random | None = None):
+    name = "sim"
+
+    def __init__(self, rng: random.Random | None = None,
+                 evaluators: list[Evaluator] | None = None):
         self.rng = rng or random.Random()
-
-    @staticmethod
-    def _card_value(card: Card) -> float:
-        value = 0.0
-        for tag in card.tags:
-            if tag in ("Trophy", "Nature", "Amenity"):
-                value += 3.0
-            elif tag in ("Knowledge", "Spiritual"):
-                value += 1.5
-            elif tag == "Discontent":
-                value -= 2.0
-            else:
-                value += 0.5
-        return value
+        self.evaluators = evaluators
 
     def resolve(self, state, player, options, ctx):
         if not options:
@@ -281,30 +274,75 @@ class GreedyStrategy(Strategy):
         match ctx.intent:
             case Intent.GAIN:
                 if hasattr(options[0], "tags"):
-                    return max(options, key=self._card_value)
-            case Intent.DISCARD | Intent.GIVE_AWAY:
+                    return self._best_card_to_gain(state, player, options)
+            case Intent.DISCARD:
                 if hasattr(options[0], "tags"):
-                    return min(options, key=self._card_value)
+                    return self._best_card_to_discard(state, player, options)
+            case Intent.GIVE_AWAY:
+                if hasattr(options[0], "tags"):
+                    return self._best_card_to_give(state, player, options)
             case Intent.TARGET:
                 if hasattr(options[0], "domain"):
-                    return max(options, key=lambda p: len(p.domain))
+                    return self._best_target(state, player, options)
             case Intent.OPTION:
                 if options == [True, False]:
                     return True
         return options[0]
 
+    def _best_card_to_gain(self, state, player, cards):
+        """Try adding each card, evaluate, pick best."""
+        best, best_score = cards[0], float("-inf")
+        for card in cards:
+            player.domain.append(card)
+            score = evaluate(state, player, self.evaluators)
+            player.domain.pop()
+            if score > best_score:
+                best_score = score
+                best = card
+        return best
+
+    def _best_card_to_discard(self, state, player, cards):
+        """Try removing each card, evaluate, keep best remaining state."""
+        best, best_score = cards[0], float("-inf")
+        for card in cards:
+            if card in player.domain:
+                player.domain.remove(card)
+                player.discard.append(card)
+                score = evaluate(state, player, self.evaluators)
+                player.discard.pop()
+                player.domain.append(card)
+            else:
+                score = evaluate(state, player, self.evaluators)
+            if score > best_score:
+                best_score = score
+                best = card
+        return best
+
+    def _best_card_to_give(self, state, player, cards):
+        """Give away the card whose absence hurts least."""
+        return self._best_card_to_discard(state, player, cards)
+
+    def _best_target(self, state, player, targets):
+        """Target the opponent with the strongest position (disrupt the leader)."""
+        return max(targets, key=lambda p: evaluate(state, p, self.evaluators))
+
     def sequence(self, state, player, items, ctx):
         return list(items)
 
     def resolve_n(self, state, player, options, min_n, max_n, ctx):
+        """Pick N items one at a time using evaluate."""
         n = min(max_n, len(options))
         if n <= min_n:
             return list(options[:n])
-        if ctx.intent == Intent.GAIN and options and hasattr(options[0], "tags"):
-            return sorted(options, key=self._card_value, reverse=True)[:n]
-        if ctx.intent in (Intent.DISCARD, Intent.GIVE_AWAY) and options and hasattr(options[0], "tags"):
-            return sorted(options, key=self._card_value)[:n]
-        return list(options[:n])
+        picked = []
+        remaining = list(options)
+        for _ in range(n):
+            if not remaining:
+                break
+            choice = self.resolve(state, player, remaining, ctx)
+            picked.append(choice)
+            remaining.remove(choice)
+        return picked
 
 
 # ── Tree search strategy ─────────────────────────────────────────────
@@ -322,37 +360,38 @@ class TreeSearchStrategy(Strategy):
     def __init__(self, rng: random.Random | None = None,
                  evaluators: list[Evaluator] | None = None):
         self.rng = rng or random.Random()
-        self._greedy = GreedyStrategy(self.rng)
+        self._sim_strategy = SimStrategy(self.rng, evaluators)
         self.evaluators = evaluators
 
     def resolve(self, state, player, options, ctx):
         if ctx.event == "Dawn" and ctx.source == "Presence":
             return self._search(state, player, options)
-        return self._greedy.resolve(state, player, options, ctx)
+        return self._sim_strategy.resolve(state, player, options, ctx)
 
     def sequence(self, state, player, items, ctx):
-        return self._greedy.sequence(state, player, items, ctx)
+        return self._sim_strategy.sequence(state, player, items, ctx)
 
     def resolve_n(self, state, player, options, min_n, max_n, ctx):
-        return self._greedy.resolve_n(state, player, options, min_n, max_n, ctx)
+        return self._sim_strategy.resolve_n(state, player, options, min_n, max_n, ctx)
 
     # ── Core search ──
 
     def _search(self, state: GameState, player: Player, actions: list[Action]) -> Action:
-        baseline = evaluate(state, player, self.evaluators)
-        scored: list[tuple[Action, float]] = []
+        best_action = None
+        best_score = float("-inf")
 
         for action in actions:
             score = self._simulate(state, player, action)
-            scored.append((action, score - baseline))
+            if score > best_score:
+                best_score = score
+                best_action = action
 
-        # If any action improves the position, pick the best
-        positive = [(a, d) for a, d in scored if d > 0]
-        if positive:
-            return max(positive, key=lambda x: x[1])[0]
+        # If best is no better than current, pick randomly to avoid loops
+        baseline = evaluate(state, player, self.evaluators)
+        if best_score <= baseline:
+            return self.rng.choice(actions)
 
-        # All actions are neutral or bad — pick randomly to avoid loops
-        return self.rng.choice(actions)
+        return best_action or actions[0]
 
     def _simulate(self, state: GameState, player: Player, action: Action) -> float:
         if action.type == "pass":
@@ -368,10 +407,11 @@ class TreeSearchStrategy(Strategy):
         # Silence logging
         sim_state.log = lambda msg: None
 
-        greedy_strats = {p.name: GreedyStrategy(random.Random(42)) for p in sim_state.players}
+        sim_strats = {p.name: SimStrategy(random.Random(42), self.evaluators)
+                      for p in sim_state.players}
 
         from engine import GameEngine
-        sim_engine = GameEngine(sim_state, greedy_strats, observers=[])
+        sim_engine = GameEngine(sim_state, sim_strats, observers=[])
 
         try:
             beh = sim_engine.behavior(sim_card)
