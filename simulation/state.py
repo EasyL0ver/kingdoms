@@ -109,6 +109,8 @@ class Player:
             return True
         if self.has_card("Mine"):
             return True
+        if self.has_card("Market"):
+            return True
         # Apprenticeship needs a player with Craftsmanship to agree — handled at action level
         return False
 

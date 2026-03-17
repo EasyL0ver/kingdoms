@@ -137,7 +137,7 @@ class GameEngine:
 
     def _compute_winner(self) -> str | None:
         s = self.state
-        win_tags = {"tree": "Nature", "claw": "Trophy", "wheat": "Amenity"}
+        win_tags = {"tree": "Nature", "claw": "Trophy", "wheat": "Amenity", "coin": "Wealth"}
         win_tag = win_tags.get(s.depleted_pile)
         if not win_tag:
             return None
@@ -354,6 +354,7 @@ class GameEngine:
             "tree": ("Nature", "🌳 Tree depleted — most [Nature] wins"),
             "claw": ("Trophy", "🐾 Claw depleted — most [Trophy] wins"),
             "wheat": ("Amenity", "🌾 Wheat depleted — most [Amenity] wins"),
+            "coin": ("Wealth", "🪙 Coin depleted — most [Wealth] wins"),
         }
 
         for p in s.players:

@@ -67,7 +67,16 @@
     { "name": "Compost", "tags": [], "count": 3 }
   ],
   "coin": [
-    { "name": "Mine", "tags": ["Labour"], "count": 2 }
+    { "name": "Treasure", "tags": ["Trophy", "Amenity", "Wealth"], "count": 6 },
+    { "name": "Market", "tags": [], "count": 3 },
+    { "name": "Smuggler", "tags": ["Mob"], "count": 3 },
+    { "name": "Sellsword", "tags": ["Unit"], "count": 2 },
+    { "name": "Windfall", "tags": [], "count": 2 },
+    { "name": "Prosperity", "tags": ["Wealth"], "count": 2 },
+    { "name": "Embassy", "tags": ["Wealth"], "count": 2 },
+    { "name": "Efficiency", "tags": [], "count": 2 },
+    { "name": "Mine", "tags": ["Labour"], "count": 2 },
+    { "name": "Provisions", "tags": ["Amenity"], "count": 2 }
   ],
   "candle": [
     { "name": "Worship of the Flame", "tags": ["Spiritual"], "count": 1 }

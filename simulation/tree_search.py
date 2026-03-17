@@ -79,6 +79,7 @@ class TagValue(Evaluator):
         s += player.count_tag("Trophy") * 3.0
         s += player.count_tag("Nature") * 3.0
         s += player.count_tag("Amenity") * 3.0
+        s += player.count_tag("Wealth") * 3.0
         s += player.count_tag("Knowledge") * 1.5
         s += player.count_tag("Spiritual") * 1.0
         s += len(player.domain) * 0.5
@@ -143,13 +144,15 @@ class EndgameAwareness(Evaluator):
 
     def score(self, state, player):
         s = 0.0
-        win_tags = {"claw": "Trophy", "tree": "Nature", "wheat": "Amenity"}
+        win_tags = {"claw": "Trophy", "tree": "Nature", "wheat": "Amenity", "coin": "Wealth"}
         for deck, tag in win_tags.items():
             remaining = state.pile_remaining(deck)
             if deck == "tree":
                 remaining += len(state.season)
             elif deck == "wheat":
                 remaining += len(state.fields)
+            elif deck == "coin":
+                remaining += len(state.wares)
 
             if remaining > 15:
                 continue
@@ -535,8 +538,8 @@ class TreeSearchStrategy(Strategy):
     def sequence(self, state, player, items, ctx):
         # Cancellers first on Brawl, info cards first on Rumour
         PRIORITY = {
-            "Brawl": {"Militia": 0, "Eldership": 1, "Crags": 2},
-            "Rumour": {"Village Gossip": 0},
+            "Brawl": {"Militia": 0, "Sellsword": 0, "Eldership": 1, "Crags": 2},
+            "Rumour": {"Village Gossip": 0, "Market": 1},
         }
         priorities = PRIORITY.get(ctx.event, {})
         if not priorities:
