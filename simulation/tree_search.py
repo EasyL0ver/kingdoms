@@ -446,8 +446,12 @@ class TreeSearchStrategy(Strategy):
         if action.type == "pass":
             return evaluate(state, player, self.evaluators), []
 
-        # Discovery run — find how many decision points this action has
+        # Discovery run — find decision points, detect no-ops early
         decision_points = self._discover_decisions(state, player, action)
+
+        if decision_points is None:
+            # No-op — don't waste time branching
+            return evaluate(state, player, self.evaluators) - 1.0, []
 
         if not decision_points:
             # No sub-decisions — just run once and evaluate
@@ -468,21 +472,25 @@ class TreeSearchStrategy(Strategy):
         return best_score, best_combo
 
     def _discover_decisions(self, state: GameState, player: Player,
-                            action: Action) -> list[int]:
+                            action: Action) -> list[int] | None:
         """Run action once with RecordingStrategy to discover decision points.
 
-        Returns list of option counts per decision point.
+        Returns list of option counts per decision point, or None if the
+        action is a no-op (nothing changes).
         """
         sim_state = copy.deepcopy(state)
         sim_player = sim_state.player_by_name(player.name)
         sim_card = self._find_card(sim_state, sim_player, action)
         if not sim_card:
-            return []
+            return None
 
         sim_state.log = lambda msg: None
         recorder = RecordingStrategy()
         strats = {p.name: RecordingStrategy() for p in sim_state.players}
         strats[sim_player.name] = recorder
+
+        # Snapshot before
+        snap = self._snapshot(sim_state, sim_player)
 
         from engine import GameEngine
         sim_engine = GameEngine(sim_state, strats, observers=[])
@@ -492,13 +500,29 @@ class TreeSearchStrategy(Strategy):
             ctx = sim_engine.make_ctx(sim_player, sim_card)
             beh.on_order(ctx)
         except Exception:
-            return []
+            return None
+
+        # No-op: nothing changed at all → skip all branching
+        if self._snapshot(sim_state, sim_player) == snap:
+            return None
 
         # Return option counts, capped
         return [
             min(len(opts), self.MAX_OPTIONS_PER_DECISION)
             for opts, _ in recorder.decisions[:self.MAX_DECISIONS]
         ]
+
+    @staticmethod
+    def _snapshot(state: GameState, player: Player) -> tuple:
+        """Quick hashable snapshot for no-op detection."""
+        return (
+            len(player.domain),
+            len(player.discard),
+            tuple(state.pile_remaining(d) for d in ("claw", "tree", "wheat", "coin", "candle")),
+            len(state.season),
+            len(state.fields),
+            len(state.wares),
+        )
 
     def _generate_combos(self, decision_points: list[int]) -> list[list[int]]:
         """Generate all index combinations across decision points."""
@@ -526,9 +550,7 @@ class TreeSearchStrategy(Strategy):
         from engine import GameEngine
         sim_engine = GameEngine(sim_state, strats, observers=[])
 
-        # Snapshot before to detect no-ops
-        before_domain = len(sim_player.domain)
-        before_discard = len(sim_player.discard)
+        snap = self._snapshot(sim_state, sim_player)
 
         try:
             beh = sim_engine.behavior(sim_card)
@@ -537,10 +559,8 @@ class TreeSearchStrategy(Strategy):
         except Exception:
             return float("-inf")
 
-        # No-op detection: if nothing changed, penalize
-        after_domain = len(sim_player.domain)
-        after_discard = len(sim_player.discard)
-        if after_domain == before_domain and after_discard == before_discard:
+        # No-op: penalize
+        if self._snapshot(sim_state, sim_player) == snap:
             return evaluate(sim_state, sim_player, self.evaluators) - 1.0
 
         return evaluate(sim_state, sim_player, self.evaluators)
