@@ -171,32 +171,29 @@ class Chiefdom(CardBehavior):
     name = 'Chiefdom'
     tags = ['Allegiance', 'Trophy']
     deck = 'claw'
-    def on_order(self, ctx):
+    def on_dawn(self, ctx):
         if ctx.location != "domain":
-            return
-        has_mob = ctx.player.count_tag("Mob") > 0
-        if not has_mob and not any(
-                ctx.player.shares_culture(p) and p.count_tag("Mob") > 0
-                for p in ctx.state.other_players(ctx.player)):
             return
         mob_sources = []
         for mob in ctx.player.cards_with_tag("Mob"):
-            mob_sources.append((ctx.player, mob))
+            if mob is not ctx.card:
+                mob_sources.append((ctx.player, mob))
         for p in ctx.state.other_players(ctx.player):
             if ctx.player.shares_culture(p):
                 for mob in p.cards_with_tag("Mob"):
                     mob_sources.append((p, mob))
-        if mob_sources:
-            source_player, mob = ctx.engine.strat(ctx.player).resolve(
-                ctx.state, ctx.player, mob_sources,
-                DecisionContext(event="Order", source="Chiefdom", intent=Intent.OPTION))
-            targets = [p for p in ctx.state.players if p is not source_player]
-            target = ctx.engine.strat(ctx.player).resolve(
-                ctx.state, ctx.player, targets,
-                DecisionContext(event="Order", source="Chiefdom", intent=Intent.TARGET))
-            source_player.remove_from_domain(mob)
-            target.add_to_domain(mob, ctx.state)
-            ctx.state.log(f"  → moves {mob.name} from {source_player.name} to {target.name}")
+        if not mob_sources:
+            return
+        source_player, mob = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, mob_sources,
+            DecisionContext(event="Dawn", source="Chiefdom", intent=Intent.OPTION))
+        targets = [p for p in ctx.state.players if p is not source_player]
+        target = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, targets,
+            DecisionContext(event="Dawn", source="Chiefdom", intent=Intent.TARGET))
+        source_player.remove_from_domain(mob)
+        target.add_to_domain(mob, ctx.state)
+        ctx.state.log(f"  → Chiefdom: moves {mob.name} from {source_player.name} to {target.name}")
 
 
 @_register
