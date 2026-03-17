@@ -86,10 +86,9 @@ class TagValue(Evaluator):
         return s
 
 
-@_register_evaluator
-class PileProximity(Evaluator):
-    """Weight win tags higher when their pile is close to depletion."""
-    name = "pile_proximity"
+class _PileProximity_DISABLED(Evaluator):
+    """DISABLED — superseded by EndgameAwareness."""
+    name = "pile_proximity_disabled"
 
     def score(self, state, player):
         s = 0.0
@@ -134,6 +133,41 @@ class ZoneAccess(Evaluator):
             s += 2.0
         if player.has_candle_access():
             s += 1.5
+        return s
+
+
+@_register_evaluator
+class EndgameAwareness(Evaluator):
+    """Discourage ending the game on an axis where we're tied or behind."""
+    name = "endgame_awareness"
+
+    def score(self, state, player):
+        s = 0.0
+        win_tags = {"claw": "Trophy", "tree": "Nature", "wheat": "Amenity"}
+        for deck, tag in win_tags.items():
+            remaining = state.pile_remaining(deck)
+            if deck == "tree":
+                remaining += len(state.season)
+            elif deck == "wheat":
+                remaining += len(state.fields)
+
+            if remaining > 15:
+                continue
+
+            my_count = player.count_tag(tag)
+            max_opp = max(
+                (p.count_tag(tag) for p in state.players if p is not player),
+                default=0,
+            )
+            lead = my_count - max_opp
+            danger = max(0, 15 - remaining) / 15.0
+
+            if lead > 0:
+                s += lead * danger * 4.0
+            elif lead == 0:
+                s -= danger * 6.0
+            else:
+                s -= danger * 10.0
         return s
 
 
@@ -506,12 +540,6 @@ class TreeSearchStrategy(Strategy):
                 best_action = action
                 best_keys = chosen_keys
 
-        baseline = evaluate(state, player, self.evaluators)
-        if best_score <= baseline:
-            self._best_keys = []
-            self._replay_idx = 0
-            return self.rng.choice(actions)
-
         self._best_keys = best_keys
         self._replay_idx = 0
         return best_action or actions[0]
@@ -522,9 +550,6 @@ class TreeSearchStrategy(Strategy):
 
         Returns (best_leaf_score, list_of_chosen_keys).
         """
-        if action.type == "pass":
-            return evaluate(state, player, self.evaluators), []
-
         decision_points, discovery_score, discovery_keys = self._discover_decisions(state, player, action)
 
         if decision_points is None:
