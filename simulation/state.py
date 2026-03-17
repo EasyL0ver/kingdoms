@@ -229,9 +229,9 @@ class GameState:
         get_behavior("Wheat Zone").refill(self)
         get_behavior("Coin Zone").refill(self)
 
-    def refill_season(self):
+    def refill_season(self, target: int = 4):
         from cards import get_behavior
-        get_behavior("Tree Zone").refill(self)
+        get_behavior("Tree Zone").refill(self, target)
 
     def refill_fields(self, target: int = 5):
         from cards import get_behavior

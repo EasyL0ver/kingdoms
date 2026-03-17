@@ -27,8 +27,8 @@
     { "name": "Enforcers", "tags": ["Mob", "Discontent"], "count": 2 }
   ],
   "tree": [
-    { "name": "Highlander", "tags": ["Culture"], "count": 3 },
-    { "name": "Nomad", "tags": ["Culture"], "count": 3 },
+    { "name": "Highlander", "tags": ["Culture", "Trophy"], "count": 3 },
+    { "name": "Nomad", "tags": ["Culture", "Amenity"], "count": 3 },
     { "name": "Eldership", "tags": ["Allegiance", "Knowledge"], "count": 1 },
     { "name": "Sky Dance", "tags": ["Spiritual"], "count": 1 },
     { "name": "Harvest", "tags": [], "count": 4 },
@@ -45,7 +45,8 @@
     { "name": "Forage", "tags": [], "count": 2 },
     { "name": "Sowing", "tags": ["Knowledge"], "count": 3 },
     { "name": "Withered Crop", "tags": [], "count": 3 },
-    { "name": "Remembrance", "tags": ["Knowledge"], "count": 2 }
+    { "name": "Remembrance", "tags": ["Knowledge"], "count": 2 },
+    { "name": "Kinship", "tags": [], "count": 2 }
   ],
   "wheat": [
     { "name": "Plough", "tags": ["Labour"], "count": 3 },
@@ -61,7 +62,9 @@
     { "name": "Maypole", "tags": ["Amenity"], "count": 2 },
     { "name": "Village Gossip", "tags": [], "count": 2 },
     { "name": "Orchard", "tags": ["Nature", "Land"], "count": 3 },
-    { "name": "Stewardship", "tags": [], "count": 2 }
+    { "name": "Stewardship", "tags": [], "count": 2 },
+    { "name": "Irrigation", "tags": ["Labour"], "count": 2 },
+    { "name": "Compost", "tags": [], "count": 3 }
   ],
   "coin": [
     { "name": "Rumour", "tags": [], "count": 30 },

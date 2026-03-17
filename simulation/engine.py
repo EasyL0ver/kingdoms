@@ -166,7 +166,12 @@ class GameEngine:
         match action.type:
             case "order" | "order_well":
                 beh = self.behavior(action.card)
-                ctx = self.make_ctx(player, action.card)
+                owner = getattr(action, "owner", None)
+                if action.type == "order_well" and owner:
+                    # Well: ctx.player = owner, ctx.active_player = orderer
+                    ctx = self.make_ctx(owner, action.card, active_player=player)
+                else:
+                    ctx = self.make_ctx(player, action.card, active_player=player)
                 self._notify("on_order", s, player, action.card)
                 beh.on_order(ctx)
             case "pass":

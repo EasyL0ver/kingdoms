@@ -6,7 +6,7 @@ from strategy import Intent, DecisionContext
 @_register
 class Highlander(CardBehavior):
     name = 'Highlander'
-    tags = ['Culture']
+    tags = ['Culture', 'Trophy']
     deck = 'tree'
     def on_order(self, ctx):
         if ctx.location != "discard" or not ctx.player.has_card("Crags"):
@@ -24,7 +24,7 @@ class Highlander(CardBehavior):
 @_register
 class Nomad(CardBehavior):
     name = 'Nomad'
-    tags = ['Culture']
+    tags = ['Culture', 'Amenity']
     deck = 'tree'
     def on_order(self, ctx):
         if ctx.location != "discard" or not ctx.player.has_card("Pasture"):
@@ -407,3 +407,35 @@ class Remembrance(CardBehavior):
             ctx.player.discard.remove(c)
             ctx.player.add_to_domain(c, ctx.state)
             ctx.state.log(f"  → recovers {c.name} from discard")
+
+
+@_register
+class Kinship(CardBehavior):
+    name = 'Kinship'
+    tags = []
+    deck = 'tree'
+
+    def on_harvest(self, ctx):
+        s = ctx.state
+        # Refill Season
+        old = len(s.season)
+        s.refill_season()
+        if len(s.season) > old:
+            s.log(f"  → Kinship: Season refilled {old} → {len(s.season)}")
+        # Give any Culture cards from Season to a target player
+        culture_in_season = [c for c in s.season if c.has_tag("Culture")]
+        if culture_in_season:
+            targets = list(s.players)
+            target = ctx.engine.strat(ctx.player).resolve(
+                s, ctx.player, targets,
+                DecisionContext(event="Harvest", source="Kinship", intent=Intent.TARGET))
+            for c in culture_in_season:
+                s.season.remove(c)
+                ctx.engine.receive_card(target, c)
+                s.log(f"  → Kinship: gives {c.name} from Season to {target.name}")
+        # Each player sharing culture with owner orders tree zone
+        for p in s.other_players(ctx.player):
+            if ctx.player.shares_culture(p) and s.season:
+                s.log(f"  → Kinship: {p.name} shares culture, orders Tree zone")
+                ctx.engine.order_zone(p, "tree")
+        return True

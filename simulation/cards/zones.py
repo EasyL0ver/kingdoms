@@ -60,16 +60,12 @@ class TreeZone(CardBehavior):
                 ctx.engine.receive_card(ctx.player, pick)
                 self.refill(ctx.state)
 
-    def refill(self, state):
-        """Refill Season to 4 when empty."""
+    def refill(self, state, target: int = 4):
+        """Refill Season up to target."""
         zone = state.zone_cards["tree"]
-        if len(zone.face_up) == 0:
-            while len(zone.face_up) < 4 and zone.pile_ptr < len(zone.pile):
-                zone.face_up.append(zone.pile[zone.pile_ptr])
-                zone.pile_ptr += 1
-            if zone.face_up:
-                names = ", ".join(c.name for c in zone.face_up)
-                state.log(f"  🔄 Season refilled: {names}")
+        while len(zone.face_up) < target and zone.pile_ptr < len(zone.pile):
+            zone.face_up.append(zone.pile[zone.pile_ptr])
+            zone.pile_ptr += 1
 
 
 @_register

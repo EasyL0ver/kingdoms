@@ -209,12 +209,22 @@ class Well(CardBehavior):
     def on_order(self, ctx):
         if not ctx.state.season:
             return
-        tree_zone = ctx.state.zone_cards["tree"]
-        tree_beh = ctx.engine.behavior(tree_zone)
-        ctx.state.log("  → Orders Well (Tree zone ×2)")
-        for _ in range(2):
-            tree_ctx = ctx.engine.make_ctx(ctx.player, tree_zone)
-            tree_beh.on_order(tree_ctx)
+        # Orderer orders tree zone
+        ctx.state.log(f"  → {ctx.active_player.name} orders Tree zone via Well")
+        ctx.engine.order_zone(ctx.active_player, "tree")
+        # Owner also orders tree zone (if different from orderer)
+        if ctx.player is not ctx.active_player:
+            ctx.state.log(f"  → {ctx.player.name} (Well owner) orders Tree zone")
+            ctx.engine.order_zone(ctx.player, "tree")
+        # Refill 1 Season + 1 Fields
+        old_season = len(ctx.state.season)
+        ctx.state.refill_season(old_season + 1)
+        if len(ctx.state.season) > old_season:
+            ctx.state.log(f"  → Well: Season refilled {old_season} → {len(ctx.state.season)}")
+        old_fields = len(ctx.state.fields)
+        ctx.state.refill_fields(old_fields + 1)
+        if len(ctx.state.fields) > old_fields:
+            ctx.state.log(f"  → Well: Fields refilled {old_fields} → {len(ctx.state.fields)}")
 
 
 @_register
@@ -288,3 +298,43 @@ class Stewardship(CardBehavior):
             DecisionContext(event="Dawn", source="Stewardship", intent=Intent.OPTION))
         ctx.state.log(f"  → Stewardship: {ctx.player.name} orders {choice} zone")
         ctx.engine.order_zone(ctx.player, choice)
+
+
+@_register
+class Irrigation(CardBehavior):
+    name = 'Irrigation'
+    tags = ['Labour']
+    deck = 'wheat'
+
+    def on_dawn(self, ctx):
+        if ctx.location != "domain":
+            return
+        old = len(ctx.state.fields)
+        ctx.state.refill_fields(old + 1)
+        if len(ctx.state.fields) > old:
+            ctx.state.log(f"  → Irrigation: Fields refilled {old} → {len(ctx.state.fields)}")
+
+
+@_register
+class Compost(CardBehavior):
+    name = 'Compost'
+    tags = []
+    deck = 'wheat'
+
+    def on_order(self, ctx):
+        if ctx.location != "domain" or not ctx.player.discard:
+            return
+        to_exile = ctx.engine.strat(ctx.player).resolve_n(
+            ctx.state, ctx.player, list(ctx.player.discard),
+            1, len(ctx.player.discard),
+            DecisionContext(event="Order", source="Compost", intent=Intent.DISCARD))
+        for c in to_exile:
+            ctx.player.discard.remove(c)
+        ctx.state.log(f"  → Compost: exiles {len(to_exile)} cards from discard")
+        old = len(ctx.state.fields)
+        ctx.state.refill_fields(old + len(to_exile))
+        new = len(ctx.state.fields)
+        if new > old:
+            ctx.state.log(f"  → Compost: Fields refilled {old} → {new}")
+        if ctx.state.fields:
+            ctx.engine.order_zone(ctx.player, "wheat")
