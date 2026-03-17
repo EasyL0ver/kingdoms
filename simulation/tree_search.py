@@ -172,6 +172,23 @@ class EndgameAwareness(Evaluator):
 
 
 @_register_evaluator
+class OpponentBurden(Evaluator):
+    """Reward opponent Discontent when we have brawl-triggering cards."""
+    name = "opponent_burden"
+
+    BRAWL_ENABLERS = {"Warband", "Racketeering"}
+
+    def score(self, state, player):
+        has_enabler = any(c.name in self.BRAWL_ENABLERS for c in player.domain)
+        if not has_enabler:
+            return 0.0
+        opp_discontent = sum(
+            opp.count_tag("Discontent") for opp in state.other_players(player)
+        )
+        return opp_discontent * 0.15
+
+
+@_register_evaluator
 class CardSynergy(Evaluator):
     """Score cards based on whether their synergies are active in the current state."""
     name = "card_synergy"
