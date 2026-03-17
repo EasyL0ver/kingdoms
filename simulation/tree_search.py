@@ -3,37 +3,147 @@
 Replaces the old heuristic-scoring approach with a depth-1 lookahead:
 for each valid action, deep-copy the state, execute the action,
 evaluate the resulting board, and pick the action with the best outcome.
+
+Evaluators are composable modules that score a board position.
 """
 from __future__ import annotations
 import copy
 import random
+from abc import ABC, abstractmethod
 from state import GameState, Player, Card, Action
 from strategy import Strategy, Intent, DecisionContext
 
 
-def evaluate(state: GameState, player: Player) -> float:
-    """Score a board position from player's perspective."""
-    score = 0.0
+# ── Evaluator system ─────────────────────────────────────────────────
 
-    score += player.count_tag("Trophy") * 3.0
-    score += player.count_tag("Nature") * 3.0
-    score += player.count_tag("Amenity") * 3.0
-    score += player.count_tag("Knowledge") * 1.5
-    score += player.count_tag("Spiritual") * 1.0
-    score += len(player.domain) * 0.5
-    score -= player.count_tag("Discontent") * 2.0
+class Evaluator(ABC):
+    """Scores a board position from a player's perspective."""
+    name: str = ""
 
-    # Bonus for winning tags relative to opponents
-    win_tags = {"claw": "Trophy", "tree": "Nature", "wheat": "Amenity"}
-    for deck, tag in win_tags.items():
-        my_count = player.count_tag(tag)
-        max_opp = max(
-            (p.count_tag(tag) for p in state.players if p is not player),
-            default=0,
+    @abstractmethod
+    def score(self, state: GameState, player: Player) -> float:
+        ...
+
+
+_EVALUATOR_REGISTRY: dict[str, type[Evaluator]] = {}
+
+
+def _register_evaluator(cls):
+    _EVALUATOR_REGISTRY[cls.name] = cls
+    return cls
+
+
+def get_evaluator(name: str) -> Evaluator:
+    if name not in _EVALUATOR_REGISTRY:
+        available = ", ".join(sorted(_EVALUATOR_REGISTRY))
+        raise ValueError(f"Unknown evaluator '{name}'. Available: {available}")
+    return _EVALUATOR_REGISTRY[name]()
+
+
+def list_evaluators() -> list[str]:
+    return sorted(_EVALUATOR_REGISTRY.keys())
+
+
+def evaluate(state: GameState, player: Player,
+             evaluators: list[Evaluator] | None = None) -> float:
+    """Sum scores from all evaluators."""
+    if not evaluators:
+        evaluators = [get_evaluator(n) for n in _EVALUATOR_REGISTRY]
+    return sum(e.score(state, player) for e in evaluators)
+
+
+# ── Built-in evaluators ──────────────────────────────────────────────
+
+@_register_evaluator
+class TagValue(Evaluator):
+    """Score cards by their tag value."""
+    name = "tag_value"
+
+    def score(self, state, player):
+        s = 0.0
+        s += player.count_tag("Trophy") * 3.0
+        s += player.count_tag("Nature") * 3.0
+        s += player.count_tag("Amenity") * 3.0
+        s += player.count_tag("Knowledge") * 1.5
+        s += player.count_tag("Spiritual") * 1.0
+        s += len(player.domain) * 0.5
+        s -= player.count_tag("Discontent") * 3.0
+        return s
+
+
+@_register_evaluator
+class PileProximity(Evaluator):
+    """Weight win tags higher when their pile is close to depletion."""
+    name = "pile_proximity"
+
+    def score(self, state, player):
+        s = 0.0
+        pile_health = {}
+        for deck in ("claw", "tree", "wheat"):
+            remaining = state.pile_remaining(deck)
+            if deck == "tree":
+                remaining += len(state.season)
+            elif deck == "wheat":
+                remaining += len(state.fields)
+            pile_health[deck] = remaining
+
+        win_tags = {"claw": "Trophy", "tree": "Nature", "wheat": "Amenity"}
+        closest = min(pile_health, key=pile_health.get)
+
+        for deck, tag in win_tags.items():
+            my_count = player.count_tag(tag)
+            max_opp = max(
+                (p.count_tag(tag) for p in state.players if p is not player),
+                default=0,
+            )
+            lead = my_count - max_opp
+            urgency = max(1, 30 - pile_health[deck]) / 30.0
+
+            # Extra weight for the closest pile
+            if deck == closest:
+                s += my_count * 2.0
+            s += lead * 3.0 * (1.0 + urgency)
+        return s
+
+
+@_register_evaluator
+class ZoneAccess(Evaluator):
+    """Reward having access to wheat/coin/candle zones."""
+    name = "zone_access"
+
+    def score(self, state, player):
+        s = 0.0
+        if player.has_wheat_access():
+            s += 2.0
+        if player.has_coin_access():
+            s += 2.0
+        if player.has_candle_access():
+            s += 1.5
+        return s
+
+
+@_register_evaluator
+class CardSynergy(Evaluator):
+    """Bonus for high-value cards that enable powerful plays."""
+    name = "card_synergy"
+
+    # card_name → bonus score
+    CARD_BONUSES = {
+        "Tyranny": 4.0,
+        "Chiefdom": 2.0,
+        "Remembrance": 1.5,
+        "Outriders": 1.5,
+        "Sacred Grove": 1.5,
+        "Forage": 1.0,
+        "Crags": 1.0,
+        "Ransack": 1.0,
+    }
+
+    def score(self, state, player):
+        return sum(
+            self.CARD_BONUSES.get(c.name, 0.0)
+            for c in player.domain
         )
-        score += (my_count - max_opp) * 2.0
-
-    return score
 
 
 # ── Greedy sub-decision strategy ──────────────────────────────────────
@@ -102,13 +212,16 @@ class TreeSearchStrategy(Strategy):
 
     Top-level Order selection uses tree search.
     All sub-decisions (during both simulation and real execution) use greedy.
+    Evaluators are composable — pass a list to control what the AI values.
     """
 
     name = "tree_search"
 
-    def __init__(self, rng: random.Random | None = None):
+    def __init__(self, rng: random.Random | None = None,
+                 evaluators: list[Evaluator] | None = None):
         self.rng = rng or random.Random()
         self._greedy = GreedyStrategy(self.rng)
+        self.evaluators = evaluators
 
     def resolve(self, state, player, options, ctx):
         if ctx.event == "Dawn" and ctx.source == "Presence":
@@ -124,7 +237,7 @@ class TreeSearchStrategy(Strategy):
     # ── Core search ──
 
     def _search(self, state: GameState, player: Player, actions: list[Action]) -> Action:
-        baseline = evaluate(state, player)
+        baseline = evaluate(state, player, self.evaluators)
         scored: list[tuple[Action, float]] = []
 
         for action in actions:
@@ -141,7 +254,7 @@ class TreeSearchStrategy(Strategy):
 
     def _simulate(self, state: GameState, player: Player, action: Action) -> float:
         if action.type == "pass":
-            return evaluate(state, player)
+            return evaluate(state, player, self.evaluators)
 
         sim_state = copy.deepcopy(state)
         sim_player = sim_state.player_by_name(player.name)
@@ -165,7 +278,7 @@ class TreeSearchStrategy(Strategy):
         except Exception:
             return float("-inf")
 
-        return evaluate(sim_state, sim_player)
+        return evaluate(sim_state, sim_player, self.evaluators)
 
     @staticmethod
     def _find_card(sim_state: GameState, sim_player: Player, action: Action) -> Card | None:

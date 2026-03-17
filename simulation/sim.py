@@ -4,8 +4,10 @@ Usage:
     python sim.py                     # Single game, 3 players, random strategy
     python sim.py -n 100              # 100 games, print summary stats
     python sim.py --players 4 --seed 42
-    python sim.py -n 1000 --strategy tree_search:2
+    python sim.py -n 10 --strategy tree_search:2
+    python sim.py -n 10 --strategy tree_search:3 --evaluator tag_value+pile_proximity
     python sim.py --list-strategies   # Show available strategies
+    python sim.py --list-evaluators   # Show available evaluators
 """
 import argparse
 import sys
@@ -18,22 +20,27 @@ sys.path.insert(0, str(Path(__file__).parent))
 from state import GameState
 from engine import GameEngine
 from strategy import RandomStrategy
-from tree_search import TreeSearchStrategy
+from tree_search import TreeSearchStrategy, get_evaluator, list_evaluators
 from observers import CardWinCorrelation, OrderStats, EventFrequency, StrategyWinRate
 
 STRATEGIES = {
-    "random": ("Uniformly random choices", lambda rng: RandomStrategy(rng)),
-    "tree_search": ("Depth-1 lookahead, evaluates all actions", lambda rng: TreeSearchStrategy(rng)),
+    "random": ("Uniformly random choices", lambda rng, evals: RandomStrategy(rng)),
+    "tree_search": ("Depth-1 lookahead, evaluates all actions",
+                    lambda rng, evals: TreeSearchStrategy(rng, evaluators=evals)),
 }
 
 
 def _build_strategies(names: list[str], strategy_specs: list[str] | None,
-                      rng) -> dict:
+                      rng, evaluator_names: list[str] | None = None) -> dict:
     """Build per-player strategy dict from --strategy specs.
 
     Each spec is 'name:count', e.g. 'tree_search:2' means 2 players get it.
     Players are assigned in order; remaining get RandomStrategy.
     """
+    evaluators = None
+    if evaluator_names:
+        evaluators = [get_evaluator(n) for n in evaluator_names]
+
     if not strategy_specs:
         return {n: RandomStrategy(rng) for n in names}
 
@@ -54,7 +61,7 @@ def _build_strategies(names: list[str], strategy_specs: list[str] | None,
         for _ in range(count):
             if idx >= len(names):
                 break
-            strategies[names[idx]] = factory(rng)
+            strategies[names[idx]] = factory(rng, evaluators)
             idx += 1
 
     for i in range(idx, len(names)):
@@ -65,7 +72,8 @@ def _build_strategies(names: list[str], strategy_specs: list[str] | None,
 
 def run_single_game(players: int, max_turns: int, seed: int | None,
                     verbose: bool = True, observers: list | None = None,
-                    strategy_specs: list[str] | None = None) -> dict:
+                    strategy_specs: list[str] | None = None,
+                    evaluator_names: list[str] | None = None) -> dict:
     """Run one game. Returns result dict."""
     names = ["Alice", "Bob", "Charlie", "Dave", "Eve"][:players]
     state = GameState(names, seed=seed)
@@ -73,7 +81,7 @@ def run_single_game(players: int, max_turns: int, seed: int | None,
     state.setup_zones()
 
     rng_strategy = state.rng
-    strategies = _build_strategies(names, strategy_specs, rng_strategy)
+    strategies = _build_strategies(names, strategy_specs, rng_strategy, evaluator_names)
     engine = GameEngine(state, strategies, observers=observers)
 
     t0 = time.perf_counter()
@@ -107,8 +115,13 @@ def main():
     parser.add_argument("--strategy", action="append", dest="strategies",
                         metavar="NAME:COUNT",
                         help="Assign strategy to N players (e.g. tree_search:2). Repeatable.")
+    parser.add_argument("--evaluator", type=str, dest="evaluators", default=None,
+                        metavar="NAME+NAME",
+                        help="Evaluators for tree_search (e.g. tag_value+pile_proximity). Default: all.")
     parser.add_argument("--list-strategies", action="store_true",
                         help="Show available strategies and exit")
+    parser.add_argument("--list-evaluators", action="store_true",
+                        help="Show available evaluators and exit")
     args = parser.parse_args()
 
     if args.list_strategies:
@@ -117,10 +130,21 @@ def main():
             print(f"  {name:20s} — {desc}")
         return
 
+    if args.list_evaluators:
+        print("Available evaluators:")
+        for name in list_evaluators():
+            e = get_evaluator(name)
+            doc = e.__class__.__doc__ or ""
+            print(f"  {name:20s} — {doc.strip().splitlines()[0]}")
+        return
+
+    eval_names = args.evaluators.split("+") if args.evaluators else None
+
     if args.games == 1:
         result = run_single_game(args.players, args.turns, args.seed,
                                   verbose=not args.quiet,
-                                  strategy_specs=args.strategies)
+                                  strategy_specs=args.strategies,
+                                  evaluator_names=eval_names)
         if args.out:
             Path(args.out).parent.mkdir(parents=True, exist_ok=True)
             Path(args.out).write_text(result["log"], encoding="utf-8")
@@ -138,7 +162,8 @@ def main():
             seed = (args.seed + i) if args.seed is not None else None
             result = run_single_game(args.players, args.turns, seed,
                                      verbose=False, observers=observers,
-                                     strategy_specs=args.strategies)
+                                     strategy_specs=args.strategies,
+                                     evaluator_names=eval_names)
             stats["turns"].append(result["turns"])
             stats["elapsed"].append(result["elapsed"])
             d = result["depleted"] or "none"
@@ -155,7 +180,7 @@ def main():
         if args.strategies:
             print(f"Strategies: {', '.join(args.strategies)}")
             names = ["Alice", "Bob", "Charlie", "Dave", "Eve"][:args.players]
-            sample_strats = _build_strategies(names, args.strategies, None)
+            sample_strats = _build_strategies(names, args.strategies, None, eval_names)
             for name in names:
                 s = sample_strats[name]
                 print(f"  {name}: {getattr(s, 'name', 'unknown')}")
