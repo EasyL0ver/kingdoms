@@ -22,7 +22,9 @@
     { "name": "Uprising", "tags": ["Discontent"], "count": 3 },
     { "name": "Ransack", "tags": [], "count": 2 },
     { "name": "Spoils of War", "tags": ["Trophy", "Mob"], "count": 2 },
-    { "name": "Dusk Rite", "tags": ["Spiritual", "Discontent"], "count": 1 }
+    { "name": "Dusk Rite", "tags": ["Spiritual", "Discontent"], "count": 1 },
+    { "name": "Blood Feud", "tags": ["Mob", "Discontent"], "count": 2 },
+    { "name": "Enforcers", "tags": ["Mob", "Discontent"], "count": 2 }
   ],
   "tree": [
     { "name": "Highlander", "tags": ["Culture"], "count": 3 },

@@ -20,6 +20,15 @@ class Warband(CardBehavior):
         target = ctx.engine.strat(ctx.player).resolve(
             ctx.state, ctx.player, tied,
             DecisionContext(event="Order", source="Warband", intent=Intent.TARGET))
+        # Move 1 Mob card to target before brawl
+        mobs = [c for c in ctx.player.domain if c.has_tag("Mob") and c is not ctx.card]
+        if mobs:
+            mob = ctx.engine.strat(ctx.player).resolve(
+                ctx.state, ctx.player, mobs,
+                DecisionContext(event="Order", source="Warband", intent=Intent.GIVE_AWAY))
+            ctx.player.remove_from_domain(mob)
+            target.add_to_domain(mob, ctx.state)
+            ctx.state.log(f"  → moves {mob.name} to {target.name}'s Domain")
         ctx.state.log(f"  → Brawl in {target.name}'s Domain")
         ctx.engine.resolve_event("Brawl", ctx.player, target)
 
@@ -460,3 +469,49 @@ class DuskRite(CardBehavior):
             ctx.player.discard_from_domain(ctx.card)
             ctx.state.log(f"  → discards Dusk Rite, Rite")
             ctx.engine.resolve_event("Rite", ctx.player)
+
+
+@_register
+class BloodFeud(CardBehavior):
+    name = 'Blood Feud'
+    tags = ['Mob', 'Discontent']
+    deck = 'claw'
+    def on_brawl(self, ctx):
+        if ctx.target is not ctx.player:
+            return False
+        if ctx.uprising:
+            return False
+        # Draw 2 from claw
+        drawn = ctx.engine.draw_and_receive(ctx.player, "claw", 2)
+        for c in drawn:
+            ctx.state.log(f"  → Blood Feud: {ctx.player.name} draws {c.name}")
+        # Move up to 2 Mob cards to the attacker
+        mobs = [c for c in ctx.player.domain if c.has_tag("Mob") and c is not ctx.card]
+        to_move = min(2, len(mobs))
+        for i in range(to_move):
+            mob = mobs[i]
+            ctx.player.remove_from_domain(mob)
+            ctx.active_player.add_to_domain(mob, ctx.state)
+            ctx.state.log(f"  → Blood Feud: moves {mob.name} to {ctx.active_player.name}")
+        # Retaliate — brawl the attacker back
+        ctx.state.log(f"  → Blood Feud: {ctx.player.name} retaliates!")
+        ctx.engine.resolve_event("Brawl", ctx.player, ctx.active_player)
+        return True
+
+
+@_register
+class Enforcers(CardBehavior):
+    name = 'Enforcers'
+    tags = ['Mob', 'Discontent']
+    deck = 'claw'
+    def on_brawl(self, ctx):
+        if ctx.target is not ctx.player:
+            return False
+        if ctx.uprising:
+            return False
+        # Both sides draw 3 claw — arms race
+        for c in ctx.engine.draw_and_receive(ctx.player, "claw", 3):
+            ctx.state.log(f"  → Enforcers: {ctx.player.name} draws {c.name}")
+        for c in ctx.engine.draw_and_receive(ctx.active_player, "claw", 3):
+            ctx.state.log(f"  → Enforcers: {ctx.active_player.name} draws {c.name}")
+        return True
