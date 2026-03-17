@@ -196,6 +196,15 @@ class GameState:
         zone.pile_ptr += 1
         return card
 
+    def return_to_pile(self, deck: str, card: Card):
+        """Put a card back on top of a pile (before pile_ptr)."""
+        zone = self.zone_cards[deck]
+        if zone.pile_ptr > 0:
+            zone.pile_ptr -= 1
+            zone.pile.insert(zone.pile_ptr, card)
+        else:
+            zone.pile.insert(0, card)
+
     def peek_pile(self, deck: str, n: int = 1) -> list[Card]:
         zone = self.zone_cards.get(deck)
         if not zone:

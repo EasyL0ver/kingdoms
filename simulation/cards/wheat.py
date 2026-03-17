@@ -149,8 +149,9 @@ class Tavern(CardBehavior):
             victim = ctx.engine.strat(ctx.player).resolve(
                 ctx.state, ctx.player, discontent,
                 DecisionContext(event="Feast", source="Tavern", intent=Intent.DISCARD))
-            ctx.player.discard_from_domain(victim)
-            ctx.state.log(f"  → Tavern: discards {victim.name}")
+            ctx.player.remove_from_domain(victim)
+            ctx.state.return_to_pile("claw", victim)
+            ctx.state.log(f"  → Tavern: returns {victim.name} to claw pile")
         return True
 
 
@@ -162,13 +163,14 @@ class FeedTheCommoners(CardBehavior):
     def on_dawn(self, ctx):
         discontent = ctx.player.cards_with_tag("Discontent")
         if discontent:
-            to_discard = ctx.engine.strat(ctx.player).resolve_n(
+            to_return = ctx.engine.strat(ctx.player).resolve_n(
                 ctx.state, ctx.player, discontent,
                 0, min(3, len(discontent)),
                 DecisionContext(event="Dawn", source="Feed the Commoners", intent=Intent.DISCARD))
-            for c in to_discard:
-                ctx.player.discard_from_domain(c)
-                ctx.state.log(f"  → Feed the Commoners discards {c.name}")
+            for c in to_return:
+                ctx.player.remove_from_domain(c)
+                ctx.state.return_to_pile("claw", c)
+                ctx.state.log(f"  → Feed the Commoners returns {c.name} to claw pile")
         ctx.discard_self()
 
 
