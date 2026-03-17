@@ -8,10 +8,23 @@ class Plough(CardBehavior):
     name = 'Plough'
     tags = ['Labour']
     deck = 'wheat'
-    def on_dawn(self, ctx):
-        if not ctx.player.has_card("Pasture"):
-            ctx.state.log(f"  → Dawn: no Pasture → Plough to discard")
-            ctx.player.discard.append(ctx.card)
+
+    def on_order(self, ctx):
+        if ctx.location != "domain" or not ctx.state.fields:
+            return
+        # Optionally sacrifice a Pasture for double wheat order
+        pastures = [c for c in ctx.player.domain if c.name == "Pasture"]
+        double = False
+        if pastures:
+            if ctx.engine.strat(ctx.player).resolve(
+                    ctx.state, ctx.player, [True, False],
+                    DecisionContext(event="Order", source="Plough", intent=Intent.OPTION)):
+                ctx.player.discard_from_domain(pastures[0])
+                ctx.state.log(f"  → Plough: sacrifices Pasture for double wheat order")
+                double = True
+        ctx.engine.order_zone(ctx.player, "wheat")
+        if double and ctx.state.fields:
+            ctx.engine.order_zone(ctx.player, "wheat")
 
     def on_harvest(self, ctx):
         options = ["feast", "wheat"]
@@ -82,10 +95,6 @@ class AnimalHusbandry(CardBehavior):
     name = 'Animal Husbandry'
     tags = ['Labour']
     deck = 'wheat'
-    def on_dawn(self, ctx):
-        if not ctx.player.has_card("Pasture"):
-            ctx.state.log(f"  → Dawn: no Pasture → Animal Husbandry to discard")
-            ctx.player.discard.append(ctx.card)
 
     def on_order(self, ctx):
         if ctx.location != "domain":
@@ -94,17 +103,37 @@ class AnimalHusbandry(CardBehavior):
         choice = ctx.engine.strat(ctx.player).resolve(
             ctx.state, ctx.player, options,
             DecisionContext(event="Order", source="Animal Husbandry", intent=Intent.OPTION))
+        # Optionally sacrifice a Pasture to draw 2 from chosen pile
+        pastures = [c for c in ctx.player.domain if c.name == "Pasture"]
+        double = False
+        if pastures:
+            if ctx.engine.strat(ctx.player).resolve(
+                    ctx.state, ctx.player, [True, False],
+                    DecisionContext(event="Order", source="Animal Husbandry", intent=Intent.OPTION)):
+                ctx.player.discard_from_domain(pastures[0])
+                ctx.state.log(f"  → AH: sacrifices Pasture")
+                double = True
         if choice == "wheat" and len(ctx.state.fields) > 0:
             ctx.state.log(f"  → Orders Wheat zone via AH")
             ctx.engine.order_zone(ctx.player, "wheat")
+            if double and ctx.state.fields:
+                ctx.engine.order_zone(ctx.player, "wheat")
         elif choice == "coin":
             coin = ctx.state.draw_from_pile("coin")
             if coin:
                 ctx.state.log(f"  → draws {coin.name} from Coin via AH")
                 ctx.engine.receive_card(ctx.player, coin)
+            if double:
+                coin2 = ctx.state.draw_from_pile("coin")
+                if coin2:
+                    ctx.state.log(f"  → draws {coin2.name} from Coin via AH (bonus)")
+                    ctx.engine.receive_card(ctx.player, coin2)
         else:
             ctx.state.log(f"  → Feast via AH")
             ctx.engine.resolve_event("Feast", ctx.player, ctx.player)
+            if double:
+                ctx.state.log(f"  → Feast via AH (bonus)")
+                ctx.engine.resolve_event("Feast", ctx.player, ctx.player)
 
 
 @_register

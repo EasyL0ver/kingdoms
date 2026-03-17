@@ -98,6 +98,8 @@ class Player:
             return True
         if self.has_card("Plough"):
             return True
+        if self.has_card("Orchard"):
+            return True
         return False
 
     def has_coin_access(self) -> bool:
