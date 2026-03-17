@@ -124,26 +124,128 @@ class ZoneAccess(Evaluator):
 
 @_register_evaluator
 class CardSynergy(Evaluator):
-    """Bonus for high-value cards that enable powerful plays."""
+    """Score cards based on whether their synergies are active in the current state."""
     name = "card_synergy"
 
-    # card_name → bonus score
-    CARD_BONUSES = {
-        "Tyranny": 4.0,
-        "Chiefdom": 2.0,
-        "Remembrance": 1.5,
-        "Outriders": 1.5,
-        "Sacred Grove": 1.5,
-        "Forage": 1.0,
-        "Crags": 1.0,
-        "Ransack": 1.0,
-    }
-
     def score(self, state, player):
-        return sum(
-            self.CARD_BONUSES.get(c.name, 0.0)
-            for c in player.domain
-        )
+        s = 0.0
+        domain_names = set(c.name for c in player.domain)
+        has_mobs = player.count_tag("Mob") > 0
+        has_knowledge = player.count_tag("Knowledge") > 0
+        has_nature = player.count_tag("Nature")
+        has_discontent = player.count_tag("Discontent")
+        discard_size = len(player.discard)
+        claw_remaining = state.pile_remaining("claw")
+        tree_remaining = state.pile_remaining("tree")
+        coin_remaining = state.pile_remaining("coin")
+        candle_remaining = state.pile_remaining("candle")
+        has_coin_cards = any(c.deck == "coin" or c.has_tag("Craftsmanship") for c in player.domain)
+        has_fields = len(state.fields) > 0
+        has_season = len(state.season) > 0
+
+        for card in player.domain:
+            match card.name:
+                # ── Claw cards ──
+                case "Tyranny":
+                    # Draws per Discontent, then self-Brawl — good with Discontent + claw pile
+                    if has_discontent > 0 and claw_remaining > 0:
+                        s += 2.0 + has_discontent * 1.0
+                case "Chiefdom":
+                    # Needs Mobs to move
+                    if has_mobs:
+                        s += 2.5
+                case "Outriders":
+                    # Draws 3 from claw, keeps best
+                    if claw_remaining >= 3:
+                        s += 2.0
+                    elif claw_remaining > 0:
+                        s += 0.5
+                case "Ransack":
+                    # Sacrifice + draw 2 claw + pick season — needs both
+                    if len(player.domain) > 1 and (claw_remaining > 0 or has_season):
+                        s += 1.5
+                case "Blood Offering":
+                    # Sacrifice to trigger Rite — good with Spiritual responders
+                    spiritual = player.count_tag("Spiritual")
+                    if len(player.domain) > 1:
+                        s += 0.5 + spiritual * 0.5
+                case "Warband":
+                    # Brawl — good with Mob responders
+                    mob_count = player.count_tag("Mob")
+                    s += mob_count * 0.5
+                case "Racketeering":
+                    others = state.other_players(player)
+                    if any(len(p.domain) > 0 for p in others):
+                        s += 1.0
+
+                # ── Tree cards ──
+                case "Remembrance":
+                    if has_knowledge and discard_size > 0:
+                        knowledge_count = player.count_tag("Knowledge")
+                        recoverable = min(knowledge_count, discard_size)
+                        s += recoverable * 1.5
+                case "Herbalism":
+                    cost_cards = player.count_tag("Knowledge") + has_nature
+                    if cost_cards > 1 and discard_size > 0:  # >1 because Herbalism itself is Nature
+                        s += 1.5
+                case "Forage":
+                    if tree_remaining >= 3:
+                        s += 1.5
+                    elif tree_remaining > 0:
+                        s += 0.5
+                case "Oral Tradition":
+                    if has_coin_cards and candle_remaining > 0:
+                        s += 2.0
+                case "Sacred Grove":
+                    # Rite or Scry — always somewhat useful, better with Spiritual
+                    s += 1.0 + player.count_tag("Spiritual") * 0.3
+                case "Crags":
+                    crags_count = sum(1 for c in player.domain if c.name == "Crags")
+                    if claw_remaining > 0:
+                        s += 1.0
+                    if crags_count >= 2:
+                        s += 1.5  # Brawl defense active
+                case "Well":
+                    if has_season:
+                        s += 2.0
+
+                # ── Wheat cards ──
+                case "Sowing":
+                    if has_nature >= 2 and has_fields:
+                        s += 2.0
+                case "Withered Crop":
+                    has_harvest_discard = any(c.name == "Harvest" for c in player.discard)
+                    if has_harvest_discard and has_fields:
+                        s += 2.0
+                case "Animal Husbandry":
+                    s += 1.5  # always flexible (wheat/coin/feast)
+                case "Militia":
+                    if has_mobs:
+                        s += 1.0  # can discard Mobs + Brawl defense
+                case "Granary":
+                    # Feast trigger — better with Discontent to clear
+                    if has_discontent > 0:
+                        s += 1.5
+                    else:
+                        s += 0.5
+
+                # ── Discard-orderable cards ──
+                case "Highlander":
+                    pass  # handled below
+                case "Nomad":
+                    pass  # handled below
+                case "Dusk Rite":
+                    if discard_size > 0 and (claw_remaining > 0 or tree_remaining > 0):
+                        s += discard_size * 0.3
+
+        # Discard synergies — cards that can self-rescue
+        for card in player.discard:
+            if card.name == "Highlander" and "Crags" in domain_names:
+                s += 1.5
+            elif card.name == "Nomad" and "Pasture" in domain_names:
+                s += 1.5
+
+        return s
 
 
 # ── Greedy sub-decision strategy ──────────────────────────────────────
