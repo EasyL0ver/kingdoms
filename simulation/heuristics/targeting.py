@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 
 from heuristics import Heuristic, _register_heuristic
 from heuristics.card_hints import (
-    get_card_heuristics, Draw, Activate, Take, Peek, Give, Cancel, Discard,
+    get_card_heuristics, Draw, Order, Take, Peek, Give, Cancel, Discard,
     Trigger,
 )
 from strategy import Intent
@@ -59,7 +59,7 @@ def _negative_responders(player, event_type: str) -> int:
 
 
 def _positive_responders(player, event_type: str) -> int:
-    """Count how many positive event responders a player has (Draw, Activate, Take, Peek)."""
+    """Count how many positive event responders a player has (Draw, Order, Take, Peek)."""
     attr = _EVENT_ATTRS.get(event_type)
     if not attr:
         return 0
@@ -69,7 +69,7 @@ def _positive_responders(player, event_type: str) -> int:
         if not ch:
             continue
         for effect in getattr(ch, attr, []):
-            if isinstance(effect, (Draw, Activate, Take, Peek)):
+            if isinstance(effect, (Draw, Order, Take, Peek)):
                 count += 1
     return count
 
@@ -108,73 +108,73 @@ class TargetEvent(Heuristic):
       - negative responders (Give, Discard) → good to brawl them
       - cancel responders (Eldership, Militia) → penalise (brawl gets blocked)
       - threat as tiebreaker
-    Also scores activation of event-triggering cards.
+    Also scores ordering of event-triggering cards.
     """
     name = "target_event"
 
-    def score_resolution_choice(self, state, player, options, ctx):
-        if ctx.intent != Intent.PICK_TARGET:
-            return {}
-        if "Brawl" not in ctx.consequence:
-            return {}
+    def score_resolve(self, state, player, options, ctx):
+        if ctx.intent == Intent.TARGET:
+            if ctx.event != "Brawl":
+                return {}
+            scores = []
+            for o in options:
+                if not hasattr(o, "count_tag") or o is player:
+                    continue
+                neg = _negative_responders(o, "brawl")
+                can = _cancel_responders(o, "brawl")
+                threat = _threat_score(o)
+                score = neg * 2.0 - can * 1.5 + threat * 0.5
+                scores.append((o, score))
+            return scores
 
-        scores = []
-        for o in options:
-            if not hasattr(o, "count_tag") or o is player:
-                continue
-            neg = _negative_responders(o, "brawl")
-            can = _cancel_responders(o, "brawl")
-            threat = _threat_score(o)
-            score = neg * 2.0 - can * 1.5 + threat * 0.5
-            scores.append((o, score))
-        return scores
-
-    def score_activate(self, state, player, actions, ctx):
-        """Prefer activating cards that trigger events hurting opponents."""
-        scores = []
-        for a in actions:
-            if not hasattr(a, "card") or not a.card:
-                continue
-            ch = get_card_heuristics(getattr(a.card, "name", ""))
-            if not ch:
-                continue
-
-            for effect in ch.on_activate:
-                if not isinstance(effect, Trigger):
+        if ctx.intent == Intent.OPTION:
+            # Prefer ordering cards that trigger events hurting opponents
+            scores = []
+            for a in options:
+                if not hasattr(a, "card") or not a.card:
+                    continue
+                ch = get_card_heuristics(getattr(a.card, "name", ""))
+                if not ch:
                     continue
 
-                if effect.scope == "target":
-                    best_neg = max(
-                        (_negative_responders(p, effect.event), _threat_score(p))
-                        for p in state.players if p is not player
-                    )
-                    neg_count, threat = best_neg
-                    if neg_count > 0:
-                        scores.append((a, neg_count * 1.5 + threat * 0.5))
+                for effect in ch.on_order:
+                    if not isinstance(effect, Trigger):
+                        continue
 
-                elif effect.scope in ("all", "cultural"):
-                    my_neg = _negative_responders(player, effect.event)
-                    opp_neg = sum(
-                        _negative_responders(p, effect.event)
-                        for p in state.players if p is not player
-                    )
-                    my_pos = _positive_responders(player, effect.event)
-                    opp_pos = sum(
-                        _positive_responders(p, effect.event)
-                        for p in state.players if p is not player
-                    )
-                    net = (my_pos + opp_neg) - (my_neg + opp_pos)
-                    if net != 0:
-                        scores.append((a, net * 1.5))
+                    if effect.scope == "target":
+                        best_neg = max(
+                            (_negative_responders(p, effect.event), _threat_score(p))
+                            for p in state.players if p is not player
+                        )
+                        neg_count, threat = best_neg
+                        if neg_count > 0:
+                            scores.append((a, neg_count * 1.5 + threat * 0.5))
 
-                elif effect.scope == "self":
-                    my_pos = _positive_responders(player, effect.event)
-                    my_neg = _negative_responders(player, effect.event)
-                    net = my_pos - my_neg
-                    if net != 0:
-                        scores.append((a, net * 1.5))
+                    elif effect.scope in ("all", "cultural"):
+                        my_neg = _negative_responders(player, effect.event)
+                        opp_neg = sum(
+                            _negative_responders(p, effect.event)
+                            for p in state.players if p is not player
+                        )
+                        my_pos = _positive_responders(player, effect.event)
+                        opp_pos = sum(
+                            _positive_responders(p, effect.event)
+                            for p in state.players if p is not player
+                        )
+                        net = (my_pos + opp_neg) - (my_neg + opp_pos)
+                        if net != 0:
+                            scores.append((a, net * 1.5))
 
-        return scores
+                    elif effect.scope == "self":
+                        my_pos = _positive_responders(player, effect.event)
+                        my_neg = _negative_responders(player, effect.event)
+                        net = my_pos - my_neg
+                        if net != 0:
+                            scores.append((a, net * 1.5))
+
+            return scores
+
+        return {}
 
 
 # -----------------------------------------------------------------------
@@ -184,7 +184,7 @@ class TargetEvent(Heuristic):
 class TargetEffect(Heuristic):
     """Smart non-event targeting — placement, forced discard, demands.
 
-    Categorises PICK_TARGET decisions by consequence:
+    Categorises TARGET decisions by event context:
       - Placement/gifts:  giving win-tag card → target weakest (waste the tag)
                           giving negative card → target strongest
       - Forced discard:   target highest threat-per-card (few strong cards)
@@ -192,18 +192,18 @@ class TargetEffect(Heuristic):
     """
     name = "target_effect"
 
-    def score_resolution_choice(self, state, player, options, ctx):
-        if ctx.intent != Intent.PICK_TARGET:
+    def score_resolve(self, state, player, options, ctx):
+        if ctx.intent != Intent.TARGET:
             return {}
         # Skip event targeting (handled by target_event)
-        if "Brawl" in ctx.consequence:
+        if ctx.event == "Brawl":
             return {}
 
-        consequence = ctx.consequence
+        event = ctx.event or ""
         scores = []
 
         # --- Placement: card placed in opponent's domain ---
-        if "placed" in consequence:
+        if "place" in event.lower():
             tags = _get_card_tags(ctx.source)
             has_win_tag = any(t in _WIN_TAGS for t in tags)
             for o in options:
@@ -211,17 +211,14 @@ class TargetEffect(Heuristic):
                     continue
                 threat = _threat_score(o)
                 if has_win_tag:
-                    # Giving Trophy/Nature/Amenity → target weakest
                     score = -threat * 2.0
                 else:
                     score = threat * 2.0
                 scores.append((o, score))
 
         # --- Gift: opponent receives a specific card ---
-        elif "receives" in consequence:
-            # Card name is after "receives "
-            card_name = consequence.split("receives ")[-1]
-            tags = _get_card_tags(card_name)
+        elif "gift" in event.lower() or "receive" in event.lower():
+            tags = _get_card_tags(ctx.source)
             has_win_tag = any(t in _WIN_TAGS for t in tags)
             for o in options:
                 if not hasattr(o, "count_tag") or o is player:
@@ -234,7 +231,7 @@ class TargetEffect(Heuristic):
                 scores.append((o, score))
 
         # --- Forced discard: target highest quality (few but strong cards) ---
-        elif "discard" in consequence.lower():
+        elif "discard" in event.lower():
             for o in options:
                 if not hasattr(o, "count_tag") or o is player:
                     continue
@@ -245,7 +242,7 @@ class TargetEffect(Heuristic):
                 scores.append((o, score))
 
         # --- Demand: they offer us a card ---
-        elif "offer" in consequence:
+        elif "demand" in event.lower() or "offer" in event.lower():
             for o in options:
                 if not hasattr(o, "count_tag") or o is player:
                     continue

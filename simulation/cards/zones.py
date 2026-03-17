@@ -1,18 +1,15 @@
-"""Zone and Domain card behaviors."""
+"""Zone and Presence card behaviors."""
 from cards import CardBehavior, CardContext, _register
 from strategy import Intent, DecisionContext
 
 
 @_register
-class Domain(CardBehavior):
-    name = "Domain"
+class Presence(CardBehavior):
+    name = "Presence"
     tags = []
     deck = "zone"
 
-    def can_activate(self, ctx):
-        return True
-
-    def on_activate(self, ctx):
+    def on_order(self, ctx):
         options = []
         if ctx.state.pile_remaining("claw") > 0:
             options.append("claw")
@@ -21,14 +18,13 @@ class Domain(CardBehavior):
         if not options:
             ctx.state.log("  → No zones available")
             return
-        choice = ctx.engine.strat(ctx.player).choose_from(
+        choice = ctx.engine.strat(ctx.player).resolve(
             ctx.state, ctx.player, options,
-            DecisionContext(Intent.PICK_OPTION, source="Domain",
-                            consequence="activate Claw or Tree zone"))
+            DecisionContext(event="Order", source="Presence", intent=Intent.OPTION))
         zone_card = ctx.state.zone_cards[choice]
         zone_beh = ctx.engine.behavior(zone_card)
         zone_ctx = ctx.engine.make_ctx(ctx.player, zone_card)
-        zone_beh.on_activate(zone_ctx)
+        zone_beh.on_order(zone_ctx)
 
 
 @_register
@@ -37,7 +33,7 @@ class ClawZone(CardBehavior):
     tags = ["Zone"]
     deck = "zone"
 
-    def on_activate(self, ctx):
+    def on_order(self, ctx):
         for _ in range(2):
             card = ctx.state.draw_from_pile("claw")
             if card:
@@ -53,12 +49,11 @@ class TreeZone(CardBehavior):
     tags = ["Zone"]
     deck = "zone"
 
-    def on_activate(self, ctx):
+    def on_order(self, ctx):
         if ctx.state.season:
-            pick = ctx.engine.strat(ctx.player).choose_from(
+            pick = ctx.engine.strat(ctx.player).resolve(
                 ctx.state, ctx.player, list(ctx.state.season),
-                DecisionContext(Intent.GAIN, source="Tree Zone",
-                                consequence="take from Season"))
+                DecisionContext(event="Order", source="Tree Zone", intent=Intent.GAIN))
             if pick in ctx.state.season:
                 ctx.state.season.remove(pick)
                 ctx.state.log(f"  → takes {pick.name} from Season")
@@ -83,16 +78,15 @@ class WheatZone(CardBehavior):
     tags = ["Zone"]
     deck = "zone"
 
-    def on_activate(self, ctx):
+    def on_order(self, ctx):
         s = ctx.state
         if not s.fields:
             s.log("  → Fields empty, nothing to take")
             return
         max_take = min(3, len(s.fields))
-        to_take = ctx.engine.strat(ctx.player).choose_n(
+        to_take = ctx.engine.strat(ctx.player).resolve_n(
             s, ctx.player, list(s.fields), 1, max_take,
-            DecisionContext(Intent.GAIN, source="Wheat Zone",
-                            consequence="Claw tax: draw 1 per card taken"))
+            DecisionContext(event="Order", source="Wheat Zone", intent=Intent.GAIN))
         for c in to_take:
             if c in s.fields:
                 s.fields.remove(c)
@@ -113,9 +107,7 @@ class WheatZone(CardBehavior):
             zone.face_up.append(zone.pile[zone.pile_ptr])
             zone.pile_ptr += 1
 
-    def on_event(self, ctx):
-        if not ctx.responds_to("Harvest"):
-            return False
+    def on_harvest(self, ctx):
         s = ctx.state
         old_count = len(s.fields)
         self.refill(s)
@@ -131,7 +123,7 @@ class CoinZone(CardBehavior):
     tags = ["Zone"]
     deck = "zone"
 
-    def on_activate(self, ctx):
+    def on_order(self, ctx):
         s = ctx.state
         options = []
         if s.wares:
@@ -141,24 +133,21 @@ class CoinZone(CardBehavior):
         if not options:
             s.log("  → Coin zone: nothing to do")
             return
-        choice = ctx.engine.strat(ctx.player).choose_from(
+        choice = ctx.engine.strat(ctx.player).resolve(
             s, ctx.player, options,
-            DecisionContext(Intent.PICK_OPTION, source="Coin Zone",
-                            consequence="Buy from Wares or Trade"))
+            DecisionContext(event="Order", source="Coin Zone", intent=Intent.OPTION))
         if choice == "buy" and s.wares:
-            pick = ctx.engine.strat(ctx.player).choose_from(
+            pick = ctx.engine.strat(ctx.player).resolve(
                 s, ctx.player, list(s.wares),
-                DecisionContext(Intent.GAIN, source="Coin Zone",
-                                consequence="take from Wares"))
+                DecisionContext(event="Order", source="Coin Zone", intent=Intent.GAIN))
             s.wares.remove(pick)
             ctx.player.add_to_domain(pick, s)
             s.log(f"  → buys {pick.name} from Wares")
             self.refill(s)
         elif choice == "trade" and ctx.player.domain:
-            to_trade = ctx.engine.strat(ctx.player).choose_from(
+            to_trade = ctx.engine.strat(ctx.player).resolve(
                 s, ctx.player, list(ctx.player.domain),
-                DecisionContext(Intent.SACRIFICE, source="Coin Zone",
-                                consequence="put in Wares, draw blind from Coin"))
+                DecisionContext(event="Order", source="Coin Zone", intent=Intent.DISCARD))
             ctx.player.remove_from_domain(to_trade)
             s.wares.append(to_trade)
             coin = s.draw_from_pile("coin")

@@ -14,15 +14,15 @@ Everything in this game — zones, actions, permissions, effects — lives on th
 
 ## 1. Setup
 
-1. **Place deck zone cards** for each deck, face-up next to their shuffled draw piles.
-2. Each player starts with their **Domain** — an empty personal area in front of them with access to Claw and Tree zones.
+1. **Place zone cards** for each deck, face-up next to their shuffled draw piles.
+2. Each player starts with their **Domain** (an empty personal zone in front of them) and a **Presence** card in it.
 
 ---
 
 ## 2. How to Play
 
 1. Players take turns clockwise.
-2. **On your turn: activate one card you have access to.** You cannot pass — your Domain always grants access to Claw and Tree zones.
+2. **On your turn: Dawn.** Dawn fires in your Domain. All your cards with `On Dawn` text respond — you choose the order.
 3. Negotiate freely with any player at any time.
 4. When any deck's draw pile is emptied, the game ends.
 
@@ -32,37 +32,48 @@ That's it. Everything else is on the cards.
 
 ## 3. Core Concepts
 
-### Activate
+### The Event System
 
-On your turn, you **activate one card**. This can be:
+All card text uses one pattern: **`On [Event] — effect`**.
 
-- A card in your **Domain**
-- A **zone card** on the table (if a card in your Domain grants you access)
-- Any card another card explicitly lets you activate
+There are no other keywords to learn. Every card tells you when it fires and what it does.
+
+**Events:** Dawn, Order, Brawl, Rite, Feast, Harvest, Rumour.
+
+### Event Scope
+
+Events fire in a specific place. Card text always says where:
+
+- **"on"** targets one card — e.g. "Order on the Claw zone"
+- **"in"** broadcasts to a zone — e.g. "Brawl in the largest Domain"
+
+When an event fires **in** a zone, every card there with a matching `On [Event]` responds.
+
+### Dawn & Order
+
+**Dawn** is the root event. It fires in your Domain at the start of your turn. Your `On Dawn` cards respond.
+
+**Order** targets a specific card. Your starting Presence card says `On Dawn — Order on the Claw zone, the Tree zone, or a card in your Domain`. When you Order a card, its `On Order` text fires.
 
 For example, to draw from the Tree deck:
-1. Your **Domain** card says you may activate the Claw and Tree zones
-2. You activate the **Tree zone** → its text says "take 1 card from the Season"
+1. Your turn begins — **Dawn** in your Domain
+2. Your **Presence** responds — you may Order on a zone or a card in your Domain
+3. You Order on the **Tree zone** → its `On Order` text says "take 1 card from the Season"
 
-**Losing a card = losing its access.** If your Culture card is gone, you can't activate those deck zones anymore.
+### The Active Player
 
-### Card Text & Events
+Whenever card text needs to reference who is driving an event, it says **"the active player"** — the player whose turn it is.
 
-Cards use four keywords: **Activate**, **Drafted**, **On [Event]**, and **Trigger [Event]**. 
+### Zones
 
-- **Drafted** resolves the moment a card is drawn from any deck, before it enters your Domain. It fires exactly once. The card text says what happens — some cards have conditions that must be met or the card discards itself (e.g. "discard a Pasture or discard Plough"). Cards that ONLY have Drafted text (no Activate text) cannot be activated later from your Domain — they fire on draw and that's it. If the Drafted text says "discard [this card]" or "move to discard", the card goes to your discard after resolving. Otherwise it stays in your Domain.
+A **zone** is any place that holds cards. There are two kinds:
 
-Events can chain — one trigger can cascade through multiple cards. Events can fire globally (all Domains), locally (your Domain only), or targeted (specific player's Domain) — the scope is written on the card.
-
-**Event resolution order:** When an event fires, resolve it one Domain at a time in play order (clockwise from the triggering player). Each player makes their own decisions when their Domain resolves.
-
-### The Domain
-
-Every player has a **Domain** — their personal zone. All your cards sit **face-up** here. There is no hidden hand. Your Domain IS your score at end of game.
+- **Domains** — each player's personal zone. Your cards sit face-up here. Events like Brawl, Rite, and Feast target Domains.
+- **Shared zones** — Claw, Tree, Wheat, Coin. Defined by zone cards placed at setup. You interact with them by Ordering their zone card.
 
 ### Deck Access
 
-Players do **not** automatically have access to all decks. Access is granted by cards (Culture cards, gateway cards like Sowing, Apprenticeship, etc.). Lose the card, lose the access.
+Players do **not** automatically have access to all decks. Your Presence grants access to Claw and Tree. Other access is granted by cards (gateway cards like Sowing, Apprenticeship, etc.). Lose the card, lose the access.
 
 ### The Discard
 
@@ -71,6 +82,10 @@ Each player has their own **discard pile** (face-up). Other cards can reference 
 ### Tags
 
 Tags are keywords on cards that other cards reference (e.g. [Mob], [Spiritual], [Nature]). They define what a card IS, not what it DOES.
+
+### Event Resolution
+
+When an event fires in a zone, resolve it one Domain at a time in play order (clockwise from the active player). Each player makes their own decisions when their Domain resolves.
 
 ---
 

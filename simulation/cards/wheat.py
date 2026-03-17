@@ -8,31 +8,23 @@ class Plough(CardBehavior):
     name = 'Plough'
     tags = ['Labour']
     deck = 'wheat'
-    def on_location_change(self, ctx, from_loc, to_loc):
-        if from_loc != "pile":
-            return
+    def on_dawn(self, ctx):
         if not ctx.player.has_card("Pasture"):
-            ctx.state.log(f"  → Drafted: no Pasture → Plough to discard")
+            ctx.state.log(f"  → Dawn: no Pasture → Plough to discard")
             ctx.player.discard.append(ctx.card)
-            return
-        ctx.player.discard_from_domain(ctx.player.get_card("Pasture"))
-        ctx.state.log(f"  → Drafted: discards Pasture to keep Plough")
 
-    def on_event(self, ctx):
-        if ctx.event != "Harvest":
-            return False
+    def on_harvest(self, ctx):
         options = ["feast", "wheat"]
-        choice = ctx.engine.strat(ctx.player).choose_from(
+        choice = ctx.engine.strat(ctx.player).resolve(
             ctx.state, ctx.player, options,
-            DecisionContext(Intent.PICK_OPTION, source="Plough",
-                            consequence="On Harvest: Feast or activate Wheat zone"))
+            DecisionContext(event="Harvest", source="Plough", intent=Intent.OPTION))
         if choice == "feast":
-            ctx.state.log(f"  → {ctx.player.name}'s Plough: triggers Feast")
+            ctx.state.log(f"  → {ctx.player.name}'s Plough: Feast")
             ctx.engine.resolve_event("Feast", ctx.player, ctx.player)
         else:
             if ctx.state.fields:
-                ctx.state.log(f"  → {ctx.player.name}'s Plough: activates Wheat zone")
-                ctx.engine.activate_zone(ctx.player, "wheat")
+                ctx.state.log(f"  → {ctx.player.name}'s Plough: Orders Wheat zone")
+                ctx.engine.order_zone(ctx.player, "wheat")
         return True
 
 
@@ -41,12 +33,11 @@ class Granary(CardBehavior):
     name = 'Granary'
     tags = ['Labour']
     deck = 'wheat'
-    def can_activate(self, ctx):
-        return ctx.location == "domain"
-
-    def on_activate(self, ctx):
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
         ctx.player.discard_from_domain(ctx.card)
-        ctx.state.log(f"  → discards Granary, triggers Feast")
+        ctx.state.log(f"  → discards Granary, Feast")
         ctx.engine.resolve_event("Feast", ctx.player, ctx.player)
 
 
@@ -55,10 +46,9 @@ class Mill(CardBehavior):
     name = 'Mill'
     tags = ['Labour']
     deck = 'wheat'
-    def can_activate(self, ctx):
-        return ctx.location == "domain" and ctx.state.pile_remaining("coin") > 0
-
-    def on_activate(self, ctx):
+    def on_order(self, ctx):
+        if ctx.location != "domain" or ctx.state.pile_remaining("coin") <= 0:
+            return
         ctx.player.discard_from_domain(ctx.card)
         drawn = ctx.engine.draw_and_receive(ctx.player, "coin")
         if drawn:
@@ -70,23 +60,18 @@ class Famine(CardBehavior):
     name = 'Famine'
     tags = []
     deck = 'wheat'
-    def on_location_change(self, ctx, from_loc, to_loc):
-        if from_loc != "pile":
-            return
+    def on_dawn(self, ctx):
         targets = ctx.state.other_players(ctx.player)
         valid_targets = [p for p in targets if any(c.deck == "wheat" for c in p.domain)]
         if valid_targets:
-            target = ctx.engine.strat(ctx.player).choose_from(
+            target = ctx.engine.strat(ctx.player).resolve(
                 ctx.state, ctx.player, valid_targets,
-                DecisionContext(Intent.PICK_TARGET, source="Famine",
-                                consequence="they discard 1 Wheat card"))
+                DecisionContext(event="Dawn", source="Famine", intent=Intent.TARGET))
             wheat_cards = [c for c in target.domain if c.deck == "wheat"]
             if wheat_cards:
-                victim = ctx.engine.strat(ctx.player).choose_from(
+                victim = ctx.engine.strat(ctx.player).resolve(
                     ctx.state, ctx.player, wheat_cards,
-                    DecisionContext(Intent.PICK_TARGET, source="Famine",
-                                    opponent=target,
-                                    consequence=f"{target.name} loses this card"))
+                    DecisionContext(event="Dawn", source="Famine", intent=Intent.TARGET))
                 target.discard_from_domain(victim)
                 ctx.state.log(f"  → Famine: {target.name} discards {victim.name}")
         ctx.discard_self()
@@ -97,35 +82,28 @@ class AnimalHusbandry(CardBehavior):
     name = 'Animal Husbandry'
     tags = ['Labour']
     deck = 'wheat'
-    def can_activate(self, ctx):
-        return ctx.location == "domain"
-
-    def on_location_change(self, ctx, from_loc, to_loc):
-        if from_loc != "pile":
-            return
+    def on_dawn(self, ctx):
         if not ctx.player.has_card("Pasture"):
-            ctx.state.log(f"  → Drafted: no Pasture → Animal Husbandry to discard")
+            ctx.state.log(f"  → Dawn: no Pasture → Animal Husbandry to discard")
             ctx.player.discard.append(ctx.card)
-            return
-        ctx.player.discard_from_domain(ctx.player.get_card("Pasture"))
-        ctx.state.log(f"  → Drafted: discards Pasture to keep Animal Husbandry")
 
-    def on_activate(self, ctx):
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
         options = ["wheat", "coin", "feast"]
-        choice = ctx.engine.strat(ctx.player).choose_from(
+        choice = ctx.engine.strat(ctx.player).resolve(
             ctx.state, ctx.player, options,
-            DecisionContext(Intent.PICK_OPTION, source="Animal Husbandry",
-                            consequence="Wheat zone, Coin draw, or Feast"))
+            DecisionContext(event="Order", source="Animal Husbandry", intent=Intent.OPTION))
         if choice == "wheat" and len(ctx.state.fields) > 0:
-            ctx.state.log(f"  → activates Wheat zone via AH")
-            ctx.engine.activate_zone(ctx.player, "wheat")
+            ctx.state.log(f"  → Orders Wheat zone via AH")
+            ctx.engine.order_zone(ctx.player, "wheat")
         elif choice == "coin":
             coin = ctx.state.draw_from_pile("coin")
             if coin:
                 ctx.state.log(f"  → draws {coin.name} from Coin via AH")
                 ctx.engine.receive_card(ctx.player, coin)
         else:
-            ctx.state.log(f"  → triggers Feast via AH")
+            ctx.state.log(f"  → Feast via AH")
             ctx.engine.resolve_event("Feast", ctx.player, ctx.player)
 
 
@@ -134,15 +112,14 @@ class Tavern(CardBehavior):
     name = 'Tavern'
     tags = ['Amenity']
     deck = 'wheat'
-    def on_event(self, ctx):
-        if not ctx.responds_to("Feast", targeted=True):
+    def on_feast(self, ctx):
+        if ctx.target is not ctx.player:
             return False
         discontent = ctx.player.cards_with_tag("Discontent")
         if discontent:
-            victim = ctx.engine.strat(ctx.player).choose_from(
+            victim = ctx.engine.strat(ctx.player).resolve(
                 ctx.state, ctx.player, discontent,
-                DecisionContext(Intent.SACRIFICE, source="Tavern",
-                                consequence="discard Discontent (cleanup)"))
+                DecisionContext(event="Feast", source="Tavern", intent=Intent.DISCARD))
             ctx.player.discard_from_domain(victim)
             ctx.state.log(f"  → Tavern: discards {victim.name}")
         return True
@@ -153,19 +130,17 @@ class FeedTheCommoners(CardBehavior):
     name = 'Feed the Commoners'
     tags = []
     deck = 'wheat'
-    def on_location_change(self, ctx, from_loc, to_loc):
-        if from_loc != "pile":
-            return
+    def on_dawn(self, ctx):
         discontent = ctx.player.cards_with_tag("Discontent")
         if discontent:
-            to_discard = ctx.engine.strat(ctx.player).choose_n(
+            to_discard = ctx.engine.strat(ctx.player).resolve_n(
                 ctx.state, ctx.player, discontent,
                 0, min(3, len(discontent)),
-                DecisionContext(Intent.SACRIFICE, source="Feed the Commoners",
-                                consequence="discard up to 3 Discontent"))
+                DecisionContext(event="Dawn", source="Feed the Commoners", intent=Intent.DISCARD))
             for c in to_discard:
                 ctx.player.discard_from_domain(c)
                 ctx.state.log(f"  → Feed the Commoners discards {c.name}")
+        ctx.discard_self()
 
 
 @_register
@@ -173,17 +148,13 @@ class Apprenticeship(CardBehavior):
     name = 'Apprenticeship'
     tags = ['Labour']
     deck = 'wheat'
-    def can_activate(self, ctx):
+    def on_order(self, ctx):
         if ctx.location != "domain":
-            return False
-        for p in ctx.state.other_players(ctx.player):
-            if p.count_tag("Craftsmanship") > 0:
-                return True
-        return False
-
-    def on_activate(self, ctx):
-        ctx.state.log(f"  → activates Coin zone via Apprenticeship")
-        ctx.engine.activate_zone(ctx.player, "coin")
+            return
+        if not any(p.count_tag("Craftsmanship") > 0 for p in ctx.state.other_players(ctx.player)):
+            return
+        ctx.state.log(f"  → Orders Coin zone via Apprenticeship")
+        ctx.engine.order_zone(ctx.player, "coin")
 
 
 @_register
@@ -191,25 +162,22 @@ class Militia(CardBehavior):
     name = 'Militia'
     tags = ['Unit']
     deck = 'wheat'
-    def can_activate(self, ctx):
-        return ctx.location == "domain" and ctx.player.count_tag("Mob") > 0
-
-    def on_activate(self, ctx):
+    def on_order(self, ctx):
+        if ctx.location != "domain" or ctx.player.count_tag("Mob") <= 0:
+            return
         mobs = ctx.player.cards_with_tag("Mob")
-        mob = ctx.engine.strat(ctx.player).choose_from(
+        mob = ctx.engine.strat(ctx.player).resolve(
             ctx.state, ctx.player, mobs,
-            DecisionContext(Intent.SACRIFICE, source="Militia",
-                            consequence="discard a Mob from your Domain"))
+            DecisionContext(event="Order", source="Militia", intent=Intent.DISCARD))
         ctx.player.discard_from_domain(mob)
         ctx.state.log(f"  → Militia discards {mob.name}")
 
-    def on_event(self, ctx):
-        if not ctx.responds_to("Brawl", targeted=True):
+    def on_brawl(self, ctx):
+        if ctx.target is not ctx.player:
             return False
-        if ctx.engine.strat(ctx.player).choose_yes_no(
-                ctx.state, ctx.player,
-                DecisionContext(Intent.ACCEPT_REJECT, source="Militia",
-                                consequence="sacrifice Militia to cancel Brawl")):
+        if ctx.engine.strat(ctx.player).resolve(
+                ctx.state, ctx.player, [True, False],
+                DecisionContext(event="Brawl", source="Militia", intent=Intent.OPTION)):
             ctx.player.discard_from_domain(ctx.card)
             ctx.state.log(f"  → Militia cancels Brawl (Militia discarded)")
             ctx.engine.cancel_event()
@@ -223,16 +191,15 @@ class Well(CardBehavior):
     tags = ['Amenity']
     deck = 'wheat'
 
-    def can_activate(self, ctx):
-        return len(ctx.state.season) > 0
-
-    def on_activate(self, ctx):
+    def on_order(self, ctx):
+        if not ctx.state.season:
+            return
         tree_zone = ctx.state.zone_cards["tree"]
         tree_beh = ctx.engine.behavior(tree_zone)
-        ctx.state.log("  → activates Well (Tree zone ×2)")
+        ctx.state.log("  → Orders Well (Tree zone ×2)")
         for _ in range(2):
             tree_ctx = ctx.engine.make_ctx(ctx.player, tree_zone)
-            tree_beh.on_activate(tree_ctx)
+            tree_beh.on_order(tree_ctx)
 
 
 @_register
@@ -248,22 +215,18 @@ class VillageGossip(CardBehavior):
     name = 'Village Gossip'
     tags = []
     deck = 'wheat'
-    def on_event(self, ctx):
-        if not ctx.responds_to("Rumour"):
-            return False
+    def on_rumour(self, ctx):
         decks = [d for d in ctx.state.zone_cards if ctx.state.pile_remaining(d) > 0]
         if not decks:
             return False
-        deck = ctx.engine.strat(ctx.player).choose_from(
+        deck = ctx.engine.strat(ctx.player).resolve(
             ctx.state, ctx.player, decks,
-            DecisionContext(Intent.PICK_OPTION, source="Village Gossip",
-                            consequence="peek at top card of a pile"))
+            DecisionContext(event="Rumour", source="Village Gossip", intent=Intent.OPTION))
         top = ctx.state.peek_pile(deck, 1)
         if top:
-            if ctx.engine.strat(ctx.player).choose_yes_no(
-                    ctx.state, ctx.player,
-                    DecisionContext(Intent.ACCEPT_REJECT, source="Village Gossip",
-                                    consequence=f"send {top[0].name} to bottom of {deck}")):
+            if ctx.engine.strat(ctx.player).resolve(
+                    ctx.state, ctx.player, [True, False],
+                    DecisionContext(event="Rumour", source="Village Gossip", intent=Intent.OPTION)):
                 zone = ctx.state.zone_cards[deck]
                 zone.pile.pop(zone.pile_ptr)
                 zone.pile.append(top[0])

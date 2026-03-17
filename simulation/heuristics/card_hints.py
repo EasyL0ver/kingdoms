@@ -3,9 +3,9 @@
 Each CardHeuristics mirrors the card behavior hooks, describing effects
 per trigger using typed Effect classes:
 
-  on_activate:          effects when player activates this card
+  on_order:             effects when player orders this card
   on_event_<type>:      effects when a specific event fires
-  on_move_from_pile:    effects when this card moves from a pile
+  on_dawn:              effects when this card moves from a pile
 
 Effect classes are purely descriptive — they say WHAT happens, not whether
 it's good or bad.  Heuristics interpret sentiment based on game state.
@@ -25,8 +25,8 @@ class Draw:
     scales_with: str = ""  # tag whose count amplifies this effect
 
 @dataclass(frozen=True)
-class Activate:
-    """Triggers a zone's activation flow."""
+class Order:
+    """Triggers a zone's order flow."""
     zone: str
     scales_with: str = ""
 
@@ -69,7 +69,7 @@ class Trigger:
     scales_with: str = ""
 
 # Union type for convenience
-Effect = Draw | Activate | Take | Peek | Give | Cancel | Discard | Trigger
+Effect = Draw | Order | Take | Peek | Give | Cancel | Discard | Trigger
 
 
 # ---------------------------------------------------------------------------
@@ -78,13 +78,13 @@ Effect = Draw | Activate | Take | Peek | Give | Cancel | Discard | Trigger
 class CardHeuristics:
     """Strategy metadata for a single card."""
     name: str = ""
-    on_activate: list[Effect] = []
+    on_order: list[Effect] = []
     on_event_brawl: list[Effect] = []
     on_event_feast: list[Effect] = []
     on_event_rite: list[Effect] = []
     on_event_harvest: list[Effect] = []
     on_event_rumour: list[Effect] = []
-    on_move_from_pile: list[Effect] = []
+    on_dawn: list[Effect] = []
 
 
 # ---------------------------------------------------------------------------
@@ -112,7 +112,7 @@ def get_card_heuristics(card_name: str) -> CardHeuristics | None:
 @_register_card_h
 class _Domain(CardHeuristics):
     name = "Domain"
-    on_activate = [Activate("claw"), Activate("tree")]
+    on_order = [Order("claw"), Order("tree")]
 
 # ---------------------------------------------------------------------------
 # Claw deck
@@ -121,7 +121,7 @@ class _Domain(CardHeuristics):
 @_register_card_h
 class _Tyranny(CardHeuristics):
     name = "Tyranny"
-    on_activate = [Draw("claw", scales_with="Discontent"), Trigger("brawl", "self")]
+    on_order = [Draw("claw", scales_with="Discontent"), Trigger("brawl", "self")]
 
 @_register_card_h
 class _Marauders(CardHeuristics):
@@ -136,12 +136,12 @@ class _ShareTheSpoils(CardHeuristics):
 @_register_card_h
 class _Outriders(CardHeuristics):
     name = "Outriders"
-    on_activate = [Draw("claw")]
+    on_order = [Draw("claw")]
 
 @_register_card_h
 class _Ransack(CardHeuristics):
     name = "Ransack"
-    on_activate = [Draw("claw"), Take("season")]
+    on_order = [Draw("claw"), Take("season")]
 
 @_register_card_h
 class _SpoilsOfWar(CardHeuristics):
@@ -152,12 +152,12 @@ class _SpoilsOfWar(CardHeuristics):
 @_register_card_h
 class _DuskRite(CardHeuristics):
     name = "Dusk Rite"
-    on_activate = [Draw("claw"), Draw("tree"), Trigger("rite", "all")]
+    on_order = [Draw("claw"), Draw("tree"), Trigger("rite", "all")]
 
 @_register_card_h
 class _LandGrab(CardHeuristics):
     name = "Land Grab"
-    on_activate = [Take("season")]
+    on_order = [Take("season")]
 
 @_register_card_h
 class _RiteOfPassage(CardHeuristics):
@@ -167,7 +167,7 @@ class _RiteOfPassage(CardHeuristics):
 @_register_card_h
 class _Ingenuity(CardHeuristics):
     name = "Ingenuity"
-    on_move_from_pile = [Draw("coin")]
+    on_dawn = [Draw("coin")]
 
 @_register_card_h
 class _Raid(CardHeuristics):
@@ -182,17 +182,17 @@ class _Scavenge(CardHeuristics):
 @_register_card_h
 class _Warband(CardHeuristics):
     name = "Warband"
-    on_activate = [Trigger("brawl", "target")]
+    on_order = [Trigger("brawl", "target")]
 
 @_register_card_h
 class _BloodOffering(CardHeuristics):
     name = "Blood Offering"
-    on_activate = [Discard(), Trigger("rite", "all")]
+    on_order = [Discard(), Trigger("rite", "all")]
 
 @_register_card_h
 class _Poach(CardHeuristics):
     name = "Poach"
-    on_activate = [Trigger("feast", "self", scales_with="Pasture")]
+    on_order = [Trigger("feast", "self", scales_with="Pasture")]
 
 @_register_card_h
 class _WorshipOfWar(CardHeuristics):
@@ -207,22 +207,22 @@ class _WorshipOfTheHunt(CardHeuristics):
 @_register_card_h
 class _Chiefdom(CardHeuristics):
     name = "Chiefdom"
-    on_activate = [Give()]
+    on_order = [Give()]
 
 @_register_card_h
 class _Racketeering(CardHeuristics):
     name = "Racketeering"
-    on_activate = [Trigger("brawl", "target")]
+    on_order = [Trigger("brawl", "target")]
 
 @_register_card_h
 class _Incite(CardHeuristics):
     name = "Incite"
-    on_move_from_pile = [Give()]
+    on_dawn = [Give()]
 
 @_register_card_h
 class _Culling(CardHeuristics):
     name = "Culling"
-    on_move_from_pile = [Discard()]
+    on_dawn = [Discard()]
 
 # ---------------------------------------------------------------------------
 # Tree deck
@@ -236,38 +236,38 @@ class _Eldership(CardHeuristics):
 @_register_card_h
 class _OralTradition(CardHeuristics):
     name = "Oral Tradition"
-    on_activate = [Draw("candle")]
+    on_order = [Draw("candle")]
 
 @_register_card_h
 class _Crags(CardHeuristics):
     name = "Crags"
-    on_activate = [Peek("claw")]
+    on_order = [Peek("claw")]
 
 @_register_card_h
 class _Forage(CardHeuristics):
     name = "Forage"
-    on_activate = [Draw("tree")]
+    on_order = [Draw("tree")]
 
 @_register_card_h
 class _SacredGrove(CardHeuristics):
     name = "Sacred Grove"
-    on_activate = [Peek("tree"), Trigger("rite", "all")]
+    on_order = [Peek("tree"), Trigger("rite", "all")]
 
 @_register_card_h
 class _SkyDance(CardHeuristics):
     name = "Sky Dance"
-    on_activate = [Trigger("rite", "all")]
+    on_order = [Trigger("rite", "all")]
 
 @_register_card_h
 class _Gathering(CardHeuristics):
     name = "Gathering"
-    on_move_from_pile = [Trigger("brawl", "self"), Trigger("brawl", "cultural"),
+    on_dawn = [Trigger("brawl", "self"), Trigger("brawl", "cultural"),
                          Trigger("rite", "all")]
 
 @_register_card_h
 class _Harvest(CardHeuristics):
     name = "Harvest"
-    on_move_from_pile = [Trigger("harvest", "all")]
+    on_dawn = [Trigger("harvest", "all")]
 
 @_register_card_h
 class _WorshipOfFertility(CardHeuristics):
@@ -282,12 +282,12 @@ class _Solstice(CardHeuristics):
 @_register_card_h
 class _Sowing(CardHeuristics):
     name = "Sowing"
-    on_activate = [Activate("wheat", scales_with="Nature")]
+    on_order = [Order("wheat", scales_with="Nature")]
 
 @_register_card_h
 class _WitheredCrop(CardHeuristics):
     name = "Withered Crop"
-    on_activate = [Activate("wheat")]
+    on_order = [Order("wheat")]
 
 @_register_card_h
 class _WorshipOfTheRain(CardHeuristics):
@@ -297,7 +297,7 @@ class _WorshipOfTheRain(CardHeuristics):
 @_register_card_h
 class _Remembrance(CardHeuristics):
     name = "Remembrance"
-    on_activate = [Take("discard", scales_with="Knowledge")]
+    on_order = [Take("discard", scales_with="Knowledge")]
 
 # ---------------------------------------------------------------------------
 # Wheat deck
@@ -306,32 +306,32 @@ class _Remembrance(CardHeuristics):
 @_register_card_h
 class _Mill(CardHeuristics):
     name = "Mill"
-    on_activate = [Draw("coin")]
+    on_order = [Draw("coin")]
 
 @_register_card_h
 class _Plough(CardHeuristics):
     name = "Plough"
-    on_event_harvest = [Activate("wheat"), Trigger("feast", "self")]
+    on_event_harvest = [Order("wheat"), Trigger("feast", "self")]
 
 @_register_card_h
 class _AnimalHusbandry(CardHeuristics):
     name = "Animal Husbandry"
-    on_activate = [Draw("coin"), Activate("wheat"), Trigger("feast", "self")]
+    on_order = [Draw("coin"), Order("wheat"), Trigger("feast", "self")]
 
 @_register_card_h
 class _Granary(CardHeuristics):
     name = "Granary"
-    on_activate = [Discard(), Trigger("feast", "self")]
+    on_order = [Discard(), Trigger("feast", "self")]
 
 @_register_card_h
 class _Apprenticeship(CardHeuristics):
     name = "Apprenticeship"
-    on_activate = [Activate("coin")]
+    on_order = [Order("coin")]
 
 @_register_card_h
 class _Well(CardHeuristics):
     name = "Well"
-    on_activate = [Activate("tree"), Activate("tree")]
+    on_order = [Order("tree"), Order("tree")]
 
 @_register_card_h
 class _VillageGossip(CardHeuristics):
@@ -356,14 +356,14 @@ class _Tavern(CardHeuristics):
 @_register_card_h
 class _Mine(CardHeuristics):
     name = "Mine"
-    on_activate = [Draw("coin")]
+    on_order = [Draw("coin")]
 
 @_register_card_h
 class _Rumour(CardHeuristics):
     name = "Rumour"
-    on_move_from_pile = [Trigger("rumour", "all")]
+    on_dawn = [Trigger("rumour", "all")]
 
 @_register_card_h
 class _WorshipOfTheFlame(CardHeuristics):
     name = "Worship of the Flame"
-    on_activate = [Activate("claw"), Activate("tree")]
+    on_order = [Order("claw"), Order("tree")]

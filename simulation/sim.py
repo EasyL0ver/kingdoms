@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from state import GameState
 from engine import GameEngine
 from strategy import RandomStrategy
-from observers import CardWinCorrelation, ActivationStats, EventFrequency, HeuristicWinRate
+from observers import CardWinCorrelation, OrderStats, EventFrequency, HeuristicWinRate
 from heuristics import HeuristicStrategy, get_heuristic, list_heuristics
 
 
@@ -132,7 +132,7 @@ def main():
                   f"winner: {result['winner']}, {result['elapsed']:.3f}s")
     else:
         # Batch mode with observers
-        observers = [CardWinCorrelation(), ActivationStats(), EventFrequency(),
+        observers = [CardWinCorrelation(), OrderStats(), EventFrequency(),
                      HeuristicWinRate()]
         stats = {"wins": {}, "depleted": {}, "turns": [], "elapsed": []}
 

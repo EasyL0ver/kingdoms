@@ -19,10 +19,10 @@ class GameObserver(ABC):
     def on_card_received(self, state: GameState, player: Player, card: Card):
         pass
 
-    def on_activate(self, state: GameState, player: Player, card: Card):
+    def on_order(self, state: GameState, player: Player, card: Card):
         pass
 
-    def on_event_fired(self, state: GameState, event: str, triggerer: Player,
+    def on_event_fired(self, state: GameState, event: str, active_player: Player,
                        target: Player | None, cancelled: bool,
                        responder_count: int = 0):
         pass
@@ -116,51 +116,50 @@ class CardWinCorrelation(GameObserver):
         return "\n".join(lines)
 
 
-class ActivationStats(GameObserver):
-    """Tracks how often each card gets activated."""
+class OrderStats(GameObserver):
+    """Tracks how often each card gets Ordered."""
 
     def __init__(self):
-        self.activations: dict[str, int] = {}
-        self.activations_in_wins: dict[str, int] = {}
+        self.orders: dict[str, int] = {}
+        self.orders_in_wins: dict[str, int] = {}
         self.total_games = 0
         self.total_decisive = 0
-        self._game_activations: dict[str, dict[str, int]] = {}  # player → card → count
+        self._game_orders: dict[str, dict[str, int]] = {}  # player → card → count
         self._current_players: list[str] = []
 
     def on_game_start(self, state, strategies=None):
         self.total_games += 1
-        self._game_activations = {p.name: {} for p in state.players}
+        self._game_orders = {p.name: {} for p in state.players}
         self._current_players = [p.name for p in state.players]
 
-    def on_activate(self, state, player, card):
-        self.activations[card.name] = self.activations.get(card.name, 0) + 1
-        pa = self._game_activations.get(player.name, {})
+    def on_order(self, state, player, card):
+        self.orders[card.name] = self.orders.get(card.name, 0) + 1
+        pa = self._game_orders.get(player.name, {})
         pa[card.name] = pa.get(card.name, 0) + 1
-        self._game_activations[player.name] = pa
+        self._game_orders[player.name] = pa
 
     def on_game_end(self, state, depleted, winner):
         if not winner or winner.startswith("Tie"):
             return
         self.total_decisive += 1
-        winner_acts = self._game_activations.get(winner, {})
-        for card_name, count in winner_acts.items():
-            self.activations_in_wins[card_name] = self.activations_in_wins.get(card_name, 0) + count
+        winner_orders = self._game_orders.get(winner, {})
+        for card_name, count in winner_orders.items():
+            self.orders_in_wins[card_name] = self.orders_in_wins.get(card_name, 0) + count
 
     def report(self) -> str:
-        if not self.activations:
-            return "No activations recorded."
+        if not self.orders:
+            return "No orders recorded."
         lines = []
         lines.append(f"{'='*70}")
-        lines.append(f"ACTIVATION STATS ({self.total_games} games)")
+        lines.append(f"ORDER STATS ({self.total_games} games)")
         lines.append(f"{'='*70}")
         lines.append(f"\n{'Card':<25} {'Total':>7} {'PerGame':>8} {'InWins':>7} {'WinShare':>9}")
         lines.append(f"{'-'*25} {'-'*7} {'-'*8} {'-'*7} {'-'*9}")
 
         rows = []
-        total_acts = sum(self.activations.values())
-        for card_name, count in self.activations.items():
+        for card_name, count in self.orders.items():
             per_game = count / self.total_games
-            in_wins = self.activations_in_wins.get(card_name, 0)
+            in_wins = self.orders_in_wins.get(card_name, 0)
             win_share = in_wins / count if count > 0 else 0
             rows.append((card_name, count, per_game, in_wins, win_share))
 
@@ -168,12 +167,12 @@ class ActivationStats(GameObserver):
         for name, count, pg, iw, ws in rows:
             lines.append(f"{name:<25} {count:>7} {pg:>8.2f} {iw:>7} {ws:>8.1%}")
 
-        # Never activated
+        # Never ordered
         from cards import _BEHAVIOR_MAP
         all_cards = set(_BEHAVIOR_MAP.keys())
-        never = all_cards - set(self.activations.keys())
+        never = all_cards - set(self.orders.keys())
         if never:
-            lines.append(f"\n  Never activated: {', '.join(sorted(never))}")
+            lines.append(f"\n  Never ordered: {', '.join(sorted(never))}")
 
         return "\n".join(lines)
 

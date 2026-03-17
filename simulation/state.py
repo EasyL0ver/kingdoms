@@ -26,7 +26,7 @@ class Player:
     name: str
     domain: list[Card] = field(default_factory=list)
     discard: list[Card] = field(default_factory=list)
-    domain_card: Card = field(default_factory=lambda: Card(name="Domain", tags=[], deck="zone"))
+    domain_card: Card = field(default_factory=lambda: Card(name="Presence", tags=[], deck="zone"))
 
     def domain_names(self) -> list[str]:
         return [c.name for c in self.domain]
@@ -98,8 +98,6 @@ class Player:
         if self.has_card("Mill"):
             return True
         if self.has_card("Mine"):
-            return True
-        if self.has_card("Ingenuity"):
             return True
         # Apprenticeship needs a player with Craftsmanship to agree — handled at action level
         return False

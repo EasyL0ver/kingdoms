@@ -16,9 +16,9 @@ class CardContext:
     card: Card             # the card instance
     state: GameState       # full game state
 
-    # Event-specific fields (set when called from on_event)
+    # Event-specific fields (set when dispatching per-event handlers)
     event: str = ""        # "Brawl", "Rite", "Feast", "Harvest", "Rumour"
-    triggerer: Player | None = None  # who triggered the event
+    active_player: Player | None = None  # the active player (whose turn it is)
     target: Player | None = None     # target domain (for Brawl)
     uprising: bool = False           # Uprising special rules (no benefits)
 
@@ -30,14 +30,6 @@ class CardContext:
         if self.card in self.player.discard:
             return "discard"
         return "unknown"
-
-    def responds_to(self, event: str, targeted: bool = False) -> bool:
-        """Check if this context matches the given event and optional self-targeting."""
-        if self.event != event:
-            return False
-        if targeted and self.target is not self.player:
-            return False
-        return True
 
     def discard_self(self):
         """Send this card to its owner's discard pile."""
@@ -52,39 +44,43 @@ class CardBehavior:
         tags: list[str] — tags like ["Discontent", "Mob"]
         deck: str       — which deck ("claw", "tree", "wheat", "coin", "candle")
 
-    Four hooks define behavior:
-        can_activate        — game rules: is activation legal right now?
-        on_activate         — what happens when activated
-        on_location_change  — fires on any card movement (pile→domain, domain→discard, etc.)
-        on_event            — fires when an event broadcasts
+    Hooks define behavior:
+        on_order        — what happens when Ordered (the player's turn action)
+        on_dawn         — fires at the start of the owner's turn (Dawn phase)
+        on_<event>      — per-event handlers (on_brawl, on_rite, etc.)
     """
     name: str = ""
     tags: list[str] = []
     deck: str = ""
 
-    def can_activate(self, ctx: CardContext) -> bool:
-        """Can this card be activated right now?
-        Checks both domain and discard (use ctx.location to distinguish).
-        Return False by default — only activatable cards override this."""
+    def on_order(self, ctx: CardContext):
+        """Resolve this card's Order. Guard preconditions inside (early return)."""
+        pass
+
+    def on_dawn(self, ctx: CardContext):
+        """Called at the start of the owner's turn (Dawn phase).
+        Used for: one-shot effects (formerly Drafted), prerequisite checks,
+        and delayed punishments."""
+        pass
+
+    def on_brawl(self, ctx: CardContext) -> bool:
+        """Called when a Brawl event fires. Return True if this card responded."""
         return False
 
-    def on_activate(self, ctx: CardContext):
-        """Resolve this card's activation as the player's turn action."""
-        pass
+    def on_rite(self, ctx: CardContext) -> bool:
+        """Called when a Rite event fires. Return True if this card responded."""
+        return False
 
-    def on_location_change(self, ctx: CardContext, from_loc: str, to_loc: str):
-        """Called when a card moves between zones.
-        Locations: 'pile', 'domain', 'discard', 'season', 'fields', 'wares', 'removed'
+    def on_feast(self, ctx: CardContext) -> bool:
+        """Called when a Feast event fires. Return True if this card responded."""
+        return False
 
-        The card can place/discard itself. If it does nothing, the engine
-        places it in the owner's domain by default.
-        """
-        pass
+    def on_harvest(self, ctx: CardContext) -> bool:
+        """Called when a Harvest event fires. Return True if this card responded."""
+        return False
 
-    def on_event(self, ctx: CardContext) -> bool:
-        """Called when an event fires.
-        Event type is in ctx.event. Triggerer in ctx.triggerer. Target in ctx.target.
-        Return True if this card responded."""
+    def on_rumour(self, ctx: CardContext) -> bool:
+        """Called when a Rumour event fires. Return True if this card responded."""
         return False
 
 

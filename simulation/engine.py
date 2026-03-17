@@ -43,44 +43,45 @@ class GameEngine:
 
     # ── Valid Actions ──
 
+    def _has_on_order(self, card: Card) -> bool:
+        """Check if a card overrides on_order (i.e. is Orderable)."""
+        beh = self.behavior(card)
+        return getattr(type(beh), 'on_order') is not getattr(CardBehavior, 'on_order')
+
     def get_valid_actions(self, player: Player) -> list[Action]:
         actions: list[Action] = []
         s = self.state
 
-        domain_card = player.domain_card
-        beh = self.behavior(domain_card)
-        ctx = self.make_ctx(player, domain_card)
-        if beh.can_activate(ctx):
-            actions.append(Action("activate", card=domain_card,
-                                  label="Activate Domain"))
+        # Presence card — always available for Ordering
+        presence = player.domain_card
+        if self._has_on_order(presence):
+            actions.append(Action("order", card=presence,
+                                  label="Order Presence"))
 
-        # Activate cards in Domain and Discard — ask each card's behavior
+        # Order cards in Domain — any card with on_order is Orderable
         for card in player.domain:
-            beh = self.behavior(card)
-            ctx = self.make_ctx(player, card)
-            if beh.can_activate(ctx):
-                actions.append(Action("activate", card=card,
-                                      label=f"Activate {card.name}"))
+            if self._has_on_order(card):
+                actions.append(Action("order", card=card,
+                                      label=f"Order {card.name}"))
 
+        # Order cards in Discard — deduplicate by name (one action per card type)
+        seen_discard = set()
         for card in player.discard:
-            beh = self.behavior(card)
-            ctx = self.make_ctx(player, card)
-            if beh.can_activate(ctx):
-                actions.append(Action("activate", card=card,
-                                      label=f"Activate {card.name} from discard"))
+            if card.name not in seen_discard and self._has_on_order(card):
+                seen_discard.add(card.name)
+                actions.append(Action("order", card=card,
+                                      label=f"Order {card.name} from discard"))
 
-        # Well — any player's Well can be activated by current player
+        # Well — any player's Well can be Ordered by current player
         for p in s.players:
             if p is player:
                 continue
             for card in p.domain:
                 if card.name != "Well":
                     continue
-                beh = self.behavior(card)
-                ctx = self.make_ctx(player, card)
-                if beh.can_activate(ctx):
-                    actions.append(Action("activate_well", card=card, owner=p,
-                                          label=f"Activate {p.name}'s Well"))
+                if self._has_on_order(card):
+                    actions.append(Action("order_well", card=card, owner=p,
+                                          label=f"Order {p.name}'s Well"))
 
         if not actions:
             actions.append(Action("pass", label="Pass (no valid actions)"))
@@ -147,18 +148,27 @@ class GameEngine:
 
     def resolve_turn(self, player: Player):
         s = self.state
+
+        # ── Dawn Phase ──
+        # Dawn broadcasts in the active player's Domain.
+        # All On Dawn cards resolve (one-shot effects, prerequisite checks).
+        self._resolve_dawn(player)
+        if s.game_over:
+            return
+
+        # ── Order Phase ──
         actions = self.get_valid_actions(player)
-        action = self.strat(player).choose_action(
+        action = self.strat(player).resolve(
             s, player, actions,
-            DecisionContext(Intent.TURN_ACTION, source="turn"))
+            DecisionContext(event="Dawn", source="Presence", intent=Intent.OPTION))
         s.log(f"**T{s.turn_num} — {player.name}:** {action.label}")
 
         match action.type:
-            case "activate" | "activate_well":
+            case "order" | "order_well":
                 beh = self.behavior(action.card)
                 ctx = self.make_ctx(player, action.card)
-                self._notify("on_activate", s, player, action.card)
-                beh.on_activate(ctx)
+                self._notify("on_order", s, player, action.card)
+                beh.on_order(ctx)
             case "pass":
                 s.log("  *(no valid actions)*")
 
@@ -166,13 +176,28 @@ class GameEngine:
 
         s.log("")
 
+    def _resolve_dawn(self, player: Player):
+        """Dawn phase: fire on_dawn for all cards in the player's Domain.
+        Cards may discard themselves (one-shots) or check prerequisites."""
+        s = self.state
+        # Iterate over a copy since on_dawn may modify the domain
+        for card in list(player.domain):
+            if s.game_over:
+                break
+            if card not in player.domain:
+                continue  # removed by an earlier on_dawn
+            beh = self.behavior(card)
+            if getattr(type(beh), 'on_dawn') is not getattr(CardBehavior, 'on_dawn'):
+                ctx = self.make_ctx(player, card)
+                beh.on_dawn(ctx)
+
     # ── Public helpers for card behaviors ──
 
-    def activate_zone(self, player: Player, zone_name: str):
+    def order_zone(self, player: Player, zone_name: str):
         zone_card = self.state.zone_cards[zone_name]
         beh = self.behavior(zone_card)
         ctx = self.make_ctx(player, zone_card)
-        beh.on_activate(ctx)
+        beh.on_order(ctx)
 
 
     def _card_is_placed(self, card: Card) -> bool:
@@ -183,12 +208,7 @@ class GameEngine:
         return False
 
     def receive_card(self, player: Player, card: Card):
-        """Handle a card being received — fires on_location_change."""
-        beh = self.behavior(card)
-        ctx = self.make_ctx(player, card)
-        beh.on_location_change(ctx, "pile", "domain")
-
-        # If the card didn't place itself, put it in domain by default
+        """Handle a card being received — just place it in domain."""
         if not self._card_is_placed(card):
             player.add_to_domain(card, self.state)
 
@@ -206,7 +226,7 @@ class GameEngine:
 
     # ── Generic Event Resolution ──
 
-    def resolve_event(self, event: str, triggerer: Player,
+    def resolve_event(self, event: str, active_player: Player,
                       target: Player | None = None, uprising: bool = False):
         """Broadcast an event. Each domain's owner chooses resolution order
         of their responding cards."""
@@ -217,28 +237,23 @@ class GameEngine:
         self._event_cancelled = False
         s = self.state
 
+        handler_name = f"on_{event.lower()}"
+        base_handler = getattr(CardBehavior, handler_name)
+
         # Broadcast to zone cards first (e.g., Wheat Zone refills on Harvest)
         for zone_name, zone_card in s.zone_cards.items():
             if s.game_over or self._event_cancelled:
                 break
             beh = self.behavior(zone_card)
-            if type(beh).on_event is not CardBehavior.on_event:
-                ctx = self.make_ctx(triggerer, zone_card, event=event,
-                                    triggerer=triggerer, target=target, uprising=uprising)
-                beh.on_event(ctx)
+            if getattr(type(beh), handler_name) is not base_handler:
+                ctx = self.make_ctx(active_player, zone_card, event=event,
+                                    active_player=active_player, target=target, uprising=uprising)
+                handler = getattr(beh, handler_name)
+                handler(ctx)
 
         # Pre-count Rite Spiritual responders (for Worship of the Flame)
         rite_spiritual_count = 0
         if event == "Rite":
-            for p in s.players:
-                for card in p.domain:
-                    beh = self.behavior(card)
-                    ctx = self.make_ctx(p, card, event=event, triggerer=triggerer,
-                                        target=target, uprising=uprising)
-                    if beh.on_event(ctx) is not None:
-                        # Check if card is a Rite responder (has Spiritual tag in worship cards)
-                        pass
-            # Actually, count by testing: just count worship cards
             for p in s.players:
                 for card in p.domain:
                     if card.name.startswith("Worship"):
@@ -246,7 +261,7 @@ class GameEngine:
 
         # Scan all domains in play order, collect responders, let owner order them
         responder_count = 0
-        for p in s.play_order_from(triggerer):
+        for p in s.play_order_from(active_player):
             if s.game_over or self._event_cancelled:
                 break
 
@@ -254,12 +269,7 @@ class GameEngine:
             responders = []
             for card in list(p.domain):
                 beh = self.behavior(card)
-                # Quick check: does this behavior override on_event?
-                if type(beh).on_event is not CardBehavior.on_event:
-                    ctx = self.make_ctx(p, card, event=event, triggerer=triggerer,
-                                        target=target, uprising=uprising)
-                    # Only include if this card's on_event is relevant
-                    # (cards internally check ctx.event)
+                if getattr(type(beh), handler_name) is not base_handler:
                     responders.append(card)
 
             if not responders:
@@ -267,10 +277,9 @@ class GameEngine:
 
             # Owner chooses resolution order
             if len(responders) > 1:
-                ordered = self.strat(p).choose_order(
+                ordered = self.strat(p).sequence(
                     s, p, responders,
-                    DecisionContext(Intent.ORDER, source=event,
-                                    tags=[f"event:{event}"]))
+                    DecisionContext(event=event, source=event, intent=Intent.OPTION))
             else:
                 ordered = responders
 
@@ -281,32 +290,33 @@ class GameEngine:
                     continue  # removed during earlier resolution
 
                 beh = self.behavior(card)
-                ctx = self.make_ctx(p, card, event=event, triggerer=triggerer,
+                ctx = self.make_ctx(p, card, event=event, active_player=active_player,
                                     target=target, uprising=uprising)
-                if beh.on_event(ctx):
+                handler = getattr(beh, handler_name)
+                if handler(ctx):
                     responder_count += 1
 
         # Worship of the Flame: after all other Rite responders, draw per Spiritual count
         if event == "Rite" and not self._event_cancelled and not s.game_over:
-            for p in s.play_order_from(triggerer):
+            for p in s.play_order_from(active_player):
                 for card in list(p.domain):
                     if card.name == "Worship of the Flame" and rite_spiritual_count > 0:
                         draws = rite_spiritual_count
-                        s.log(f"  → {p.name}'s Worship of the Flame: {triggerer.name} draws {draws}")
+                        s.log(f"  → {p.name}'s Worship of the Flame: {active_player.name} draws {draws}")
                         for _ in range(draws):
                             decks = [d for d in ("claw", "tree", "wheat", "coin", "candle")
                                      if s.pile_remaining(d) > 0]
                             if decks:
-                                deck = self.strat(triggerer).choose_from(
-                                    s, triggerer, decks,
-                                    DecisionContext(Intent.PICK_OPTION, source="Worship of the Flame",
-                                                    consequence="draw from any deck"))
+                                deck = self.strat(active_player).resolve(
+                                    s, active_player, decks,
+                                    DecisionContext(event="Rite", source="Worship of the Flame",
+                                                    intent=Intent.OPTION))
                                 drawn = s.draw_from_pile(deck)
                                 if drawn:
                                     s.log(f"    → draws {drawn.name} from {deck}")
-                                    self.receive_card(triggerer, drawn)
+                                    self.receive_card(active_player, drawn)
 
-        self._notify("on_event_fired", s, event, triggerer, target, self._event_cancelled, responder_count)
+        self._notify("on_event_fired", s, event, active_player, target, self._event_cancelled, responder_count)
         self._event_depth -= 1
 
     # ── Logging ──

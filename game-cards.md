@@ -18,20 +18,17 @@ The game ends when any deck pile is fully depleted. The winner depends on which 
 
 ## Domain
 
-Each player has a Domain — their personal area in front of them.
+Each player has a Domain — their personal zone in front of them.
 
 ```
-YOUR DOMAIN
-Activate — activate the Claw zone or the Tree zone.
-All your cards are placed here.
-Your Domain holds at most 1 [Culture], 1 [Allegiance],
-and 1 [Religion] card. If you gain another, discard
-the existing one.
+PRESENCE
+On Dawn — Order on the Claw zone, the Tree
+zone, or a card in your Domain.
 ```
 
-> Your home base. Claw and Tree zones are always available to you.
+> Your starting card. Grants you one Order per turn across Claw, Tree, or your Domain.
 
-🤖 Default action — activate Claw or Tree when nothing better. Choose Claw for aggression, Tree for precision.
+🤖 Default action — Order on Claw or Tree when nothing better. Choose Claw for aggression, Tree for precision.
 
 ---
 
@@ -42,7 +39,7 @@ One per deck. Placed next to their draw pile at setup. Defines how activating th
 ```
 🐾  CLAW ZONE
 [Zone]
-Activate — take the top 2 cards from the Claw pile.
+On Order — take the top 2 cards from the Claw pile.
 ```
 
 🤖 High-risk and aggressive strategy involving attacks on other players. Be more aggressive if drawing from Claw deck.
@@ -51,9 +48,8 @@ Activate — take the top 2 cards from the Claw pile.
 🌳  TREE ZONE
 [Zone]
 4 cards revealed face-up — this is the Season.
-Activate — take 1 card from the Season.
-When all Season cards are taken, reveal the next
-4 (a new Season begins).
+On Order — take 1 card from the Season.
+When the Season is empty, reveal the next 4.
 ```
 
 🤖 Better to pick when the zone is full of cards — if it's few it's underwhelming but less risky than Claw.
@@ -62,13 +58,13 @@ When all Season cards are taken, reveal the next
 🌾  WHEAT ZONE
 [Zone]
 5 Wheat cards face-up (the Fields).
-Activate — take any number of cards from the
+On Order — take any number of cards from the
 Fields. For each card taken, draw 1 from Claw.
 On Harvest — refill the Fields to 5 from the
 Wheat pile.
 ```
 
-> You can't activate this by default — needs a gateway card.
+> You can't Order this by default — needs a gateway card.
 
 🤖 Claw cards can backfire so be conservative with amount drawn unless you have a way to handle the Claw cards.
 
@@ -76,15 +72,14 @@ Wheat pile.
 🪙  COIN ZONE
 [Zone]
 3 Coin cards face-up (the Wares).
-Activate — choose one:
+On Order — choose one:
   Buy — take any card from the Wares. Refill to 3
   from pile.
   Trade — place any card from your Domain into the
-  Wares, then draw blindly from the top of the Coin
-  pile.
+  Wares, then draw from the top of the Coin pile.
 ```
 
-> You can't activate this by default — needs a gateway card.
+> You can't Order this by default — needs a gateway card.
 
 🤖 Buy when Wares has something valuable. Trade to dump unwanted cards. Wares content shifts as players Trade into it.
 
@@ -98,7 +93,7 @@ Activate — choose one:
 ```
 🐾  WARBAND
 [Discontent]
-Activate — trigger Brawl in the Domain with the
+On Order — Brawl in the Domain with the
 most cards. (You choose if tied.)
 ```
 
@@ -107,28 +102,26 @@ most cards. (You choose if tied.)
 ```
 🐾  RAID
 [Unit] [Mob] [Discontent]
-On Brawl — this Domain's owner gives 1 card
-to the player that triggered the Brawl.
+On Brawl — give 1 card to the active player.
 ```
 
 > Having this in your Domain hurts YOU — it rewards your attacker.
 
-🤖 Plant in opponents' Domains via Incite/Chiefdom before triggering Brawl.
+🤖 Plant in opponents' Domains via Incite/Chiefdom before Brawling.
 
 ```
 🐾  SCAVENGE
 [Unit] [Mob] [Discontent]
-On Brawl — this Domain's owner gives 1 card
-from their discard to the player that triggered
-the Brawl.
+On Brawl — give 1 card from your discard
+to the active player.
 ```
 
 🤖 Less dangerous than Raid since you pick what to give from discard. Still better in opponents' Domains.
 
 ```
 🐾  BLOOD OFFERING
-Activate — discard 1 card from your Domain,
-then trigger Rite.
+On Order — discard 1 card from your Domain,
+then Rite in your Domain.
 ```
 
 🤖 Worth the sacrifice with 2+ Spiritual responders. Discard your weakest card.
@@ -136,10 +129,10 @@ then trigger Rite.
 ```
 🐾  POACH
 [Unit] [Mob] [Hunt] [Discontent]
-Activate — trigger Feast in your Domain.
-Hunt limit: across all Domains, only 1 [Hunt]
-activation is allowed per round. Each Pasture
-in your Domain increases this limit by 1.
+On Order — Feast in your Domain.
+Hunt limit: only 1 [Hunt] Order per round
+across all Domains. Each Pasture in your
+Domain increases this limit by 1.
 ```
 
 > Hunt limit is shared across ALL players — not per player.
@@ -149,9 +142,9 @@ in your Domain increases this limit by 1.
 ```
 🐾  WORSHIP OF THE HUNT
 [Spiritual]
-On Rite — the player who triggered the Rite
-may activate all [Hunt] cards in their Domain.
-They work regardless of their number.
+On Rite — the active player may Order all
+[Hunt] cards in their Domain. They ignore
+the Hunt limit.
 ```
 
 🤖 Build multiple Hunt cards then Rite into mass Feast. The payoff for a Hunt-heavy strategy.
@@ -159,8 +152,8 @@ They work regardless of their number.
 ```
 🐾  WORSHIP OF WAR
 [Spiritual]
-On Rite — the player who triggered the Rite
-may trigger Brawl in any player's Domain.
+On Rite — the active player may Brawl in
+any Domain.
 ```
 
 > Can target ANY Domain — including allies'.
@@ -169,7 +162,7 @@ may trigger Brawl in any player's Domain.
 
 ```
 🐾  INCITE
-Drafted — move up to 3 [Mob] cards from
+On Dawn — move up to 3 [Mob] cards from
 your Domain to any other Domain(s).
 Discard Incite.
 ```
@@ -179,7 +172,7 @@ Discard Incite.
 ```
 🐾  CHIEFDOM
 [Allegiance] [Trophy]
-Activate — move 1 [Mob] card from your Domain
+On Order — move 1 [Mob] card from your Domain
 or any Domain that shares your culture to any
 other Domain.
 ```
@@ -191,9 +184,9 @@ other Domain.
 ```
 🐾  RACKETEERING
 [Discontent]
-Activate — choose a player. They offer you a
+On Order — choose a player. They offer you a
 card from their Domain. You may take it, or
-refuse and trigger Brawl in their Domain.
+refuse and Brawl in their Domain.
 ```
 
 🤖 Pure upside — take their offering or refuse and Brawl. Target Mob-heavy Domains.
@@ -201,13 +194,12 @@ refuse and trigger Brawl in their Domain.
 ```
 🐾  TYRANNY                                    ×2
 [Trophy] [Discontent]
-Activate — draw from Claw equal to your
-[Discontent] count, then trigger Brawl in
-your Domain (taken cards are discarded,
-not given to opponents).
+On Order — draw from Claw equal to your
+[Discontent] count, then Brawl in your Domain
+(cards go to discard, not to the active player).
 ```
 
-🤖 Massive draw engine with a built-in punishment — your own [Mob] cards fire against you on the self-Brawl. More Discontent = bigger draws but also more Mob in your Domain turning on you. Timing is everything: fire too early and it's weak, fire too late and the Brawl strips half your gains. Counter: plant extra [Mob] in the Tyranny player's Domain with Incite/Chiefdom — they'll lose even more when they trigger it.
+🤖 Massive draw engine with a built-in punishment — your own [Mob] cards fire against you on the self-Brawl. More Discontent = bigger draws but also more Mob in your Domain turning on you. Timing is everything: fire too early and it's weak, fire too late and the Brawl strips half your gains. Counter: plant extra [Mob] in the Tyranny player's Domain with Incite/Chiefdom — they'll lose even more when they Brawl.
 
 ```
 🐾  MARAUDERS
@@ -223,12 +215,12 @@ from Claw.
 On Feast — you may draw 1 from Claw.
 ```
 
-🤖 Free value. Keep — no cost, triggers on any Feast.
+🤖 Free value. Keep — no cost, fires on any Feast.
 
 ```
 🐾  ARMAMENT
 [Knowledge]
-Activate — discard a Coin card from your Domain,
+On Order — discard a Coin card from your Domain,
 then draw 1 from Sword.
 ```
 
@@ -236,7 +228,7 @@ then draw 1 from Sword.
 
 ```
 🐾  OUTRIDERS
-Activate — draw 3 from Claw, discard 1.
+On Order — draw 3 from Claw, discard 1.
 ```
 
 🤖 Strictly better than Claw zone — use this instead whenever possible.
@@ -244,7 +236,7 @@ Activate — draw 3 from Claw, discard 1.
 ```
 🐾  LAND GRAB
 [Discontent]
-Activate — take all [Land] cards from the
+On Order — take all [Land] cards from the
 Season to your Domain. Discard Land Grab.
 ```
 
@@ -252,21 +244,22 @@ Season to your Domain. Discard Land Grab.
 
 ```
 🐾  INGENUITY
-[Craftsmanship] [Discontent]
-Drafted — draw 1 from Coin.
+[Discontent]
+On Dawn — draw 1 from Coin. Discard Ingenuity.
 ```
 
-🤖 Always take — free Coin draw, zero downside.
+🤖 Always take — free Coin draw at next Dawn, zero downside.
 
 ```
 🐾  UPRISING
 [Discontent]
-Drafted — trigger Brawl in your Domain. No
-player benefits from On Brawl effects — cards
-that would be taken are discarded instead.
+On Dawn — Brawl in your Domain. No player
+benefits from On Brawl effects — cards that
+would be taken are discarded instead.
+Discard Uprising.
 ```
 
-🤖 Purges your own Mob without anyone profiting. Draft when your Domain is polluted.
+🤖 Delayed purge — fires at your next Dawn. Clears your own Mob without anyone profiting.
 
 ```
 🐾  RITE OF PASSAGE
@@ -278,8 +271,8 @@ On Brawl — draw 1 from Tree.
 
 ```
 🐾  RANSACK
-Activate — discard a card from your Domain,
-then activate Claw zone and Tree zone.
+On Order — discard a card from your Domain,
+then Order on the Claw zone and the Tree zone.
 ```
 
 🤖 Sacrifice outlet and Claw-Tree bridge card. Dump stolen junk or dead Mob cards, get 2 Claw + 1 Tree. Enables the raider-explorer archetype — your tribe repurposes plunder into fresh supplies and wilderness knowledge.
@@ -287,72 +280,75 @@ then activate Claw zone and Tree zone.
 ```
 🐾  CULLING
 [Discontent]
-Drafted — the player with the most cards in
+On Dawn — the player with the most cards in
 their Domain discards 2 cards of their choice.
-If tied, you choose which player. Discard Culling.
+If tied, you choose which player. Discard
+Culling.
 ```
 
-> Automatic anti-snowball. Fires when drawn from Claw — nobody chooses it, it just happens.
+> Automatic anti-snowball. Fires at your next Dawn — nobody chooses it, it just happens.
 
-🤖 Claw's natural balancer. The biggest Domain gets punished whenever anyone draws this. Makes Claw draws risky for the leader and a potential equaliser for everyone else. Can't be hoarded or timed — pure chaos.
+🤖 Claw's natural balancer. The biggest Domain gets punished whenever anyone draws this. Makes Claw draws risky for the leader and a potential equaliser for everyone else.
 
 ```
 🐾  SPOILS OF WAR
 [Trophy] [Mob]
-Drafted — place Spoils of War in another
+On Dawn — place Spoils of War in another
 player's Domain.
-On Brawl — moves to the triggerer's Domain,
-then triggerer draws from Claw and from Tree
-equal to their [Trophy] count.
+On Brawl — Spoils of War moves to the active
+player's Domain. The active player draws from
+Claw and from Tree equal to their [Trophy]
+count.
 ```
 
-🤖 The ultimate Trophy payoff card. Plant it on an enemy to mark them as a target — it's [Mob] so it makes them Brawl-vulnerable too. When you trigger Brawl and claim it, you draw from both Claw and Tree scaled by your total [Trophy] count. Rewards building the Trophy hunter archetype and bridges Claw+Tree. Gets exponentially stronger with Tyranny and Chiefdom.
+🤖 The ultimate Trophy payoff card. Plant it on an enemy at your next Dawn — it's [Mob] so it makes them Brawl-vulnerable too. When you Brawl and claim it, you draw from both Claw and Tree scaled by your total [Trophy] count. Rewards building the Trophy hunter archetype and bridges Claw+Tree. Gets exponentially stronger with Tyranny and Chiefdom.
 
 ```
 🐾  DUSK RITE
 [Spiritual] [Discontent]
-Activate — remove any number of cards from
+On Order — remove any number of cards from
 your discard from the game. Draw from Claw
 and Tree equal to the number removed.
-Then trigger Rite. Discard Dusk Rite.
+Then Rite in your Domain. Discard Dusk Rite.
 ```
 
-🤖 One-shot graveyard nuke — the shamans invoke the dead for a massive power surge. Burns your discard permanently (Remembrance can't recover removed cards), draws from both piles, and triggers Rite for Worship card cascades. Hold it until your graveyard is stacked and your Rite engine is ready. The dark payoff for the Claw+Tree archetype.
+🤖 One-shot graveyard nuke — the shamans invoke the dead for a massive power surge. Burns your discard permanently (Remembrance can't recover removed cards), draws from both piles, and fires Rite for Worship card cascades. Hold it until your graveyard is stacked and your Rite engine is ready. The dark payoff for the Claw+Tree archetype.
 
 ---
 
 ## 🌳 Tree Deck Cards
 
-> Family, spirituality, harmony, roots, nature. Community bonds, ancestral wisdom, peaceful growth. The seasonal engine and communal heartbeat — source of trigger cards and gateway cards that unlock higher-tier decks.
+> Family, spirituality, harmony, roots, nature. Community bonds, ancestral wisdom, peaceful growth. The seasonal engine and communal heartbeat — source of event cards and gateway cards that unlock higher-tier decks.
 
 ```
 🌳  HIGHLANDER
 [Culture]
-Drafted — if you do not have a Crags card in
+On Dawn — if you do not have a Crags card in
 your Domain, discard Highlander.
-Activate from discard — if you have a Crags card
-in your Domain, move Highlander to your Domain.
+On Order (from discard) — if you have a Crags
+card in your Domain, move Highlander to your
+Domain.
 ```
 
-🤖 Don't draft without Crags. Competes with Nomad for Culture slot. Can activate from discard if you later get Crags — costs one turn but recovers a hard-to-replace Culture card. Culture is mostly political — it unlocks Gathering's cultural spread, Eldership's Brawl defense, Chiefdom's Mob movement, and Solstice's On Harvest bonus. Without those synergy cards, Culture is just a tag.
+🤖 Don't draw without Crags. Competes with Nomad for Culture slot. Can Order from discard if you later get Crags — costs one turn but recovers a hard-to-replace Culture card. Culture is mostly political — it unlocks Gathering's cultural spread, Eldership's Brawl defense, Chiefdom's Mob movement, and Solstice's On Harvest bonus. Without those synergy cards, Culture is just a tag.
 
 ```
 🌳  NOMAD
 [Culture]
-Drafted — if you do not have a Pasture card in
+On Dawn — if you do not have a Pasture card in
 your Domain, discard Nomad.
-Activate from discard — if you have a Pasture card
-in your Domain, move Nomad to your Domain.
+On Order (from discard) — if you have a Pasture
+card in your Domain, move Nomad to your Domain.
 ```
 
-🤖 Don't draft without Pasture. Easier to get than Highlander since Pasture is more common. Can activate from discard if you later get Pasture — costs one turn but recovers a hard-to-replace Culture card. Culture is mostly political — see Highlander for details.
+🤖 Don't draw without Pasture. Easier to get than Highlander since Pasture is more common. Can Order from discard if you later get Pasture — costs one turn but recovers a hard-to-replace Culture card. Culture is mostly political — see Highlander for details.
 
 ```
 🌳  ELDERSHIP
 [Allegiance] [Knowledge]
-On Brawl — if the triggering player shares your
+On Brawl — if the active player shares your
 culture, you may cancel the Brawl in your Domain.
-That player draws 1 from Tree.
+The active player draws 1 from Tree.
 ```
 
 > Competes for [Allegiance] slot with Chiefdom.
@@ -362,38 +358,39 @@ That player draws 1 from Tree.
 ```
 🌳  SKY DANCE
 [Spiritual]
-Activate — trigger Rite.
+On Order — Rite in your Domain.
 ```
 
 🤖 Core of any Spiritual build. Zero-cost repeatable Rite every turn.
 
 ```
 🌳  HARVEST
-Drafted — trigger Harvest. Move to discard.
+On Dawn — Harvest in every zone. Discard
+Harvest.
 ```
 
-> Refills the Fields (Wheat zone) when it fires.
+> Refills the Fields (Wheat zone) and fires all On Harvest effects everywhere.
 
-🤖 More valuable when On Harvest cards are in play. Self-discards — no clutter.
+🤖 More valuable when On Harvest cards are in play. Auto-fires at your next Dawn — opponents see it coming. Self-discards.
 
 ```
 🌳  GATHERING
-Drafted — choose one:
-  Trigger Brawl in your Domain.
-  Trigger Rumour in your Domain.
-  Trigger Rite in your Domain.
-All players of your culture also trigger the
+On Dawn — choose one:
+  Brawl in your Domain.
+  Rumour in your Domain.
+  Rite in your Domain.
+All players of your culture also fire the
 same event in their Domain.
-Move to discard.
+Discard Gathering.
 ```
 
-🤖 Most versatile trigger card. Pick the event that benefits your cultural coalition most. Rumour has no On Rumour responders yet — always pick Brawl or Rite instead.
+🤖 Most versatile event card. Pick the event that benefits your cultural coalition most. Rumour has few On Rumour responders — prefer Brawl or Rite.
 
 ```
 🌳  SACRED GROVE
 [Nature] [Spiritual]
-Activate — choose one:
-  Trigger Rite in your Domain.
+On Order — choose one:
+  Rite in your Domain.
   Look at the top 3 cards of the Tree pile. You
   may take any [Spiritual] cards from them to
   your Domain. Put the rest back in any order.
@@ -404,7 +401,7 @@ Activate — choose one:
 ```
 🌳  ORAL TRADITION
 [Knowledge]
-Activate — discard a Coin card from your Domain,
+On Order — discard a Coin card from your Domain,
 then draw 1 from Candle.
 ```
 
@@ -415,7 +412,7 @@ then draw 1 from Candle.
 ```
 🌳  HERBALISM
 [Knowledge]
-Activate — discard a [Knowledge] or [Nature] card
+On Order — discard a [Knowledge] or [Nature] card
 from your Domain. Take any card from your discard
 to your Domain.
 ```
@@ -425,9 +422,9 @@ to your Domain.
 ```
 🌳  WORSHIP OF THE RAIN
 [Spiritual]
-On Rite — the player who triggered the Rite
-discards any card from the Season and replaces
-it with the top card from the Tree pile.
+On Rite — the active player discards any card
+from the Season and replaces it with the top
+card from the Tree pile.
 ```
 
 🤖 Subtle board control — curate the Season during any Rite, not just yours.
@@ -435,8 +432,7 @@ it with the top card from the Tree pile.
 ```
 🌳  WORSHIP OF FERTILITY
 [Nature] [Spiritual]
-On Rite — trigger Harvest in the Domain of the
-player who triggered the Rite.
+On Rite — Harvest in the active player's Domain.
 ```
 
 🤖 Chain piece: Rite → Harvest → On Harvest effects. Build around this.
@@ -444,8 +440,6 @@ player who triggered the Rite.
 ```
 🌳  PASTURE
 [Nature] [Land]
-Passive — no activate ability. Counts toward
-[Nature] requirements and Hunt limits.
 ```
 
 🤖 Foundation card. Enables Nomad, Sowing, and raises Hunt limit. Protect from Famine. On its own Pasture is passive — it doesn't DO anything on your turn. Only prioritise if you're building toward Sowing (needs 2+ Nature), Nomad culture, or racing Tree pile for [Nature] victory.
@@ -453,37 +447,36 @@ Passive — no activate ability. Counts toward
 ```
 🌳  CRAGS
 [Nature] [Land]
-Activate — look at the top 3 cards of the Claw
+On Order — look at the top 3 cards of the Claw
 pile. You may put 1 of them into your discard.
 On Brawl — if you have 2+ Crags, cancel the
-Brawl in your Domain unless the triggering
-player discards a card.
+Brawl in your Domain unless the active player
+discards a card.
 ```
 
-🤖 Foundation card. Enables Highlander and Mine. 2+ Crags gives strong Brawl defense. Activating Crags lets you scout Claw AND remove a dangerous card (Uprising, Tyranny) before someone draws it — or stash a useful card in discard for Herbalism retrieval later. But scouting is slow tempo — only prioritise Crags if you're building toward Highlander culture, Mine, or racing Tree pile for [Nature] victory.
+🤖 Foundation card. Enables Highlander and Mine. 2+ Crags gives strong Brawl defense. Ordering Crags lets you scout Claw AND remove a dangerous card (Uprising, Tyranny) before someone draws it — or stash a useful card in discard for Herbalism retrieval later. But scouting is slow tempo — only prioritise Crags if you're building toward Highlander culture, Mine, or racing Tree pile for [Nature] victory.
 
 ```
 🌳  SOLSTICE
 On Harvest — choose one:
   All players of your culture draw 1 from Tree.
   Place a [Culture] card from your discard into
-  any player's Domain. It stays regardless of
-  prerequisites.
+  any player's Domain.
 ```
 
 🤖 On Harvest culture spreader. Best with cultural allies — draw together or force culture on opponents.
 
 ```
 🌳  REGROWTH
-Drafted — all Pasture cards in the discard
-return to their owners' Domains. Move to discard.
+On Dawn — all Pasture cards in discard return
+to their owners' Domains. Discard Regrowth.
 ```
 
-🤖 Recovers ALL discarded Pastures game-wide. Devastating mid-game when Pastures have been Famined or sacrificed.
+🤖 Recovers ALL discarded Pastures game-wide. Devastating mid-game when Pastures have been Famined or sacrificed. Auto-fires at your next Dawn.
 
 ```
 🌳  FORAGE
-Activate — put the top 3 cards of the Tree pile
+On Order — put the top 3 cards of the Tree pile
 into your discard. You may discard Forage to
 take one of them to your Domain.
 ```
@@ -493,7 +486,7 @@ take one of them to your Domain.
 ```
 🌳  SOWING
 [Knowledge]
-Activate — activate the Wheat zone. Requires
+On Order — Order on the Wheat zone. Requires
 2 or more [Nature] cards in your Domain.
 ```
 
@@ -503,7 +496,7 @@ Activate — activate the Wheat zone. Requires
 
 ```
 🌳  WITHERED CROP
-Activate — activate the Wheat zone. Requires
+On Order — Order on the Wheat zone. Requires
 a Harvest card in your discard.
 ```
 
@@ -514,12 +507,12 @@ a Harvest card in your discard.
 ```
 🌳  REMEMBRANCE
 [Knowledge]
-Activate — return cards from your discard
+On Order — return cards from your discard
 to your Domain equal to your [Knowledge]
 count.
 ```
 
-🤖 Knowledge payoff card — rewards having a stocked discard pile. Early losses from Brawl, Uprising, Culling, and Drafted effects become fuel for a massive comeback. Build Knowledge mid-game, then fire Remembrance late to recover your best cards. Weak if your discard is empty or full of junk. Counter: thin the Remembrance player's discard by stealing from it (Herbalism) before they can reclaim.
+🤖 Knowledge payoff card — rewards having a stocked discard pile. Early losses from Brawl, Uprising, Culling, and On Dawn effects become fuel for a massive comeback. Build Knowledge mid-game, then fire Remembrance late to recover your best cards. Weak if your discard is empty or full of junk. Counter: thin the Remembrance player's discard by stealing from it (Herbalism) before they can reclaim.
 
 ---
 
@@ -530,22 +523,22 @@ count.
 ```
 🌾  PLOUGH
 [Labour]
-Drafted — discard a Pasture card or discard
-Plough.
+On Dawn — if you do not have a Pasture card
+in your Domain, discard Plough.
 On Harvest — choose one:
-  Trigger Feast in your Domain.
-  Activate Wheat.
+  Feast in your Domain.
+  Order on the Wheat zone.
 ```
 
-> Needs Pasture to stay (Drafted requirement).
+> Needs Pasture to stay — loses itself at Dawn without one.
 
 🤖 Core Wheat card. On Harvest flexibility is excellent — choose Feast or Wheat based on board state.
 
 ```
 🌾  GRANARY
 [Labour]
-Activate — discard Granary. Trigger Feast in your
-Domain.
+On Order — Feast in your Domain. Discard
+Granary.
 ```
 
 🤖 One-shot Feast. Time it when you have Feast responders (Tavern, Poach, Share the Spoils).
@@ -553,16 +546,15 @@ Domain.
 ```
 🌾  MILL
 [Labour]
-Activate — move Mill to discard. Draw 1 from the
-Coin deck.
+On Order — draw 1 from Coin. Discard Mill.
 ```
 
 🤖 Quick one-shot Coin access. Use it and move on.
 
 ```
 🌾  FAMINE
-Drafted — choose a player. They discard 1 Wheat
-card from their Domain. Then discard Famine.
+On Dawn — choose a player. They discard 1 Wheat
+card from their Domain. Discard Famine.
 ```
 
 🤖 Target the player with the best Wheat cards. Worthless against empty Wheat Domains.
@@ -570,39 +562,39 @@ card from their Domain. Then discard Famine.
 ```
 🌾  ANIMAL HUSBANDRY
 [Labour]
-Drafted — discard a Pasture card or discard
-Animal Husbandry.
-Activate — choose one:
-  Activate Wheat.
-  Activate Coin.
-  Trigger Feast in your Domain.
+On Dawn — if you do not have a Pasture card
+in your Domain, discard Animal Husbandry.
+On Order — choose one:
+  Order on the Wheat zone.
+  Order on the Coin zone.
+  Feast in your Domain.
 ```
 
-> Needs Pasture to stay (Drafted requirement).
+> Needs Pasture to stay — loses itself at Dawn without one.
 
-🤖 Best Wheat card — three-way flexibility is unmatched. Worth sacrificing Pasture to keep.
+🤖 Best Wheat card — three-way flexibility is unmatched.
 
 ```
 🌾  TAVERN
 [Amenity]
-On Feast— you may discard 1 [Discontent] card
+On Feast — you may discard 1 [Discontent] card
 from your Domain.
 ```
 
-🤖 Free Discontent cleanup on Feast. Keep — passive value that costs nothing.
+🤖 Free Discontent cleanup on Feast. Keep — costs nothing.
 
 ```
 🌾  FEED THE COMMONERS
-Drafted — discard up to 3 [Discontent] cards
-from your Domain.
+On Dawn — discard up to 3 [Discontent] cards
+from your Domain. Discard Feed the Commoners.
 ```
 
-🤖 Great with 2-3 Discontent in Domain. Worthless with none. Self-discards.
+🤖 Great with 2-3 Discontent in Domain. Worthless with none. Auto-fires at your next Dawn.
 
 ```
 🌾  APPRENTICESHIP
 [Labour]
-Activate — activate the Coin zone. Requires
+On Order — Order on the Coin zone. Requires
 another player with a [Craftsmanship] card
 to agree.
 ```
@@ -612,7 +604,7 @@ to agree.
 ```
 🌾  MILITIA
 [Unit]
-Activate — discard 1 [Mob] card from your
+On Order — discard 1 [Mob] card from your
 Domain.
 On Brawl — you may discard Militia to cancel
 the Brawl in your Domain.
@@ -620,16 +612,16 @@ the Brawl in your Domain.
 
 > Can also sacrifice itself to cancel a Brawl targeting you.
 
-🤖 Best defensive card. Activate proactively to clean Mob. Save the On Brawl cancel for big threats.
+🤖 Best defensive card. Order proactively to clean Mob. Save the On Brawl cancel for big threats.
 
 ```
 🌾  WELL
 [Amenity]
-Any player may activate — activate Tree
+On Order (any player) — Order on the Tree
 zone twice.
 ```
 
-🤖 Public utility — anyone can use it, but it sits in YOUR Domain earning [Amenity]. Creates political protection (opponents don't want to destroy the village with the well). Double Tree activation is strong value that attracts allies and deters aggression.
+🤖 Public utility — anyone can Order it, but it sits in YOUR Domain earning [Amenity]. Creates political protection (opponents don't want to destroy the village with the well). Double Tree Order is strong value that attracts allies and deters aggression.
 
 ```
 🌾  MAYPOLE
@@ -652,23 +644,25 @@ pile. You may put it on the bottom.
 
 > Trade, commerce, social mobility. The merchant class and flow of wealth. The Wares evolve into a chaotic bazaar as players trade cards through it.
 
-### Trigger Cards
+### Event Cards
 
 ```
 🪙  RUMOUR
-Drafted — trigger Rumour. Move to discard.
+On Dawn — Rumour in every zone. Discard
+Rumour.
 ```
 
-🤖 Value depends on On Rumour responders in play. No On Rumour cards exist yet — triggering Rumour currently does nothing. Self-discards.
+🤖 Value depends on On Rumour responders in play. Village Gossip is the first responder. Auto-fires at your next Dawn.
 
 ```
 🪙  MINE
 [Labour]
-Drafted — discard a Crags card or discard Mine.
-Activate — draw 1 from Coin.
+On Dawn — if you do not have a Crags card
+in your Domain, discard Mine.
+On Order — draw 1 from Coin.
 ```
 
-> Needs Crags to stay (Drafted requirement).
+> Needs Crags to stay — loses itself at Dawn without one.
 
 🤖 Reliable repeatable Coin income. No diplomacy needed unlike Apprenticeship.
 
@@ -681,9 +675,9 @@ Activate — draw 1 from Coin.
 ```
 🕯️  WORSHIP OF THE FLAME
 [Spiritual]
-On Rite — the player who triggered the Rite
-draws 1 card from any deck for each [Spiritual]
-card that responded to this Rite.
+On Rite — the active player draws 1 card
+from any deck for each [Spiritual] card that
+responded to this Rite.
 ```
 
 🤖 The payoff for going deep on Spiritual. More responders = more draws. Snowball potential.

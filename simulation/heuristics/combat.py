@@ -6,7 +6,7 @@ from heuristics import Heuristic, _register_heuristic, _leader_player
 from strategy import Intent
 
 if TYPE_CHECKING:
-    from state import GameState, Player, Action
+    from state import GameState, Player
     from strategy import DecisionContext
 
 
@@ -18,30 +18,33 @@ class Aggressive(Heuristic):
     """
     name = "aggressive"
 
-    def score_activate(self, state, player, actions, ctx):
-        scores = []
-        for a in actions:
-            if hasattr(a, "card") and a.card and hasattr(a.card, "tags"):
-                if "Mob" in a.card.tags:
-                    scores.append((a, 2.0))
-        return scores
-
-    def score_resolution_choice(self, state, player, options, ctx):
-        if ctx.intent == Intent.PICK_TARGET:
+    def score_resolve(self, state, player, options, ctx):
+        if ctx.intent == Intent.TARGET:
             leader = _leader_player(state, player)
             if leader and leader in options:
                 return [(leader, 3.0)]
-        if ctx.intent == Intent.PICK_OPTION:
-            scores = {}
+            return {}
+
+        if ctx.intent == Intent.OPTION:
+            scores = []
+            # Prefer Mob cards for ordering (turn actions)
+            for a in options:
+                if hasattr(a, "card") and a.card and hasattr(a.card, "tags"):
+                    if "Mob" in a.card.tags:
+                        scores.append((a, 2.0))
+            # Prefer brawl events
             for o in options:
                 if isinstance(o, str):
-                    if o in ("brawl",):
-                        scores[o] = 2.0
-                    elif o in ("rite",):
-                        scores[o] = -0.5
+                    if o == "brawl":
+                        scores.append((o, 2.0))
+                    elif o == "rite":
+                        scores.append((o, -0.5))
+            # Yes/no: aggressive accepts, especially brawls
+            if True in options and False in options:
+                if "brawl" in ctx.source.lower() or ctx.event == "Brawl":
+                    scores.extend([(True, 1.5), (False, -1.5)])
+                else:
+                    scores.extend([(True, 0.5), (False, -0.5)])
             return scores
-        if ctx.intent == Intent.ACCEPT_REJECT:
-            if "brawl" in ctx.source.lower() or "event:Brawl" in ctx.tags:
-                return {True: 1.5, False: -1.5}
-            return {True: 0.5, False: -0.5}
+
         return {}

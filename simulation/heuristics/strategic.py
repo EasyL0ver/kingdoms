@@ -3,11 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from heuristics import Heuristic, _register_heuristic, _card_tag_score
-from heuristics.card_hints import get_card_heuristics, Draw, Activate, Take, Peek, Trigger
+from heuristics.card_hints import get_card_heuristics, Draw, Order, Take, Peek, Trigger
 from strategy import Intent
 
 if TYPE_CHECKING:
-    from state import GameState, Player, Action
+    from state import GameState, Player
     from strategy import DecisionContext
 
 
@@ -58,8 +58,8 @@ def _best_zone(state, player) -> str | None:
 
 def _effect_zone(effect) -> str | None:
     """Extract the zone from an effect, if it has one."""
-    if isinstance(effect, (Draw, Activate, Take, Peek)):
-        zone = effect.zone if isinstance(effect, (Draw, Activate, Peek)) else effect.area
+    if isinstance(effect, (Draw, Order, Take, Peek)):
+        zone = effect.zone if isinstance(effect, (Draw, Order, Peek)) else effect.area
         return zone
     return None
 
@@ -67,10 +67,10 @@ def _effect_zone(effect) -> str | None:
 def _card_all_zones(ch) -> set[str]:
     """Collect all zones a card interacts with across all hooks."""
     all_effects = (
-        ch.on_activate
+        ch.on_order
         + ch.on_event_brawl + ch.on_event_feast + ch.on_event_rite
         + ch.on_event_harvest + ch.on_event_rumour
-        + ch.on_move_from_pile
+        + ch.on_dawn
     )
     zones = set()
     for effect in all_effects:
@@ -122,12 +122,12 @@ class PlayToWin(Heuristic):
     State-aware: evaluates each player's standing on all three scoring axes
     (Trophy/Nature/Amenity) and biases toward the zone where they lead.
 
-    Uses CardHeuristics metadata (on_activate, on_event_*, on_move_from_pile)
+    Uses CardHeuristics metadata (on_order, on_event_*, on_dawn)
     to identify which cards interact with the target zone.
     """
     name = "play_to_win"
 
-    def score_draft(self, state, player, options, ctx):
+    def score_resolve(self, state, player, options, ctx):
         best = _best_zone(state, player)
         if not best:
             return {}
@@ -135,62 +135,22 @@ class PlayToWin(Heuristic):
         tag = _WIN_TAGS[best]
         depletion = _zone_depletion(state, best)
 
-        bonus = 1.5 + 2.0 * depletion
-        scores = _card_tag_score(options, tag, bonus)
-        owned_names = {c.name for c in player.domain}
-        for o in options:
-            if hasattr(o, "name"):
-                zscore = _card_zone_score(o.name, best, state, player)
-                if zscore > 0.0:
-                    multiplier = 2.0 if o.name not in owned_names else 1.0
-                    scores.append((o, zscore * multiplier * (1.0 + depletion)))
-                elif zscore < 0.0:
-                    scores.append((o, zscore * (1.0 + depletion)))
-        return scores
-
-    def score_resolution_choice(self, state, player, options, ctx):
-        best = _best_zone(state, player)
-        if not best:
-            return {}
-
-        tag = _WIN_TAGS[best]
-        depletion = _zone_depletion(state, best)
-        advantage = _zone_advantage(state, player, best)
-
-        if ctx.intent == Intent.PICK_OPTION:
-            scores = {}
-            has_zone_options = any(
-                isinstance(o, str) and o in _WIN_TAGS for o in options
-            )
-
-            if has_zone_options:
-                for o in options:
-                    if not isinstance(o, str):
-                        continue
-                    if o not in _WIN_TAGS:
-                        continue
-                    if o == best:
-                        scores[o] = 2.0 + 2.0 * depletion + 0.5 * max(advantage, 0)
-                    else:
-                        other_adv = _zone_advantage(state, player, o)
-                        if other_adv > 0:
-                            scores[o] = 0.5 + 0.5 * other_adv
-                        else:
-                            scores[o] = -1.0
-            else:
-                for o in options:
-                    if not isinstance(o, str):
-                        continue
-                    if o == "wheat" and best == "wheat":
-                        scores[o] = 2.0 + depletion
-                    elif o == "scry" and best == "tree":
-                        scores[o] = 1.5
-                    elif o == "rite":
-                        scores[o] = 0.5
-
+        if ctx.intent == Intent.GAIN:
+            bonus = 1.5 + 2.0 * depletion
+            scores = _card_tag_score(options, tag, bonus)
+            owned_names = {c.name for c in player.domain}
+            for o in options:
+                if hasattr(o, "name"):
+                    zscore = _card_zone_score(o.name, best, state, player)
+                    if zscore > 0.0:
+                        multiplier = 2.0 if o.name not in owned_names else 1.0
+                        scores.append((o, zscore * multiplier * (1.0 + depletion)))
+                    elif zscore < 0.0:
+                        scores.append((o, zscore * (1.0 + depletion)))
             return scores
 
-        if ctx.intent == Intent.SACRIFICE:
+        if ctx.intent in (Intent.DISCARD, Intent.GIVE_AWAY):
+            # Protect cards aligned with winning zone (negate gain scores)
             penalty = -(1.5 + 2.0 * depletion)
             scores = _card_tag_score(options, tag, penalty)
             for o in options:
@@ -200,23 +160,48 @@ class PlayToWin(Heuristic):
                         scores.append((o, -zscore * (1.0 + depletion)))
             return scores
 
+        if ctx.intent == Intent.OPTION:
+            advantage = _zone_advantage(state, player, best)
+            scores = []
+
+            # Zone selection
+            has_zone_options = any(
+                isinstance(o, str) and o in _WIN_TAGS for o in options
+            )
+            if has_zone_options:
+                for o in options:
+                    if not isinstance(o, str) or o not in _WIN_TAGS:
+                        continue
+                    if o == best:
+                        scores.append((o, 2.0 + 2.0 * depletion + 0.5 * max(advantage, 0)))
+                    else:
+                        other_adv = _zone_advantage(state, player, o)
+                        if other_adv > 0:
+                            scores.append((o, 0.5 + 0.5 * other_adv))
+                        else:
+                            scores.append((o, -1.0))
+            else:
+                for o in options:
+                    if not isinstance(o, str):
+                        continue
+                    if o == "wheat" and best == "wheat":
+                        scores.append((o, 2.0 + depletion))
+                    elif o == "scry" and best == "tree":
+                        scores.append((o, 1.5))
+                    elif o == "rite":
+                        scores.append((o, 0.5))
+
+            # Ordering cards that help the winning zone (turn actions)
+            for a in options:
+                if not hasattr(a, "card") or not a.card:
+                    continue
+                name = getattr(a.card, "name", "")
+                if not name:
+                    continue
+                zscore = _card_zone_score(name, best, state, player)
+                if zscore != 0.0:
+                    scores.append((a, zscore * (1.5 + depletion)))
+
+            return scores
+
         return {}
-
-    def score_activate(self, state, player, actions, ctx):
-        best = _best_zone(state, player)
-        if not best:
-            return []
-
-        depletion = _zone_depletion(state, best)
-
-        scores = []
-        for a in actions:
-            if not hasattr(a, "card") or not a.card:
-                continue
-            name = getattr(a.card, "name", "")
-            if not name:
-                continue
-            zscore = _card_zone_score(name, best, state, player)
-            if zscore != 0.0:
-                scores.append((a, zscore * (1.5 + depletion)))
-        return scores
