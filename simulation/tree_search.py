@@ -287,6 +287,11 @@ class CardSynergy(Evaluator):
                     if discard_size > 0 and (claw_remaining > 0 or tree_remaining > 0):
                         s += discard_size * 0.3
 
+                # ── Wheat cards ── (continued)
+                case "Stewardship":
+                    # Free zone order every Dawn — extremely strong persistent effect
+                    s += 4.0
+
         # Discard synergies — cards that can self-rescue
         for card in player.discard:
             if card.name == "Highlander" and "Crags" in domain_names:
