@@ -390,28 +390,24 @@ class Penance(CardBehavior):
     deck = 'candle'
     def on_dawn(self, ctx):
         s = ctx.state
-        if ctx.player.has_card("Clergy"):
-            s.log(f"  → Penance: {ctx.player.name} has Clergy — triggers Rite")
-            ctx.engine.resolve_event("Rite", ctx.player)
-        else:
-            # Discard 2 cards
-            discardable = [c for c in ctx.player.domain if c is not ctx.card]
-            count = min(2, len(discardable))
-            if count > 0:
-                victims = ctx.engine.strat(ctx.player).resolve_n(
-                    s, ctx.player, discardable,
-                    count, count,
-                    DecisionContext(event="Dawn", source="Penance", intent=Intent.DISCARD))
-                for v in victims:
-                    ctx.player.discard_from_domain(v)
-                names = ", ".join(v.name for v in victims)
-                s.log(f"  → Penance: {ctx.player.name} has no Clergy — discards {names}")
-            # Optionally sacrifice Penance
-            if ctx.card in ctx.player.domain and ctx.engine.strat(ctx.player).resolve(
-                    s, ctx.player, [True, False],
-                    DecisionContext(event="Dawn", source="Penance", intent=Intent.OPTION)):
-                ctx.player.discard_from_domain(ctx.card)
-                s.log(f"  → Penance sacrificed")
+        # Discard 2 cards
+        discardable = [c for c in ctx.player.domain if c is not ctx.card]
+        count = min(2, len(discardable))
+        if count > 0:
+            victims = ctx.engine.strat(ctx.player).resolve_n(
+                s, ctx.player, discardable,
+                count, count,
+                DecisionContext(event="Dawn", source="Penance", intent=Intent.DISCARD))
+            for v in victims:
+                ctx.player.discard_from_domain(v)
+            names = ", ".join(v.name for v in victims)
+            s.log(f"  → Penance: {ctx.player.name} discards {names}")
+        # Optionally sacrifice Penance
+        if ctx.card in ctx.player.domain and ctx.engine.strat(ctx.player).resolve(
+                s, ctx.player, [True, False],
+                DecisionContext(event="Dawn", source="Penance", intent=Intent.OPTION)):
+            ctx.player.discard_from_domain(ctx.card)
+            s.log(f"  → Penance sacrificed")
 
 
 @_register
