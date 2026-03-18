@@ -79,14 +79,7 @@ class Player:
         return False
 
     def add_to_domain(self, card: Card, state: GameState | None = None):
-        """Add card to domain, respecting slot limits (Culture, Allegiance)."""
-        for slot_tag in ("Culture", "Allegiance"):
-            if card.has_tag(slot_tag):
-                existing = [c for c in self.domain if c.has_tag(slot_tag)]
-                for e in existing:
-                    self.discard_from_domain(e)
-                    if state:
-                        state.log(f"  → {self.name} discards {e.name} (replaced by {card.name})")
+        """Add card to domain."""
         self.domain.append(card)
 
     def has_wheat_access(self) -> bool:
