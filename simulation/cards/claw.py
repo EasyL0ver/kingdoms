@@ -445,26 +445,19 @@ class Hunger(CardBehavior):
         return True
 
     def on_feast(self, ctx):
-        """Properly fed — recycle 1 card from any player's discard to top of claw pile."""
+        """Properly fed — recycle 1 card from own discard to top of claw pile."""
         s = ctx.state
-        candidates = []
-        for p in s.players:
-            for card in p.discard:
-                candidates.append((p, card))
+        candidates = list(ctx.player.discard)
         if not candidates:
             return False
-        recyclable_cards = [card for _, card in candidates]
         pick = ctx.engine.strat(ctx.player).resolve(
-            s, ctx.player, recyclable_cards,
+            s, ctx.player, candidates,
             DecisionContext(event="Feast", source="Hunger", intent=Intent.OPTION))
         if pick is None:
             return False
-        for p, card in candidates:
-            if card is pick:
-                p.discard.remove(card)
-                s.return_to_pile("claw", card)
-                s.log(f"  → Hunger: {ctx.player.name} recycles {card.name} from {p.name}'s discard to claw pile")
-                break
+        ctx.player.discard.remove(pick)
+        s.return_to_pile("claw", pick)
+        s.log(f"  → Hunger: {ctx.player.name} recycles {pick.name} from discard to claw pile")
         return True
 
 
