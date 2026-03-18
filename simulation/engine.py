@@ -232,9 +232,11 @@ class GameEngine:
     # ── Generic Event Resolution ──
 
     def resolve_event(self, event: str, active_player: Player,
-                      target: Player | None = None, uprising: bool = False):
+                      target: Player | None = None, uprising: bool = False,
+                      exclude_active: bool = False):
         """Broadcast an event. Each domain's owner chooses resolution order
-        of their responding cards."""
+        of their responding cards.
+        If exclude_active, the active_player's domain cards do not respond."""
         if self._event_depth >= self._max_event_depth:
             self.state.log("  ⚠️ Event chain too deep, stopping")
             return
@@ -267,6 +269,8 @@ class GameEngine:
         # Scan all domains in play order, collect responders, let owner order them
         responder_count = 0
         for p in s.play_order_from(active_player):
+            if exclude_active and p is active_player:
+                continue
             if s.game_over or self._event_cancelled:
                 break
 
