@@ -515,13 +515,21 @@ def _global_spiritual_count(state):
     return sum(1 for p in state.players for c in p.domain if c.has_tag("Spiritual"))
 
 
+def _worship_power(ctx):
+    """Worship scaling: N = global Spiritual count if owner has Clergy, else 1."""
+    n = _global_spiritual_count(ctx.state)
+    if not ctx.player.has_card("Clergy"):
+        return min(1, n)
+    return n
+
+
 @_register
 class WorshipOfTheScripture(CardBehavior):
     name = 'Worship of the Scripture'
     tags = ['Spiritual', 'Religion']
     deck = 'candle'
     def on_rite(self, ctx):
-        n = _global_spiritual_count(ctx.state)
+        n = _worship_power(ctx)
         if n <= 0 or ctx.state.pile_remaining("candle") <= 0:
             return False
         peek_n = min(n, ctx.state.pile_remaining("candle"))
@@ -552,7 +560,7 @@ class WorshipOfTheRelic(CardBehavior):
     tags = ['Spiritual', 'Religion']
     deck = 'candle'
     def on_rite(self, ctx):
-        n = _global_spiritual_count(ctx.state)
+        n = _worship_power(ctx)
         if n <= 0:
             return False
         piles = [d for d in ("claw", "tree", "wheat", "coin", "candle")
@@ -586,7 +594,7 @@ class WorshipOfTheMartyr(CardBehavior):
     tags = ['Spiritual', 'Religion']
     deck = 'candle'
     def on_rite(self, ctx):
-        n = _global_spiritual_count(ctx.state)
+        n = _worship_power(ctx)
         if n <= 0:
             return False
         s = ctx.state
