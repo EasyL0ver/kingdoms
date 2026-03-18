@@ -384,6 +384,28 @@ class Flagellation(CardBehavior):
 
 
 @_register
+class Penance(CardBehavior):
+    name = 'Penance'
+    tags = ['Religion']
+    deck = 'candle'
+    def on_dawn(self, ctx):
+        s = ctx.state
+        if ctx.player.has_card("Clergy"):
+            # The devout are rewarded with a Rite
+            s.log(f"  → Penance: {ctx.player.name} has Clergy — triggers Rite")
+            ctx.engine.resolve_event("Rite", ctx.player)
+        else:
+            # The faithless suffer
+            discardable = [c for c in ctx.player.domain if c is not ctx.card]
+            if discardable:
+                victim = ctx.engine.strat(ctx.player).resolve(
+                    s, ctx.player, discardable,
+                    DecisionContext(event="Dawn", source="Penance", intent=Intent.DISCARD))
+                ctx.player.discard_from_domain(victim)
+                s.log(f"  → Penance: {ctx.player.name} has no Clergy — discards {victim.name}")
+
+
+@_register
 class Zealot(CardBehavior):
     name = 'Zealot'
     tags = ['Spiritual', 'Religion', 'Mob']
