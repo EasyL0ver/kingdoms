@@ -295,10 +295,7 @@ class CardSynergy(Evaluator):
                     if cost_cards > 1 and discard_size > 0:  # >1 because Herbalism itself is Nature
                         s += 1.5
                 case "Forage":
-                    if tree_remaining >= 3:
-                        s += 1.5
-                    elif tree_remaining > 0:
-                        s += 0.5
+                    s += 1.5  # dumps tree+claw to discard, feast, optional sacrifice to recover
                 case "Sacred Grove":
                     # Rite or Scry — always somewhat useful, better with Spiritual
                     s += 1.0 + player.count_tag("Spiritual") * 0.3

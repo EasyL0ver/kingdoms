@@ -175,30 +175,23 @@ class Forage(CardBehavior):
     tags = []
     deck = 'tree'
     def on_order(self, ctx):
-        if ctx.location != "domain" or ctx.state.pile_remaining("tree") <= 0:
+        if ctx.location != "domain":
             return
-        top3 = []
-        for _ in range(3):
+        dumped = []
+        for _ in range(2):
             c = ctx.state.draw_from_pile("tree")
             if c:
-                top3.append(c)
-        if not top3:
-            return
-        ctx.state.log(f"  → reveals: {', '.join(c.name for c in top3)}")
-        for c in top3:
-            ctx.player.discard.append(c)
-        if ctx.engine.strat(ctx.player).resolve(
-                ctx.state, ctx.player, [True, False],
-                DecisionContext(event="Order", source="Forage", intent=Intent.OPTION)):
-            pick = ctx.engine.strat(ctx.player).resolve(
-                ctx.state, ctx.player, top3,
-                DecisionContext(event="Order", source="Forage", intent=Intent.GAIN))
-            ctx.player.discard.remove(pick)
-            ctx.player.add_to_domain(pick, ctx.state)
-            ctx.player.discard_from_domain(ctx.card)
-            ctx.state.log(f"  → takes {pick.name}, discards Forage")
-        else:
-            ctx.state.log(f"  → keeps Forage, all to discard")
+                ctx.player.discard.append(c)
+                dumped.append(c)
+        for _ in range(2):
+            c = ctx.state.draw_from_pile("claw")
+            if c:
+                ctx.player.discard.append(c)
+                dumped.append(c)
+        if dumped:
+            ctx.state.log(f"  → Forage dumps {', '.join(c.name for c in dumped)} to discard")
+        ctx.engine.resolve_event("Feast", ctx.player, ctx.player)
+        ctx.state.log(f"  → Forage triggers Feast")
 
 
 @_register
