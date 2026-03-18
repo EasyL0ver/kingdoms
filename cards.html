@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Kingdoms — Printable Cards</title>
+  <style>
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #eee;
+}
+
+.page {
+  width: 210mm;
+  height: 297mm;
+  background: white;
+  display: grid;
+  grid-template-columns: repeat(3, 60mm);
+  grid-template-rows: repeat(3, 85mm);
+  justify-content: center;
+  align-content: center;
+  page-break-after: always;
+  break-after: page;
+}
+
+@media print {
+  body { background: white; }
+  .page { box-shadow: none; }
+}
+
+@media screen {
+  .page {
+    margin: 10mm auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+}
+
+/* ── Card (laser-printer friendly: outlines only) ─────────── */
+
+.card {
+  width: 60mm;
+  height: 85mm;
+  border: 0.4mm solid #000;
+  border-radius: 2.5mm;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: white;
+}
+
+.card-header {
+  padding: 2.5mm 3mm 2mm;
+  color: #000;
+  font-weight: 800;
+  font-size: 12pt;
+  text-transform: uppercase;
+  letter-spacing: 0.3pt;
+  display: flex;
+  align-items: center;
+  gap: 1.5mm;
+  min-height: 9mm;
+  border-bottom: 0.5mm solid #000;
+}
+
+.card-header .icon {
+  font-size: 12pt;
+  flex-shrink: 0;
+}
+
+.card-tags {
+  padding: 1.5mm 3mm 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.3pt;
+  border-bottom: 0.3mm solid #999;
+  min-height: 5mm;
+  display: flex;
+  align-items: center;
+  gap: 1.5mm;
+  flex-wrap: wrap;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.3mm 1.5mm;
+  border: 0.3mm solid #000;
+  border-radius: 1mm;
+  font-size: 7.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2pt;
+  color: #000;
+}
+
+.card-body {
+  padding: 2.5mm 3mm 2mm;
+  flex: 1;
+  font-size: 11pt;
+  line-height: 1.25;
+  color: #000;
+  white-space: pre-wrap;
+}
+
+.card-body b {
+  font-weight: 800;
+}
+
+.card-body.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-style: italic;
+  font-size: 11pt;
+}
+
+.card-footer {
+  padding: 0.5mm 3mm 1.5mm;
+  font-size: 7pt;
+  text-align: right;
+  text-transform: uppercase;
+  letter-spacing: 0.3pt;
+  font-weight: 700;
+  color: #000;
+  border-top: 0.3mm solid #999;
+}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="card deck-zone">  <div class="card-header"><span class="icon">🏰</span> Presence</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — choose one:
+• <b>Order</b> on the Claw zone or Tree zone.
+• <b>Order</b> a card in your <b>Domain</b>.
+• <b>Order</b> a card from your discard.</div>  <div class="card-footer">🏰 Zone</div></div>
+<div class="card deck-zone">  <div class="card-header"><span class="icon">🏰</span> Presence</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — choose one:
+• <b>Order</b> on the Claw zone or Tree zone.
+• <b>Order</b> a card in your <b>Domain</b>.
+• <b>Order</b> a card from your discard.</div>  <div class="card-footer">🏰 Zone</div></div>
+<div class="card deck-zone">  <div class="card-header"><span class="icon">🏰</span> Presence</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — choose one:
+• <b>Order</b> on the Claw zone or Tree zone.
+• <b>Order</b> a card in your <b>Domain</b>.
+• <b>Order</b> a card from your discard.</div>  <div class="card-footer">🏰 Zone</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Claw Zone</div>  <div class="card-tags"><span class="tag">Zone</span></div>  <div class="card-body"><b>On Order</b> — draw 2 cards from the Claw pile.</div>  <div class="card-footer">🐾 Claw Zone</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Tree Zone</div>  <div class="card-tags"><span class="tag">Zone</span></div>  <div class="card-body">4 cards face-up — the <b>Season</b>.
+<b>On Order</b> — take 1 card from the <b>Season</b>.
+Refill the <b>Season</b> to 4.</div>  <div class="card-footer">🌳 Tree Zone</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Wheat Zone</div>  <div class="card-tags"><span class="tag">Zone</span></div>  <div class="card-body">Face-up cards — the <b>Fields</b>.
+<b>On Order</b> — take 1–3 cards from the <b>Fields</b>.
+For each card taken, draw 1 from Claw.</div>  <div class="card-footer">🌾 Wheat Zone</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Coin Zone</div>  <div class="card-tags"><span class="tag">Zone</span></div>  <div class="card-body">3 face-up cards — the <b>Opportunities</b>.
+Discarded cards go to the <b>Wares</b>.
+<b>On Order</b> — choose one:
+• Buy — take 1 card from the <b>Wares</b>.
+• Trade — give 1 <b>Domain</b> card to <b>Wares</b>,
+  take 1 Opportunity. <b>Rumour</b>.</div>  <div class="card-footer">🪙 Coin Zone</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Candle Zone</div>  <div class="card-tags"><span class="tag">Zone</span></div>  <div class="card-body">1 face-up card — the <b>Revelation</b>.
+<b>On Order</b> — claim the <b>Revelation</b>.
+Reveal the next card.</div>  <div class="card-footer">🕯️ Candle Zone</div></div>
+<div class="card deck-sword">  <div class="card-header"><span class="icon">⚔️</span> Sword Zone</div>  <div class="card-tags"><span class="tag">Zone</span></div>  <div class="card-body">2 face-up cards — the <b>Tourney</b>.
+<b>On Order</b> — Injustice (2+ [Mob] in any
+<b>Domain</b>): tyrant takes [Unit], you take rest.
+Peace (Joust): challenge an opponent.
+Accept = both pick 1. Refuse = <b>Brawl</b> in
+both Domains. Refill <b>Tourney</b> to 2.</div>  <div class="card-footer">⚔️ Sword Zone</div></div>
+</div>
+<div class="page">
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Warband</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Order</b> — you may move 1 [Mob] to the
+<b>Domain</b> with the most cards. <b>Brawl</b> there.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Warband</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Order</b> — you may move 1 [Mob] to the
+<b>Domain</b> with the most cards. <b>Brawl</b> there.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Raid</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Mob</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Brawl</b> — give 1 card from your <b>Domain</b>
+to the active player.
+If Uprising, discard 1 instead.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Raid</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Mob</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Brawl</b> — give 1 card from your <b>Domain</b>
+to the active player.
+If Uprising, discard 1 instead.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Raid</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Mob</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Brawl</b> — give 1 card from your <b>Domain</b>
+to the active player.
+If Uprising, discard 1 instead.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Raid</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Mob</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Brawl</b> — give 1 card from your <b>Domain</b>
+to the active player.
+If Uprising, discard 1 instead.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Scavenge</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Mob</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Brawl</b> — the active player takes 1 card
+from your discard.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Scavenge</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Mob</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Brawl</b> — the active player takes 1 card
+from your discard.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Scavenge</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Mob</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Brawl</b> — the active player takes 1 card
+from your discard.</div>  <div class="card-footer">🐾 Claw</div></div>
+</div>
+<div class="page">
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Blood Offering</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — discard 1 card from your <b>Domain</b>.
+<b>Rite</b> in your <b>Domain</b>.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Poach</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Mob</span><span class="tag">Hunt</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Order</b> — <b>Feast</b> in your <b>Domain</b>. Draw 1
+from Claw.
+<b>Hunt</b> — blocked if another player has [<b>Hunt</b>].</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Poach</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Mob</span><span class="tag">Hunt</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Order</b> — <b>Feast</b> in your <b>Domain</b>. Draw 1
+from Claw.
+<b>Hunt</b> — blocked if another player has [<b>Hunt</b>].</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Poach</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Mob</span><span class="tag">Hunt</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Order</b> — <b>Feast</b> in your <b>Domain</b>. Draw 1
+from Claw.
+<b>Hunt</b> — blocked if another player has [<b>Hunt</b>].</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Poach</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Mob</span><span class="tag">Hunt</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Order</b> — <b>Feast</b> in your <b>Domain</b>. Draw 1
+from Claw.
+<b>Hunt</b> — blocked if another player has [<b>Hunt</b>].</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Worship of the Hunt</div>  <div class="card-tags"><span class="tag">Spiritual</span></div>  <div class="card-body"><b>On Rite</b> — dump 5 Claw cards to the active
+player's discard.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Worship of War</div>  <div class="card-tags"><span class="tag">Spiritual</span></div>  <div class="card-body"><b>On Rite</b> — the active player Brawls in a
+<b>Domain</b> of their choice.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Incite</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — move up to 3 [Mob] cards from
+your <b>Domain</b> to other Domains.
+<b>Discard</b> Incite.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Incite</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — move up to 3 [Mob] cards from
+your <b>Domain</b> to other Domains.
+<b>Discard</b> Incite.</div>  <div class="card-footer">🐾 Claw</div></div>
+</div>
+<div class="page">
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Chiefdom</div>  <div class="card-tags"><span class="tag">Trophy</span></div>  <div class="card-body"><b>On Dawn</b> — move up to 2 [Mob] cards from
+your <b>Domain</b> or a culture ally's to any
+other <b>Domain</b>.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Chiefdom</div>  <div class="card-tags"><span class="tag">Trophy</span></div>  <div class="card-body"><b>On Dawn</b> — move up to 2 [Mob] cards from
+your <b>Domain</b> or a culture ally's to any
+other <b>Domain</b>.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Kinship</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Harvest</b> — <b>Order</b> on the Tree zone.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Kinship</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Harvest</b> — <b>Order</b> on the Tree zone.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Kinship</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Harvest</b> — <b>Order</b> on the Tree zone.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Racketeering</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Order</b> — choose a player. They offer you
+1 card. Take it, or refuse and <b>Brawl</b> in
+their <b>Domain</b>.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Racketeering</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Order</b> — choose a player. They offer you
+1 card. Take it, or refuse and <b>Brawl</b> in
+their <b>Domain</b>.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Tyranny</div>  <div class="card-tags"><span class="tag">Trophy</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Order</b> — draw from Claw equal to your
+[Discontent] count. <b>Brawl</b> in your <b>Domain</b>
+(spoils are discarded, not taken).</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Tyranny</div>  <div class="card-tags"><span class="tag">Trophy</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Order</b> — draw from Claw equal to your
+[Discontent] count. <b>Brawl</b> in your <b>Domain</b>
+(spoils are discarded, not taken).</div>  <div class="card-footer">🐾 Claw</div></div>
+</div>
+<div class="page">
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Marauders</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Mob</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Feast</b> — discard Marauders.
+Draw 1 from Claw.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Marauders</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Mob</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Feast</b> — discard Marauders.
+Draw 1 from Claw.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Share the Spoils</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Feast</b> — draw 1 from Claw.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Share the Spoils</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Feast</b> — draw 1 from Claw.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Martial Excellence</div>  <div class="card-tags"><span class="tag">Trophy</span><span class="tag">Chivalry</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> on the Sword zone.
+<b>Requires</b> another [Trophy] in your <b>Domain</b>.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Outriders</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — draw 3 from Claw.
+<b>Discard</b> 1 of your choice.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Outriders</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — draw 3 from Claw.
+<b>Discard</b> 1 of your choice.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Land Grab</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Order</b> — take all [Land] cards from the
+<b>Season</b> to your <b>Domain</b>. <b>Discard</b> Land Grab.
+<b>Requires</b> [Land] in the <b>Season</b>.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Land Grab</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Order</b> — take all [Land] cards from the
+<b>Season</b> to your <b>Domain</b>. <b>Discard</b> Land Grab.
+<b>Requires</b> [Land] in the <b>Season</b>.</div>  <div class="card-footer">🐾 Claw</div></div>
+</div>
+<div class="page">
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Land Grab</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Order</b> — take all [Land] cards from the
+<b>Season</b> to your <b>Domain</b>. <b>Discard</b> Land Grab.
+<b>Requires</b> [Land] in the <b>Season</b>.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Rite of Passage</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Brawl</b> — draw 1 from Tree.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Rite of Passage</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Brawl</b> — draw 1 from Tree.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Culling</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Dawn</b> — the player with the most cards
+discards 1–2 cards of their choice.
+<b>Discard</b> Culling.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Culling</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Dawn</b> — the player with the most cards
+discards 1–2 cards of their choice.
+<b>Discard</b> Culling.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Ivory</div>  <div class="card-tags"><span class="tag">Trophy</span><span class="tag">Wealth</span></div>  <div class="card-body"><b>On Order</b> — discard Ivory.
+<b>Order</b> on the Coin zone.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Ivory</div>  <div class="card-tags"><span class="tag">Trophy</span><span class="tag">Wealth</span></div>  <div class="card-body"><b>On Order</b> — discard Ivory.
+<b>Order</b> on the Coin zone.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Hunger</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Harvest</b> — dump 1 Claw card to your
+discard.
+<b>On Feast</b> — return 1 card from your discard
+to top of the Claw pile.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Hunger</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Harvest</b> — dump 1 Claw card to your
+discard.
+<b>On Feast</b> — return 1 card from your discard
+to top of the Claw pile.</div>  <div class="card-footer">🐾 Claw</div></div>
+</div>
+<div class="page">
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Hunger</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Harvest</b> — dump 1 Claw card to your
+discard.
+<b>On Feast</b> — return 1 card from your discard
+to top of the Claw pile.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Hunger</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Harvest</b> — dump 1 Claw card to your
+discard.
+<b>On Feast</b> — return 1 card from your discard
+to top of the Claw pile.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Hunger</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Harvest</b> — dump 1 Claw card to your
+discard.
+<b>On Feast</b> — return 1 card from your discard
+to top of the Claw pile.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Uprising</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Dawn</b> — <b>Brawl</b> in your <b>Domain</b>. No player
+benefits from the <b>Brawl</b>.
+<b>Discard</b> Uprising.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Uprising</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Dawn</b> — <b>Brawl</b> in your <b>Domain</b>. No player
+benefits from the <b>Brawl</b>.
+<b>Discard</b> Uprising.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Uprising</div>  <div class="card-tags"><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Dawn</b> — <b>Brawl</b> in your <b>Domain</b>. No player
+benefits from the <b>Brawl</b>.
+<b>Discard</b> Uprising.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Ransack</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — discard 1 card from your <b>Domain</b>.
+Draw 2 from Claw. Take 1 from the <b>Season</b>.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Ransack</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — discard 1 card from your <b>Domain</b>.
+Draw 2 from Claw. Take 1 from the <b>Season</b>.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Spoils of War</div>  <div class="card-tags"><span class="tag">Trophy</span><span class="tag">Mob</span></div>  <div class="card-body"><b>On Dawn</b> — place Spoils of War in another
+player's <b>Domain</b>.
+<b>On Brawl</b> — moves to the active player. They
+draw from Claw and Tree equal to their
+[Trophy] count.</div>  <div class="card-footer">🐾 Claw</div></div>
+</div>
+<div class="page">
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Spoils of War</div>  <div class="card-tags"><span class="tag">Trophy</span><span class="tag">Mob</span></div>  <div class="card-body"><b>On Dawn</b> — place Spoils of War in another
+player's <b>Domain</b>.
+<b>On Brawl</b> — moves to the active player. They
+draw from Claw and Tree equal to their
+[Trophy] count.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Dusk Rite</div>  <div class="card-tags"><span class="tag">Spiritual</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Order</b> — exile any number of cards from
+your discard. <b>Rite</b> in your <b>Domain</b>.
+<b>Discard</b> Dusk <b>Rite</b>.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Blood Feud</div>  <div class="card-tags"><span class="tag">Mob</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Brawl</b> — draw 2 from Claw. Move up to
+2 [Mob] to the active player. <b>Discard</b>
+Blood Feud, then <b>Brawl</b> the attacker back.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Blood Feud</div>  <div class="card-tags"><span class="tag">Mob</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Brawl</b> — draw 2 from Claw. Move up to
+2 [Mob] to the active player. <b>Discard</b>
+Blood Feud, then <b>Brawl</b> the attacker back.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Enforcers</div>  <div class="card-tags"><span class="tag">Mob</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Brawl</b> — both you and the active player
+draw 2 from Claw.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-claw">  <div class="card-header"><span class="icon">🐾</span> Enforcers</div>  <div class="card-tags"><span class="tag">Mob</span><span class="tag">Discontent</span></div>  <div class="card-body"><b>On Brawl</b> — both you and the active player
+draw 2 from Claw.</div>  <div class="card-footer">🐾 Claw</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Kinship</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Harvest</b> — <b>Order</b> on the Tree zone.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Kinship</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Harvest</b> — <b>Order</b> on the Tree zone.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Kinship</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Harvest</b> — <b>Order</b> on the Tree zone.</div>  <div class="card-footer">🌳 Tree</div></div>
+</div>
+<div class="page">
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Kinship</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Harvest</b> — <b>Order</b> on the Tree zone.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Kinship</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Harvest</b> — <b>Order</b> on the Tree zone.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Eldership</div>  <div class="card-tags"><span class="tag">Knowledge</span></div>  <div class="card-body"><b>On Brawl</b> — if the active player shares your
+culture, you may cancel the <b>Brawl</b>.
+They draw 1 from Tree.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Sky Dance</div>  <div class="card-tags"><span class="tag">Spiritual</span></div>  <div class="card-body"><b>On Order</b> — <b>Rite</b> in your <b>Domain</b>.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Harvest</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — <b>Harvest</b> in every zone.
+<b>Discard</b> <b>Harvest</b>.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Harvest</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — <b>Harvest</b> in every zone.
+<b>Discard</b> <b>Harvest</b>.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Harvest</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — <b>Harvest</b> in every zone.
+<b>Discard</b> <b>Harvest</b>.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Harvest</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — <b>Harvest</b> in every zone.
+<b>Discard</b> <b>Harvest</b>.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Gathering</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — choose <b>Brawl</b> or <b>Rite</b>. Fires in
+your <b>Domain</b> and all culture allies' Domains.
+<b>Discard</b> Gathering.</div>  <div class="card-footer">🌳 Tree</div></div>
+</div>
+<div class="page">
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Gathering</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — choose <b>Brawl</b> or <b>Rite</b>. Fires in
+your <b>Domain</b> and all culture allies' Domains.
+<b>Discard</b> Gathering.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Sacred Grove</div>  <div class="card-tags"><span class="tag">Nature</span><span class="tag">Spiritual</span></div>  <div class="card-body"><b>On Order</b> — choose one:
+• <b>Rite</b> in your <b>Domain</b>.
+• Look at the top 3 Tree cards. Take any
+  [Spiritual] cards. Return the rest.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Herbalism</div>  <div class="card-tags"><span class="tag">Knowledge</span></div>  <div class="card-body"><b>On Order</b> — discard a [Knowledge] or [Nature]
+card. Take 1 card from your discard to
+your <b>Domain</b>.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Worship of the Rain</div>  <div class="card-tags"><span class="tag">Spiritual</span></div>  <div class="card-body"><b>On Rite</b> — swap 1 <b>Season</b> card with the top
+card of the Candle pile.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Worship of Fertility</div>  <div class="card-tags"><span class="tag">Nature</span><span class="tag">Spiritual</span></div>  <div class="card-body"><b>On Rite</b> — <b>Harvest</b> in the active player's
+<b>Domain</b>.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Forage</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — dump top 2 Tree and top 2 Claw
+cards to your discard.
+<b>Feast</b> in your <b>Domain</b>.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Forage</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — dump top 2 Tree and top 2 Claw
+cards to your discard.
+<b>Feast</b> in your <b>Domain</b>.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Sowing</div>  <div class="card-tags"><span class="tag">Knowledge</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> on the Wheat zone.
+<b>On Harvest</b> — refill 1 Field.
+<b>Requires</b> 2+ [Nature] in your <b>Domain</b>.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Sowing</div>  <div class="card-tags"><span class="tag">Knowledge</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> on the Wheat zone.
+<b>On Harvest</b> — refill 1 Field.
+<b>Requires</b> 2+ [Nature] in your <b>Domain</b>.</div>  <div class="card-footer">🌳 Tree</div></div>
+</div>
+<div class="page">
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Sowing</div>  <div class="card-tags"><span class="tag">Knowledge</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> on the Wheat zone.
+<b>On Harvest</b> — refill 1 Field.
+<b>Requires</b> 2+ [Nature] in your <b>Domain</b>.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Withered Crop</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — exile cards from your discard.
+Refill <b>Fields</b> by that count from the Wheat
+pile. <b>Order</b> on the Wheat zone.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Withered Crop</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — exile cards from your discard.
+Refill <b>Fields</b> by that count from the Wheat
+pile. <b>Order</b> on the Wheat zone.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Withered Crop</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — exile cards from your discard.
+Refill <b>Fields</b> by that count from the Wheat
+pile. <b>Order</b> on the Wheat zone.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Remembrance</div>  <div class="card-tags"><span class="tag">Knowledge</span></div>  <div class="card-body"><b>On Order</b> — return cards from your discard
+to your <b>Domain</b> equal to your [Knowledge]
+count.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Remembrance</div>  <div class="card-tags"><span class="tag">Knowledge</span></div>  <div class="card-body"><b>On Order</b> — return cards from your discard
+to your <b>Domain</b> equal to your [Knowledge]
+count.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Pilgrimage</div>  <div class="card-tags"><span class="tag">Spiritual</span></div>  <div class="card-body"><b>On Order</b> — claim the <b>Revelation</b>. Reveal
+the next card.
+<b>On Rite</b> — same effect.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Pilgrimage</div>  <div class="card-tags"><span class="tag">Spiritual</span></div>  <div class="card-body"><b>On Order</b> — claim the <b>Revelation</b>. Reveal
+the next card.
+<b>On Rite</b> — same effect.</div>  <div class="card-footer">🌳 Tree</div></div>
+<div class="card deck-tree">  <div class="card-header"><span class="icon">🌳</span> Pilgrimage</div>  <div class="card-tags"><span class="tag">Spiritual</span></div>  <div class="card-body"><b>On Order</b> — claim the <b>Revelation</b>. Reveal
+the next card.
+<b>On Rite</b> — same effect.</div>  <div class="card-footer">🌳 Tree</div></div>
+</div>
+<div class="page">
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Plough</div>  <div class="card-tags"><span class="tag">Labour</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> on the Wheat zone. Return
+1 [Discontent] to the Claw pile.
+<b>On Harvest</b> — choose: <b>Feast</b> in your <b>Domain</b>,
+or <b>Order</b> on the Wheat zone.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Plough</div>  <div class="card-tags"><span class="tag">Labour</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> on the Wheat zone. Return
+1 [Discontent] to the Claw pile.
+<b>On Harvest</b> — choose: <b>Feast</b> in your <b>Domain</b>,
+or <b>Order</b> on the Wheat zone.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Plough</div>  <div class="card-tags"><span class="tag">Labour</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> on the Wheat zone. Return
+1 [Discontent] to the Claw pile.
+<b>On Harvest</b> — choose: <b>Feast</b> in your <b>Domain</b>,
+or <b>Order</b> on the Wheat zone.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Granary</div>  <div class="card-tags"><span class="tag">Labour</span></div>  <div class="card-body"><b>On Order</b> — <b>Feast</b> in your <b>Domain</b>.
+<b>Discard</b> Granary.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Granary</div>  <div class="card-tags"><span class="tag">Labour</span></div>  <div class="card-body"><b>On Order</b> — <b>Feast</b> in your <b>Domain</b>.
+<b>Discard</b> Granary.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Mill</div>  <div class="card-tags"><span class="tag">Labour</span></div>  <div class="card-body"><b>On Order</b> — draw 1 from Coin.
+<b>Discard</b> Mill.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Mill</div>  <div class="card-tags"><span class="tag">Labour</span></div>  <div class="card-body"><b>On Order</b> — draw 1 from Coin.
+<b>Discard</b> Mill.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Famine</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — choose a player. They discard
+1 Wheat card from their <b>Domain</b>.
+<b>Discard</b> Famine.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Famine</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — choose a player. They discard
+1 Wheat card from their <b>Domain</b>.
+<b>Discard</b> Famine.</div>  <div class="card-footer">🌾 Wheat</div></div>
+</div>
+<div class="page">
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Animal Husbandry</div>  <div class="card-tags"><span class="tag">Labour</span></div>  <div class="card-body"><b>On Order</b> — choose one:
+• <b>Order</b> on the Wheat zone.
+• <b>Order</b> on the Coin zone.
+• <b>Feast</b> in your <b>Domain</b>.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Animal Husbandry</div>  <div class="card-tags"><span class="tag">Labour</span></div>  <div class="card-body"><b>On Order</b> — choose one:
+• <b>Order</b> on the Wheat zone.
+• <b>Order</b> on the Coin zone.
+• <b>Feast</b> in your <b>Domain</b>.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Tavern</div>  <div class="card-tags"><span class="tag">Amenity</span></div>  <div class="card-body"><b>On Feast</b> — return 1 [Discontent] card from
+your <b>Domain</b> to the Claw pile.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Tavern</div>  <div class="card-tags"><span class="tag">Amenity</span></div>  <div class="card-body"><b>On Feast</b> — return 1 [Discontent] card from
+your <b>Domain</b> to the Claw pile.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Feed the Commoners</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — return up to 3 [Discontent] cards
+from your <b>Domain</b> to the Claw pile.
+<b>Discard</b> Feed the Commoners.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Apprenticeship</div>  <div class="card-tags"><span class="tag">Labour</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> on the Coin zone.
+<b>Requires</b> an opponent with [Craftsmanship].</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Militia</div>  <div class="card-tags"><span class="tag">Unit</span></div>  <div class="card-body"><b>On Order</b> — discard 1 [Mob] from your <b>Domain</b>.
+<b>On Brawl</b> — discard Militia to cancel
+the <b>Brawl</b> in your <b>Domain</b>.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Militia</div>  <div class="card-tags"><span class="tag">Unit</span></div>  <div class="card-body"><b>On Order</b> — discard 1 [Mob] from your <b>Domain</b>.
+<b>On Brawl</b> — discard Militia to cancel
+the <b>Brawl</b> in your <b>Domain</b>.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Well</div>  <div class="card-tags"><span class="tag">Amenity</span></div>  <div class="card-body"><b>On Order</b> (any player) — the orderer and the
+owner each <b>Order</b> on the Tree zone.
+Refill 1 <b>Season</b> card and 1 Field.</div>  <div class="card-footer">🌾 Wheat</div></div>
+</div>
+<div class="page">
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Well</div>  <div class="card-tags"><span class="tag">Amenity</span></div>  <div class="card-body"><b>On Order</b> (any player) — the orderer and the
+owner each <b>Order</b> on the Tree zone.
+Refill 1 <b>Season</b> card and 1 Field.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Maypole</div>  <div class="card-tags"><span class="tag">Amenity</span></div>  <div class="card-body">No effect — pure [Amenity] tag.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Maypole</div>  <div class="card-tags"><span class="tag">Amenity</span></div>  <div class="card-body">No effect — pure [Amenity] tag.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Village Gossip</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Rumour</b> — look at the top card of any
+pile. You may put it on the bottom.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Village Gossip</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Rumour</b> — look at the top card of any
+pile. You may put it on the bottom.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Orchard</div>  <div class="card-tags"><span class="tag">Nature</span><span class="tag">Land</span></div>  <div class="card-body"><b>On Order</b> — take 1 card from the <b>Fields</b>
+(no Claw tax).</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Orchard</div>  <div class="card-tags"><span class="tag">Nature</span><span class="tag">Land</span></div>  <div class="card-body"><b>On Order</b> — take 1 card from the <b>Fields</b>
+(no Claw tax).</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Orchard</div>  <div class="card-tags"><span class="tag">Nature</span><span class="tag">Land</span></div>  <div class="card-body"><b>On Order</b> — take 1 card from the <b>Fields</b>
+(no Claw tax).</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Stewardship</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — choose one:
+• <b>Order</b> on the Wheat zone (if <b>Fields</b> exist).
+• <b>Order</b> on the Tree zone (if <b>Season</b> exists).</div>  <div class="card-footer">🌾 Wheat</div></div>
+</div>
+<div class="page">
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Stewardship</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Dawn</b> — choose one:
+• <b>Order</b> on the Wheat zone (if <b>Fields</b> exist).
+• <b>Order</b> on the Tree zone (if <b>Season</b> exists).</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Irrigation</div>  <div class="card-tags"><span class="tag">Labour</span></div>  <div class="card-body"><b>On Dawn</b> — refill 1 Field from the Wheat
+pile.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Irrigation</div>  <div class="card-tags"><span class="tag">Labour</span></div>  <div class="card-body"><b>On Dawn</b> — refill 1 Field from the Wheat
+pile.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-wheat">  <div class="card-header"><span class="icon">🌾</span> Worship of the Bread</div>  <div class="card-tags"><span class="tag">Spiritual</span></div>  <div class="card-body"><b>On Feast</b> — refill 1 Field.
+<b>On Rite</b> — refill 1 Field.</div>  <div class="card-footer">🌾 Wheat</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Treasure</div>  <div class="card-tags"><span class="tag">Trophy</span><span class="tag">Amenity</span><span class="tag">Wealth</span></div>  <div class="card-body">No effect — pure tags.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Treasure</div>  <div class="card-tags"><span class="tag">Trophy</span><span class="tag">Amenity</span><span class="tag">Wealth</span></div>  <div class="card-body">No effect — pure tags.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Treasure</div>  <div class="card-tags"><span class="tag">Trophy</span><span class="tag">Amenity</span><span class="tag">Wealth</span></div>  <div class="card-body">No effect — pure tags.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Treasure</div>  <div class="card-tags"><span class="tag">Trophy</span><span class="tag">Amenity</span><span class="tag">Wealth</span></div>  <div class="card-body">No effect — pure tags.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Treasure</div>  <div class="card-tags"><span class="tag">Trophy</span><span class="tag">Amenity</span><span class="tag">Wealth</span></div>  <div class="card-body">No effect — pure tags.</div>  <div class="card-footer">🪙 Coin</div></div>
+</div>
+<div class="page">
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Treasure</div>  <div class="card-tags"><span class="tag">Trophy</span><span class="tag">Amenity</span><span class="tag">Wealth</span></div>  <div class="card-body">No effect — pure tags.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Market</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> on the Coin zone.
+<b>On Rumour</b> — swap 1 <b>Domain</b> card with
+1 <b>Wares</b> card.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Market</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> on the Coin zone.
+<b>On Rumour</b> — swap 1 <b>Domain</b> card with
+1 <b>Wares</b> card.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Market</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> on the Coin zone.
+<b>On Rumour</b> — swap 1 <b>Domain</b> card with
+1 <b>Wares</b> card.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Smuggler</div>  <div class="card-tags"><span class="tag">Mob</span></div>  <div class="card-body"><b>On Brawl</b> — move 1 <b>Domain</b> card to <b>Wares</b>.
+<b>On Rumour</b> — move Smuggler to the active
+player's <b>Domain</b>.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Smuggler</div>  <div class="card-tags"><span class="tag">Mob</span></div>  <div class="card-body"><b>On Brawl</b> — move 1 <b>Domain</b> card to <b>Wares</b>.
+<b>On Rumour</b> — move Smuggler to the active
+player's <b>Domain</b>.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Smuggler</div>  <div class="card-tags"><span class="tag">Mob</span></div>  <div class="card-body"><b>On Brawl</b> — move 1 <b>Domain</b> card to <b>Wares</b>.
+<b>On Rumour</b> — move Smuggler to the active
+player's <b>Domain</b>.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Sellsword</div>  <div class="card-tags"><span class="tag">Unit</span></div>  <div class="card-body"><b>On Brawl</b> — discard Sellsword to the <b>Wares</b>
+to cancel the <b>Brawl</b> in your <b>Domain</b>.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Sellsword</div>  <div class="card-tags"><span class="tag">Unit</span></div>  <div class="card-body"><b>On Brawl</b> — discard Sellsword to the <b>Wares</b>
+to cancel the <b>Brawl</b> in your <b>Domain</b>.</div>  <div class="card-footer">🪙 Coin</div></div>
+</div>
+<div class="page">
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Swindle</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — give all <b>Wares</b> to a chosen
+opponent. <b>Brawl</b> in their <b>Domain</b>.
+<b>Discard</b> Swindle.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Swindle</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — give all <b>Wares</b> to a chosen
+opponent. <b>Brawl</b> in their <b>Domain</b>.
+<b>Discard</b> Swindle.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Prosperity</div>  <div class="card-tags"><span class="tag">Wealth</span></div>  <div class="card-body"><b>On Dawn</b> — draw 1 from Coin if <b>Opportunities</b>
+exist.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Prosperity</div>  <div class="card-tags"><span class="tag">Wealth</span></div>  <div class="card-body"><b>On Dawn</b> — draw 1 from Coin if <b>Opportunities</b>
+exist.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Embassy</div>  <div class="card-tags"><span class="tag">Wealth</span></div>  <div class="card-body"><b>On Dawn</b> — if you have a culture ally and
+<b>Wares</b> exist: you and your ally each take
+1 card from the <b>Wares</b>.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Embassy</div>  <div class="card-tags"><span class="tag">Wealth</span></div>  <div class="card-body"><b>On Dawn</b> — if you have a culture ally and
+<b>Wares</b> exist: you and your ally each take
+1 card from the <b>Wares</b>.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Efficiency</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> up to 4 other cards in
+your <b>Domain</b>. <b>Discard</b> Efficiency.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Efficiency</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> up to 4 other cards in
+your <b>Domain</b>. <b>Discard</b> Efficiency.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Mine</div>  <div class="card-tags"><span class="tag">Labour</span></div>  <div class="card-body"><b>On Dawn</b> — discard Mine if you have no Crags.
+<b>On Order</b> — draw 1 from Coin.</div>  <div class="card-footer">🪙 Coin</div></div>
+</div>
+<div class="page">
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Mine</div>  <div class="card-tags"><span class="tag">Labour</span></div>  <div class="card-body"><b>On Dawn</b> — discard Mine if you have no Crags.
+<b>On Order</b> — draw 1 from Coin.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Spice Market</div>  <div class="card-tags"><span class="tag">Wealth</span></div>  <div class="card-body"><b>On Order</b> — draw Coin cards equal to your
+count of unique tags in your <b>Domain</b>.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Spice Market</div>  <div class="card-tags"><span class="tag">Wealth</span></div>  <div class="card-body"><b>On Order</b> — draw Coin cards equal to your
+count of unique tags in your <b>Domain</b>.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Commodities</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Rumour</b> — draw 1 card from a chosen pile.
+Add it to the <b>Wares</b>.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Commodities</div>  <div class="card-tags"><span style="visibility:hidden;font-size:5pt">&nbsp;</span></div>  <div class="card-body"><b>On Rumour</b> — draw 1 card from a chosen pile.
+Add it to the <b>Wares</b>.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Provisions</div>  <div class="card-tags"><span class="tag">Amenity</span></div>  <div class="card-body"><b>On Feast</b> — draw 1 from Coin.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Provisions</div>  <div class="card-tags"><span class="tag">Amenity</span></div>  <div class="card-body"><b>On Feast</b> — draw 1 from Coin.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-coin">  <div class="card-header"><span class="icon">🪙</span> Worship of Gold</div>  <div class="card-tags"><span class="tag">Spiritual</span></div>  <div class="card-body"><b>On Rite</b> — the active player takes 1 card
+from the <b>Wares</b>.</div>  <div class="card-footer">🪙 Coin</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Worship of the Scripture</div>  <div class="card-tags"><span class="tag">Spiritual</span><span class="tag">Religion</span></div>  <div class="card-body"><b>On Rite</b> — the active player peeks at Candle
+cards (scales with [Spiritual]). Keep 1,
+exile the rest.</div>  <div class="card-footer">🕯️ Candle</div></div>
+</div>
+<div class="page">
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Worship of the Relic</div>  <div class="card-tags"><span class="tag">Spiritual</span><span class="tag">Religion</span></div>  <div class="card-body"><b>On Rite</b> — peek at cards from a chosen pile
+(scales with [Spiritual]). May replace the
+<b>Revelation</b>. Return rest to top.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Worship of the Martyr</div>  <div class="card-tags"><span class="tag">Spiritual</span><span class="tag">Religion</span></div>  <div class="card-body"><b>On Rite</b> — the active player may discard
+cards. All other players must discard
+equal to [Spiritual] scaling.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Clergy</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> Candle zone. Peek at Candle
+cards (1 per player with [Religion]). Keep 1,
+may set 1 as <b>Revelation</b>, exile rest.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Clergy</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> Candle zone. Peek at Candle
+cards (1 per player with [Religion]). Keep 1,
+may set 1 as <b>Revelation</b>, exile rest.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Clergy</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Order</b> — <b>Order</b> Candle zone. Peek at Candle
+cards (1 per player with [Religion]). Keep 1,
+may set 1 as <b>Revelation</b>, exile rest.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Sabbath</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Dawn</b> — <b>Rite</b> in your <b>Domain</b>.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Sabbath</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Dawn</b> — <b>Rite</b> in your <b>Domain</b>.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Sabbath</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Dawn</b> — <b>Rite</b> in your <b>Domain</b>.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Zealot</div>  <div class="card-tags"><span class="tag">Spiritual</span><span class="tag">Religion</span><span class="tag">Mob</span></div>  <div class="card-body"><b>On Brawl</b> — cancel if you have [Religion];
+else discard 1 <b>Domain</b> card.
+<b>On Rite</b> — active player may move Zealot
+to another <b>Domain</b>.</div>  <div class="card-footer">🕯️ Candle</div></div>
+</div>
+<div class="page">
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Zealot</div>  <div class="card-tags"><span class="tag">Spiritual</span><span class="tag">Religion</span><span class="tag">Mob</span></div>  <div class="card-body"><b>On Brawl</b> — cancel if you have [Religion];
+else discard 1 <b>Domain</b> card.
+<b>On Rite</b> — active player may move Zealot
+to another <b>Domain</b>.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Alms</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Feast</b> — refill 1 Field. Return
+1 [Discontent] to the Claw pile.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Alms</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Feast</b> — refill 1 Field. Return
+1 [Discontent] to the Claw pile.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Evangelism</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Order</b> — each player in turn order claims
+1 <b>Revelation</b>. Refill between each.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Evangelism</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Order</b> — each player in turn order claims
+1 <b>Revelation</b>. Refill between each.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Purity</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Order</b> — optionally exile the <b>Revelation</b>
+and reveal the next. <b>Rite</b> in your <b>Domain</b>.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Purity</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Order</b> — optionally exile the <b>Revelation</b>
+and reveal the next. <b>Rite</b> in your <b>Domain</b>.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Flagellation</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Rite</b> — <b>Brawl</b> in your <b>Domain</b> (no player
+benefits).</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Flagellation</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Rite</b> — <b>Brawl</b> in your <b>Domain</b> (no player
+benefits).</div>  <div class="card-footer">🕯️ Candle</div></div>
+</div>
+<div class="page">
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Penance</div>  <div class="card-tags"><span class="tag">Spiritual</span><span class="tag">Religion</span></div>  <div class="card-body"><b>On Dawn</b> — discard 2 cards from your <b>Domain</b>.
+You may sacrifice Penance for an extra
+effect.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Penance</div>  <div class="card-tags"><span class="tag">Spiritual</span><span class="tag">Religion</span></div>  <div class="card-body"><b>On Dawn</b> — discard 2 cards from your <b>Domain</b>.
+You may sacrifice Penance for an extra
+effect.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Benefaction</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Order</b> — draw 1 from Coin. Refill
+<b>Opportunities</b> to 3. Optionally trigger
+2 Rumours.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Benefaction</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Order</b> — draw 1 from Coin. Refill
+<b>Opportunities</b> to 3. Optionally trigger
+2 Rumours.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Ornament</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Order</b> — move the <b>Revelation</b> to the <b>Wares</b>.
+Reveal the next card.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Ornament</div>  <div class="card-tags"><span class="tag">Religion</span></div>  <div class="card-body"><b>On Order</b> — move the <b>Revelation</b> to the <b>Wares</b>.
+Reveal the next card.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Protect the Meek</div>  <div class="card-tags"><span class="tag">Chivalry</span></div>  <div class="card-body"><b>On Brawl</b> — <b>Order</b> on the Sword zone.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Protect the Meek</div>  <div class="card-tags"><span class="tag">Chivalry</span></div>  <div class="card-body"><b>On Brawl</b> — <b>Order</b> on the Sword zone.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Protect the Meek</div>  <div class="card-tags"><span class="tag">Chivalry</span></div>  <div class="card-body"><b>On Brawl</b> — <b>Order</b> on the Sword zone.</div>  <div class="card-footer">🕯️ Candle</div></div>
+</div>
+<div class="page">
+<div class="card deck-candle">  <div class="card-header"><span class="icon">🕯️</span> Protect the Meek</div>  <div class="card-tags"><span class="tag">Chivalry</span></div>  <div class="card-body"><b>On Brawl</b> — <b>Order</b> on the Sword zone.</div>  <div class="card-footer">🕯️ Candle</div></div>
+<div class="card deck-sword">  <div class="card-header"><span class="icon">⚔️</span> Royal Hunt</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Trophy</span><span class="tag">Hunt</span></div>  <div class="card-body"><b>On Order</b> — <b>Feast</b> twice. Draw 1 from Claw.
+<b>Hunt</b> — blocked if another player has [<b>Hunt</b>].</div>  <div class="card-footer">⚔️ Sword</div></div>
+<div class="card deck-sword">  <div class="card-header"><span class="icon">⚔️</span> Royal Hunt</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Trophy</span><span class="tag">Hunt</span></div>  <div class="card-body"><b>On Order</b> — <b>Feast</b> twice. Draw 1 from Claw.
+<b>Hunt</b> — blocked if another player has [<b>Hunt</b>].</div>  <div class="card-footer">⚔️ Sword</div></div>
+<div class="card deck-sword">  <div class="card-header"><span class="icon">⚔️</span> Royal Hunt</div>  <div class="card-tags"><span class="tag">Unit</span><span class="tag">Trophy</span><span class="tag">Hunt</span></div>  <div class="card-body"><b>On Order</b> — <b>Feast</b> twice. Draw 1 from Claw.
+<b>Hunt</b> — blocked if another player has [<b>Hunt</b>].</div>  <div class="card-footer">⚔️ Sword</div></div>
+</div>
+</body>
+</html>
