@@ -230,10 +230,12 @@ CARD_TEXT = {
         "• Look at the top 3 Tree cards. Take any\n"
         "  [Spiritual] cards. Return the rest.",
 
-    "Herbalism":
-        "On Order — discard a [Knowledge] or [Nature]\n"
-        "card. Take 1 card from your discard to\n"
-        "your Domain.",
+    "Floods":
+        "On Brawl — if another Floods is in play,\n"
+        "cancel the Brawl.\n"
+        "On Dawn — refill the Season. If another\n"
+        "Floods is in play, every player discards\n"
+        "1 card from their Domain.",
 
     "Worship of the Rain":
         "On Rite — swap 1 Season card with the top\n"

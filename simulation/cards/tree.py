@@ -110,29 +110,41 @@ class SacredGrove(CardBehavior):
 
 
 @_register
-class Herbalism(CardBehavior):
-    name = 'Herbalism'
-    tags = ['Knowledge']
+class Floods(CardBehavior):
+    name = 'Floods'
+    tags = ['Nature']
     deck = 'tree'
-    def on_order(self, ctx):
-        if ctx.location != "domain":
-            return
-        has_cost = any(c.has_tag("Knowledge") or c.has_tag("Nature")
-                       for c in ctx.player.domain if c is not ctx.card)
-        if not has_cost or len(ctx.player.discard) <= 0:
-            return
-        costs = [c for c in ctx.player.domain
-                 if (c.has_tag("Knowledge") or c.has_tag("Nature")) and c is not ctx.card]
-        cost_card = ctx.engine.strat(ctx.player).resolve(
-            ctx.state, ctx.player, costs,
-            DecisionContext(event="Order", source="Herbalism", intent=Intent.DISCARD))
-        ctx.player.discard_from_domain(cost_card)
-        target_card = ctx.engine.strat(ctx.player).resolve(
-            ctx.state, ctx.player, list(ctx.player.discard),
-            DecisionContext(event="Order", source="Herbalism", intent=Intent.GAIN))
-        ctx.player.discard.remove(target_card)
-        ctx.player.add_to_domain(target_card, ctx.state)
-        ctx.state.log(f"  → discards {cost_card.name}, recovers {target_card.name} from discard")
+
+    # Alternative design tested (v2): unconditional Brawl cancel, On Dawn
+    # with two Floods every player discards 4 then all Floods discard.
+    # More dramatic but one-shot; v1 grind was stronger in tree_search sims.
+
+    def _another_floods_in_play(self, ctx):
+        for p in ctx.state.players:
+            for c in p.domain:
+                if c.name == 'Floods' and c is not ctx.card:
+                    return True
+        return False
+
+    def on_brawl(self, ctx):
+        if not self._another_floods_in_play(ctx):
+            return False
+        ctx.state.log(f"  → Floods cancels Brawl (two Floods in play)")
+        ctx.engine.cancel_event()
+        return True
+
+    def on_dawn(self, ctx):
+        ctx.state.refill_season()
+        ctx.state.log(f"  → Floods: Season refilled to {len(ctx.state.season)}")
+        if self._another_floods_in_play(ctx):
+            ctx.state.log(f"  → Floods: two in play — each player discards 1")
+            for p in ctx.state.players:
+                if p.domain:
+                    victim = ctx.engine.strat(p).resolve(
+                        ctx.state, p, list(p.domain),
+                        DecisionContext(event="Dawn", source="Floods", intent=Intent.DISCARD))
+                    p.discard_from_domain(victim)
+                    ctx.state.log(f"    {p.name} discards {victim.name}")
 
 
 @_register

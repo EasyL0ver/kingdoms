@@ -51,6 +51,11 @@ class Player:
     def count_tag(self, tag: str) -> int:
         return sum(1 for c in self.domain if c.has_tag(tag))
 
+    def count_tag_all(self, tag: str) -> int:
+        """Count tag across domain + discard (for win conditions)."""
+        return (sum(1 for c in self.domain if c.has_tag(tag))
+                + sum(1 for c in self.discard if c.has_tag(tag)))
+
     def get_card(self, name: str) -> Card | None:
         for c in self.domain:
             if c.name == name:

@@ -25,7 +25,7 @@ ORDERABLE = [
     ("Dusk Rite", ["Spiritual", "Discontent"], "claw"),
     ("Sky Dance", ["Spiritual"], "tree"),
     ("Sacred Grove", ["Nature", "Spiritual"], "tree"),
-    ("Herbalism", ["Knowledge"], "tree"),
+    ("Floods", ["Nature"], "tree"),
     ("Forage", [], "tree"),
     ("Sowing", ["Knowledge"], "tree"),
     ("Withered Crop", [], "tree"),

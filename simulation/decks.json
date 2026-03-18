@@ -32,21 +32,21 @@
     { "name": "Royal Hunt", "tags": ["Unit", "Trophy", "Hunt"], "count": 3 }
   ],
   "tree": [
-    { "name": "Kinship", "tags": [], "count": 5 },
+    { "name": "Kinship", "tags": [], "count": 4 },
     { "name": "Eldership", "tags": ["Knowledge"], "count": 1 },
     { "name": "Sky Dance", "tags": ["Spiritual"], "count": 1 },
     { "name": "Harvest", "tags": [], "count": 4 },
     { "name": "Gathering", "tags": [], "count": 2 },
     { "name": "Sacred Grove", "tags": ["Nature", "Spiritual"], "count": 1 },
-    { "name": "Herbalism", "tags": ["Knowledge"], "count": 1 },
     { "name": "Worship of the Rain", "tags": ["Spiritual"], "count": 1 },
     { "name": "Worship of Fertility", "tags": ["Nature", "Spiritual"], "count": 1 },
 
     { "name": "Forage", "tags": [], "count": 2 },
     { "name": "Sowing", "tags": ["Knowledge"], "count": 3 },
-    { "name": "Withered Crop", "tags": [], "count": 3 },
+    { "name": "Withered Crop", "tags": [], "count": 2 },
     { "name": "Remembrance", "tags": ["Knowledge"], "count": 2 },
-    { "name": "Pilgrimage", "tags": ["Spiritual"], "count": 3 }
+    { "name": "Pilgrimage", "tags": ["Spiritual"], "count": 3 },
+    { "name": "Floods", "tags": ["Nature"], "count": 2 }
   ],
   "wheat": [
     { "name": "Plough", "tags": ["Labour"], "count": 3 },

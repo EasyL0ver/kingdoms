@@ -96,7 +96,7 @@ class GameEngine:
         win_tag = win_tags.get(s.depleted_pile)
         if not win_tag:
             return None
-        scores = {p.name: p.count_tag(win_tag) for p in s.players}
+        scores = {p.name: p.count_tag_all(win_tag) for p in s.players}
         max_score = max(scores.values())
         winners = [n for n, sc in scores.items() if sc == max_score]
         return winners[0] if len(winners) == 1 else f"Tie({'/'.join(winners)})"
@@ -307,7 +307,7 @@ class GameEngine:
                 s.log(f"{label}\n")
                 scores = {}
                 for p in s.players:
-                    scores[p.name] = p.count_tag(win_tag)
+                    scores[p.name] = p.count_tag_all(win_tag)
                 max_score = max(scores.values()) if scores else 0
                 winners = [name for name, sc in scores.items() if sc == max_score]
                 for p in s.players:

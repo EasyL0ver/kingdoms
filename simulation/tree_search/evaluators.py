@@ -227,10 +227,12 @@ class CardSynergy(Evaluator):
                     if player.count_tag("Knowledge") > 0 and discard_size > 0:
                         recoverable = min(player.count_tag("Knowledge"), discard_size)
                         s += recoverable * 1.5
-                case "Herbalism":
-                    cost = player.count_tag("Knowledge") + has_nature
-                    if cost > 1 and discard_size > 0:
-                        s += 1.5
+                case "Floods":
+                    other_floods = sum(1 for c in player.domain
+                                       if c.name == "Floods") - 1
+                    s += 1.5  # Season refill is always good
+                    if other_floods > 0:
+                        s += 1.0  # Brawl shield is great
                 case "Forage":
                     s += 1.5
                 case "Sacred Grove":
