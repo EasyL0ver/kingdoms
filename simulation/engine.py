@@ -4,7 +4,7 @@ from __future__ import annotations
 from state import GameState, Player, Card, Action
 from strategy import Strategy, Intent, DecisionContext
 from cards import CardContext, CardBehavior, get_behavior
-import cards.claw, cards.tree, cards.wheat, cards.coin, cards.candle, cards.zones
+import cards.claw, cards.tree, cards.wheat, cards.coin, cards.candle, cards.sword, cards.zones
 
 
 # Event responder sets — which events each card can respond to.

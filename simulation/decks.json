@@ -13,18 +13,21 @@
     { "name": "Tyranny", "tags": ["Trophy", "Discontent"], "count": 2 },
     { "name": "Marauders", "tags": ["Unit", "Mob", "Discontent"], "count": 2 },
     { "name": "Share the Spoils", "tags": [], "count": 2 },
-    { "name": "Armament", "tags": ["Knowledge"], "count": 1 },
+    { "name": "Martial Excellence", "tags": ["Trophy", "Chivalry"], "count": 1 },
     { "name": "Outriders", "tags": [], "count": 2 },
     { "name": "Land Grab", "tags": ["Discontent"], "count": 3 },
     { "name": "Rite of Passage", "tags": ["Discontent"], "count": 2 },
     { "name": "Culling", "tags": ["Discontent"], "count": 2 },
-    { "name": "Ingenuity", "tags": ["Discontent"], "count": 2 },
+    { "name": "Ivory", "tags": ["Trophy", "Wealth"], "count": 2 },
     { "name": "Uprising", "tags": ["Discontent"], "count": 3 },
     { "name": "Ransack", "tags": [], "count": 2 },
     { "name": "Spoils of War", "tags": ["Trophy", "Mob"], "count": 2 },
     { "name": "Dusk Rite", "tags": ["Spiritual", "Discontent"], "count": 1 },
     { "name": "Blood Feud", "tags": ["Mob", "Discontent"], "count": 2 },
     { "name": "Enforcers", "tags": ["Mob", "Discontent"], "count": 2 }
+  ],
+  "sword": [
+    { "name": "Royal Hunt", "tags": ["Unit", "Trophy", "Hunt"], "count": 3 }
   ],
   "tree": [
     { "name": "Highlander", "tags": ["Culture", "Trophy"], "count": 3 },
@@ -94,6 +97,7 @@
     { "name": "Flagellation", "tags": ["Religion"], "count": 2 },
     { "name": "Penance", "tags": ["Spiritual", "Religion"], "count": 2 },
     { "name": "Benefaction", "tags": ["Religion"], "count": 2 },
-    { "name": "Ornament", "tags": ["Religion"], "count": 2 }
+    { "name": "Ornament", "tags": ["Religion"], "count": 2 },
+    { "name": "Protect the Meek", "tags": ["Chivalry"], "count": 4 }
   ]
 }

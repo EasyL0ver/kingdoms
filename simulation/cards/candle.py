@@ -363,3 +363,16 @@ class WorshipOfTheMartyr(CardBehavior):
                 names = ", ".join(v.name for v in victims)
                 s.log(f"  → Worship of the Martyr: {p.name} discards {names}")
         return True
+
+
+@_register
+class ProtectTheMeek(CardBehavior):
+    name = 'Protect the Meek'
+    tags = ['Chivalry']
+    deck = 'candle'
+    def on_brawl(self, ctx):
+        if ctx.target is not ctx.player:
+            return False
+        ctx.state.log(f"  → Protect the Meek: the church calls for knights!")
+        ctx.engine.order_zone(ctx.player, "sword")
+        return True

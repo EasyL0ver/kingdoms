@@ -138,6 +138,7 @@ class GameState:
             "wheat": Card(name="Wheat Zone", tags=["Zone"], deck="zone"),
             "coin": Card(name="Coin Zone", tags=["Zone"], deck="zone"),
             "candle": Card(name="Candle Zone", tags=["Zone"], deck="zone"),
+            "sword": Card(name="Sword Zone", tags=["Zone"], deck="zone"),
         }
         self.wares_pile: list[Card] = []  # Junk dump — separate from Opportunities
         self.hunt_uses_this_round = 0
@@ -176,6 +177,11 @@ class GameState:
     def revelation(self) -> list[Card]:
         """The face-up Revelation card(s) for candle zone. Usually 0 or 1."""
         return self.zone_cards["candle"].face_up
+
+    @property
+    def tourney(self) -> list[Card]:
+        """The 2 face-up sword cards in the Tourney."""
+        return self.zone_cards["sword"].face_up
 
     def load_decks(self, decks_path: str | Path):
         data = json.loads(Path(decks_path).read_text(encoding="utf-8"))
@@ -230,12 +236,13 @@ class GameState:
             zone.pile.append(card)
 
     def setup_zones(self):
-        """Set up face-up areas: Season (4), Fields (5), Opportunities (3), Revelation (1). Wares start empty."""
+        """Set up face-up areas: Season (4), Fields (5), Opportunities (3), Revelation (1), Tourney (2). Wares start empty."""
         from cards import get_behavior
         get_behavior("Tree Zone").refill(self)
         get_behavior("Wheat Zone").refill(self)
         get_behavior("Coin Zone").refill(self, 3)
         get_behavior("Candle Zone").refill(self)
+        get_behavior("Sword Zone").refill(self)
 
     def refill_season(self, target: int = 4):
         from cards import get_behavior
@@ -264,6 +271,8 @@ class GameState:
             return "candle"
         if "claw" in self.zone_cards and self.pile_remaining("claw") == 0:
             return "claw"
+        if "sword" in self.zone_cards and self.pile_remaining("sword") == 0 and len(self.tourney) == 0:
+            return "sword"
         return None
 
     def player_by_name(self, name: str) -> Player | None:

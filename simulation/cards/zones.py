@@ -42,6 +42,30 @@ class ClawZone(CardBehavior):
             if ctx.state.game_over:
                 break
 
+    def on_feast(self, ctx):
+        """Active player picks 1 card from any player's discard → top of claw pile."""
+        s = ctx.state
+        candidates = []
+        for p in s.players:
+            for card in p.discard:
+                candidates.append((p, card))
+        if not candidates:
+            return
+        # Active player chooses which card to recycle
+        recyclable_cards = [card for _, card in candidates]
+        pick = ctx.engine.strat(ctx.active_player).resolve(
+            s, ctx.active_player, recyclable_cards,
+            DecisionContext(event="Feast", source="Claw Zone", intent=Intent.OPTION))
+        if pick is None:
+            return
+        # Find which player owns this discard card and remove it
+        for p, card in candidates:
+            if card is pick:
+                p.discard.remove(card)
+                s.return_to_pile("claw", card)
+                s.log(f"  → Claw Zone: {ctx.active_player.name} recycles {card.name} from {p.name}'s discard to claw pile")
+                break
+
 
 @_register
 class TreeZone(CardBehavior):
@@ -241,6 +265,107 @@ class CandleZone(CardBehavior):
     def refill(self, state, target: int = 1):
         """Flip top candle card as Revelation (max 1)."""
         zone = state.zone_cards["candle"]
+        while len(zone.face_up) < target and zone.pile_ptr < len(zone.pile):
+            zone.face_up.append(zone.pile[zone.pile_ptr])
+            zone.pile_ptr += 1
+
+
+@_register
+class SwordZone(CardBehavior):
+    name = "Sword Zone"
+    tags = ["Zone"]
+    deck = "zone"
+
+    def on_order(self, ctx):
+        """The Tourney: 2 face-up sword cards.
+        Injustice (≥2 Mob in any single domain): take BOTH, Unit cards from
+        the pair go to the tyrant's domain, non-Units go to you.
+        Peace: Joust — challenge opponent, Accept = both pick one,
+        Refuse = Brawl in both players' domains."""
+        s = ctx.state
+        tourney = list(s.zone_cards["sword"].face_up)
+        if not tourney:
+            s.log("  → Tourney empty, nothing to do")
+            return
+
+        # Check for injustice: any player with ≥2 Mob tags in domain
+        tyrant = None
+        for p in s.players:
+            if p.count_tag("Mob") >= 2:
+                tyrant = p
+                break
+
+        if tyrant:
+            self._injustice(ctx, tourney, tyrant)
+        else:
+            self._joust(ctx, tourney)
+
+    def _injustice(self, ctx, tourney, tyrant):
+        s = ctx.state
+        s.log(f"  → Injustice! {tyrant.name} has ≥2 Mob tags")
+        face_up = s.zone_cards["sword"].face_up
+        for card in tourney:
+            face_up.remove(card)
+            if card.has_tag("Unit"):
+                # Knights march to fight injustice
+                tyrant.add_to_domain(card, s)
+                s.log(f"  → {card.name} (Unit) deployed to {tyrant.name}'s domain")
+            else:
+                ctx.player.add_to_domain(card, s)
+                s.log(f"  → {card.name} claimed by {ctx.player.name}")
+        self.refill(s)
+
+    def _joust(self, ctx, tourney):
+        s = ctx.state
+        # Choose opponent to challenge
+        opponents = s.other_players(ctx.player)
+        if not opponents:
+            return
+        opponent = ctx.engine.strat(ctx.player).resolve(
+            s, ctx.player, opponents,
+            DecisionContext(event="Order", source="Sword Zone", intent=Intent.TARGET))
+        s.log(f"  → Peace: {ctx.player.name} challenges {opponent.name} to a Joust")
+
+        # Opponent decides: Accept or Refuse
+        choice = ctx.engine.strat(opponent).resolve(
+            s, opponent, ["accept", "refuse"],
+            DecisionContext(event="Order", source="Sword Zone", intent=Intent.OPTION))
+
+        face_up = s.zone_cards["sword"].face_up
+        if choice == "accept":
+            s.log(f"  → {opponent.name} accepts the Joust")
+            # Both pick one card from tourney
+            if len(tourney) >= 2:
+                pick1 = ctx.engine.strat(ctx.player).resolve(
+                    s, ctx.player, list(tourney),
+                    DecisionContext(event="Order", source="Sword Zone", intent=Intent.GAIN))
+                face_up.remove(pick1)
+                tourney.remove(pick1)
+                ctx.player.add_to_domain(pick1, s)
+                s.log(f"  → {ctx.player.name} takes {pick1.name}")
+
+                pick2 = ctx.engine.strat(opponent).resolve(
+                    s, opponent, list(tourney),
+                    DecisionContext(event="Order", source="Sword Zone", intent=Intent.GAIN))
+                face_up.remove(pick2)
+                opponent.add_to_domain(pick2, s)
+                s.log(f"  → {opponent.name} takes {pick2.name}")
+            elif len(tourney) == 1:
+                # Only one card — challenger gets it
+                card = tourney[0]
+                face_up.remove(card)
+                ctx.player.add_to_domain(card, s)
+                s.log(f"  → {ctx.player.name} takes {card.name}")
+            self.refill(s)
+        else:
+            s.log(f"  → {opponent.name} refuses! Brawl in both domains")
+            ctx.engine.resolve_event("Brawl", ctx.player, ctx.player)
+            if not s.game_over:
+                ctx.engine.resolve_event("Brawl", ctx.player, opponent)
+
+    def refill(self, state, target: int = 2):
+        """Refill Tourney to 2 face-up sword cards."""
+        zone = state.zone_cards["sword"]
         while len(zone.face_up) < target and zone.pile_ptr < len(zone.pile):
             zone.face_up.append(zone.pile[zone.pile_ptr])
             zone.pile_ptr += 1

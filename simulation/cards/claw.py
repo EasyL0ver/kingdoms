@@ -107,12 +107,26 @@ class Poach(CardBehavior):
     def on_order(self, ctx):
         if ctx.location != "domain":
             return
-        hunt_limit = 1 + sum(1 for c in ctx.player.domain if c.name == "Pasture")
-        if ctx.state.hunt_uses_this_round >= hunt_limit:
-            return
-        ctx.state.hunt_uses_this_round += 1
+        # Only works if no other player has a Hunt card in domain
+        for p in ctx.state.players:
+            if p is ctx.player:
+                continue
+            if p.cards_with_tag("Hunt"):
+                ctx.state.log(f"  → Poach blocked: {p.name} has Hunt in domain")
+                return
+        # Hunt: discard top 1 from claw pile
+        killed = ctx.state.draw_from_pile("claw")
+        if killed:
+            ctx.player.discard.append(killed)
+            ctx.state.log(f"  → Poach: hunts {killed.name} (to discard)")
+        # Feast
         ctx.state.log(f"  → Feast in {ctx.player.name}'s Domain")
         ctx.engine.resolve_event("Feast", ctx.player, ctx.player)
+        # Draw 1 from claw
+        drawn = ctx.state.draw_from_pile("claw")
+        if drawn:
+            ctx.state.log(f"  → Poach: draws {drawn.name} from Claw")
+            ctx.engine.receive_card(ctx.player, drawn)
 
 
 @_register
@@ -121,10 +135,15 @@ class WorshipOfTheHunt(CardBehavior):
     tags = ['Spiritual']
     deck = 'claw'
     def on_rite(self, ctx):
-        hunts = ctx.active_player.cards_with_tag("Hunt")
-        for h in hunts:
-            ctx.state.log(f"  → {ctx.player.name}'s Worship of the Hunt: {ctx.active_player.name} feasts via {h.name}")
-            ctx.engine.resolve_event("Feast", ctx.active_player, ctx.active_player)
+        s = ctx.state
+        dumped = []
+        for _ in range(5):
+            card = s.draw_from_pile("claw")
+            if card:
+                ctx.active_player.discard.append(card)
+                dumped.append(card.name)
+        if dumped:
+            s.log(f"  → Worship of the Hunt: {ctx.active_player.name} hunts {', '.join(dumped)} (to discard)")
         return True
 
 
@@ -390,14 +409,33 @@ class Culling(CardBehavior):
 
 
 @_register
-class Ingenuity(CardBehavior):
-    name = 'Ingenuity'
-    tags = ['Discontent']
+class Ivory(CardBehavior):
+    name = 'Ivory'
+    tags = ['Trophy', 'Wealth']
     deck = 'claw'
-    def on_dawn(self, ctx):
-        ctx.state.log(f"  → Ingenuity: orders Coin zone")
-        ctx.engine.order_zone(ctx.player, "coin")
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
+        ctx.state.log(f"  → Ivory: sold at market")
         ctx.discard_self()
+        ctx.engine.order_zone(ctx.player, "coin")
+
+
+@_register
+class MartialExcellence(CardBehavior):
+    name = 'Martial Excellence'
+    tags = ['Trophy', 'Chivalry']
+    deck = 'claw'
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
+        # Prereq: need another Trophy tag in domain (besides this card)
+        other_trophies = [c for c in ctx.player.domain
+                         if c.has_tag("Trophy") and c is not ctx.card]
+        if not other_trophies:
+            return
+        ctx.state.log(f"  → Martial Excellence: proven warrior enters the Tourney")
+        ctx.engine.order_zone(ctx.player, "sword")
 
 
 @_register
