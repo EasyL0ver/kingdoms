@@ -82,6 +82,11 @@
   ],
   "candle": [
     { "name": "Worship of the Flame", "tags": ["Spiritual"], "count": 1 },
+    { "name": "Blessing", "tags": ["Spiritual", "Religion"], "count": 6 },
+    { "name": "Clergy", "tags": ["Religion"], "count": 3 },
+    { "name": "Sabbath", "tags": ["Religion"], "count": 3 },
+    { "name": "Zealot", "tags": ["Spiritual", "Religion", "Mob"], "count": 2 },
+    { "name": "Alms", "tags": ["Religion"], "count": 2 },
     { "name": "Benefaction", "tags": ["Religion"], "count": 2 },
     { "name": "Ornament", "tags": ["Religion"], "count": 2 }
   ]

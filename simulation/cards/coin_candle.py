@@ -281,6 +281,87 @@ class Ornament(CardBehavior):
 
 
 @_register
+class Clergy(CardBehavior):
+    name = 'Clergy'
+    tags = ['Religion']
+    deck = 'candle'
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
+        ctx.engine.order_zone(ctx.player, "candle")
+
+
+@_register
+class Sabbath(CardBehavior):
+    name = 'Sabbath'
+    tags = ['Religion']
+    deck = 'candle'
+    def on_dawn(self, ctx):
+        ctx.state.log(f"  → Sabbath: {ctx.player.name} triggers Rite")
+        ctx.engine.resolve_event("Rite", ctx.player)
+
+
+@_register
+class Blessing(CardBehavior):
+    name = 'Blessing'
+    tags = ['Spiritual', 'Religion']
+    deck = 'candle'
+
+
+@_register
+class Zealot(CardBehavior):
+    name = 'Zealot'
+    tags = ['Spiritual', 'Religion', 'Mob']
+    deck = 'candle'
+    def on_brawl(self, ctx):
+        if ctx.state.pile_remaining("claw") <= 0:
+            return False
+        drawn = ctx.engine.draw_and_receive(ctx.player, "claw")
+        if drawn:
+            ctx.state.log(f"  → Zealot: {ctx.player.name} draws {drawn[0].name} from Claw")
+            return True
+        return False
+
+    def on_rite(self, ctx):
+        if ctx.state.pile_remaining("claw") <= 0:
+            return False
+        drawn = ctx.engine.draw_and_receive(ctx.player, "claw")
+        if drawn:
+            ctx.state.log(f"  → Zealot: {ctx.player.name} draws {drawn[0].name} from Claw")
+            return True
+        return False
+
+
+@_register
+class Alms(CardBehavior):
+    name = 'Alms'
+    tags = ['Religion']
+    deck = 'candle'
+    def on_feast(self, ctx):
+        acted = False
+        s = ctx.state
+        # Refill 1 Field
+        zone = s.zone_cards["wheat"]
+        old_count = len(s.fields)
+        wheat_zone = ctx.engine.behavior(zone)
+        wheat_zone.refill(s, old_count + 1)
+        if len(s.fields) > old_count:
+            s.log(f"  → Alms: refills 1 Field ({s.fields[-1].name})")
+            acted = True
+        # Return 1 Discontent to claw pile
+        discontent = ctx.player.cards_with_tag("Discontent")
+        if discontent:
+            victim = ctx.engine.strat(ctx.player).resolve(
+                s, ctx.player, discontent,
+                DecisionContext(event="Feast", source="Alms", intent=Intent.DISCARD))
+            ctx.player.remove_from_domain(victim)
+            s.return_to_pile("claw", victim)
+            s.log(f"  → Alms: returns {victim.name} to claw pile")
+            acted = True
+        return acted
+
+
+@_register
 class Benefaction(CardBehavior):
     name = 'Benefaction'
     tags = ['Religion']
