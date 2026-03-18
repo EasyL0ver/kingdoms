@@ -10,7 +10,7 @@ from __future__ import annotations
 import copy
 import random
 from abc import ABC, abstractmethod
-from state import GameState, Player, Card, Action
+from state import GameState, Player, Card
 from strategy import Strategy, Intent, DecisionContext
 
 
@@ -634,7 +634,7 @@ class TreeSearchStrategy(Strategy):
         self._replay_idx = 0
 
     def resolve(self, state, player, options, ctx):
-        if ctx.event == "Dawn" and ctx.source == "Presence":
+        if ctx.event == "Turn" and ctx.source == "Presence":
             return self._search(state, player, options)
         if not options:
             return None
@@ -691,29 +691,26 @@ class TreeSearchStrategy(Strategy):
 
     # ── Core search ──
 
-    def _search(self, state: GameState, player: Player, actions: list[Action]) -> Action:
-        best_action = None
+    def _search(self, state: GameState, player: Player, options: list[Card]) -> Card:
+        best_card = None
         best_score = float("-inf")
         best_keys: list = []
 
-        for action in actions:
-            score, chosen_keys = self._evaluate_action(state, player, action)
+        for card in options:
+            score, chosen_keys = self._evaluate_card(state, player, card)
             if score > best_score:
                 best_score = score
-                best_action = action
+                best_card = card
                 best_keys = chosen_keys
 
         self._best_keys = best_keys
         self._replay_idx = 0
-        return best_action or actions[0]
+        return best_card or options[0]
 
-    def _evaluate_action(self, state: GameState, player: Player,
-                         action: Action) -> tuple[float, list]:
-        """Evaluate an action by branching on sub-decisions.
-
-        Returns (best_leaf_score, list_of_chosen_keys).
-        """
-        decision_points, discovery_score, discovery_keys = self._discover_decisions(state, player, action)
+    def _evaluate_card(self, state: GameState, player: Player,
+                       card: Card) -> tuple[float, list]:
+        """Evaluate ordering a card by branching on sub-decisions."""
+        decision_points, discovery_score, discovery_keys = self._discover_decisions(state, player, card)
 
         if decision_points is None:
             return float("-inf"), []
@@ -727,7 +724,7 @@ class TreeSearchStrategy(Strategy):
         best_keys = discovery_keys
 
         for combo in combos[1:]:
-            score, chosen_keys = self._run_with_choices(state, player, action, combo)
+            score, chosen_keys = self._run_with_choices(state, player, card, combo)
             if score > best_score:
                 best_score = score
                 best_keys = chosen_keys
@@ -735,15 +732,12 @@ class TreeSearchStrategy(Strategy):
         return best_score, best_keys
 
     def _discover_decisions(self, state: GameState, player: Player,
-                            action: Action) -> tuple[list[int] | None, float, list]:
-        """Run action once with RecordingStrategy to discover decision points.
-
-        Returns (decision_point_counts, leaf_score, chosen_keys).
-        """
+                            card: Card) -> tuple[list[int] | None, float, list]:
+        """Run Order on card with RecordingStrategy to discover decision points."""
         sim_state = copy.deepcopy(state)
         self._hide_pile_order(sim_state)
         sim_player = sim_state.player_by_name(player.name)
-        sim_card = self._find_card(sim_state, sim_player, action)
+        sim_card = self._find_card_in_state(sim_state, sim_player, card)
         if not sim_card:
             return None, float("-inf"), []
 
@@ -783,12 +777,12 @@ class TreeSearchStrategy(Strategy):
         return combos
 
     def _run_with_choices(self, state: GameState, player: Player,
-                          action: Action, choices: list[int]) -> tuple[float, list[int | None]]:
-        """Run action on a deepcopy with predetermined choices, return (leaf_score, chosen_ids)."""
+                          card: Card, choices: list[int]) -> tuple[float, list[int | None]]:
+        """Run Order on card with predetermined choices, return (leaf_score, chosen_ids)."""
         sim_state = copy.deepcopy(state)
         self._hide_pile_order(sim_state)
         sim_player = sim_state.player_by_name(player.name)
-        sim_card = self._find_card(sim_state, sim_player, action)
+        sim_card = self._find_card_in_state(sim_state, sim_player, card)
         if not sim_card:
             return float("-inf"), []
 
@@ -808,20 +802,27 @@ class TreeSearchStrategy(Strategy):
         return evaluate(sim_state, sim_player, self.evaluators), scripted.chosen_keys
 
     @staticmethod
-    def _find_card(sim_state: GameState, sim_player: Player, action: Action) -> Card | None:
-        card_name = action.card.name
-
-        if card_name == "Presence":
+    def _find_card_in_state(sim_state: GameState, sim_player: Player, original: Card) -> Card | None:
+        """Find the deepcopy equivalent of original card in the simulated state."""
+        if original.name == "Presence":
             return sim_player.domain_card
 
-        if action.type == "order_well":
-            owner_name = action.owner.name
-            for p in sim_state.players:
-                if p.name == owner_name:
-                    return p.get_card("Well")
-            return None
+        # Check domain
+        for c in sim_player.domain:
+            if c.id == original.id:
+                return c
 
-        if "from discard" in action.label:
-            return sim_player.get_discard_card(card_name)
+        # Check discard
+        for c in sim_player.discard:
+            if c.id == original.id:
+                return c
 
-        return sim_player.get_card(card_name)
+        # Check other players' domains (Wells)
+        for p in sim_state.players:
+            if p is sim_player:
+                continue
+            for c in p.domain:
+                if c.id == original.id:
+                    return c
+
+        return None

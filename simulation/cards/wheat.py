@@ -304,7 +304,7 @@ class WorshipOfTheBread(CardBehavior):
         old = len(s.fields)
         s.refill_fields(old + 1)
         if len(s.fields) > old:
-            s.log(f"  → Worship of the Bread: refills 1 Field for {ctx.active_player.name} ({s.fields[-1].name})")
+            s.log(f"  → Worship of the Bread: refills 1 Field ({s.fields[-1].name})")
             return True
         return False
 

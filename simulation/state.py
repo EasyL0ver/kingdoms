@@ -240,13 +240,18 @@ class GameState:
             zone.pile.append(card)
 
     def setup_zones(self):
-        """Set up face-up areas: Season (4), Fields (5), Opportunities (3), Revelation (1), Tourney (2). Wares start empty."""
+        """Set up face-up areas: Season (4), Fields (5), Opportunities (3), Revelation (1), Tourney (2). Wares start empty.
+        Also place each player's Presence card into their domain."""
         from cards import get_behavior
         get_behavior("Tree Zone").refill(self)
         get_behavior("Wheat Zone").refill(self)
         get_behavior("Coin Zone").refill(self, 3)
         get_behavior("Candle Zone").refill(self)
         get_behavior("Sword Zone").refill(self)
+        # Each player's Presence card lives in their domain permanently
+        for p in self.players:
+            if p.domain_card not in p.domain:
+                p.domain.insert(0, p.domain_card)
 
     def refill_season(self, target: int = 4):
         from cards import get_behavior

@@ -1,7 +1,7 @@
 """Game engine: generic loop, action resolution, event broadcasting.
 All card-specific logic lives in cards/*.py — the engine just orchestrates."""
 from __future__ import annotations
-from state import GameState, Player, Card, Action
+from state import GameState, Player, Card
 from strategy import Strategy, Intent, DecisionContext
 from cards import CardContext, CardBehavior, get_behavior
 import cards.claw, cards.tree, cards.wheat, cards.coin, cards.candle, cards.sword, cards.zones
@@ -40,53 +40,6 @@ class GameEngine:
     def cancel_event(self):
         """Called by card behaviors (Eldership, Militia) to cancel current event."""
         self._event_cancelled = True
-
-    # ── Valid Actions ──
-
-    def _has_on_order(self, card: Card) -> bool:
-        """Check if a card overrides on_order (i.e. is Orderable)."""
-        beh = self.behavior(card)
-        return getattr(type(beh), 'on_order') is not getattr(CardBehavior, 'on_order')
-
-    def get_valid_actions(self, player: Player) -> list[Action]:
-        actions: list[Action] = []
-        s = self.state
-
-        # Presence card — always available for Ordering
-        presence = player.domain_card
-        if self._has_on_order(presence):
-            actions.append(Action("order", card=presence,
-                                  label="Order Presence"))
-
-        # Order cards in Domain — any card with on_order is Orderable
-        for card in player.domain:
-            if self._has_on_order(card):
-                actions.append(Action("order", card=card,
-                                      label=f"Order {card.name}"))
-
-        # Order cards in Discard — deduplicate by name (one action per card type)
-        seen_discard = set()
-        for card in player.discard:
-            if card.name not in seen_discard and self._has_on_order(card):
-                seen_discard.add(card.name)
-                actions.append(Action("order", card=card,
-                                      label=f"Order {card.name} from discard"))
-
-        # Well — any player's Well can be Ordered by current player
-        for p in s.players:
-            if p is player:
-                continue
-            for card in p.domain:
-                if card.name != "Well":
-                    continue
-                if self._has_on_order(card):
-                    actions.append(Action("order_well", card=card, owner=p,
-                                          label=f"Order {p.name}'s Well"))
-
-        if not actions:
-            actions.append(Action("pass", label="Pass (no valid actions)"))
-
-        return actions
 
     # ── Main Game Loop ──
 
@@ -149,28 +102,8 @@ class GameEngine:
 
     def resolve_turn(self, player: Player):
         s = self.state
-
-        # ── Dawn Phase ──
         self.resolve_event("Dawn", player, scope=player)
-        if s.game_over:
-            return
-
-        # ── Order Phase ──
-        actions = self.get_valid_actions(player)
-        action = self.strat(player).resolve(
-            s, player, actions,
-            DecisionContext(event="Dawn", source="Presence", intent=Intent.OPTION))
-        s.log(f"**T{s.turn_num} — {player.name}:** {action.label}")
-
-        match action.type:
-            case "order" | "order_well":
-                self._notify("on_order", s, player, action.card)
-                self.resolve_event("Order", player, scope=action.card)
-            case "pass":
-                s.log("  *(no valid actions)*")
-
-        self._notify("on_turn_end", s, player, action)
-
+        self._notify("on_turn_end", s, player, None)
         s.log("")
 
     # ── Public helpers for card behaviors ──
@@ -229,6 +162,7 @@ class GameEngine:
         # Single card scope — fire directly, skip zone broadcast and domain scan
         if isinstance(scope, Card):
             beh = self.behavior(scope)
+            resp = 0
             if getattr(type(beh), handler_name) is not base_handler:
                 # Find owner
                 owner = active_player
@@ -239,7 +173,9 @@ class GameEngine:
                 ctx = self.make_ctx(owner, scope, event=event,
                                     active_player=active_player, uprising=uprising)
                 handler = getattr(beh, handler_name)
-                handler(ctx)
+                if handler(ctx):
+                    resp = 1
+            self._notify("on_event_fired", s, event, active_player, self._event_cancelled, resp, scope)
             self._event_depth -= 1
             return
 
@@ -300,7 +236,7 @@ class GameEngine:
                 if handler(ctx):
                     responder_count += 1
 
-        self._notify("on_event_fired", s, event, active_player, self._event_cancelled, responder_count)
+        self._notify("on_event_fired", s, event, active_player, self._event_cancelled, responder_count, scope)
         self._event_depth -= 1
 
     # ── Logging ──

@@ -160,8 +160,10 @@ class Efficiency(CardBehavior):
     def on_order(self, ctx):
         if ctx.location != "domain":
             return
+        from cards import CardBehavior as _CB
         orderable = [c for c in ctx.player.domain
-                     if c is not ctx.card and ctx.engine._has_on_order(c)]
+                     if c is not ctx.card
+                     and getattr(type(ctx.engine.behavior(c)), 'on_order') is not getattr(_CB, 'on_order')]
         if not orderable:
             ctx.player.discard_from_domain(ctx.card)
             ctx.state.log(f"  → Efficiency: nothing to order, discarded")

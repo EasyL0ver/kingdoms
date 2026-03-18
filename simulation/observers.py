@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from state import GameState, Player, Card, Action
+    from state import GameState, Player, Card
 
 
 class GameObserver(ABC):
@@ -13,7 +13,7 @@ class GameObserver(ABC):
     def on_game_start(self, state: GameState, strategies: dict | None = None):
         pass
 
-    def on_turn_end(self, state: GameState, player: Player, action: Action):
+    def on_turn_end(self, state: GameState, player: Player, action=None):
         pass
 
     def on_card_received(self, state: GameState, player: Player, card: Card):
@@ -23,7 +23,7 @@ class GameObserver(ABC):
         pass
 
     def on_event_fired(self, state: GameState, event: str, active_player: Player,
-                       cancelled: bool, responder_count: int = 0):
+                       cancelled: bool, responder_count: int = 0, scope=None):
         pass
 
     def on_game_end(self, state: GameState, depleted: str | None, winner: str | None):
@@ -131,11 +131,15 @@ class OrderStats(GameObserver):
         self._game_orders = {p.name: {} for p in state.players}
         self._current_players = [p.name for p in state.players]
 
-    def on_order(self, state, player, card):
-        self.orders[card.name] = self.orders.get(card.name, 0) + 1
-        pa = self._game_orders.get(player.name, {})
-        pa[card.name] = pa.get(card.name, 0) + 1
-        self._game_orders[player.name] = pa
+    def on_event_fired(self, state, event, active_player, cancelled, responder_count=0, scope=None):
+        if event != "Order" or cancelled:
+            return
+        from state import Card
+        card_name = scope.name if isinstance(scope, Card) else str(scope)
+        self.orders[card_name] = self.orders.get(card_name, 0) + 1
+        pa = self._game_orders.get(active_player.name, {})
+        pa[card_name] = pa.get(card_name, 0) + 1
+        self._game_orders[active_player.name] = pa
 
     def on_game_end(self, state, depleted, winner):
         if not winner or winner.startswith("Tie"):
@@ -279,7 +283,7 @@ class EventFrequency(GameObserver):
         self._game_events = {}
 
     def on_event_fired(self, state, event, triggerer, cancelled,
-                       responder_count=0):
+                       responder_count=0, scope=None):
         self.event_count[event] = self.event_count.get(event, 0) + 1
         if cancelled:
             self.event_cancelled[event] = self.event_cancelled.get(event, 0) + 1

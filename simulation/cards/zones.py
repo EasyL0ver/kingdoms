@@ -9,19 +9,61 @@ class Presence(CardBehavior):
     tags = []
     deck = "zone"
 
-    def on_order(self, ctx):
+    def _orderable(self, engine, card):
+        beh = engine.behavior(card)
+        return getattr(type(beh), 'on_order') is not getattr(CardBehavior, 'on_order')
+
+    def on_dawn(self, ctx):
+        s = ctx.state
+        player = ctx.player
         options = []
-        if ctx.state.pile_remaining("claw") > 0:
-            options.append("claw")
-        if ctx.state.season:
-            options.append("tree")
+
+        # Presence itself — zone access (claw/tree)
+        zone_options = []
+        if s.pile_remaining("claw") > 0:
+            zone_options.append("claw")
+        if s.season:
+            zone_options.append("tree")
+        if zone_options:
+            options.append(ctx.card)  # Presence = pick a zone
+
+        # Domain cards with on_order
+        for card in player.domain:
+            if self._orderable(ctx.engine, card):
+                options.append(card)
+
+        # Discard cards with on_order (deduplicate by name)
+        seen = set()
+        for card in player.discard:
+            if card.name not in seen and self._orderable(ctx.engine, card):
+                seen.add(card.name)
+                options.append(card)
+
+        # Wells in other players' domains
+        for p in s.players:
+            if p is player:
+                continue
+            for card in p.domain:
+                if card.name == "Well" and self._orderable(ctx.engine, card):
+                    options.append(card)
+
         if not options:
-            ctx.state.log("  → No zones available")
+            s.log("  *(no valid actions)*")
             return
-        choice = ctx.engine.strat(ctx.player).resolve(
-            ctx.state, ctx.player, options,
-            DecisionContext(event="Order", source="Presence", intent=Intent.OPTION))
-        ctx.engine.resolve_event("Order", ctx.player, scope=ctx.state.zone_cards[choice])
+
+        pick = ctx.engine.strat(player).resolve(
+            s, player, options,
+            DecisionContext(event="Turn", source="Presence", intent=Intent.OPTION))
+        s.log(f"**T{s.turn_num} — {player.name}:** Order {pick.name}")
+
+        if pick is ctx.card:
+            # Presence picked — choose zone
+            choice = ctx.engine.strat(player).resolve(
+                s, player, zone_options,
+                DecisionContext(event="Order", source="Presence", intent=Intent.OPTION))
+            ctx.engine.resolve_event("Order", player, scope=s.zone_cards[choice])
+        else:
+            ctx.engine.resolve_event("Order", player, scope=pick)
 
 
 @_register

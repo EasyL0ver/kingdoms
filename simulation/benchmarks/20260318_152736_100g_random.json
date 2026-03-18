@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-03-18T14:27:36.767713+00:00",
+  "config": {
+    "games": 100,
+    "players": 3,
+    "max_turns": 200,
+    "seed": 42,
+    "strategies": [],
+    "evaluators": null
+  },
+  "summary": {
+    "avg_turns": 200.0,
+    "avg_time": 0.001396164000107092,
+    "total_time": 0.13961640001070919,
+    "pile_depletion": {
+      "none": 100
+    },
+    "winners": {
+      "none": 100
+    }
+  },
+  "order_stats": {},
+  "strategy_winrates": {
+    "RandomStrategy": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 300,
+      "win_rate": 0,
+      "decisive": 0
+    },
+    "by_win_condition": {}
+  },
+  "events": {
+    "Dawn": {
+      "total": 20000,
+      "per_game": 200.0,
+      "cancelled": 0,
+      "cancel_rate": 0.0,
+      "avg_responders": 0.0
+    }
+  }
+}

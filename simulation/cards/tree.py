@@ -9,6 +9,8 @@ class Eldership(CardBehavior):
     tags = ['Knowledge']
     deck = 'tree'
     def on_brawl(self, ctx):
+        if ctx.active_player is ctx.player:
+            return False
         if not ctx.active_player.shares_culture(ctx.player):
             return False
         if ctx.engine.strat(ctx.player).resolve(
