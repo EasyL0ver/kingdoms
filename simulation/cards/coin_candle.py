@@ -345,6 +345,34 @@ class Evangelism(CardBehavior):
 
 
 @_register
+class Purity(CardBehavior):
+    name = 'Purity'
+    tags = ['Religion']
+    deck = 'candle'
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
+        s = ctx.state
+        if not s.revelation:
+            return
+        # Optionally exile the current Revelation
+        if not ctx.engine.strat(ctx.player).resolve(
+                s, ctx.player, [True, False],
+                DecisionContext(event="Order", source="Purity", intent=Intent.OPTION)):
+            return
+        exiled = s.revelation.pop(0)
+        s.log(f"  → Purity: exiles {exiled.name} from Revelation")
+        # Flip new Revelation
+        candle_zone = ctx.engine.behavior(s.zone_cards["candle"])
+        candle_zone.refill(s)
+        if s.revelation:
+            s.log(f"  → New Revelation: {s.revelation[0].name}")
+        # Trigger Rite
+        s.log(f"  → Purity: {ctx.player.name} triggers Rite")
+        ctx.engine.resolve_event("Rite", ctx.player)
+
+
+@_register
 class Zealot(CardBehavior):
     name = 'Zealot'
     tags = ['Spiritual', 'Religion', 'Mob']
