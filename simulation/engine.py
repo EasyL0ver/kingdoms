@@ -22,6 +22,7 @@ class GameEngine:
         self._event_depth = 0
         self._max_event_depth = 10
         self._event_cancelled = False
+        self._fired_this_dawn: set[int] = set()  # card ids that already triggered
 
     def _notify(self, method: str, *args, **kwargs):
         for obs in self.observers:
@@ -102,6 +103,7 @@ class GameEngine:
 
     def resolve_turn(self, player: Player):
         s = self.state
+        self._fired_this_dawn.clear()
         self.resolve_event("Dawn", player, scope=player)
         self._notify("on_turn_end", s, player, None)
         s.log("")
@@ -164,6 +166,10 @@ class GameEngine:
             beh = self.behavior(scope)
             resp = 0
             if getattr(type(beh), handler_name) is not base_handler:
+                if id(scope) in self._fired_this_dawn:
+                    self._notify("on_event_fired", s, event, active_player, False, 0, scope)
+                    self._event_depth -= 1
+                    return
                 # Find owner
                 owner = active_player
                 for p in s.players:
@@ -174,6 +180,7 @@ class GameEngine:
                                     active_player=active_player, uprising=uprising)
                 handler = getattr(beh, handler_name)
                 if handler(ctx):
+                    self._fired_this_dawn.add(id(scope))
                     resp = 1
             self._notify("on_event_fired", s, event, active_player, self._event_cancelled, resp, scope)
             self._event_depth -= 1
@@ -228,12 +235,15 @@ class GameEngine:
                     break
                 if card not in p.domain:
                     continue  # removed during earlier resolution
+                if id(card) in self._fired_this_dawn:
+                    continue  # already triggered this dawn
 
                 beh = self.behavior(card)
                 ctx = self.make_ctx(p, card, event=event, active_player=active_player,
                                     uprising=uprising)
                 handler = getattr(beh, handler_name)
                 if handler(ctx):
+                    self._fired_this_dawn.add(id(card))
                     responder_count += 1
 
         self._notify("on_event_fired", s, event, active_player, self._event_cancelled, responder_count, scope)

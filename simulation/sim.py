@@ -27,8 +27,8 @@ from observers import CardWinCorrelation, OrderStats, EventFrequency, StrategyWi
 
 STRATEGIES = {
     "random": ("Uniformly random choices", lambda rng, evals: RandomStrategy(rng)),
-    "tree_search": ("Depth-1 lookahead, evaluates all actions",
-                    lambda rng, evals: TreeSearchStrategy(rng, evaluators=evals)),
+    "tree_search": ("Naive decision tree — plays best path each Dawn",
+                    lambda rng, evals: TreeSearchStrategy(rng)),
 }
 
 
