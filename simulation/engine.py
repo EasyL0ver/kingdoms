@@ -102,8 +102,9 @@ class GameEngine:
         s.log(f"Fields ({len(s.fields)}): {', '.join(c.name for c in s.fields)}")
         s.log(f"Opportunities ({len(s.opportunities)}): {', '.join(c.name for c in s.opportunities)}")
         s.log(f"Wares ({len(s.wares)}): {', '.join(c.name for c in s.wares)}")
+        s.log(f"Tourney ({len(s.tourney)}): {', '.join(c.name for c in s.tourney)}")
         piles = ", ".join(f"{d} {s.pile_remaining(d)}"
-                          for d in ("claw", "tree", "wheat", "coin", "candle") if d in s.zone_cards)
+                          for d in ("claw", "tree", "wheat", "coin", "candle", "sword") if d in s.zone_cards)
         s.log(f"Piles: {piles}")
         s.log("\n---\n")
 
@@ -116,7 +117,6 @@ class GameEngine:
 
             if p_idx == 0:
                 s.round_num += 1
-                s.hunt_uses_this_round = 0
                 end_t = min(t + len(s.players) - 1, max_turns)
                 s.log(f"## Round {s.round_num} (Turns {t}–{end_t})\n")
 
@@ -138,7 +138,7 @@ class GameEngine:
 
     def _compute_winner(self) -> str | None:
         s = self.state
-        win_tags = {"tree": "Nature", "claw": "Trophy", "wheat": "Amenity", "coin": "Wealth", "candle": "Religion"}
+        win_tags = {"tree": "Nature", "claw": "Trophy", "wheat": "Amenity", "coin": "Wealth", "candle": "Religion", "sword": "Chivalry"}
         win_tag = win_tags.get(s.depleted_pile)
         if not win_tag:
             return None
@@ -327,8 +327,9 @@ class GameEngine:
         s.log(f"Fields ({len(s.fields)}): {', '.join(c.name for c in s.fields)}")
         s.log(f"Opportunities ({len(s.opportunities)}): {', '.join(c.name for c in s.opportunities)}")
         s.log(f"Wares ({len(s.wares)}): {', '.join(c.name for c in s.wares)}")
+        s.log(f"Tourney ({len(s.tourney)}): {', '.join(c.name for c in s.tourney)}")
         piles = ", ".join(f"{d} {s.pile_remaining(d)}"
-                          for d in ("claw", "tree", "wheat", "coin", "candle") if d in s.zone_cards)
+                          for d in ("claw", "tree", "wheat", "coin", "candle", "sword") if d in s.zone_cards)
         s.log(f"Piles: {piles}")
         s.log("\n---\n")
 
@@ -342,6 +343,8 @@ class GameEngine:
             "claw": ("Trophy", "🐾 Claw depleted — most [Trophy] wins"),
             "wheat": ("Amenity", "🌾 Wheat depleted — most [Amenity] wins"),
             "coin": ("Wealth", "🪙 Coin depleted — most [Wealth] wins"),
+            "candle": ("Religion", "🕯️ Candle depleted — most [Religion] wins"),
+            "sword": ("Chivalry", "⚔️ Sword depleted — most [Chivalry] wins"),
         }
 
         for p in s.players:
@@ -379,6 +382,6 @@ class GameEngine:
                 s.log(f"### Game ended — {s.depleted_pile} depleted (no scoring axis defined)")
 
         piles = ", ".join(f"{d} {s.pile_remaining(d)}"
-                          for d in ("claw", "tree", "wheat", "coin", "candle") if d in s.zone_cards)
+                          for d in ("claw", "tree", "wheat", "coin", "candle", "sword") if d in s.zone_cards)
         s.log(f"\n### Stats")
         s.log(f"Turns: {s.turn_num} | Piles: {piles}")

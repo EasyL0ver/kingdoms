@@ -81,6 +81,7 @@ class TagValue(Evaluator):
         s += player.count_tag("Amenity") * 3.0
         s += player.count_tag("Wealth") * 3.0
         s += player.count_tag("Religion") * 3.0
+        s += player.count_tag("Chivalry") * 3.0
         s += player.count_tag("Knowledge") * 1.5
         s += player.count_tag("Spiritual") * 1.0
         s += len(player.domain) * 0.5
@@ -124,7 +125,7 @@ class _PileProximity_DISABLED(Evaluator):
 
 @_register_evaluator
 class ZoneAccess(Evaluator):
-    """Reward having access to wheat/coin/candle zones."""
+    """Reward having access to wheat/coin/candle/sword zones."""
     name = "zone_access"
 
     def score(self, state, player):
@@ -134,6 +135,8 @@ class ZoneAccess(Evaluator):
         if player.has_coin_access():
             s += 2.0
         if player.has_candle_access():
+            s += 2.5
+        if player.has_sword_access():
             s += 2.5
         return s
 
@@ -174,7 +177,7 @@ class EndgameAwareness(Evaluator):
 
     def score(self, state, player):
         s = 0.0
-        win_tags = {"claw": "Trophy", "tree": "Nature", "wheat": "Amenity", "coin": "Wealth", "candle": "Religion"}
+        win_tags = {"claw": "Trophy", "tree": "Nature", "wheat": "Amenity", "coin": "Wealth", "candle": "Religion", "sword": "Chivalry"}
         for deck, tag in win_tags.items():
             remaining = state.pile_remaining(deck)
             if deck == "tree":
@@ -185,6 +188,8 @@ class EndgameAwareness(Evaluator):
                 remaining += len(state.opportunities)
             elif deck == "candle":
                 remaining += len(state.revelation)
+            elif deck == "sword":
+                remaining += len(state.tourney)
 
             if remaining > 15:
                 continue
@@ -409,6 +414,39 @@ class CardSynergy(Evaluator):
                         s += 1.0
                 case "Worship of the Martyr":
                     if player.has_card("Clergy"):
+                        s += 2.0
+                    else:
+                        s += 0.5
+                # ── Sword cards ──
+                case "Royal Hunt":
+                    # Needs hunt exclusivity (no opponent Hunt tags) + claw pile
+                    opponent_hunts = any(
+                        p.cards_with_tag("Hunt") for p in state.players if p is not player)
+                    if not opponent_hunts and claw_remaining > 3:
+                        s += 4.0
+                    elif not opponent_hunts:
+                        s += 2.0
+                    else:
+                        s += 0.5  # blocked but still has Trophy/Hunt tags
+                # ── Claw gateway cards ──
+                case "Ivory":
+                    # Self-discard → order coin zone. Good with feast recycling
+                    if len(state.opportunities) > 0:
+                        s += 2.5
+                    else:
+                        s += 1.0
+                case "Martial Excellence":
+                    # Gateway to sword zone, needs another Trophy
+                    other_trophies = sum(1 for c in player.domain
+                                       if c.has_tag("Trophy") and c.name != "Martial Excellence")
+                    if other_trophies > 0 and len(state.tourney) > 0:
+                        s += 3.0
+                    elif other_trophies > 0:
+                        s += 1.5
+                # ── Candle gateway ──
+                case "Protect the Meek":
+                    # On brawl → order sword zone. Value scales with tourney availability
+                    if len(state.tourney) > 0:
                         s += 2.0
                     else:
                         s += 0.5

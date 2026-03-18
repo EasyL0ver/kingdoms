@@ -110,6 +110,13 @@ class Player:
     def has_candle_access(self) -> bool:
         return self.has_card("Clergy")
 
+    def has_sword_access(self) -> bool:
+        if self.has_card("Martial Excellence") and self.count_tag("Trophy") >= 2:
+            return True
+        if self.has_card("Protect the Meek"):
+            return True  # triggers on brawl, not on_order, but signals intent
+        return False
+
     def shares_culture(self, other: Player) -> bool:
         """True if both players have a Culture card with the same name."""
         my_cultures = {c.name for c in self.domain if c.has_tag("Culture")}
@@ -141,7 +148,6 @@ class GameState:
             "sword": Card(name="Sword Zone", tags=["Zone"], deck="zone"),
         }
         self.wares_pile: list[Card] = []  # Junk dump — separate from Opportunities
-        self.hunt_uses_this_round = 0
         self.round_num = 0
         self.turn_num = 0
         self.game_over = False
