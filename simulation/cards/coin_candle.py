@@ -357,7 +357,11 @@ class Zealot(CardBehavior):
     def on_rite(self, ctx):
         if ctx.active_player is None or ctx.active_player is ctx.player:
             return False
-        # Rite triggerer chooses where Zealot moves
+        # Rite triggerer optionally chooses where Zealot moves
+        if not ctx.engine.strat(ctx.active_player).resolve(
+                ctx.state, ctx.active_player, [True, False],
+                DecisionContext(event="Rite", source="Zealot", intent=Intent.OPTION)):
+            return False
         targets = [p for p in ctx.state.players if p is not ctx.player]
         if not targets:
             return False
