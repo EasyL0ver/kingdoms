@@ -184,6 +184,27 @@ class Efficiency(CardBehavior):
 
 
 @_register
+class SpiceMarket(CardBehavior):
+    name = 'Spice Market'
+    tags = ['Wealth']
+    deck = 'coin'
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
+        unique_tags = set()
+        for c in ctx.player.domain:
+            for tag in c.tags:
+                unique_tags.add(tag)
+        draw_count = min(len(unique_tags), ctx.state.pile_remaining("coin"))
+        if draw_count <= 0:
+            ctx.state.log(f"  → Spice Market: {len(unique_tags)} unique tags but no coin left")
+            return
+        drawn = ctx.engine.draw_and_receive(ctx.player, "coin", draw_count)
+        names = ", ".join(c.name for c in drawn)
+        ctx.state.log(f"  → Spice Market: {len(unique_tags)} unique tags → draws {len(drawn)}: {names}")
+
+
+@_register
 class Mine(CardBehavior):
     name = 'Mine'
     tags = ['Labour']
