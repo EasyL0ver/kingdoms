@@ -540,9 +540,9 @@ class WorshipOfTheScripture(CardBehavior):
         peeked.remove(keep)
         ctx.active_player.add_to_domain(keep, ctx.state)
         ctx.state.log(f"  → keeps {keep.name}")
-        # Return rest to pile bottom
+        # Exile the rest (removed from game)
         for card in peeked:
-            ctx.state.put_on_bottom("candle", card)
+            ctx.state.log(f"  → exiles {card.name}")
         return True
 
 
