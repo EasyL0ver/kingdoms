@@ -232,7 +232,7 @@ class TreeSearchStrategy(Strategy):
 
     name = "tree_search"
 
-    def __init__(self, rng=None, time_budget: float = 2.0):
+    def __init__(self, rng=None, time_budget: float = 4.0):
         self.rng = rng or random.Random()
         self.time_budget = time_budget
         self._choices: list[int] = []
