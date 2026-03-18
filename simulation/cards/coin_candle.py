@@ -373,6 +373,17 @@ class Purity(CardBehavior):
 
 
 @_register
+class Flagellation(CardBehavior):
+    name = 'Flagellation'
+    tags = ['Religion']
+    deck = 'candle'
+    def on_rite(self, ctx):
+        ctx.state.log(f"  → Flagellation: {ctx.player.name} brawls themselves!")
+        ctx.engine.resolve_event("Brawl", ctx.player, target=ctx.player)
+        return True
+
+
+@_register
 class Zealot(CardBehavior):
     name = 'Zealot'
     tags = ['Spiritual', 'Religion', 'Mob']
