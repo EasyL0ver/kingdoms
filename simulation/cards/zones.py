@@ -247,19 +247,6 @@ class CandleZone(CardBehavior):
         s.log(f"  → Rite: {ctx.active_player.name} claims Revelation ({rev_card.name})")
         self.refill(s)
 
-    def on_harvest(self, ctx):
-        """Harvest cycles the Revelation — current goes to bottom, flip next."""
-        s = ctx.state
-        if not s.revelation:
-            self.refill(s)
-            return
-        old_rev = s.revelation.pop(0)
-        s.put_on_bottom("candle", old_rev)
-        s.log(f"  → Harvest cycles Revelation: {old_rev.name} to bottom")
-        self.refill(s)
-        if s.revelation:
-            s.log(f"  → New Revelation: {s.revelation[0].name}")
-
     def refill(self, state, target: int = 1):
         """Flip top candle card as Revelation (max 1)."""
         zone = state.zone_cards["candle"]
