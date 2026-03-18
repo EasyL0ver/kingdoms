@@ -395,9 +395,8 @@ class Ingenuity(CardBehavior):
     tags = ['Discontent']
     deck = 'claw'
     def on_dawn(self, ctx):
-        drawn = ctx.engine.draw_and_receive(ctx.player, "coin")
-        if drawn:
-            ctx.state.log(f"  → Ingenuity: draws {drawn[0].name} from Coin")
+        ctx.state.log(f"  → Ingenuity: orders Coin zone")
+        ctx.engine.order_zone(ctx.player, "coin")
         ctx.discard_self()
 
 

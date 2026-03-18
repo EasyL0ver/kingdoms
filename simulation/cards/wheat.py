@@ -57,12 +57,11 @@ class Mill(CardBehavior):
     tags = ['Labour']
     deck = 'wheat'
     def on_order(self, ctx):
-        if ctx.location != "domain" or ctx.state.pile_remaining("coin") <= 0:
+        if ctx.location != "domain":
             return
         ctx.player.discard_from_domain(ctx.card)
-        drawn = ctx.engine.draw_and_receive(ctx.player, "coin")
-        if drawn:
-            ctx.state.log(f"  → discards Mill, draws {drawn[0].name} from Coin")
+        ctx.state.log(f"  → Mill discarded, orders Coin zone")
+        ctx.engine.order_zone(ctx.player, "coin")
 
 
 @_register
@@ -96,9 +95,8 @@ class AnimalHusbandry(CardBehavior):
     def on_order(self, ctx):
         if ctx.location != "domain":
             return
-        drawn = ctx.engine.draw_and_receive(ctx.player, "coin")
-        if drawn:
-            ctx.state.log(f"  → AH: draws {drawn[0].name} from Coin")
+        ctx.state.log(f"  → AH: orders Coin zone")
+        ctx.engine.order_zone(ctx.player, "coin")
         ctx.state.log(f"  → AH: Feast")
         ctx.engine.resolve_event("Feast", ctx.player, ctx.player)
 
@@ -110,10 +108,8 @@ class AnimalHusbandry(CardBehavior):
                 ctx.state, ctx.player, [True, False],
                 DecisionContext(event="Harvest", source="Animal Husbandry", intent=Intent.OPTION)):
             ctx.player.discard_from_domain(pastures[0])
-            ctx.state.log(f"  → AH: sacrifices Pasture")
-            drawn = ctx.engine.draw_and_receive(ctx.player, "coin")
-            if drawn:
-                ctx.state.log(f"  → AH: draws {drawn[0].name} from Coin")
+            ctx.state.log(f"  → AH: sacrifices Pasture, orders Coin zone")
+            ctx.engine.order_zone(ctx.player, "coin")
             ctx.state.log(f"  → AH: Feast")
             ctx.engine.resolve_event("Feast", ctx.player, ctx.player)
             return True
