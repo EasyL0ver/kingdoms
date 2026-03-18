@@ -386,7 +386,7 @@ class Flagellation(CardBehavior):
 @_register
 class Penance(CardBehavior):
     name = 'Penance'
-    tags = ['Religion']
+    tags = ['Spiritual', 'Religion']
     deck = 'candle'
     def on_dawn(self, ctx):
         s = ctx.state
@@ -394,7 +394,7 @@ class Penance(CardBehavior):
             s.log(f"  → Penance: {ctx.player.name} has Clergy — triggers Rite")
             ctx.engine.resolve_event("Rite", ctx.player)
         else:
-            # Discard 2 cards, then sacrifice Penance
+            # Discard 2 cards
             discardable = [c for c in ctx.player.domain if c is not ctx.card]
             count = min(2, len(discardable))
             if count > 0:
@@ -406,8 +406,12 @@ class Penance(CardBehavior):
                     ctx.player.discard_from_domain(v)
                 names = ", ".join(v.name for v in victims)
                 s.log(f"  → Penance: {ctx.player.name} has no Clergy — discards {names}")
-            ctx.player.discard_from_domain(ctx.card)
-            s.log(f"  → Penance sacrificed")
+            # Optionally sacrifice Penance
+            if ctx.card in ctx.player.domain and ctx.engine.strat(ctx.player).resolve(
+                    s, ctx.player, [True, False],
+                    DecisionContext(event="Dawn", source="Penance", intent=Intent.OPTION)):
+                ctx.player.discard_from_domain(ctx.card)
+                s.log(f"  → Penance sacrificed")
 
 
 @_register
