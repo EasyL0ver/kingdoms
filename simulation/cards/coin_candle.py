@@ -379,7 +379,7 @@ class Flagellation(CardBehavior):
     deck = 'candle'
     def on_rite(self, ctx):
         ctx.state.log(f"  → Flagellation: {ctx.player.name} brawls themselves!")
-        ctx.engine.resolve_event("Brawl", ctx.player, target=ctx.player)
+        ctx.engine.resolve_event("Brawl", ctx.player, target=ctx.player, uprising=True)
         return True
 
 
