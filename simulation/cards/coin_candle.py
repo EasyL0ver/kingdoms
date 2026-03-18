@@ -205,6 +205,27 @@ class SpiceMarket(CardBehavior):
 
 
 @_register
+class Commodities(CardBehavior):
+    name = 'Commodities'
+    tags = []
+    deck = 'coin'
+    def on_rumour(self, ctx):
+        piles = [d for d in ("tree", "claw", "wheat", "coin")
+                 if ctx.state.pile_remaining(d) > 0]
+        if not piles:
+            return False
+        pile = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, piles,
+            DecisionContext(event="Rumour", source="Commodities", intent=Intent.OPTION))
+        card = ctx.state.draw_from_pile(pile)
+        if card:
+            ctx.state.wares.append(card)
+            ctx.state.log(f"  → Commodities: {ctx.player.name} adds {card.name} from {pile} to Wares")
+            return True
+        return False
+
+
+@_register
 class Mine(CardBehavior):
     name = 'Mine'
     tags = ['Labour']

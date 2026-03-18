@@ -77,6 +77,7 @@
     { "name": "Efficiency", "tags": [], "count": 2 },
     { "name": "Mine", "tags": ["Labour"], "count": 2 },
     { "name": "Spice Market", "tags": ["Wealth"], "count": 1 },
+    { "name": "Commodities", "tags": [], "count": 2 },
     { "name": "Provisions", "tags": ["Amenity"], "count": 2 }
   ],
   "candle": [
