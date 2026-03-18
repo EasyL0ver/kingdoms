@@ -63,7 +63,8 @@
     { "name": "Orchard", "tags": ["Nature", "Land"], "count": 3 },
     { "name": "Stewardship", "tags": [], "count": 2 },
     { "name": "Irrigation", "tags": ["Labour"], "count": 2 },
-    { "name": "Compost", "tags": [], "count": 3 }
+    { "name": "Compost", "tags": [], "count": 3 },
+    { "name": "Worship of the Bread", "tags": ["Spiritual"], "count": 1 }
   ],
   "coin": [
     { "name": "Treasure", "tags": ["Trophy", "Amenity", "Wealth"], "count": 6 },
@@ -77,7 +78,8 @@
     { "name": "Mine", "tags": ["Labour"], "count": 2 },
     { "name": "Spice Market", "tags": ["Wealth"], "count": 2 },
     { "name": "Commodities", "tags": [], "count": 2 },
-    { "name": "Provisions", "tags": ["Amenity"], "count": 2 }
+    { "name": "Provisions", "tags": ["Amenity"], "count": 2 },
+    { "name": "Worship of Gold", "tags": ["Spiritual"], "count": 1 }
   ],
   "candle": [
     { "name": "Worship of the Flame", "tags": ["Spiritual"], "count": 1 },

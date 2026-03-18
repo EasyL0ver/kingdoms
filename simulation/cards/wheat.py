@@ -334,3 +334,25 @@ class Compost(CardBehavior):
             ctx.state.log(f"  → Compost: Fields refilled {old} → {new}")
         if ctx.state.fields:
             ctx.engine.order_zone(ctx.player, "wheat")
+
+
+@_register
+class WorshipOfTheBread(CardBehavior):
+    name = 'Worship of the Bread'
+    tags = ['Spiritual']
+    deck = 'wheat'
+
+    def _refill_one_field(self, ctx):
+        s = ctx.state
+        old = len(s.fields)
+        s.refill_fields(old + 1)
+        if len(s.fields) > old:
+            s.log(f"  → Worship of the Bread: refills 1 Field for {ctx.active_player.name} ({s.fields[-1].name})")
+            return True
+        return False
+
+    def on_feast(self, ctx):
+        return self._refill_one_field(ctx)
+
+    def on_rite(self, ctx):
+        return self._refill_one_field(ctx)

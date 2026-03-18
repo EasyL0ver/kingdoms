@@ -259,6 +259,23 @@ class Provisions(CardBehavior):
 
 
 @_register
+class WorshipOfGold(CardBehavior):
+    name = 'Worship of Gold'
+    tags = ['Spiritual']
+    deck = 'coin'
+    def on_rite(self, ctx):
+        if not ctx.state.wares:
+            return False
+        pick = ctx.engine.strat(ctx.active_player).resolve(
+            ctx.state, ctx.active_player, list(ctx.state.wares),
+            DecisionContext(event="Rite", source="Worship of Gold", intent=Intent.GAIN))
+        ctx.state.wares.remove(pick)
+        ctx.active_player.add_to_domain(pick, ctx.state)
+        ctx.state.log(f"  → Worship of Gold: {ctx.active_player.name} takes {pick.name} from Wares")
+        return True
+
+
+@_register
 class Ornament(CardBehavior):
     name = 'Ornament'
     tags = ['Religion']
