@@ -82,6 +82,7 @@
   ],
   "candle": [
     { "name": "Worship of the Flame", "tags": ["Spiritual"], "count": 1 },
-    { "name": "Benefaction", "tags": ["Religion"], "count": 2 }
+    { "name": "Benefaction", "tags": ["Religion"], "count": 2 },
+    { "name": "Ornament", "tags": ["Religion"], "count": 2 }
   ]
 }

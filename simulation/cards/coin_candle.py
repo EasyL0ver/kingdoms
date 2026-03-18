@@ -259,6 +259,28 @@ class Provisions(CardBehavior):
 
 
 @_register
+class Ornament(CardBehavior):
+    name = 'Ornament'
+    tags = ['Religion']
+    deck = 'candle'
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
+        s = ctx.state
+        if not s.revelation:
+            s.log(f"  → Ornament: no Revelation to sell")
+            return
+        rev_card = s.revelation.pop(0)
+        s.wares.append(rev_card)
+        s.log(f"  → Ornament: {rev_card.name} moved from Revelation to Wares")
+        # Flip next Revelation
+        candle_zone = ctx.engine.behavior(s.zone_cards["candle"])
+        candle_zone.refill(s)
+        if s.revelation:
+            s.log(f"  → New Revelation: {s.revelation[0].name}")
+
+
+@_register
 class Benefaction(CardBehavior):
     name = 'Benefaction'
     tags = ['Religion']
