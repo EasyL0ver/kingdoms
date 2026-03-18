@@ -10,7 +10,7 @@ import cards.claw, cards.tree, cards.wheat, cards.coin, cards.candle, cards.swor
 # Event responder sets — which events each card can respond to.
 # Built from card behaviors at import time, but we define known sets here
 # so the engine knows which cards to scan for each event type.
-EVENT_NAMES = {"Brawl", "Rite", "Feast", "Harvest", "Rumour"}
+EVENT_NAMES = {"Dawn", "Order", "Brawl", "Rite", "Feast", "Harvest", "Rumour"}
 
 
 class GameEngine:
@@ -151,9 +151,7 @@ class GameEngine:
         s = self.state
 
         # ── Dawn Phase ──
-        # Dawn broadcasts in the active player's Domain.
-        # All On Dawn cards resolve (one-shot effects, prerequisite checks).
-        self._resolve_dawn(player)
+        self.resolve_event("Dawn", player, scope=player)
         if s.game_over:
             return
 
@@ -166,15 +164,8 @@ class GameEngine:
 
         match action.type:
             case "order" | "order_well":
-                beh = self.behavior(action.card)
-                owner = getattr(action, "owner", None)
-                if action.type == "order_well" and owner:
-                    # Well: ctx.player = owner, ctx.active_player = orderer
-                    ctx = self.make_ctx(owner, action.card, active_player=player)
-                else:
-                    ctx = self.make_ctx(player, action.card, active_player=player)
                 self._notify("on_order", s, player, action.card)
-                beh.on_order(ctx)
+                self.resolve_event("Order", player, scope=action.card)
             case "pass":
                 s.log("  *(no valid actions)*")
 
@@ -182,28 +173,11 @@ class GameEngine:
 
         s.log("")
 
-    def _resolve_dawn(self, player: Player):
-        """Dawn phase: fire on_dawn for all cards in the player's Domain.
-        Cards may discard themselves (one-shots) or check prerequisites."""
-        s = self.state
-        # Iterate over a copy since on_dawn may modify the domain
-        for card in list(player.domain):
-            if s.game_over:
-                break
-            if card not in player.domain:
-                continue  # removed by an earlier on_dawn
-            beh = self.behavior(card)
-            if getattr(type(beh), 'on_dawn') is not getattr(CardBehavior, 'on_dawn'):
-                ctx = self.make_ctx(player, card)
-                beh.on_dawn(ctx)
-
     # ── Public helpers for card behaviors ──
 
     def order_zone(self, player: Player, zone_name: str):
         zone_card = self.state.zone_cards[zone_name]
-        beh = self.behavior(zone_card)
-        ctx = self.make_ctx(player, zone_card)
-        beh.on_order(ctx)
+        self.resolve_event("Order", player, scope=zone_card)
 
 
     def _card_is_placed(self, card: Card) -> bool:
@@ -233,13 +207,14 @@ class GameEngine:
     # ── Generic Event Resolution ──
 
     def resolve_event(self, event: str, active_player: Player,
-                      scope: 'Player | list[Player] | None' = None,
+                      scope: 'Card | Player | list[Player] | None' = None,
                       uprising: bool = False):
-        """Broadcast an event to responding cards.
-        scope controls which domains are scanned:
-          None  → all domains (Harvest, Feast, global Rite)
-          Player → just that player's domain (Brawl, local Rite)
+        """Fire an event to responding cards.
+        scope controls what receives the event:
+          Card   → just that one card (Order on a specific card/zone)
+          Player → all cards in that player's domain (Brawl, local Rite)
           [Player, ...] → those players' domains (Rumour)
+          None   → all domains (Harvest, Feast, global Rite)
         """
         if self._event_depth >= self._max_event_depth:
             self.state.log("  ⚠️ Event chain too deep, stopping")
@@ -250,6 +225,23 @@ class GameEngine:
 
         handler_name = f"on_{event.lower()}"
         base_handler = getattr(CardBehavior, handler_name)
+
+        # Single card scope — fire directly, skip zone broadcast and domain scan
+        if isinstance(scope, Card):
+            beh = self.behavior(scope)
+            if getattr(type(beh), handler_name) is not base_handler:
+                # Find owner
+                owner = active_player
+                for p in s.players:
+                    if scope in p.domain or scope in p.discard:
+                        owner = p
+                        break
+                ctx = self.make_ctx(owner, scope, event=event,
+                                    active_player=active_player, uprising=uprising)
+                handler = getattr(beh, handler_name)
+                handler(ctx)
+            self._event_depth -= 1
+            return
 
         # Broadcast to zone cards first
         for zone_name, zone_card in s.zone_cards.items():

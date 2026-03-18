@@ -756,9 +756,7 @@ class TreeSearchStrategy(Strategy):
         sim_engine = GameEngine(sim_state, strats, observers=[])
 
         try:
-            beh = sim_engine.behavior(sim_card)
-            ctx = sim_engine.make_ctx(sim_player, sim_card)
-            beh.on_order(ctx)
+            sim_engine.resolve_event("Order", sim_player, scope=sim_card)
         except Exception:
             return None, float("-inf"), []
 
@@ -803,9 +801,7 @@ class TreeSearchStrategy(Strategy):
         sim_engine = GameEngine(sim_state, strats, observers=[])
 
         try:
-            beh = sim_engine.behavior(sim_card)
-            ctx = sim_engine.make_ctx(sim_player, sim_card)
-            beh.on_order(ctx)
+            sim_engine.resolve_event("Order", sim_player, scope=sim_card)
         except Exception:
             return float("-inf"), []
 

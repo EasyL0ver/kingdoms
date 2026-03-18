@@ -174,10 +174,8 @@ class Efficiency(CardBehavior):
         for card in to_order:
             if card not in ctx.player.domain:
                 continue
-            beh = ctx.engine.behavior(card)
-            sub_ctx = ctx.engine.make_ctx(ctx.player, card, active_player=ctx.player)
             ctx.state.log(f"  → Efficiency orders {card.name}")
-            beh.on_order(sub_ctx)
+            ctx.engine.resolve_event("Order", ctx.player, scope=card)
         ctx.player.discard_from_domain(ctx.card)
         ctx.state.log(f"  → Efficiency discarded")
 

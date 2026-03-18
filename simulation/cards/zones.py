@@ -21,10 +21,7 @@ class Presence(CardBehavior):
         choice = ctx.engine.strat(ctx.player).resolve(
             ctx.state, ctx.player, options,
             DecisionContext(event="Order", source="Presence", intent=Intent.OPTION))
-        zone_card = ctx.state.zone_cards[choice]
-        zone_beh = ctx.engine.behavior(zone_card)
-        zone_ctx = ctx.engine.make_ctx(ctx.player, zone_card)
-        zone_beh.on_order(zone_ctx)
+        ctx.engine.resolve_event("Order", ctx.player, scope=ctx.state.zone_cards[choice])
 
 
 @_register
