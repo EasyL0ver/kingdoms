@@ -87,9 +87,7 @@ _CASCADE_NAMES = {
 }
 
 
-def _branch_priority(label: str, hint_labels: set[str] | None = None) -> int:
-    if hint_labels and label in hint_labels:
-        return -1  # last turn's best move — explore first
+def _branch_priority(label: str) -> int:
     if label in _ZONE_NAMES:
         return 0
     if label in _CASCADE_NAMES:
@@ -110,16 +108,12 @@ class _TimeBudgetExceeded(Exception):
 
 def build_tree(state, player, engine_cls, strategies: dict,
                time_budget: float | None = None,
-               hint_labels: set[str] | None = None,
                rng: random.Random | None = None) -> tuple[TreeNode | LeafNode, dict]:
     """Build the decision tree for one Dawn.
 
-    At each decision point for the active player, forks for every option.
-    Leaves are scored with evaluate(). Returns (root, stats_dict).
-
     time_budget: max seconds to spend building. None = unlimited.
-    hint_labels: card names from last turn's best path — explored first.
-    rng: used to shuffle within priority tiers for variety.
+    rng: shuffles within priority tiers for variety.
+    Branches ordered: zones first, cascading cards second, rest last.
     """
     node_count = 0
     leaf_count = 0
@@ -157,11 +151,10 @@ def build_tree(state, player, engine_cls, strategies: dict,
                     seen[lbl] = i
                     unique_indices.append(i)
 
-            # Order branches: last turn's best first, then zones, then cascades
-            # Shuffle within tiers for variety across runs
+            # Order branches: zones first, cascades second; shuffle within tiers
             if rng:
                 rng.shuffle(unique_indices)
-            unique_indices.sort(key=lambda i: _branch_priority(labels[i], hint_labels))
+            unique_indices.sort(key=lambda i: _branch_priority(labels[i]))
 
             node = TreeNode(
                 source=ctx.source,
@@ -213,18 +206,6 @@ def best_path(node) -> tuple[float, list[int]]:
     return best_score, best_choices
 
 
-def _collect_path_labels(node, choices: list[int]) -> set[str]:
-    """Walk the best path through the tree, collect option labels chosen."""
-    labels = set()
-    for idx in choices:
-        if isinstance(node, LeafNode) or idx not in node.children:
-            break
-        if idx < len(node.options):
-            labels.add(node.options[idx])
-        node = node.children[idx]
-    return labels
-
-
 class TreeSearchStrategy(Strategy):
     """Builds a time-budgeted decision tree each Dawn and plays the best path."""
 
@@ -236,7 +217,6 @@ class TreeSearchStrategy(Strategy):
         self._choices: list[int] = []
         self._decision_idx = 0
         self._last_turn = -1
-        self._hint_labels: set[str] = set()  # best branch labels from previous turn
 
     def _plan(self, state, player):
         if state.turn_num == self._last_turn:
@@ -244,14 +224,8 @@ class TreeSearchStrategy(Strategy):
         from engine import GameEngine
         opponent_strats = {p.name: RandomStrategy(self.rng) for p in state.players}
         root, stats = build_tree(state, player, GameEngine, opponent_strats,
-                                 time_budget=self.time_budget,
-                                 hint_labels=self._hint_labels,
-                                 rng=self.rng)
+                                 time_budget=self.time_budget, rng=self.rng)
         _, self._choices = best_path(root)
-
-        # Remember this turn's best branch labels for next turn's hints
-        self._hint_labels = _collect_path_labels(root, self._choices)
-
         self._decision_idx = 0
         self._last_turn = state.turn_num
 
