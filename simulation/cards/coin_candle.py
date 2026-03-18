@@ -323,6 +323,28 @@ class Sabbath(CardBehavior):
 
 
 @_register
+class Evangelism(CardBehavior):
+    name = 'Evangelism'
+    tags = ['Religion']
+    deck = 'candle'
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
+        s = ctx.state
+        candle_zone = ctx.engine.behavior(s.zone_cards["candle"])
+        # Each player in turn order claims the current Revelation, then next flips
+        for p in s.play_order_from(ctx.player):
+            if not s.revelation:
+                candle_zone.refill(s)
+            if not s.revelation:
+                break  # pile exhausted
+            rev_card = s.revelation.pop(0)
+            p.add_to_domain(rev_card, s)
+            s.log(f"  → Evangelism: {p.name} receives {rev_card.name}")
+            candle_zone.refill(s)
+
+
+@_register
 class Blessing(CardBehavior):
     name = 'Blessing'
     tags = ['Spiritual', 'Religion']
