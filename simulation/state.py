@@ -146,6 +146,7 @@ class GameState:
             "coin": Card(name="Coin Zone", tags=["Zone"], deck="zone"),
             "candle": Card(name="Candle Zone", tags=["Zone"], deck="zone"),
         }
+        self.wares_pile: list[Card] = []  # Junk dump — separate from Opportunities
         self.hunt_uses_this_round = 0
         self.round_num = 0
         self.turn_num = 0
@@ -169,8 +170,14 @@ class GameState:
         return self.zone_cards["wheat"].face_up
 
     @property
-    def wares(self) -> list[Card]:
+    def opportunities(self) -> list[Card]:
+        """Premium coin cards face-up (refilled to 3)."""
         return self.zone_cards["coin"].face_up
+
+    @property
+    def wares(self) -> list[Card]:
+        """Junk pile — cards dumped by trades, Smuggler, etc. Free to grab."""
+        return self.wares_pile
 
     @property
     def revelation(self) -> list[Card]:
@@ -230,10 +237,11 @@ class GameState:
             zone.pile.append(card)
 
     def setup_zones(self):
-        """Set up face-up areas: Season (4), Fields (5), Revelation (1). Wares start empty."""
+        """Set up face-up areas: Season (4), Fields (5), Opportunities (3), Revelation (1). Wares start empty."""
         from cards import get_behavior
         get_behavior("Tree Zone").refill(self)
         get_behavior("Wheat Zone").refill(self)
+        get_behavior("Coin Zone").refill(self, 3)
         get_behavior("Candle Zone").refill(self)
 
     def refill_season(self, target: int = 4):
@@ -244,7 +252,7 @@ class GameState:
         from cards import get_behavior
         get_behavior("Wheat Zone").refill(self, target)
 
-    def refill_wares(self, target: int = 3):
+    def refill_opportunities(self, target: int = 3):
         from cards import get_behavior
         get_behavior("Coin Zone").refill(self, target)
 
@@ -257,7 +265,7 @@ class GameState:
             return "tree"
         if self.pile_remaining("wheat") == 0 and len(self.fields) == 0:
             return "wheat"
-        if self.pile_remaining("coin") == 0 and len(self.wares) == 0:
+        if self.pile_remaining("coin") == 0 and len(self.opportunities) == 0:
             return "coin"
         if self.pile_remaining("candle") == 0 and len(self.revelation) == 0:
             return "candle"

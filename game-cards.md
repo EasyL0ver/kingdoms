@@ -71,17 +71,18 @@ Wheat pile.
 ```
 🪙  COIN ZONE
 [Zone]
-3 Coin cards face-up (the Wares).
+3 Coin cards face-up (the Display).
+Discarded cards go to the Wares (starts empty).
 On Order — choose one:
-  Buy — take any card from the Wares. Refill to 3
-  from pile.
   Trade — place any card from your Domain into the
-  Wares, then draw from the top of the Coin pile.
+  Wares, then take any card from the Display.
+  Refill Display to 3 from pile.
+  Buy — take any card from the Wares for free.
 ```
 
 > You can't Order this by default — needs a gateway card.
 
-🤖 Buy when Wares has something valuable. Trade to dump unwanted cards. Wares content shifts as players Trade into it.
+🤖 Trade to swap junk for premium Display cards. Buy to grab free stuff from the Wares junk pile. Wares fills up with other players' discards.
 
 ---
 

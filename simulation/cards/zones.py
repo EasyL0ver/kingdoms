@@ -124,7 +124,7 @@ class CoinZone(CardBehavior):
         options = []
         if s.wares:
             options.append("buy")
-        if ctx.player.domain and s.pile_remaining("coin") > 0:
+        if ctx.player.domain and s.opportunities:
             options.append("trade")
         if not options:
             s.log("  → Coin zone: nothing to do")
@@ -139,25 +139,26 @@ class CoinZone(CardBehavior):
             s.wares.remove(pick)
             ctx.player.add_to_domain(pick, s)
             s.log(f"  → buys {pick.name} from Wares")
-            self.refill(s)
-        elif choice == "trade" and ctx.player.domain:
+        elif choice == "trade" and ctx.player.domain and s.opportunities:
             to_trade = ctx.engine.strat(ctx.player).resolve(
                 s, ctx.player, list(ctx.player.domain),
                 DecisionContext(event="Order", source="Coin Zone", intent=Intent.DISCARD))
             ctx.player.remove_from_domain(to_trade)
             s.wares.append(to_trade)
-            coin = s.draw_from_pile("coin")
-            if coin:
-                s.log(f"  → trades {to_trade.name} into Wares, draws {coin.name} from Coin")
-                ctx.engine.receive_card(ctx.player, coin)
+            pick = ctx.engine.strat(ctx.player).resolve(
+                s, ctx.player, list(s.opportunities),
+                DecisionContext(event="Order", source="Coin Zone", intent=Intent.GAIN))
+            s.opportunities.remove(pick)
+            ctx.player.add_to_domain(pick, s)
+            s.log(f"  → trades {to_trade.name} into Wares, takes {pick.name} from Opportunities")
+            self.refill(s, 3)
             s.log(f"  → Trade triggers Rumour!")
             ctx.engine.resolve_event("Rumour", ctx.player, exclude_active=True)
 
-    def refill(self, state, target: int = None):
-        """Refill Wares from coin pile. No limit by default."""
+    def refill(self, state, target: int = 3):
+        """Refill Opportunities to target from coin pile."""
         zone = state.zone_cards["coin"]
-        limit = target if target is not None else len(zone.pile)
-        while len(zone.face_up) < limit and zone.pile_ptr < len(zone.pile):
+        while len(zone.face_up) < target and zone.pile_ptr < len(zone.pile):
             zone.face_up.append(zone.pile[zone.pile_ptr])
             zone.pile_ptr += 1
 

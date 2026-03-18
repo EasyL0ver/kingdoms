@@ -4,7 +4,7 @@ from __future__ import annotations
 from state import GameState, Player, Card, Action
 from strategy import Strategy, Intent, DecisionContext
 from cards import CardContext, CardBehavior, get_behavior
-import cards.claw, cards.tree, cards.wheat, cards.coin_candle, cards.zones
+import cards.claw, cards.tree, cards.wheat, cards.coin, cards.candle, cards.zones
 
 
 # Event responder sets — which events each card can respond to.
@@ -100,6 +100,7 @@ class GameEngine:
         s.log("## Initial State\n")
         s.log(f"Season: {', '.join(c.name for c in s.season)}")
         s.log(f"Fields ({len(s.fields)}): {', '.join(c.name for c in s.fields)}")
+        s.log(f"Opportunities ({len(s.opportunities)}): {', '.join(c.name for c in s.opportunities)}")
         s.log(f"Wares ({len(s.wares)}): {', '.join(c.name for c in s.wares)}")
         piles = ", ".join(f"{d} {s.pile_remaining(d)}"
                           for d in ("claw", "tree", "wheat", "coin", "candle") if d in s.zone_cards)
@@ -137,7 +138,7 @@ class GameEngine:
 
     def _compute_winner(self) -> str | None:
         s = self.state
-        win_tags = {"tree": "Nature", "claw": "Trophy", "wheat": "Amenity", "coin": "Wealth"}
+        win_tags = {"tree": "Nature", "claw": "Trophy", "wheat": "Amenity", "coin": "Wealth", "candle": "Religion"}
         win_tag = win_tags.get(s.depleted_pile)
         if not win_tag:
             return None
@@ -324,6 +325,7 @@ class GameEngine:
         s.log("")
         s.log(f"Season: {', '.join(c.name for c in s.season)}")
         s.log(f"Fields ({len(s.fields)}): {', '.join(c.name for c in s.fields)}")
+        s.log(f"Opportunities ({len(s.opportunities)}): {', '.join(c.name for c in s.opportunities)}")
         s.log(f"Wares ({len(s.wares)}): {', '.join(c.name for c in s.wares)}")
         piles = ", ".join(f"{d} {s.pile_remaining(d)}"
                           for d in ("claw", "tree", "wheat", "coin", "candle") if d in s.zone_cards)

@@ -80,6 +80,7 @@ class TagValue(Evaluator):
         s += player.count_tag("Nature") * 3.0
         s += player.count_tag("Amenity") * 3.0
         s += player.count_tag("Wealth") * 3.0
+        s += player.count_tag("Religion") * 3.0
         s += player.count_tag("Knowledge") * 1.5
         s += player.count_tag("Spiritual") * 1.0
         s += len(player.domain) * 0.5
@@ -133,7 +134,7 @@ class ZoneAccess(Evaluator):
         if player.has_coin_access():
             s += 2.0
         if player.has_candle_access():
-            s += 1.5
+            s += 2.5
         return s
 
 
@@ -144,7 +145,7 @@ class EndgameAwareness(Evaluator):
 
     def score(self, state, player):
         s = 0.0
-        win_tags = {"claw": "Trophy", "tree": "Nature", "wheat": "Amenity", "coin": "Wealth"}
+        win_tags = {"claw": "Trophy", "tree": "Nature", "wheat": "Amenity", "coin": "Wealth", "candle": "Religion"}
         for deck, tag in win_tags.items():
             remaining = state.pile_remaining(deck)
             if deck == "tree":
@@ -152,7 +153,9 @@ class EndgameAwareness(Evaluator):
             elif deck == "wheat":
                 remaining += len(state.fields)
             elif deck == "coin":
-                remaining += len(state.wares)
+                remaining += len(state.opportunities)
+            elif deck == "candle":
+                remaining += len(state.revelation)
 
             if remaining > 15:
                 continue
@@ -309,6 +312,77 @@ class CardSynergy(Evaluator):
                 # ── Wheat cards ── (continued)
                 case "Stewardship":
                     s += 2.0
+
+                # ── Coin cards ──
+                case "Swindle":
+                    if len(state.wares) >= 3:
+                        s += 3.0 + len(state.wares) * 0.5
+                case "Benefaction":
+                    if coin_remaining > 0:
+                        s += 2.5
+
+                # ── Candle cards ──
+                case "Clergy":
+                    # Gate to candle zone — more valuable with Religion tags
+                    has_religion = player.count_tag("Religion")
+                    s += 3.0 + has_religion * 0.5
+                case "Sabbath":
+                    # Rite engine — better with Spiritual responders
+                    spiritual = player.count_tag("Spiritual")
+                    s += 2.0 + spiritual * 0.5
+                case "Evangelism":
+                    # Win accelerator — better when ahead on Religion
+                    has_religion = player.count_tag("Religion")
+                    max_opp_religion = max(
+                        (p.count_tag("Religion") for p in state.other_players(player)),
+                        default=0)
+                    if has_religion > max_opp_religion:
+                        s += 3.0 + (has_religion - max_opp_religion) * 1.0
+                    else:
+                        s += 1.0
+                case "Purity":
+                    if candle_remaining > 0:
+                        s += 2.0
+                case "Zealot":
+                    has_religion = player.count_tag("Religion")
+                    if has_religion > 1:  # excludes Zealot itself
+                        s += 2.5  # defends + attacks
+                    else:
+                        s += 1.0  # attacks only
+                case "Ornament":
+                    if len(state.revelation) > 0:
+                        s += 2.0
+                case "Alms":
+                    if has_discontent > 0 or has_fields:
+                        s += 1.5
+                case "Penance":
+                    # Painful but carries Religion + Spiritual tags
+                    has_religion = player.count_tag("Religion")
+                    if candle_remaining <= 10 and has_religion >= 3:
+                        s += 1.0  # worth keeping late game
+                    else:
+                        s -= 1.0  # generally bad
+                case "Flagellation":
+                    has_religion = player.count_tag("Religion")
+                    if has_religion > 1:
+                        s += 0.5  # Zealot can cancel the self-brawl
+                    else:
+                        s -= 1.0
+                case "Worship of the Scripture":
+                    if player.has_card("Clergy"):
+                        s += 2.5
+                    else:
+                        s += 1.0
+                case "Worship of the Relic":
+                    if player.has_card("Clergy"):
+                        s += 2.5
+                    else:
+                        s += 1.0
+                case "Worship of the Martyr":
+                    if player.has_card("Clergy"):
+                        s += 2.0
+                    else:
+                        s += 0.5
 
         # Discard synergies — cards that can self-rescue
         for card in player.discard:
@@ -535,8 +609,9 @@ class TreeSearchStrategy(Strategy):
     def sequence(self, state, player, items, ctx):
         # Cancellers first on Brawl, info cards first on Rumour
         PRIORITY = {
-            "Brawl": {"Militia": 0, "Sellsword": 0, "Eldership": 1, "Crags": 2},
+            "Brawl": {"Militia": 0, "Sellsword": 0, "Zealot": 0, "Eldership": 1, "Crags": 2},
             "Rumour": {"Village Gossip": 0, "Market": 1},
+            "Rite": {"Worship of the Relic": 0, "Worship of the Scripture": 1, "Worship of the Martyr": 2},
         }
         priorities = PRIORITY.get(ctx.event, {})
         if not priorities:
