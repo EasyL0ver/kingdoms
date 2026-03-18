@@ -144,7 +144,7 @@ class CoinZone(CardBehavior):
             s.log(f"  → trades {to_trade.name} into Wares, takes {pick.name} from Opportunities")
             self.refill(s, 3)
             s.log(f"  → Trade triggers Rumour!")
-            ctx.engine.resolve_event("Rumour", ctx.player, exclude_active=True)
+            ctx.engine.resolve_event("Rumour", ctx.player, scope=ctx.state.other_players(ctx.player))
 
     def refill(self, state, target: int = 3):
         """Refill Opportunities to target from coin pile."""

@@ -9,8 +9,6 @@ class Eldership(CardBehavior):
     tags = ['Knowledge']
     deck = 'tree'
     def on_brawl(self, ctx):
-        if ctx.target is not ctx.player:
-            return False
         if not ctx.active_player.shares_culture(ctx.player):
             return False
         if ctx.engine.strat(ctx.player).resolve(
@@ -85,8 +83,8 @@ class SacredGrove(CardBehavior):
             ctx.state, ctx.player, options,
             DecisionContext(event="Order", source="Sacred Grove", intent=Intent.OPTION))
         if choice == "rite":
-            ctx.state.log(f"  → Rite")
-            ctx.engine.resolve_event("Rite", ctx.player)
+            ctx.state.log(f"  → Sacred Grove: local Rite")
+            ctx.engine.resolve_event("Rite", ctx.player, scope=ctx.player)
         else:
             top3 = ctx.state.peek_pile("tree", 3)
             spiritual = [c for c in top3 if c.has_tag("Spiritual")]
@@ -166,8 +164,6 @@ class WorshipOfFertility(CardBehavior):
         ctx.engine.resolve_event("Harvest", ctx.active_player)
         return True
 
-
-@_register
 
 @_register
 class Forage(CardBehavior):
@@ -294,7 +290,5 @@ class Pilgrimage(CardBehavior):
         self._claim_revelation(ctx)
 
     def on_rite(self, ctx):
-        if ctx.target is not ctx.player:
-            return False
         self._claim_revelation(ctx)
         return True

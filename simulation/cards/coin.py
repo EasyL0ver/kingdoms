@@ -47,18 +47,15 @@ class Smuggler(CardBehavior):
     tags = ['Mob']
     deck = 'coin'
     def on_brawl(self, ctx):
-        if ctx.target is None:
-            return False
-        defender = ctx.target
-        moveable = [c for c in defender.domain if c is not ctx.card]
+        moveable = [c for c in ctx.player.domain if c is not ctx.card]
         if not moveable:
             return False
         victim = ctx.engine.strat(ctx.player).resolve(
             ctx.state, ctx.player, moveable,
             DecisionContext(event="Brawl", source="Smuggler", intent=Intent.DISCARD))
-        defender.remove_from_domain(victim)
+        ctx.player.remove_from_domain(victim)
         ctx.state.wares.append(victim)
-        ctx.state.log(f"  → Smuggler: {victim.name} from {defender.name} goes to Wares")
+        ctx.state.log(f"  → Smuggler: {victim.name} from {ctx.player.name} goes to Wares")
         return True
 
     def on_rumour(self, ctx):
@@ -76,8 +73,6 @@ class Sellsword(CardBehavior):
     tags = ['Unit']
     deck = 'coin'
     def on_brawl(self, ctx):
-        if ctx.target is not ctx.player:
-            return False
         if not ctx.engine.strat(ctx.player).resolve(
                 ctx.state, ctx.player, [True, False],
                 DecisionContext(event="Brawl", source="Sellsword", intent=Intent.OPTION)):
@@ -109,7 +104,7 @@ class Swindle(CardBehavior):
         ctx.state.log(f"  → Swindle: {target.name} takes all Wares ({len(taken)}): {names}")
         # Brawl in their domain
         ctx.state.log(f"  → Swindle: Brawl erupts in {target.name}'s domain!")
-        ctx.engine.resolve_event("Brawl", ctx.player, target=target)
+        ctx.engine.resolve_event("Brawl", ctx.player, scope=target)
         # Self-discard
         ctx.player.discard_from_domain(ctx.card)
         ctx.state.log(f"  → Swindle discarded")

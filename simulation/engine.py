@@ -233,11 +233,14 @@ class GameEngine:
     # ── Generic Event Resolution ──
 
     def resolve_event(self, event: str, active_player: Player,
-                      target: Player | None = None, uprising: bool = False,
-                      exclude_active: bool = False):
-        """Broadcast an event. Each domain's owner chooses resolution order
-        of their responding cards.
-        If exclude_active, the active_player's domain cards do not respond."""
+                      scope: 'Player | list[Player] | None' = None,
+                      uprising: bool = False):
+        """Broadcast an event to responding cards.
+        scope controls which domains are scanned:
+          None  → all domains (Harvest, Feast, global Rite)
+          Player → just that player's domain (Brawl, local Rite)
+          [Player, ...] → those players' domains (Rumour)
+        """
         if self._event_depth >= self._max_event_depth:
             self.state.log("  ⚠️ Event chain too deep, stopping")
             return
@@ -248,22 +251,29 @@ class GameEngine:
         handler_name = f"on_{event.lower()}"
         base_handler = getattr(CardBehavior, handler_name)
 
-        # Broadcast to zone cards first (e.g., Wheat Zone refills on Harvest)
+        # Broadcast to zone cards first
         for zone_name, zone_card in s.zone_cards.items():
             if s.game_over or self._event_cancelled:
                 break
             beh = self.behavior(zone_card)
             if getattr(type(beh), handler_name) is not base_handler:
                 ctx = self.make_ctx(active_player, zone_card, event=event,
-                                    active_player=active_player, target=target, uprising=uprising)
+                                    active_player=active_player, uprising=uprising)
                 handler = getattr(beh, handler_name)
                 handler(ctx)
 
-        # Scan all domains in play order, collect responders, let owner order them
+        # Determine which domains to scan
+        all_players = s.play_order_from(active_player)
+        if scope is None:
+            scan_players = all_players
+        elif isinstance(scope, list):
+            scope_set = set(id(p) for p in scope)
+            scan_players = [p for p in all_players if id(p) in scope_set]
+        else:
+            scan_players = [scope]
+
         responder_count = 0
-        for p in s.play_order_from(active_player):
-            if exclude_active and p is active_player:
-                continue
+        for p in scan_players:
             if s.game_over or self._event_cancelled:
                 break
 
@@ -293,12 +303,12 @@ class GameEngine:
 
                 beh = self.behavior(card)
                 ctx = self.make_ctx(p, card, event=event, active_player=active_player,
-                                    target=target, uprising=uprising)
+                                    uprising=uprising)
                 handler = getattr(beh, handler_name)
                 if handler(ctx):
                     responder_count += 1
 
-        self._notify("on_event_fired", s, event, active_player, target, self._event_cancelled, responder_count)
+        self._notify("on_event_fired", s, event, active_player, self._event_cancelled, responder_count)
         self._event_depth -= 1
 
     # ── Logging ──

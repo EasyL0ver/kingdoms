@@ -18,8 +18,7 @@ class CardContext:
 
     # Event-specific fields (set when dispatching per-event handlers)
     event: str = ""        # "Brawl", "Rite", "Feast", "Harvest", "Rumour"
-    active_player: Player | None = None  # the active player (whose turn it is)
-    target: Player | None = None     # target domain (for Brawl)
+    active_player: Player | None = None  # the player who triggered the event
     uprising: bool = False           # Uprising special rules (no benefits)
 
     @property

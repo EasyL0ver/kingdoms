@@ -39,8 +39,6 @@ class Raid(CardBehavior):
     tags = ['Unit', 'Mob', 'Discontent']
     deck = 'claw'
     def on_brawl(self, ctx):
-        if ctx.target is not ctx.player:
-            return False
         giveable = [c for c in ctx.player.domain if c is not ctx.card]
         if not giveable:
             return True
@@ -66,8 +64,6 @@ class Scavenge(CardBehavior):
     tags = ['Unit', 'Mob', 'Discontent']
     deck = 'claw'
     def on_brawl(self, ctx):
-        if ctx.target is not ctx.player:
-            return False
         if not ctx.player.discard:
             return True
         if ctx.uprising:
@@ -273,8 +269,6 @@ class Marauders(CardBehavior):
     tags = ['Unit', 'Mob', 'Discontent']
     deck = 'claw'
     def on_feast(self, ctx):
-        if ctx.target is not ctx.player:
-            return False
         ctx.player.discard_from_domain(ctx.card)
         drawn = ctx.engine.draw_and_receive(ctx.player, "claw")
         if drawn:
@@ -290,8 +284,6 @@ class ShareTheSpoils(CardBehavior):
     tags = []
     deck = 'claw'
     def on_feast(self, ctx):
-        if ctx.target is not ctx.player:
-            return False
         drawn = ctx.engine.draw_and_receive(ctx.player, "claw")
         if drawn:
             ctx.state.log(f"  → Share the Spoils: draws {drawn[0].name} from Claw")
@@ -379,8 +371,6 @@ class RiteOfPassage(CardBehavior):
     tags = ['Discontent']
     deck = 'claw'
     def on_brawl(self, ctx):
-        if ctx.target is not ctx.player:
-            return False
         drawn = ctx.engine.draw_and_receive(ctx.player, "tree")
         if drawn:
             ctx.state.log(f"  → Rite of Passage: {ctx.player.name} draws {drawn[0].name} from Tree")
@@ -456,8 +446,6 @@ class Hunger(CardBehavior):
 
     def on_feast(self, ctx):
         """Properly fed — recycle 1 card from any player's discard to top of claw pile."""
-        if ctx.target is not ctx.player:
-            return False
         s = ctx.state
         candidates = []
         for p in s.players:
@@ -507,8 +495,6 @@ class SpoilsOfWar(CardBehavior):
             ctx.state.log(f"  → Spoils of War placed in {target.name}'s Domain")
 
     def on_brawl(self, ctx):
-        if ctx.target is not ctx.player:
-            return False
         if ctx.uprising:
             ctx.state.log(f"  → Spoils of War: no effect (Uprising)")
             return True
@@ -553,8 +539,6 @@ class BloodFeud(CardBehavior):
     tags = ['Mob', 'Discontent']
     deck = 'claw'
     def on_brawl(self, ctx):
-        if ctx.target is not ctx.player:
-            return False
         if ctx.uprising:
             return False
         # Draw 2 from claw
@@ -584,8 +568,6 @@ class Enforcers(CardBehavior):
     tags = ['Mob', 'Discontent']
     deck = 'claw'
     def on_brawl(self, ctx):
-        if ctx.target is not ctx.player:
-            return False
         if ctx.uprising:
             return False
         # Both sides draw 2 claw — arms race

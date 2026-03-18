@@ -145,7 +145,7 @@ class Flagellation(CardBehavior):
     deck = 'candle'
     def on_rite(self, ctx):
         ctx.state.log(f"  → Flagellation: {ctx.player.name} brawls themselves!")
-        ctx.engine.resolve_event("Brawl", ctx.player, target=ctx.player, uprising=True)
+        ctx.engine.resolve_event("Brawl", ctx.player, scope=ctx.player, uprising=True)
         return True
 
 
@@ -182,23 +182,20 @@ class Zealot(CardBehavior):
     tags = ['Spiritual', 'Religion', 'Mob']
     deck = 'candle'
     def on_brawl(self, ctx):
-        if ctx.target is None:
-            return False
-        # Defensive: if Zealot's owner is the target and has Religion, cancel brawl
-        if ctx.target is ctx.player and any(c.has_tag("Religion") for c in ctx.player.domain if c is not ctx.card):
+        # Defensive: cancel brawl if domain has Religion
+        if any(c.has_tag("Religion") for c in ctx.player.domain if c is not ctx.card):
             ctx.state.log(f"  → Zealot defends {ctx.player.name}'s domain — Brawl cancelled!")
             ctx.engine.cancel_event()
             return True
-        # Offensive: destroy a card from the defender's domain
-        defender = ctx.target
-        destroyable = [c for c in defender.domain if c is not ctx.card]
+        # Offensive: destroy a card from this domain
+        destroyable = [c for c in ctx.player.domain if c is not ctx.card]
         if not destroyable:
             return False
         victim = ctx.engine.strat(ctx.player).resolve(
             ctx.state, ctx.player, destroyable,
             DecisionContext(event="Brawl", source="Zealot", intent=Intent.DISCARD))
-        defender.discard_from_domain(victim)
-        ctx.state.log(f"  → Zealot: discards {victim.name} from {defender.name}")
+        ctx.player.discard_from_domain(victim)
+        ctx.state.log(f"  → Zealot: discards {victim.name} from {ctx.player.name}")
         return True
 
     def on_rite(self, ctx):
@@ -269,8 +266,8 @@ class Benefaction(CardBehavior):
                 ctx.state, ctx.player, [True, False],
                 DecisionContext(event="Order", source="Benefaction", intent=Intent.OPTION)):
             ctx.state.log(f"  → Benefaction: spectacle! Two Rumours spread")
-            ctx.engine.resolve_event("Rumour", ctx.player, exclude_active=True)
-            ctx.engine.resolve_event("Rumour", ctx.player, exclude_active=True)
+            ctx.engine.resolve_event("Rumour", ctx.player, scope=ctx.state.other_players(ctx.player))
+            ctx.engine.resolve_event("Rumour", ctx.player, scope=ctx.state.other_players(ctx.player))
         else:
             ctx.state.log(f"  → Benefaction: silence — no Rumour")
 
@@ -329,7 +326,6 @@ class WorshipOfTheRelic(CardBehavior):
         if n <= 0:
             return False
         s = ctx.state
-        # Choose any pile to peek top N
         piles = [d for d in ("claw", "tree", "wheat", "coin", "candle")
                  if s.pile_remaining(d) > 0]
         if not piles:
@@ -373,8 +369,6 @@ class WorshipOfTheMartyr(CardBehavior):
     deck = 'candle'
     def on_rite(self, ctx):
         n = _worship_power(ctx)
-        if n <= 0:
-            return False
         s = ctx.state
         # Triggerer discards up to N of their own cards
         own_discardable = [c for c in ctx.active_player.domain if c is not ctx.card]
@@ -413,8 +407,6 @@ class ProtectTheMeek(CardBehavior):
     tags = ['Chivalry']
     deck = 'candle'
     def on_brawl(self, ctx):
-        if ctx.target is not ctx.player:
-            return False
         ctx.state.log(f"  → Protect the Meek: the church calls for knights!")
         ctx.engine.order_zone(ctx.player, "sword")
         return True

@@ -23,8 +23,7 @@ class GameObserver(ABC):
         pass
 
     def on_event_fired(self, state: GameState, event: str, active_player: Player,
-                       target: Player | None, cancelled: bool,
-                       responder_count: int = 0):
+                       cancelled: bool, responder_count: int = 0):
         pass
 
     def on_game_end(self, state: GameState, depleted: str | None, winner: str | None):
@@ -279,7 +278,7 @@ class EventFrequency(GameObserver):
         self.total_games += 1
         self._game_events = {}
 
-    def on_event_fired(self, state, event, triggerer, target, cancelled,
+    def on_event_fired(self, state, event, triggerer, cancelled,
                        responder_count=0):
         self.event_count[event] = self.event_count.get(event, 0) + 1
         if cancelled:

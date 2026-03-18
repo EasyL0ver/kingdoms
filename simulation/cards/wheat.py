@@ -108,8 +108,6 @@ class Tavern(CardBehavior):
     tags = ['Amenity']
     deck = 'wheat'
     def on_feast(self, ctx):
-        if ctx.target is not ctx.player:
-            return False
         discontent = ctx.player.cards_with_tag("Discontent")
         if discontent:
             victim = ctx.engine.strat(ctx.player).resolve(
@@ -170,8 +168,6 @@ class Militia(CardBehavior):
         ctx.state.log(f"  → Militia discards {mob.name}")
 
     def on_brawl(self, ctx):
-        if ctx.target is not ctx.player:
-            return False
         if ctx.engine.strat(ctx.player).resolve(
                 ctx.state, ctx.player, [True, False],
                 DecisionContext(event="Brawl", source="Militia", intent=Intent.OPTION)):
