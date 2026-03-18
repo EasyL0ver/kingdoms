@@ -345,13 +345,6 @@ class Evangelism(CardBehavior):
 
 
 @_register
-class Blessing(CardBehavior):
-    name = 'Blessing'
-    tags = ['Spiritual', 'Religion']
-    deck = 'candle'
-
-
-@_register
 class Zealot(CardBehavior):
     name = 'Zealot'
     tags = ['Spiritual', 'Religion', 'Mob']
