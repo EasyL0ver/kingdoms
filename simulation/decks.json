@@ -34,7 +34,6 @@
     { "name": "Harvest", "tags": [], "count": 4 },
     { "name": "Gathering", "tags": [], "count": 2 },
     { "name": "Sacred Grove", "tags": ["Nature", "Spiritual"], "count": 1 },
-    { "name": "Oral Tradition", "tags": ["Knowledge"], "count": 1 },
     { "name": "Herbalism", "tags": ["Knowledge"], "count": 1 },
     { "name": "Worship of the Rain", "tags": ["Spiritual"], "count": 1 },
     { "name": "Worship of Fertility", "tags": ["Nature", "Spiritual"], "count": 1 },

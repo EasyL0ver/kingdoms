@@ -144,26 +144,6 @@ class SacredGrove(CardBehavior):
                 ctx.state.log(f"  → scries top 3 Tree: {', '.join(c.name for c in top3)}. No Spiritual found.")
 
 
-@_register
-class OralTradition(CardBehavior):
-    name = 'Oral Tradition'
-    tags = ['Knowledge']
-    deck = 'tree'
-    def on_order(self, ctx):
-        if (ctx.location != "domain"
-                or not any(c.deck == "coin" for c in ctx.player.domain)
-                or ctx.state.pile_remaining("candle") <= 0):
-            return
-        coin_cards = [c for c in ctx.player.domain if c.deck == "coin"]
-        to_discard = ctx.engine.strat(ctx.player).resolve(
-            ctx.state, ctx.player, coin_cards,
-            DecisionContext(event="Order", source="Oral Tradition", intent=Intent.DISCARD))
-        ctx.player.discard_from_domain(to_discard)
-        candle = ctx.state.draw_from_pile("candle")
-        if candle:
-            ctx.state.log(f"  → discards {to_discard.name}, draws {candle.name} from Candle")
-            ctx.engine.receive_card(ctx.player, candle)
-
 
 @_register
 class Herbalism(CardBehavior):

@@ -262,9 +262,6 @@ class CardSynergy(Evaluator):
                         s += 1.5
                     elif tree_remaining > 0:
                         s += 0.5
-                case "Oral Tradition":
-                    if has_coin_cards and candle_remaining > 0:
-                        s += 2.0
                 case "Sacred Grove":
                     # Rite or Scry — always somewhat useful, better with Spiritual
                     s += 1.0 + player.count_tag("Spiritual") * 0.3
