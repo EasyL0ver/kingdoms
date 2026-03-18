@@ -115,7 +115,7 @@ class Player:
         return False
 
     def has_candle_access(self) -> bool:
-        return self.has_card("Oral Tradition")
+        return self.has_card("Clergy")
 
     def shares_culture(self, other: Player) -> bool:
         """True if both players have a Culture card with the same name."""
@@ -172,6 +172,11 @@ class GameState:
     def wares(self) -> list[Card]:
         return self.zone_cards["coin"].face_up
 
+    @property
+    def revelation(self) -> list[Card]:
+        """The face-up Revelation card(s) for candle zone. Usually 0 or 1."""
+        return self.zone_cards["candle"].face_up
+
     def load_decks(self, decks_path: str | Path):
         data = json.loads(Path(decks_path).read_text(encoding="utf-8"))
         for deck_name, card_list in data.items():
@@ -225,10 +230,11 @@ class GameState:
             zone.pile.append(card)
 
     def setup_zones(self):
-        """Set up face-up areas: Season (4), Fields (5). Wares start empty."""
+        """Set up face-up areas: Season (4), Fields (5), Revelation (1). Wares start empty."""
         from cards import get_behavior
         get_behavior("Tree Zone").refill(self)
         get_behavior("Wheat Zone").refill(self)
+        get_behavior("Candle Zone").refill(self)
 
     def refill_season(self, target: int = 4):
         from cards import get_behavior
@@ -245,16 +251,18 @@ class GameState:
     def check_game_end(self) -> str | None:
         """Check if any zone is fully depleted. Returns pile name or None.
         Tree/Wheat/Coin: pile AND face-up zone must both be empty.
-        Claw/Candle: just the pile (no face-up zone)."""
+        Claw: just the pile (no face-up zone).
+        Candle: pile AND Revelation must both be empty."""
         if self.pile_remaining("tree") == 0 and len(self.season) == 0:
             return "tree"
         if self.pile_remaining("wheat") == 0 and len(self.fields) == 0:
             return "wheat"
         if self.pile_remaining("coin") == 0 and len(self.wares) == 0:
             return "coin"
-        for deck in ("claw", "candle"):
-            if deck in self.zone_cards and self.pile_remaining(deck) == 0:
-                return deck
+        if self.pile_remaining("candle") == 0 and len(self.revelation) == 0:
+            return "candle"
+        if "claw" in self.zone_cards and self.pile_remaining("claw") == 0:
+            return "claw"
         return None
 
     def player_by_name(self, name: str) -> Player | None:
