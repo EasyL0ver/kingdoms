@@ -71,7 +71,7 @@
     { "name": "Market", "tags": [], "count": 3 },
     { "name": "Smuggler", "tags": ["Mob"], "count": 3 },
     { "name": "Sellsword", "tags": ["Unit"], "count": 2 },
-    { "name": "Windfall", "tags": [], "count": 2 },
+    { "name": "Swindle", "tags": [], "count": 2 },
     { "name": "Prosperity", "tags": ["Wealth"], "count": 2 },
     { "name": "Embassy", "tags": ["Wealth"], "count": 2 },
     { "name": "Efficiency", "tags": [], "count": 2 },

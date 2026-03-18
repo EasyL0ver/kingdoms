@@ -90,24 +90,29 @@ class Sellsword(CardBehavior):
 
 
 @_register
-class Windfall(CardBehavior):
-    name = 'Windfall'
+class Swindle(CardBehavior):
+    name = 'Swindle'
     tags = []
     deck = 'coin'
-    def on_dawn(self, ctx):
-        if len(ctx.state.wares) < 4:
+    def on_order(self, ctx):
+        if ctx.location != "domain" or not ctx.state.wares:
             return
-        max_take = min(3, len(ctx.state.wares))
-        picks = ctx.engine.strat(ctx.player).resolve_n(
-            ctx.state, ctx.player, list(ctx.state.wares),
-            1, max_take,
-            DecisionContext(event="Dawn", source="Windfall", intent=Intent.GAIN))
-        for pick in picks:
-            ctx.state.wares.remove(pick)
-            ctx.player.add_to_domain(pick, ctx.state)
-            ctx.state.log(f"  → Windfall: {ctx.player.name} takes {pick.name} from Wares")
+        target = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, list(ctx.state.players),
+            DecisionContext(event="Order", source="Swindle", intent=Intent.OPTION))
+        # Target takes ALL wares
+        taken = list(ctx.state.wares)
+        for card in taken:
+            ctx.state.wares.remove(card)
+            target.add_to_domain(card, ctx.state)
+        names = ", ".join(c.name for c in taken)
+        ctx.state.log(f"  → Swindle: {target.name} takes all Wares ({len(taken)}): {names}")
+        # Brawl in their domain
+        ctx.state.log(f"  → Swindle: Brawl erupts in {target.name}'s domain!")
+        ctx.engine.resolve_event("Brawl", ctx.player, target=target)
+        # Self-discard
         ctx.player.discard_from_domain(ctx.card)
-        ctx.state.log(f"  → Windfall discarded")
+        ctx.state.log(f"  → Swindle discarded")
 
 
 @_register
