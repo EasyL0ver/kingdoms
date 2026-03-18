@@ -258,14 +258,6 @@ class GameEngine:
                 handler = getattr(beh, handler_name)
                 handler(ctx)
 
-        # Pre-count Rite Spiritual responders (for Worship of the Flame)
-        rite_spiritual_count = 0
-        if event == "Rite":
-            for p in s.players:
-                for card in p.domain:
-                    if card.name.startswith("Worship"):
-                        rite_spiritual_count += 1
-
         # Scan all domains in play order, collect responders, let owner order them
         responder_count = 0
         for p in s.play_order_from(active_player):
@@ -304,26 +296,6 @@ class GameEngine:
                 handler = getattr(beh, handler_name)
                 if handler(ctx):
                     responder_count += 1
-
-        # Worship of the Flame: after all other Rite responders, draw per Spiritual count
-        if event == "Rite" and not self._event_cancelled and not s.game_over:
-            for p in s.play_order_from(active_player):
-                for card in list(p.domain):
-                    if card.name == "Worship of the Flame" and rite_spiritual_count > 0:
-                        draws = rite_spiritual_count
-                        s.log(f"  → {p.name}'s Worship of the Flame: {active_player.name} draws {draws}")
-                        for _ in range(draws):
-                            decks = [d for d in ("claw", "tree", "wheat", "coin", "candle")
-                                     if s.pile_remaining(d) > 0]
-                            if decks:
-                                deck = self.strat(active_player).resolve(
-                                    s, active_player, decks,
-                                    DecisionContext(event="Rite", source="Worship of the Flame",
-                                                    intent=Intent.OPTION))
-                                drawn = s.draw_from_pile(deck)
-                                if drawn:
-                                    s.log(f"    → draws {drawn.name} from {deck}")
-                                    self.receive_card(active_player, drawn)
 
         self._notify("on_event_fired", s, event, active_player, target, self._event_cancelled, responder_count)
         self._event_depth -= 1

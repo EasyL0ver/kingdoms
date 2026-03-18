@@ -82,7 +82,9 @@
     { "name": "Worship of Gold", "tags": ["Spiritual"], "count": 1 }
   ],
   "candle": [
-    { "name": "Worship of the Flame", "tags": ["Spiritual"], "count": 1 },
+    { "name": "Worship of the Scripture", "tags": ["Spiritual", "Religion"], "count": 1 },
+    { "name": "Worship of the Relic", "tags": ["Spiritual", "Religion"], "count": 1 },
+    { "name": "Worship of the Martyr", "tags": ["Spiritual", "Religion"], "count": 1 },
     { "name": "Clergy", "tags": ["Religion"], "count": 3 },
     { "name": "Sabbath", "tags": ["Religion"], "count": 3 },
     { "name": "Zealot", "tags": ["Spiritual", "Religion", "Mob"], "count": 2 },

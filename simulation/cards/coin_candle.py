@@ -510,10 +510,112 @@ class Benefaction(CardBehavior):
             ctx.state.log(f"  → Benefaction: silence — no Rumour")
 
 
+def _global_spiritual_count(state):
+    """Count Spiritual tags across ALL players' domains."""
+    return sum(1 for p in state.players for c in p.domain if c.has_tag("Spiritual"))
+
+
 @_register
-class WorshipOfTheFlame(CardBehavior):
-    name = 'Worship of the Flame'
-    tags = ['Spiritual']
+class WorshipOfTheScripture(CardBehavior):
+    name = 'Worship of the Scripture'
+    tags = ['Spiritual', 'Religion']
     deck = 'candle'
     def on_rite(self, ctx):
+        n = _global_spiritual_count(ctx.state)
+        if n <= 0 or ctx.state.pile_remaining("candle") <= 0:
+            return False
+        peek_n = min(n, ctx.state.pile_remaining("candle"))
+        peeked = []
+        for _ in range(peek_n):
+            card = ctx.state.draw_from_pile("candle")
+            if card:
+                peeked.append(card)
+        if not peeked:
+            return False
+        ctx.state.log(f"  → Worship of the Scripture: {ctx.active_player.name} peeks {len(peeked)} ({n} Spiritual)")
+        # Triggerer picks 1 to keep, rest go back
+        keep = ctx.engine.strat(ctx.active_player).resolve(
+            ctx.state, ctx.active_player, peeked,
+            DecisionContext(event="Rite", source="Worship of the Scripture", intent=Intent.GAIN))
+        peeked.remove(keep)
+        ctx.active_player.add_to_domain(keep, ctx.state)
+        ctx.state.log(f"  → keeps {keep.name}")
+        # Return rest to pile bottom
+        for card in peeked:
+            ctx.state.put_on_bottom("candle", card)
+        return True
+
+
+@_register
+class WorshipOfTheRelic(CardBehavior):
+    name = 'Worship of the Relic'
+    tags = ['Spiritual', 'Religion']
+    deck = 'candle'
+    def on_rite(self, ctx):
+        n = _global_spiritual_count(ctx.state)
+        if n <= 0:
+            return False
+        piles = [d for d in ("claw", "tree", "wheat", "coin", "candle")
+                 if ctx.state.pile_remaining(d) > 0]
+        if not piles:
+            return False
+        draw_n = min(n, len(piles))
+        # Triggerer picks N different piles, draw top from each
+        drawn_from = []
+        available = list(piles)
+        for _ in range(draw_n):
+            if not available:
+                break
+            pile = ctx.engine.strat(ctx.active_player).resolve(
+                ctx.state, ctx.active_player, available,
+                DecisionContext(event="Rite", source="Worship of the Relic", intent=Intent.OPTION))
+            available.remove(pile)
+            card = ctx.state.draw_from_pile(pile)
+            if card:
+                ctx.engine.receive_card(ctx.active_player, card)
+                drawn_from.append(f"{card.name} ({pile})")
+        if drawn_from:
+            ctx.state.log(f"  → Worship of the Relic: {ctx.active_player.name} draws {', '.join(drawn_from)} ({n} Spiritual)")
+            return True
+        return False
+
+
+@_register
+class WorshipOfTheMartyr(CardBehavior):
+    name = 'Worship of the Martyr'
+    tags = ['Spiritual', 'Religion']
+    deck = 'candle'
+    def on_rite(self, ctx):
+        n = _global_spiritual_count(ctx.state)
+        if n <= 0:
+            return False
+        s = ctx.state
+        # Triggerer discards up to N of their own cards
+        own_discardable = [c for c in ctx.active_player.domain if c is not ctx.card]
+        if own_discardable:
+            own_count = min(n, len(own_discardable))
+            victims = ctx.engine.strat(ctx.active_player).resolve_n(
+                s, ctx.active_player, own_discardable,
+                0, own_count,
+                DecisionContext(event="Rite", source="Worship of the Martyr", intent=Intent.DISCARD))
+            for v in victims:
+                ctx.active_player.discard_from_domain(v)
+            if victims:
+                names = ", ".join(v.name for v in victims)
+                s.log(f"  → Worship of the Martyr: {ctx.active_player.name} sacrifices {names}")
+        # Everyone else discards exactly N (their choice of which)
+        for p in s.play_order_from(ctx.active_player):
+            if p is ctx.active_player:
+                continue
+            their_discardable = list(p.domain)
+            discard_count = min(n, len(their_discardable))
+            if discard_count > 0:
+                victims = ctx.engine.strat(p).resolve_n(
+                    s, p, their_discardable,
+                    discard_count, discard_count,
+                    DecisionContext(event="Rite", source="Worship of the Martyr", intent=Intent.DISCARD))
+                for v in victims:
+                    p.discard_from_domain(v)
+                names = ", ".join(v.name for v in victims)
+                s.log(f"  → Worship of the Martyr: {p.name} discards {names}")
         return True
