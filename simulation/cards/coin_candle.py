@@ -314,22 +314,33 @@ class Zealot(CardBehavior):
     tags = ['Spiritual', 'Religion', 'Mob']
     deck = 'candle'
     def on_brawl(self, ctx):
-        if ctx.state.pile_remaining("claw") <= 0:
+        if ctx.target is None:
             return False
-        drawn = ctx.engine.draw_and_receive(ctx.player, "claw")
-        if drawn:
-            ctx.state.log(f"  → Zealot: {ctx.player.name} draws {drawn[0].name} from Claw")
-            return True
-        return False
+        defender = ctx.target
+        destroyable = [c for c in defender.domain if c is not ctx.card]
+        if not destroyable:
+            return False
+        victim = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, destroyable,
+            DecisionContext(event="Brawl", source="Zealot", intent=Intent.DISCARD))
+        defender.discard_from_domain(victim)
+        ctx.state.log(f"  → Zealot: discards {victim.name} from {defender.name}")
+        return True
 
     def on_rite(self, ctx):
-        if ctx.state.pile_remaining("claw") <= 0:
+        if ctx.active_player is None or ctx.active_player is ctx.player:
             return False
-        drawn = ctx.engine.draw_and_receive(ctx.player, "claw")
-        if drawn:
-            ctx.state.log(f"  → Zealot: {ctx.player.name} draws {drawn[0].name} from Claw")
-            return True
-        return False
+        # Rite triggerer chooses where Zealot moves
+        targets = [p for p in ctx.state.players if p is not ctx.player]
+        if not targets:
+            return False
+        dest = ctx.engine.strat(ctx.active_player).resolve(
+            ctx.state, ctx.active_player, targets,
+            DecisionContext(event="Rite", source="Zealot", intent=Intent.OPTION))
+        ctx.player.remove_from_domain(ctx.card)
+        dest.add_to_domain(ctx.card, ctx.state)
+        ctx.state.log(f"  → Zealot: {ctx.active_player.name} sends Zealot to {dest.name}")
+        return True
 
 
 @_register
