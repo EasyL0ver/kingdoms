@@ -118,10 +118,8 @@ class Player:
         return False
 
     def shares_culture(self, other: Player) -> bool:
-        """True if both players have a Culture card with the same name."""
-        my_cultures = {c.name for c in self.domain if c.has_tag("Culture")}
-        their_cultures = {c.name for c in other.domain if c.has_tag("Culture")}
-        return bool(my_cultures & their_cultures)
+        """True if both players have Kinship in their domain."""
+        return self.has_card("Kinship") and other.has_card("Kinship")
 
 
 @dataclass

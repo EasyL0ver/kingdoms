@@ -188,7 +188,7 @@ class Incite(CardBehavior):
 @_register
 class Chiefdom(CardBehavior):
     name = 'Chiefdom'
-    tags = ['Allegiance', 'Trophy']
+    tags = ['Trophy']
     deck = 'claw'
     def on_dawn(self, ctx):
         if ctx.location != "domain":
@@ -203,16 +203,19 @@ class Chiefdom(CardBehavior):
                     mob_sources.append((p, mob))
         if not mob_sources:
             return
-        source_player, mob = ctx.engine.strat(ctx.player).resolve(
+        # Move up to 2 mobs
+        to_move = ctx.engine.strat(ctx.player).resolve_n(
             ctx.state, ctx.player, mob_sources,
+            1, min(2, len(mob_sources)),
             DecisionContext(event="Dawn", source="Chiefdom", intent=Intent.OPTION))
-        targets = [p for p in ctx.state.players if p is not source_player]
-        target = ctx.engine.strat(ctx.player).resolve(
-            ctx.state, ctx.player, targets,
-            DecisionContext(event="Dawn", source="Chiefdom", intent=Intent.TARGET))
-        source_player.remove_from_domain(mob)
-        target.add_to_domain(mob, ctx.state)
-        ctx.state.log(f"  → Chiefdom: moves {mob.name} from {source_player.name} to {target.name}")
+        for source_player, mob in to_move:
+            targets = [p for p in ctx.state.players if p is not source_player]
+            target = ctx.engine.strat(ctx.player).resolve(
+                ctx.state, ctx.player, targets,
+                DecisionContext(event="Dawn", source="Chiefdom", intent=Intent.TARGET))
+            source_player.remove_from_domain(mob)
+            target.add_to_domain(mob, ctx.state)
+            ctx.state.log(f"  → Chiefdom: moves {mob.name} from {source_player.name} to {target.name}")
 
 
 @_register

@@ -335,10 +335,6 @@ class CardSynergy(Evaluator):
                         s += 0.5
 
                 # ── Discard-orderable cards ──
-                case "Highlander":
-                    pass  # handled below
-                case "Nomad":
-                    pass  # handled below
                 case "Dusk Rite":
                     if discard_size > 0 and (claw_remaining > 0 or tree_remaining > 0):
                         s += discard_size * 0.3
@@ -451,13 +447,7 @@ class CardSynergy(Evaluator):
                     else:
                         s += 0.5
 
-        # Discard synergies — cards that can self-rescue
-        for card in player.discard:
-            if card.name == "Highlander" and "Crags" in domain_names:
-                s += 1.5
-            elif card.name == "Nomad" and "Pasture" in domain_names:
-                s += 1.5
-
+        # Discard synergies
         return s
 
 

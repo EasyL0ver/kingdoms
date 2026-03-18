@@ -8,7 +8,8 @@
     { "name": "Worship of the Hunt", "tags": ["Spiritual"], "count": 1 },
     { "name": "Worship of War", "tags": ["Spiritual"], "count": 1 },
     { "name": "Incite", "tags": [], "count": 2 },
-    { "name": "Chiefdom", "tags": ["Allegiance"], "count": 2 },
+    { "name": "Chiefdom", "tags": ["Trophy"], "count": 2 },
+    { "name": "Kinship", "tags": [], "count": 3 },
     { "name": "Racketeering", "tags": ["Discontent"], "count": 2 },
     { "name": "Tyranny", "tags": ["Trophy", "Discontent"], "count": 2 },
     { "name": "Marauders", "tags": ["Unit", "Mob", "Discontent"], "count": 2 },
@@ -31,9 +32,8 @@
     { "name": "Royal Hunt", "tags": ["Unit", "Trophy", "Hunt"], "count": 3 }
   ],
   "tree": [
-    { "name": "Highlander", "tags": ["Culture", "Trophy"], "count": 3 },
-    { "name": "Nomad", "tags": ["Culture", "Amenity"], "count": 3 },
-    { "name": "Eldership", "tags": ["Allegiance", "Knowledge"], "count": 1 },
+    { "name": "Kinship", "tags": [], "count": 5 },
+    { "name": "Eldership", "tags": ["Knowledge"], "count": 1 },
     { "name": "Sky Dance", "tags": ["Spiritual"], "count": 1 },
     { "name": "Harvest", "tags": [], "count": 4 },
     { "name": "Gathering", "tags": [], "count": 2 },
@@ -44,12 +44,11 @@
     { "name": "Pasture", "tags": ["Nature", "Land"], "count": 4 },
     { "name": "Crags", "tags": ["Nature", "Land"], "count": 4 },
     { "name": "Regrowth", "tags": [], "count": 2 },
-    { "name": "Solstice", "tags": [], "count": 2 },
     { "name": "Forage", "tags": [], "count": 2 },
     { "name": "Sowing", "tags": ["Knowledge"], "count": 3 },
     { "name": "Withered Crop", "tags": [], "count": 3 },
     { "name": "Remembrance", "tags": ["Knowledge"], "count": 2 },
-    { "name": "Kinship", "tags": [], "count": 2 }
+    { "name": "Pilgrimage", "tags": ["Spiritual"], "count": 3 }
   ],
   "wheat": [
     { "name": "Plough", "tags": ["Labour"], "count": 3 },

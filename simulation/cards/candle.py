@@ -33,7 +33,49 @@ class Clergy(CardBehavior):
     def on_order(self, ctx):
         if ctx.location != "domain":
             return
+        s = ctx.state
+        # First, claim Revelation via candle zone
         ctx.engine.order_zone(ctx.player, "candle")
+        # Then peek deeper — N = players with Religion tags
+        faithful_count = sum(1 for p in s.players
+                            if any(c.has_tag("Religion") for c in p.domain))
+        peek_n = min(faithful_count, s.pile_remaining("candle"))
+        if peek_n <= 0:
+            return
+        peeked = []
+        for _ in range(peek_n):
+            card = s.draw_from_pile("candle")
+            if card:
+                peeked.append(card)
+        if not peeked:
+            return
+        s.log(f"  → Clergy peeks {len(peeked)} from candle pile ({faithful_count} faithful)")
+        if len(peeked) == 1:
+            choice = ctx.engine.strat(ctx.player).resolve(
+                s, ctx.player, ["keep", "revelation"],
+                DecisionContext(event="Order", source="Clergy", intent=Intent.OPTION))
+            if choice == "keep":
+                ctx.player.add_to_domain(peeked[0], s)
+                s.log(f"  → keeps {peeked[0].name}")
+            else:
+                s.revelation.append(peeked[0])
+                s.log(f"  → sets {peeked[0].name} as Revelation")
+        else:
+            keep = ctx.engine.strat(ctx.player).resolve(
+                s, ctx.player, peeked,
+                DecisionContext(event="Order", source="Clergy", intent=Intent.GAIN))
+            peeked.remove(keep)
+            ctx.player.add_to_domain(keep, s)
+            s.log(f"  → keeps {keep.name}")
+            if peeked:
+                new_rev = ctx.engine.strat(ctx.player).resolve(
+                    s, ctx.player, peeked,
+                    DecisionContext(event="Order", source="Clergy", intent=Intent.OPTION))
+                peeked.remove(new_rev)
+                s.revelation.append(new_rev)
+                s.log(f"  → sets {new_rev.name} as Revelation")
+            for card in peeked:
+                s.log(f"  → exiles {card.name}")
 
 
 @_register

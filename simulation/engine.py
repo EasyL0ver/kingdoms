@@ -298,15 +298,6 @@ class GameEngine:
                 if handler(ctx):
                     responder_count += 1
 
-        # Rite post-resolution: triggerer claims Revelation (after domain cards have responded)
-        if event == "Rite" and not self._event_cancelled and not s.game_over:
-            if s.revelation:
-                from cards import get_behavior
-                rev_card = s.revelation.pop(0)
-                active_player.add_to_domain(rev_card, s)
-                s.log(f"  → Rite: {active_player.name} claims Revelation ({rev_card.name})")
-                get_behavior("Candle Zone").refill(s)
-
         self._notify("on_event_fired", s, event, active_player, target, self._event_cancelled, responder_count)
         self._event_depth -= 1
 

@@ -4,45 +4,9 @@ from strategy import Intent, DecisionContext
 
 
 @_register
-class Highlander(CardBehavior):
-    name = 'Highlander'
-    tags = ['Culture', 'Trophy']
-    deck = 'tree'
-    def on_order(self, ctx):
-        if ctx.location != "discard" or not ctx.player.has_card("Crags"):
-            return
-        ctx.player.discard.remove(ctx.card)
-        ctx.player.add_to_domain(ctx.card, ctx.state)
-        ctx.state.log(f"  → moves Highlander from discard to Domain")
-
-    def on_dawn(self, ctx):
-        if not ctx.player.has_card("Crags"):
-            ctx.state.log(f"  → Dawn: no Crags → Highlander to discard")
-            ctx.player.discard.append(ctx.card)
-
-
-@_register
-class Nomad(CardBehavior):
-    name = 'Nomad'
-    tags = ['Culture', 'Amenity']
-    deck = 'tree'
-    def on_order(self, ctx):
-        if ctx.location != "discard" or not ctx.player.has_card("Pasture"):
-            return
-        ctx.player.discard.remove(ctx.card)
-        ctx.player.add_to_domain(ctx.card, ctx.state)
-        ctx.state.log(f"  → moves Nomad from discard to Domain")
-
-    def on_dawn(self, ctx):
-        if not ctx.player.has_card("Pasture"):
-            ctx.state.log(f"  → Dawn: no Pasture → Nomad to discard")
-            ctx.player.discard.append(ctx.card)
-
-
-@_register
 class Eldership(CardBehavior):
     name = 'Eldership'
-    tags = ['Allegiance', 'Knowledge']
+    tags = ['Knowledge']
     deck = 'tree'
     def on_brawl(self, ctx):
         if ctx.target is not ctx.player:
@@ -263,37 +227,6 @@ class Crags(CardBehavior):
 
 
 @_register
-class Solstice(CardBehavior):
-    name = 'Solstice'
-    tags = []
-    deck = 'tree'
-    def on_harvest(self, ctx):
-        options = ["culture_draw", "culture_place"]
-        choice = ctx.engine.strat(ctx.player).resolve(
-            ctx.state, ctx.player, options,
-            DecisionContext(event="Harvest", source="Solstice", intent=Intent.OPTION))
-        if choice == "culture_draw":
-            for ally in ctx.state.players:
-                if ctx.player.shares_culture(ally) or ally is ctx.player:
-                    drawn = ctx.engine.draw_and_receive(ally, "tree")
-                    if drawn:
-                        ctx.state.log(f"  → Solstice: {ally.name} draws {drawn[0].name} from Tree")
-        else:
-            culture_cards = [c for c in ctx.player.discard if c.has_tag("Culture")]
-            if culture_cards:
-                culture = ctx.engine.strat(ctx.player).resolve(
-                    ctx.state, ctx.player, culture_cards,
-                    DecisionContext(event="Harvest", source="Solstice", intent=Intent.OPTION))
-                target = ctx.engine.strat(ctx.player).resolve(
-                    ctx.state, ctx.player, list(ctx.state.players),
-                    DecisionContext(event="Harvest", source="Solstice", intent=Intent.TARGET))
-                ctx.player.discard.remove(culture)
-                target.add_to_domain(culture, ctx.state)
-                ctx.state.log(f"  → Solstice: places {culture.name} in {target.name}'s Domain")
-        return True
-
-
-@_register
 class Regrowth(CardBehavior):
     name = 'Regrowth'
     tags = []
@@ -412,28 +345,35 @@ class Kinship(CardBehavior):
     name = 'Kinship'
     tags = []
     deck = 'tree'
-
     def on_harvest(self, ctx):
+        ctx.state.log(f"  → Kinship: {ctx.player.name} orders Tree zone")
+        ctx.engine.order_zone(ctx.player, "tree")
+        return True
+
+
+@_register
+class Pilgrimage(CardBehavior):
+    name = 'Pilgrimage'
+    tags = ['Spiritual']
+    deck = 'tree'
+
+    def _claim_revelation(self, ctx):
         s = ctx.state
-        # Refill Season
-        old = len(s.season)
-        s.refill_season()
-        if len(s.season) > old:
-            s.log(f"  → Kinship: Season refilled {old} → {len(s.season)}")
-        # Give any Culture cards from Season to a target player
-        culture_in_season = [c for c in s.season if c.has_tag("Culture")]
-        if culture_in_season:
-            targets = list(s.players)
-            target = ctx.engine.strat(ctx.player).resolve(
-                s, ctx.player, targets,
-                DecisionContext(event="Harvest", source="Kinship", intent=Intent.TARGET))
-            for c in culture_in_season:
-                s.season.remove(c)
-                ctx.engine.receive_card(target, c)
-                s.log(f"  → Kinship: gives {c.name} from Season to {target.name}")
-        # Each player sharing culture with owner orders tree zone
-        for p in s.other_players(ctx.player):
-            if ctx.player.shares_culture(p) and s.season:
-                s.log(f"  → Kinship: {p.name} shares culture, orders Tree zone")
-                ctx.engine.order_zone(p, "tree")
+        if not s.revelation:
+            return
+        rev_card = s.revelation.pop(0)
+        ctx.player.add_to_domain(rev_card, s)
+        s.log(f"  → Pilgrimage: {ctx.player.name} claims Revelation ({rev_card.name})")
+        from cards import get_behavior
+        get_behavior("Candle Zone").refill(s)
+
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
+        self._claim_revelation(ctx)
+
+    def on_rite(self, ctx):
+        if ctx.target is not ctx.player:
+            return False
+        self._claim_revelation(ctx)
         return True
