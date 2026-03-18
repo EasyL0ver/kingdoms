@@ -241,10 +241,7 @@ class Mine(CardBehavior):
         if drawn:
             ctx.state.log(f"  → Mine draws {drawn[0].name} from Coin")
 
-    def on_dawn(self, ctx):
-        if not ctx.player.has_card("Crags"):
-            ctx.state.log(f"  → Dawn: no Crags → Mine to discard")
-            ctx.player.discard.append(ctx.card)
+
 
 
 @_register

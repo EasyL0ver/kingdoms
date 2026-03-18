@@ -302,12 +302,6 @@ class CardSynergy(Evaluator):
                 case "Sacred Grove":
                     # Rite or Scry — always somewhat useful, better with Spiritual
                     s += 1.0 + player.count_tag("Spiritual") * 0.3
-                case "Crags":
-                    crags_count = sum(1 for c in player.domain if c.name == "Crags")
-                    if claw_remaining > 0:
-                        s += 1.0
-                    if crags_count >= 2:
-                        s += 1.5  # Brawl defense active
                 case "Well":
                     if has_season:
                         s += 2.0
@@ -321,9 +315,7 @@ class CardSynergy(Evaluator):
                     if has_harvest_discard and has_fields:
                         s += 2.0
                 case "Animal Husbandry":
-                    s += 1.5  # coin draw + feast, Pasture bonus on harvest
-                    if any(c.name == "Pasture" for c in player.domain):
-                        s += 1.0
+                    s += 1.5  # coin draw + feast
                 case "Militia":
                     if has_mobs:
                         s += 1.0  # can discard Mobs + Brawl defense
@@ -666,7 +658,7 @@ class TreeSearchStrategy(Strategy):
     def sequence(self, state, player, items, ctx):
         # Cancellers first on Brawl, info cards first on Rumour
         PRIORITY = {
-            "Brawl": {"Militia": 0, "Sellsword": 0, "Zealot": 0, "Eldership": 1, "Crags": 2},
+            "Brawl": {"Militia": 0, "Sellsword": 0, "Zealot": 0, "Eldership": 1},
             "Rumour": {"Village Gossip": 0, "Market": 1},
             "Rite": {"Worship of the Relic": 0, "Worship of the Scripture": 1, "Worship of the Martyr": 2},
         }

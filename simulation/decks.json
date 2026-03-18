@@ -41,9 +41,7 @@
     { "name": "Herbalism", "tags": ["Knowledge"], "count": 1 },
     { "name": "Worship of the Rain", "tags": ["Spiritual"], "count": 1 },
     { "name": "Worship of Fertility", "tags": ["Nature", "Spiritual"], "count": 1 },
-    { "name": "Pasture", "tags": ["Nature", "Land"], "count": 4 },
-    { "name": "Crags", "tags": ["Nature", "Land"], "count": 4 },
-    { "name": "Regrowth", "tags": [], "count": 2 },
+
     { "name": "Forage", "tags": [], "count": 2 },
     { "name": "Sowing", "tags": ["Knowledge"], "count": 3 },
     { "name": "Withered Crop", "tags": [], "count": 3 },

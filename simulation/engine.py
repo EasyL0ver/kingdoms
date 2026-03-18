@@ -38,7 +38,7 @@ class GameEngine:
                            state=self.state, **kwargs)
 
     def cancel_event(self):
-        """Called by card behaviors (Eldership, Militia, Crags) to cancel current event."""
+        """Called by card behaviors (Eldership, Militia) to cancel current event."""
         self._event_cancelled = True
 
     # ── Valid Actions ──

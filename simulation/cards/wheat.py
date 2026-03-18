@@ -100,20 +100,6 @@ class AnimalHusbandry(CardBehavior):
         ctx.state.log(f"  → AH: Feast")
         ctx.engine.resolve_event("Feast", ctx.player, ctx.player)
 
-    def on_harvest(self, ctx):
-        pastures = [c for c in ctx.player.domain if c.name == "Pasture"]
-        if not pastures:
-            return False
-        if ctx.engine.strat(ctx.player).resolve(
-                ctx.state, ctx.player, [True, False],
-                DecisionContext(event="Harvest", source="Animal Husbandry", intent=Intent.OPTION)):
-            ctx.player.discard_from_domain(pastures[0])
-            ctx.state.log(f"  → AH: sacrifices Pasture, orders Coin zone")
-            ctx.engine.order_zone(ctx.player, "coin")
-            ctx.state.log(f"  → AH: Feast")
-            ctx.engine.resolve_event("Feast", ctx.player, ctx.player)
-            return True
-        return False
 
 
 @_register
