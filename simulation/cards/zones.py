@@ -42,30 +42,6 @@ class ClawZone(CardBehavior):
             if ctx.state.game_over:
                 break
 
-    def on_feast(self, ctx):
-        """Active player picks 1 card from any player's discard → top of claw pile."""
-        s = ctx.state
-        candidates = []
-        for p in s.players:
-            for card in p.discard:
-                candidates.append((p, card))
-        if not candidates:
-            return
-        # Active player chooses which card to recycle
-        recyclable_cards = [card for _, card in candidates]
-        pick = ctx.engine.strat(ctx.active_player).resolve(
-            s, ctx.active_player, recyclable_cards,
-            DecisionContext(event="Feast", source="Claw Zone", intent=Intent.OPTION))
-        if pick is None:
-            return
-        # Find which player owns this discard card and remove it
-        for p, card in candidates:
-            if card is pick:
-                p.discard.remove(card)
-                s.return_to_pile("claw", card)
-                s.log(f"  → Claw Zone: {ctx.active_player.name} recycles {card.name} from {p.name}'s discard to claw pile")
-                break
-
 
 @_register
 class TreeZone(CardBehavior):
@@ -126,15 +102,6 @@ class WheatZone(CardBehavior):
         while len(zone.face_up) < target and zone.pile_ptr < len(zone.pile):
             zone.face_up.append(zone.pile[zone.pile_ptr])
             zone.pile_ptr += 1
-
-    def on_harvest(self, ctx):
-        s = ctx.state
-        old_count = len(s.fields)
-        self.refill(s)
-        new_count = len(s.fields)
-        if new_count > old_count:
-            s.log(f"  → Fields refilled: {old_count} → {new_count}")
-        return True
 
 
 @_register

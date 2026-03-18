@@ -353,6 +353,14 @@ class Sowing(CardBehavior):
         ctx.state.log(f"  → Orders Wheat zone via Sowing")
         ctx.engine.order_zone(ctx.player, "wheat")
 
+    def on_harvest(self, ctx):
+        s = ctx.state
+        old_count = len(s.fields)
+        s.refill_fields()
+        if len(s.fields) > old_count:
+            s.log(f"  → Sowing: Fields refilled {old_count} → {len(s.fields)}")
+        return True
+
 
 @_register
 class WitheredCrop(CardBehavior):
@@ -360,12 +368,22 @@ class WitheredCrop(CardBehavior):
     tags = []
     deck = 'tree'
     def on_order(self, ctx):
-        if (ctx.location != "domain"
-                or not ctx.player.has_discard("Harvest")
-                or len(ctx.state.fields) <= 0):
+        if ctx.location != "domain" or not ctx.player.discard:
             return
-        ctx.state.log(f"  → Orders Wheat zone via Withered Crop")
-        ctx.engine.order_zone(ctx.player, "wheat")
+        to_exile = ctx.engine.strat(ctx.player).resolve_n(
+            ctx.state, ctx.player, list(ctx.player.discard),
+            1, len(ctx.player.discard),
+            DecisionContext(event="Order", source="Withered Crop", intent=Intent.DISCARD))
+        for c in to_exile:
+            ctx.player.discard.remove(c)
+        ctx.state.log(f"  → Withered Crop: exiles {len(to_exile)} cards, restocks fields")
+        old = len(ctx.state.fields)
+        ctx.state.refill_fields(old + len(to_exile))
+        new = len(ctx.state.fields)
+        if new > old:
+            ctx.state.log(f"  → Fields refilled {old} → {new}")
+        if ctx.state.fields:
+            ctx.engine.order_zone(ctx.player, "wheat")
 
 
 @_register

@@ -312,31 +312,6 @@ class Irrigation(CardBehavior):
 
 
 @_register
-class Compost(CardBehavior):
-    name = 'Compost'
-    tags = []
-    deck = 'wheat'
-
-    def on_order(self, ctx):
-        if ctx.location != "domain" or not ctx.player.discard:
-            return
-        to_exile = ctx.engine.strat(ctx.player).resolve_n(
-            ctx.state, ctx.player, list(ctx.player.discard),
-            1, len(ctx.player.discard),
-            DecisionContext(event="Order", source="Compost", intent=Intent.DISCARD))
-        for c in to_exile:
-            ctx.player.discard.remove(c)
-        ctx.state.log(f"  → Compost: exiles {len(to_exile)} cards from discard")
-        old = len(ctx.state.fields)
-        ctx.state.refill_fields(old + len(to_exile))
-        new = len(ctx.state.fields)
-        if new > old:
-            ctx.state.log(f"  → Compost: Fields refilled {old} → {new}")
-        if ctx.state.fields:
-            ctx.engine.order_zone(ctx.player, "wheat")
-
-
-@_register
 class WorshipOfTheBread(CardBehavior):
     name = 'Worship of the Bread'
     tags = ['Spiritual']

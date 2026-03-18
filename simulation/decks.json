@@ -19,6 +19,7 @@
     { "name": "Rite of Passage", "tags": ["Discontent"], "count": 2 },
     { "name": "Culling", "tags": ["Discontent"], "count": 2 },
     { "name": "Ivory", "tags": ["Trophy", "Wealth"], "count": 2 },
+    { "name": "Hunger", "tags": ["Discontent"], "count": 5 },
     { "name": "Uprising", "tags": ["Discontent"], "count": 3 },
     { "name": "Ransack", "tags": [], "count": 2 },
     { "name": "Spoils of War", "tags": ["Trophy", "Mob"], "count": 2 },
@@ -66,7 +67,6 @@
     { "name": "Orchard", "tags": ["Nature", "Land"], "count": 3 },
     { "name": "Stewardship", "tags": [], "count": 2 },
     { "name": "Irrigation", "tags": ["Labour"], "count": 2 },
-    { "name": "Compost", "tags": [], "count": 3 },
     { "name": "Worship of the Bread", "tags": ["Spiritual"], "count": 1 }
   ],
   "coin": [

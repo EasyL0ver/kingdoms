@@ -439,6 +439,45 @@ class MartialExcellence(CardBehavior):
 
 
 @_register
+class Hunger(CardBehavior):
+    name = 'Hunger'
+    tags = ['Discontent']
+    deck = 'claw'
+    def on_harvest(self, ctx):
+        """Hunger persists despite harvest — top claw card lost to owner's discard."""
+        killed = ctx.state.draw_from_pile("claw")
+        if killed:
+            ctx.player.discard.append(killed)
+            ctx.state.log(f"  → Hunger: {ctx.player.name} loses {killed.name} from claw pile (to discard)")
+        return True
+
+    def on_feast(self, ctx):
+        """Properly fed — recycle 1 card from any player's discard to top of claw pile."""
+        if ctx.target is not ctx.player:
+            return False
+        s = ctx.state
+        candidates = []
+        for p in s.players:
+            for card in p.discard:
+                candidates.append((p, card))
+        if not candidates:
+            return False
+        recyclable_cards = [card for _, card in candidates]
+        pick = ctx.engine.strat(ctx.player).resolve(
+            s, ctx.player, recyclable_cards,
+            DecisionContext(event="Feast", source="Hunger", intent=Intent.OPTION))
+        if pick is None:
+            return False
+        for p, card in candidates:
+            if card is pick:
+                p.discard.remove(card)
+                s.return_to_pile("claw", card)
+                s.log(f"  → Hunger: {ctx.player.name} recycles {card.name} from {p.name}'s discard to claw pile")
+                break
+        return True
+
+
+@_register
 class Uprising(CardBehavior):
     name = 'Uprising'
     tags = ['Discontent']
