@@ -79,8 +79,8 @@ class Player:
         return False
 
     def add_to_domain(self, card: Card, state: GameState | None = None):
-        """Add card to domain, respecting slot limits (Culture, Allegiance, Religion)."""
-        for slot_tag in ("Culture", "Allegiance", "Religion"):
+        """Add card to domain, respecting slot limits (Culture, Allegiance)."""
+        for slot_tag in ("Culture", "Allegiance"):
             if card.has_tag(slot_tag):
                 existing = [c for c in self.domain if c.has_tag(slot_tag)]
                 for e in existing:

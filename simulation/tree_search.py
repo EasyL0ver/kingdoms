@@ -139,6 +139,35 @@ class ZoneAccess(Evaluator):
 
 
 @_register_evaluator
+class CandleMomentum(Evaluator):
+    """Reward candle commitment — Clergy + Religion tags + known Revelation."""
+    name = "candle_momentum"
+
+    def score(self, state, player):
+        s = 0.0
+        has_clergy = player.has_card("Clergy")
+        religion_count = player.count_tag("Religion")
+        candle_remaining = state.pile_remaining("candle") + len(state.revelation)
+
+        if candle_remaining <= 0:
+            return 0.0
+
+        # Reward Revelation existing (known, claimable card)
+        if state.revelation:
+            # Everyone benefits from Rite claiming, but Clergy owner benefits more
+            if has_clergy:
+                s += 3.0  # known card + peek bonus from ordering
+            else:
+                s += 1.0  # still claimable via Rite
+
+        # Clergy + Religion snowball: the more Religion you have, the deeper you peek
+        if has_clergy and religion_count >= 2:
+            s += religion_count * 1.5  # peek depth scales with faithful count
+
+        return s
+
+
+@_register_evaluator
 class EndgameAwareness(Evaluator):
     """Discourage ending the game on an axis where we're tied or behind."""
     name = "endgame_awareness"
