@@ -259,6 +259,32 @@ class Provisions(CardBehavior):
 
 
 @_register
+class Indulgence(CardBehavior):
+    name = 'Indulgence'
+    tags = ['Religion']
+    deck = 'candle'
+    def on_order(self, ctx):
+        if ctx.location != "domain" or ctx.state.pile_remaining("coin") <= 0:
+            return
+        drawn = ctx.engine.draw_and_receive(ctx.player, "coin")
+        if drawn:
+            ctx.state.log(f"  → Indulgence: {ctx.player.name} draws {drawn[0].name} from Coin")
+        # Refill wares from coin pile
+        from cards.zones import CoinZone
+        coin_zone = ctx.engine.behavior(ctx.state.zone_cards["coin"])
+        coin_zone.refill(ctx.state)
+        # Choose: trigger 2 Rumours or stay silent
+        if ctx.engine.strat(ctx.player).resolve(
+                ctx.state, ctx.player, [True, False],
+                DecisionContext(event="Order", source="Indulgence", intent=Intent.OPTION)):
+            ctx.state.log(f"  → Indulgence: spectacle! Two Rumours spread")
+            ctx.engine.resolve_event("Rumour", ctx.player, exclude_active=True)
+            ctx.engine.resolve_event("Rumour", ctx.player, exclude_active=True)
+        else:
+            ctx.state.log(f"  → Indulgence: silence — no Rumour")
+
+
+@_register
 class WorshipOfTheFlame(CardBehavior):
     name = 'Worship of the Flame'
     tags = ['Spiritual']

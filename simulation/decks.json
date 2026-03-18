@@ -81,6 +81,7 @@
     { "name": "Provisions", "tags": ["Amenity"], "count": 2 }
   ],
   "candle": [
-    { "name": "Worship of the Flame", "tags": ["Spiritual"], "count": 1 }
+    { "name": "Worship of the Flame", "tags": ["Spiritual"], "count": 1 },
+    { "name": "Indulgence", "tags": ["Religion"], "count": 2 }
   ]
 }
