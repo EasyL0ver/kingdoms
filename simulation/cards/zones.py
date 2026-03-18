@@ -237,16 +237,6 @@ class CandleZone(CardBehavior):
             for card in peeked:
                 s.log(f"  → exiles {card.name}")
 
-    def on_rite(self, ctx):
-        """Rite triggerer claims the Revelation card, flip next."""
-        s = ctx.state
-        if not s.revelation:
-            return
-        rev_card = s.revelation.pop(0)
-        ctx.active_player.add_to_domain(rev_card, s)
-        s.log(f"  → Rite: {ctx.active_player.name} claims Revelation ({rev_card.name})")
-        self.refill(s)
-
     def refill(self, state, target: int = 1):
         """Flip top candle card as Revelation (max 1)."""
         zone = state.zone_cards["candle"]

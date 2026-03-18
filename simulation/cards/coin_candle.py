@@ -563,29 +563,42 @@ class WorshipOfTheRelic(CardBehavior):
         n = _worship_power(ctx)
         if n <= 0:
             return False
+        s = ctx.state
+        # Choose any pile to peek top N
         piles = [d for d in ("claw", "tree", "wheat", "coin", "candle")
-                 if ctx.state.pile_remaining(d) > 0]
+                 if s.pile_remaining(d) > 0]
         if not piles:
             return False
-        draw_n = min(n, len(piles))
-        # Triggerer picks N different piles, draw top from each
-        drawn_from = []
-        available = list(piles)
-        for _ in range(draw_n):
-            if not available:
-                break
-            pile = ctx.engine.strat(ctx.active_player).resolve(
-                ctx.state, ctx.active_player, available,
-                DecisionContext(event="Rite", source="Worship of the Relic", intent=Intent.OPTION))
-            available.remove(pile)
-            card = ctx.state.draw_from_pile(pile)
+        pile = ctx.engine.strat(ctx.player).resolve(
+            s, ctx.player, piles,
+            DecisionContext(event="Rite", source="Worship of the Relic", intent=Intent.OPTION))
+        peek_n = min(n, s.pile_remaining(pile))
+        peeked = []
+        for _ in range(peek_n):
+            card = s.draw_from_pile(pile)
             if card:
-                ctx.engine.receive_card(ctx.active_player, card)
-                drawn_from.append(f"{card.name} ({pile})")
-        if drawn_from:
-            ctx.state.log(f"  → Worship of the Relic: {ctx.active_player.name} draws {', '.join(drawn_from)} ({n} Spiritual)")
-            return True
-        return False
+                peeked.append(card)
+        if not peeked:
+            return False
+        names = ", ".join(c.name for c in peeked)
+        s.log(f"  → Worship of the Relic: {ctx.player.name} peeks {len(peeked)} from {pile}: {names}")
+        # May replace Revelation with one of the peeked cards
+        if s.revelation:
+            replacements = list(peeked)
+            chosen = ctx.engine.strat(ctx.player).resolve(
+                s, ctx.player, replacements + ["keep current"],
+                DecisionContext(event="Rite", source="Worship of the Relic", intent=Intent.OPTION))
+            if chosen != "keep current":
+                # Exile current Revelation, set chosen as new Revelation
+                old_rev = s.revelation.pop(0)
+                s.log(f"  → exiles Revelation: {old_rev.name}")
+                peeked.remove(chosen)
+                s.revelation.append(chosen)
+                s.log(f"  → sets {chosen.name} as new Revelation")
+        # Return remaining peeked cards to top of pile (reverse order)
+        for card in reversed(peeked):
+            s.return_to_pile(pile, card)
+        return True
 
 
 @_register
