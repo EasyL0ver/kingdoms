@@ -121,12 +121,11 @@ class Prosperity(CardBehavior):
     tags = ['Wealth']
     deck = 'coin'
     def on_dawn(self, ctx):
-        wealth_count = sum(1 for c in ctx.player.domain
-                          if c.has_tag("Wealth") and c is not ctx.card)
-        if wealth_count >= 2 and ctx.state.pile_remaining("coin") > 0:
-            drawn = ctx.engine.draw_and_receive(ctx.player, "coin")
-            if drawn:
-                ctx.state.log(f"  → Prosperity: {ctx.player.name} draws {drawn[0].name}")
+        if not ctx.state.wares or ctx.state.pile_remaining("coin") <= 0:
+            return
+        drawn = ctx.engine.draw_and_receive(ctx.player, "coin")
+        if drawn:
+            ctx.state.log(f"  → Prosperity: {ctx.player.name} draws {drawn[0].name}")
 
 
 @_register
