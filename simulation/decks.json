@@ -6,6 +6,7 @@
     { "name": "Blood Offering", "tags": [], "count": 1 },
     { "name": "Poach", "tags": ["Unit", "Mob", "Hunt", "Discontent"], "count": 4 },
     { "name": "Worship of the Hunt", "tags": ["Spiritual"], "count": 1 },
+    { "name": "Worship of the Dusk", "tags": ["Spiritual"], "count": 1 },
     { "name": "Worship of War", "tags": ["Spiritual"], "count": 1 },
     { "name": "Incite", "tags": [], "count": 2 },
     { "name": "Chiefdom", "tags": ["Trophy"], "count": 2 },
@@ -24,7 +25,7 @@
     { "name": "Uprising", "tags": ["Discontent"], "count": 3 },
     { "name": "Ransack", "tags": [], "count": 2 },
     { "name": "Spoils of War", "tags": ["Trophy", "Mob"], "count": 2 },
-    { "name": "Dusk Rite", "tags": ["Spiritual", "Discontent"], "count": 1 },
+    { "name": "Veil Tear", "tags": ["Spiritual", "Discontent"], "count": 1 },
     { "name": "Blood Feud", "tags": ["Mob", "Discontent"], "count": 2 },
     { "name": "Enforcers", "tags": ["Mob", "Discontent"], "count": 2 }
   ],
@@ -34,19 +35,20 @@
   "tree": [
     { "name": "Kinship", "tags": [], "count": 4 },
     { "name": "Eldership", "tags": ["Knowledge"], "count": 1 },
-    { "name": "Sky Dance", "tags": ["Spiritual"], "count": 1 },
+    { "name": "Worship of the Dawn", "tags": ["Spiritual"], "count": 1 },
     { "name": "Harvest", "tags": [], "count": 4 },
     { "name": "Gathering", "tags": [], "count": 2 },
     { "name": "Sacred Grove", "tags": ["Nature", "Spiritual"], "count": 1 },
-    { "name": "Worship of the Rain", "tags": ["Spiritual"], "count": 1 },
-    { "name": "Worship of Fertility", "tags": ["Nature", "Spiritual"], "count": 1 },
+    { "name": "Worship of the Hearth", "tags": ["Nature", "Spiritual"], "count": 1 },
 
     { "name": "Forage", "tags": [], "count": 2 },
     { "name": "Sowing", "tags": ["Knowledge"], "count": 3 },
     { "name": "Withered Crop", "tags": [], "count": 2 },
-    { "name": "Remembrance", "tags": ["Knowledge"], "count": 2 },
+    { "name": "Vigil", "tags": [], "count": 2 },
     { "name": "Pilgrimage", "tags": ["Spiritual"], "count": 3 },
-    { "name": "Floods", "tags": ["Nature"], "count": 2 }
+    { "name": "Floods", "tags": ["Nature"], "count": 2 },
+    { "name": "Regrowth", "tags": [], "count": 1 },
+    { "name": "Hospitality", "tags": [], "count": 2 }
   ],
   "wheat": [
     { "name": "Plough", "tags": ["Labour"], "count": 3 },

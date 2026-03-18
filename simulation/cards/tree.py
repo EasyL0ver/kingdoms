@@ -27,15 +27,33 @@ class Eldership(CardBehavior):
 
 
 @_register
-class SkyDance(CardBehavior):
-    name = 'Sky Dance'
+class WorshipOfTheDawn(CardBehavior):
+    name = 'Worship of the Dawn'
     tags = ['Spiritual']
     deck = 'tree'
-    def on_order(self, ctx):
-        if ctx.location != "domain":
-            return
-        ctx.state.log(f"  → Rite")
-        ctx.engine.resolve_event("Rite", ctx.player)
+
+    def _dusk_exists(self, ctx):
+        for p in ctx.state.players:
+            if p.has_card("Worship of the Dusk"):
+                return True
+        return False
+
+    def on_rite(self, ctx):
+        if not ctx.player.discard:
+            return False
+        n = 2 if self._dusk_exists(ctx) else 1
+        n = min(n, len(ctx.player.discard))
+        to_recover = ctx.engine.strat(ctx.player).resolve_n(
+            ctx.state, ctx.player, list(ctx.player.discard),
+            1, n,
+            DecisionContext(event="Rite", source="Worship of the Dawn", intent=Intent.GAIN))
+        for c in to_recover:
+            ctx.player.discard.remove(c)
+            ctx.player.add_to_domain(c, ctx.state)
+        names = ", ".join(c.name for c in to_recover)
+        doubled = " (Dusk in play)" if n == 2 else ""
+        ctx.state.log(f"  → Worship of the Dawn: {ctx.player.name} recovers {names}{doubled}")
+        return True
 
 
 @_register
@@ -55,7 +73,7 @@ class Gathering(CardBehavior):
     tags = []
     deck = 'tree'
     def on_dawn(self, ctx):
-        options = ["brawl", "rite"]
+        options = ["brawl", "rite", "rumour"]
         choice = ctx.engine.strat(ctx.player).resolve(
             ctx.state, ctx.player, options,
             DecisionContext(event="Dawn", source="Gathering", intent=Intent.OPTION))
@@ -66,9 +84,13 @@ class Gathering(CardBehavior):
                 if ctx.player.shares_culture(p):
                     ctx.state.log(f"  → Gathering: Brawl also in {p.name}'s Domain (shared culture)")
                     ctx.engine.resolve_event("Brawl", ctx.player, p)
-        else:
+        elif choice == "rite":
             ctx.state.log(f"  → Gathering: Rite in {ctx.player.name}'s Domain")
             ctx.engine.resolve_event("Rite", ctx.player)
+        else:
+            ctx.state.log(f"  → Gathering: Rumour spreads")
+            ctx.engine.resolve_event("Rumour", ctx.player,
+                                     scope=ctx.state.other_players(ctx.player))
         ctx.discard_self()
 
 
@@ -148,34 +170,39 @@ class Floods(CardBehavior):
 
 
 @_register
-class WorshipOfTheRain(CardBehavior):
-    name = 'Worship of the Rain'
-    tags = ['Spiritual']
+class Regrowth(CardBehavior):
+    name = 'Regrowth'
+    tags = []
     deck = 'tree'
-    def on_rite(self, ctx):
-        if not ctx.state.season:
-            return False
-        to_discard = ctx.engine.strat(ctx.active_player).resolve(
-            ctx.state, ctx.active_player, list(ctx.state.season),
-            DecisionContext(event="Rite", source="Worship of the Rain", intent=Intent.OPTION))
-        ctx.state.season.remove(to_discard)
-        replacement = ctx.state.draw_from_pile("tree")
-        if replacement:
-            ctx.state.season.append(replacement)
-            ctx.state.log(f"  → Worship of the Rain: swaps {to_discard.name} → {replacement.name}")
-        else:
-            ctx.state.log(f"  → Worship of the Rain: removed {to_discard.name}, no replacement")
-        return True
+    def on_dawn(self, ctx):
+        total = 0
+        for p in ctx.state.players:
+            nature_cards = [c for c in p.discard
+                           if c.has_tag("Nature") and c.name != "Regrowth"]
+            for c in nature_cards:
+                p.discard.remove(c)
+                p.add_to_domain(c, ctx.state)
+                ctx.state.log(f"  → Regrowth: {c.name} returns to {p.name}'s Domain")
+                total += 1
+        if total:
+            ctx.state.log(f"  → Regrowth restored {total} [Nature] cards game-wide")
+        ctx.discard_self()
 
 
 @_register
-class WorshipOfFertility(CardBehavior):
-    name = 'Worship of Fertility'
+class WorshipOfTheHearth(CardBehavior):
+    name = 'Worship of the Hearth'
     tags = ['Nature', 'Spiritual']
     deck = 'tree'
     def on_rite(self, ctx):
-        ctx.state.log(f"  → {ctx.player.name}'s Worship of Fertility: triggers Harvest for {ctx.active_player.name}")
-        ctx.engine.resolve_event("Harvest", ctx.active_player)
+        kinship_players = [p for p in ctx.state.players
+                           if p.has_card("Kinship")]
+        if not kinship_players:
+            return False
+        names = ", ".join(p.name for p in kinship_players)
+        ctx.state.log(f"  → Worship of the Hearth: Harvest for {names}")
+        for p in kinship_players:
+            ctx.engine.resolve_event("Harvest", p)
         return True
 
 
@@ -251,24 +278,25 @@ class WitheredCrop(CardBehavior):
 
 
 @_register
-class Remembrance(CardBehavior):
-    name = 'Remembrance'
-    tags = ['Knowledge']
+class Vigil(CardBehavior):
+    name = 'Vigil'
+    tags = []
     deck = 'tree'
-    def on_order(self, ctx):
-        if (ctx.location != "domain"
-                or ctx.player.count_tag("Knowledge") <= 0
-                or len(ctx.player.discard) <= 0):
-            return
-        knowledge_count = ctx.player.count_tag("Knowledge")
+    def on_harvest(self, ctx):
+        allies = [p for p in ctx.state.other_players(ctx.player)
+                  if p.has_card("Kinship")]
+        if not allies or not ctx.player.discard:
+            return False
+        n = min(len(allies), len(ctx.player.discard))
         to_recover = ctx.engine.strat(ctx.player).resolve_n(
             ctx.state, ctx.player, list(ctx.player.discard),
-            1, min(knowledge_count, len(ctx.player.discard)),
-            DecisionContext(event="Order", source="Remembrance", intent=Intent.GAIN))
+            1, n,
+            DecisionContext(event="Harvest", source="Vigil", intent=Intent.GAIN))
         for c in to_recover:
             ctx.player.discard.remove(c)
             ctx.player.add_to_domain(c, ctx.state)
-            ctx.state.log(f"  → recovers {c.name} from discard")
+            ctx.state.log(f"  → Vigil: recovers {c.name} ({len(allies)} allies with Kinship)")
+        return True
 
 
 @_register
@@ -280,6 +308,48 @@ class Kinship(CardBehavior):
         ctx.state.log(f"  → Kinship: {ctx.player.name} orders Tree zone")
         ctx.engine.order_zone(ctx.player, "tree")
         return True
+
+
+@_register
+class Hospitality(CardBehavior):
+    name = 'Hospitality'
+    tags = []
+    deck = 'tree'
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
+        from cards import CardBehavior, get_behavior
+        # Find players with Kinship
+        partners = [p for p in ctx.state.other_players(ctx.player)
+                    if p.has_card("Kinship")]
+        if not partners:
+            ctx.state.log(f"  → Hospitality: no player with Kinship")
+            return
+        partner = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, partners,
+            DecisionContext(event="Order", source="Hospitality", intent=Intent.OPTION))
+        ctx.state.log(f"  → Hospitality: exchange with {partner.name}")
+        # Owner orders 1 card in partner's domain
+        orderable_theirs = [c for c in partner.domain
+                            if getattr(type(get_behavior(c.name)), 'on_order')
+                            is not CardBehavior.on_order]
+        if orderable_theirs:
+            pick = ctx.engine.strat(ctx.player).resolve(
+                ctx.state, ctx.player, orderable_theirs,
+                DecisionContext(event="Order", source="Hospitality", intent=Intent.OPTION))
+            ctx.state.log(f"  → {ctx.player.name} orders {pick.name} in {partner.name}'s Domain")
+            ctx.engine.resolve_event("Order", ctx.player, scope=pick)
+        # Partner orders 1 card in owner's domain
+        orderable_mine = [c for c in ctx.player.domain
+                          if c is not ctx.card
+                          and getattr(type(get_behavior(c.name)), 'on_order')
+                          is not CardBehavior.on_order]
+        if orderable_mine:
+            pick2 = ctx.engine.strat(partner).resolve(
+                ctx.state, partner, orderable_mine,
+                DecisionContext(event="Order", source="Hospitality", intent=Intent.OPTION))
+            ctx.state.log(f"  → {partner.name} orders {pick2.name} in {ctx.player.name}'s Domain")
+            ctx.engine.resolve_event("Order", partner, scope=pick2)
 
 
 @_register
@@ -301,7 +371,31 @@ class Pilgrimage(CardBehavior):
     def on_order(self, ctx):
         if ctx.location != "domain":
             return
-        self._claim_revelation(ctx)
+        # Gather participants — owner always joins, others may opt in
+        participants = [ctx.player]
+        for p in ctx.state.other_players(ctx.player):
+            if ctx.engine.strat(p).resolve(
+                    ctx.state, p, [True, False],
+                    DecisionContext(event="Order", source="Pilgrimage", intent=Intent.OPTION)):
+                participants.append(p)
+                ctx.state.log(f"  → {p.name} joins the Pilgrimage")
+        # Draw from Candle for each participant
+        drawn = []
+        for _ in participants:
+            c = ctx.state.draw_from_pile("candle")
+            if c:
+                drawn.append(c)
+        if not drawn:
+            ctx.state.log(f"  → Pilgrimage: Candle pile empty")
+            return
+        ctx.state.log(f"  → Pilgrimage: {len(participants)} pilgrims, drew {', '.join(c.name for c in drawn)}")
+        # Owner distributes cards among participants
+        for c in drawn:
+            recipient = ctx.engine.strat(ctx.player).resolve(
+                ctx.state, ctx.player, participants,
+                DecisionContext(event="Order", source="Pilgrimage", intent=Intent.OPTION))
+            recipient.add_to_domain(c, ctx.state)
+            ctx.state.log(f"    {recipient.name} receives {c.name}")
 
     def on_rite(self, ctx):
         self._claim_revelation(ctx)

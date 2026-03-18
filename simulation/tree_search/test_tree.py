@@ -73,7 +73,7 @@ def test_mean_case():
     player.domain.append(_card("Tavern", ["Amenity"], "wheat"))
     player.domain.append(_card("Alms", ["Religion", "Spiritual"], "candle"))
 
-    # Stuff in discard for Hunger/Dusk Rite
+    # Stuff in discard for Hunger/Veil Tear
     player.discard.append(_card("Raid", ["Trophy"], "claw"))
     player.discard.append(_card("Harvest", ["Amenity"], "wheat"))
 

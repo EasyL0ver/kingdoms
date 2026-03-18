@@ -22,7 +22,7 @@ ORDERABLE = [
     ("Ransack", [], "claw"),
     ("Ivory", ["Trophy", "Wealth"], "claw"),
     ("Martial Excellence", ["Trophy", "Chivalry"], "claw"),
-    ("Dusk Rite", ["Spiritual", "Discontent"], "claw"),
+    ("Veil Tear", ["Spiritual", "Discontent"], "claw"),
     ("Sky Dance", ["Spiritual"], "tree"),
     ("Sacred Grove", ["Nature", "Spiritual"], "tree"),
     ("Floods", ["Nature"], "tree"),

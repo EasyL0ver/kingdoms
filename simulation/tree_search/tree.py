@@ -79,7 +79,7 @@ _ZONE_NAMES = {"Presence", "Claw Zone", "Tree Zone", "Wheat Zone", "Coin Zone",
 _CASCADE_EVENT = {
     "Warband": "Brawl", "Racketeering": "Brawl", "Tyranny": "Brawl",
     "Swindle": "Brawl",                                                # → Brawl
-    "Blood Offering": "Rite", "Dusk Rite": "Rite", "Sky Dance": "Rite",
+    "Blood Offering": "Rite", "Veil Tear": "Rite",
     "Sacred Grove": "Rite", "Purity": "Rite",                          # → Rite
     "Poach": "Feast", "Forage": "Feast", "Granary": "Feast",
     "Animal Husbandry": "Feast", "Royal Hunt": "Feast",                # → Feast

@@ -144,6 +144,37 @@ class WorshipOfTheHunt(CardBehavior):
 
 
 @_register
+class WorshipOfTheDusk(CardBehavior):
+    name = 'Worship of the Dusk'
+    tags = ['Spiritual']
+    deck = 'claw'
+
+    def _dawn_exists(self, ctx):
+        for p in ctx.state.players:
+            if p.has_card("Worship of the Dawn"):
+                return True
+        return False
+
+    def on_rite(self, ctx):
+        n = 2 if self._dawn_exists(ctx) else 1
+        doubled = " (Dawn in play)" if n == 2 else ""
+        ctx.state.log(f"  → Worship of the Dusk: everyone discards {n}{doubled}")
+        for p in ctx.state.play_order_from(ctx.active_player):
+            if not p.domain:
+                continue
+            to_discard = min(n, len(p.domain))
+            victims = ctx.engine.strat(p).resolve_n(
+                ctx.state, p, list(p.domain),
+                1, to_discard,
+                DecisionContext(event="Rite", source="Worship of the Dusk", intent=Intent.DISCARD))
+            for v in victims:
+                p.discard_from_domain(v)
+            names = ", ".join(v.name for v in victims)
+            ctx.state.log(f"    {p.name} discards {names}")
+        return True
+
+
+@_register
 class WorshipOfWar(CardBehavior):
     name = 'Worship of War'
     tags = ['Spiritual']
@@ -501,28 +532,44 @@ class SpoilsOfWar(CardBehavior):
 
 
 @_register
-class DuskRite(CardBehavior):
-    name = 'Dusk Rite'
+class VeilTear(CardBehavior):
+    name = 'Veil Tear'
     tags = ['Spiritual', 'Discontent']
     deck = 'claw'
     def on_order(self, ctx):
-        if ctx.location != "domain" or len(ctx.player.discard) <= 0:
+        if ctx.location != "domain" or not ctx.player.discard:
             return
-        if ctx.player.discard:
-            to_remove = ctx.engine.strat(ctx.player).resolve_n(
-                ctx.state, ctx.player, list(ctx.player.discard),
-                1, len(ctx.player.discard),
-                DecisionContext(event="Order", source="Dusk Rite", intent=Intent.DISCARD))
-            for c in to_remove:
-                ctx.player.discard.remove(c)
-            removed_count = len(to_remove)
-            ctx.state.log(f"  → removes {removed_count} cards from discard permanently")
-            for c in ctx.engine.draw_and_receive(ctx.player, "claw", removed_count):
-                ctx.state.log(f"  → draws {c.name} from Claw")
-            for c in ctx.engine.draw_and_receive(ctx.player, "tree", removed_count):
-                ctx.state.log(f"  → draws {c.name} from Tree")
-            ctx.player.discard_from_domain(ctx.card)
-            ctx.state.log(f"  → discards Dusk Rite, Rite")
+        to_remove = ctx.engine.strat(ctx.player).resolve_n(
+            ctx.state, ctx.player, list(ctx.player.discard),
+            1, len(ctx.player.discard),
+            DecisionContext(event="Order", source="Veil Tear", intent=Intent.DISCARD))
+        for c in to_remove:
+            ctx.player.discard.remove(c)
+        n = len(to_remove)
+        ctx.state.log(f"  → Veil Tear: exiles {n} cards from discard")
+        # Resurrect up to N Spiritual cards from any player's discard
+        all_spiritual = []
+        for p in ctx.state.players:
+            for c in p.discard:
+                if c.has_tag("Spiritual"):
+                    all_spiritual.append((p, c))
+        resurrected = 0
+        while resurrected < n and all_spiritual:
+            options = [c for _, c in all_spiritual]
+            pick = ctx.engine.strat(ctx.player).resolve(
+                ctx.state, ctx.player, options,
+                DecisionContext(event="Order", source="Veil Tear", intent=Intent.GAIN))
+            for i, (owner, c) in enumerate(all_spiritual):
+                if c is pick:
+                    owner.discard.remove(c)
+                    owner.add_to_domain(c, ctx.state)
+                    ctx.state.log(f"  → resurrects {c.name} to {owner.name}'s Domain")
+                    all_spiritual.pop(i)
+                    resurrected += 1
+                    break
+        ctx.player.discard_from_domain(ctx.card)
+        ctx.state.log(f"  → discards Veil Tear, {n} Rites")
+        for _ in range(n):
             ctx.engine.resolve_event("Rite", ctx.player)
 
 

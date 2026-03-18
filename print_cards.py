@@ -237,6 +237,16 @@ CARD_TEXT = {
         "Floods is in play, every player discards\n"
         "1 card from their Domain.",
 
+    "Regrowth":
+        "On Dawn — all [Nature] cards in every\n"
+        "player's discard return to their owner's\n"
+        "Domain. Discard Regrowth.",
+
+    "Hospitality":
+        "On Order — choose a player with Kinship.\n"
+        "You may Order 1 card in their Domain.\n"
+        "They may Order 1 card in yours.",
+
     "Worship of the Rain":
         "On Rite — swap 1 Season card with the top\n"
         "card of the Candle pile.",
@@ -260,15 +270,16 @@ CARD_TEXT = {
         "Refill Fields by that count from the Wheat\n"
         "pile. Order on the Wheat zone.",
 
-    "Remembrance":
-        "On Order — return cards from your discard\n"
-        "to your Domain equal to your [Knowledge]\n"
-        "count.",
+    "Vigil":
+        "On Harvest — for each player with Kinship,\n"
+        "return 1 card from your discard to your\n"
+        "Domain.",
 
     "Pilgrimage":
-        "On Order — claim the Revelation. Reveal\n"
-        "the next card.\n"
-        "On Rite — same effect.",
+        "On Order — any player may join. Draw 1\n"
+        "from Candle per participant. You distribute\n"
+        "the drawn cards among participants.\n"
+        "On Rite — claim the Revelation.",
 
     # ── Wheat deck ──────────────────────────────────────────────────────
     "Plough":

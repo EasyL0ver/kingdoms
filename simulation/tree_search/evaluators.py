@@ -223,18 +223,40 @@ class CardSynergy(Evaluator):
                         s += 1.0
 
                 # ── Tree ──
-                case "Remembrance":
-                    if player.count_tag("Knowledge") > 0 and discard_size > 0:
-                        recoverable = min(player.count_tag("Knowledge"), discard_size)
-                        s += recoverable * 1.5
+                case "Vigil":
+                    allies_with_kinship = sum(1 for p in state.other_players(player)
+                                              if p.has_card("Kinship"))
+                    if allies_with_kinship > 0 and discard_size > 0:
+                        s += min(allies_with_kinship, discard_size) * 1.5
                 case "Floods":
                     other_floods = sum(1 for c in player.domain
                                        if c.name == "Floods") - 1
                     s += 1.5  # Season refill is always good
                     if other_floods > 0:
                         s += 1.0  # Brawl shield is great
+                case "Regrowth":
+                    nature_in_discard = sum(1 for c in player.discard if c.has_tag("Nature"))
+                    s += nature_in_discard * 1.5
+                case "Hospitality":
+                    partners = sum(1 for p in state.other_players(player)
+                                   if p.has_card("Kinship"))
+                    if partners > 0:
+                        s += 2.5
                 case "Forage":
                     s += 1.5
+                case "Worship of the Dawn":
+                    if discard_size > 0:
+                        dusk_exists = any(c.name == "Worship of the Dusk"
+                                          for p in state.players for c in p.domain)
+                        s += 2.0 if dusk_exists else 1.5
+                case "Worship of the Hearth":
+                    kinship_players = sum(1 for p in state.players
+                                          if p.has_card("Kinship"))
+                    s += kinship_players * 1.5
+                case "Worship of the Dusk":
+                    dawn_exists = any(c.name == "Worship of the Dawn"
+                                      for p in state.players for c in p.domain)
+                    s += 2.5 if dawn_exists else 1.5
                 case "Sacred Grove":
                     s += 1.0 + player.count_tag("Spiritual") * 0.3
                 case "Well":
