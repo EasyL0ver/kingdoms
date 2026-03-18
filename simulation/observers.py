@@ -312,3 +312,101 @@ class EventFrequency(GameObserver):
                          f"{cancel_rate:>10.1%} {avg_resp:>8.2f}")
 
         return "\n".join(lines)
+
+
+class GameLength(GameObserver):
+    """Tracks game length distribution (turns and wall-clock time) by win condition."""
+
+    def __init__(self):
+        self.total_games = 0
+        self.lengths: list[int] = []
+        self.durations: list[float] = []
+        self.lengths_by_pile: dict[str, list[int]] = {}
+        self.durations_by_pile: dict[str, list[float]] = {}
+        self.timeouts = 0
+        self._game_start: float = 0
+
+    def on_game_start(self, state, strategies=None):
+        import time
+        self._game_start = time.perf_counter()
+
+    def on_game_end(self, state, depleted, winner):
+        import time
+        elapsed = time.perf_counter() - self._game_start
+        self.total_games += 1
+        turns = state.turn_num
+        self.lengths.append(turns)
+        self.durations.append(elapsed)
+        pile = depleted or "timeout"
+        if pile == "timeout":
+            self.timeouts += 1
+        self.lengths_by_pile.setdefault(pile, []).append(turns)
+        self.durations_by_pile.setdefault(pile, []).append(elapsed)
+
+    def _fmt_time(self, secs):
+        if secs < 0.001:
+            return f"{secs*1_000_000:.0f}µs"
+        if secs < 1:
+            return f"{secs*1000:.1f}ms"
+        return f"{secs:.2f}s"
+
+    def report(self) -> str:
+        if not self.lengths:
+            return "No games recorded."
+        lines = [
+            "=" * 70,
+            f"GAME LENGTH ({self.total_games} games)",
+            "=" * 70,
+            "",
+        ]
+        avg = sum(self.lengths) / len(self.lengths)
+        mn, mx = min(self.lengths), max(self.lengths)
+        s = sorted(self.lengths)
+        med = s[len(s) // 2]
+        p25 = s[len(s) // 4]
+        p75 = s[3 * len(s) // 4]
+        avg_t = sum(self.durations) / len(self.durations)
+        total_t = sum(self.durations)
+        lines.append(f"Turns:  avg {avg:.1f} | median {med} | "
+                     f"p25 {p25} | p75 {p75} | min {mn} | max {mx}")
+        lines.append(f"Time:   avg {self._fmt_time(avg_t)} | "
+                     f"total {self._fmt_time(total_t)}")
+        if self.timeouts:
+            lines.append(f"Timeouts: {self.timeouts} ({100*self.timeouts/self.total_games:.1f}%)")
+        lines.append("")
+        lines.append(f"{'Pile':<15} {'Games':>5} {'AvgT':>6} {'Med':>5} {'Min':>5} {'Max':>5} {'AvgTime':>9}")
+        lines.append("-" * 58)
+        for pile in sorted(self.lengths_by_pile, key=lambda p: -len(self.lengths_by_pile[p])):
+            ls = self.lengths_by_pile[pile]
+            ds = self.durations_by_pile[pile]
+            a = sum(ls) / len(ls)
+            sl = sorted(ls)
+            m = sl[len(sl) // 2]
+            at = sum(ds) / len(ds)
+            lines.append(f"{pile:<15} {len(ls):>5} {a:>6.1f} {m:>5} {min(ls):>5} {max(ls):>5} {self._fmt_time(at):>9}")
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict:
+        result = {
+            "total_games": self.total_games,
+            "avg_turns": round(sum(self.lengths) / len(self.lengths), 1) if self.lengths else 0,
+            "median_turns": sorted(self.lengths)[len(self.lengths) // 2] if self.lengths else 0,
+            "min_turns": min(self.lengths) if self.lengths else 0,
+            "max_turns": max(self.lengths) if self.lengths else 0,
+            "avg_time": round(sum(self.durations) / len(self.durations), 4) if self.durations else 0,
+            "total_time": round(sum(self.durations), 3) if self.durations else 0,
+            "timeouts": self.timeouts,
+            "by_pile": {},
+        }
+        for pile, ls in self.lengths_by_pile.items():
+            sl = sorted(ls)
+            ds = self.durations_by_pile[pile]
+            result["by_pile"][pile] = {
+                "games": len(ls),
+                "avg_turns": round(sum(ls) / len(ls), 1),
+                "median_turns": sl[len(sl) // 2],
+                "min_turns": min(ls),
+                "max_turns": max(ls),
+                "avg_time": round(sum(ds) / len(ds), 4),
+            }
+        return result

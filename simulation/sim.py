@@ -23,7 +23,7 @@ from state import GameState
 from engine import GameEngine
 from strategy import RandomStrategy
 from tree_search import TreeSearchStrategy, get_evaluator, list_evaluators
-from observers import CardWinCorrelation, OrderStats, EventFrequency, StrategyWinRate
+from observers import CardWinCorrelation, OrderStats, EventFrequency, StrategyWinRate, GameLength
 
 STRATEGIES = {
     "random": ("Uniformly random choices", lambda rng, evals: RandomStrategy(rng)),
@@ -188,6 +188,10 @@ def _collect_benchmark(args, stats, observers, eval_names) -> dict:
                              "avg_responders": round(resp / count, 2) if count else 0}
         data["events"] = events
 
+    length_obs = next((o for o in observers if isinstance(o, GameLength)), None)
+    if length_obs:
+        data["game_length"] = length_obs.to_dict()
+
     return data
 
 
@@ -258,7 +262,7 @@ def main():
     else:
         # Batch mode with observers
         observers = [CardWinCorrelation(), OrderStats(), EventFrequency(),
-                     StrategyWinRate()]
+                     StrategyWinRate(), GameLength()]
         stats = {"wins": {}, "depleted": {}, "turns": [], "elapsed": []}
 
         for i in range(args.games):
