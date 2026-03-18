@@ -76,23 +76,44 @@ def _label(opt) -> str:
 _ZONE_NAMES = {"Presence", "Claw Zone", "Tree Zone", "Wheat Zone", "Coin Zone",
                "Candle Zone", "Sword Zone"}
 # Tier 1: Cards whose on_order cascades into secondary events
-_CASCADE_NAMES = {
-    "Warband", "Blood Offering", "Poach", "Racketeering", "Tyranny",
-    "Ivory", "Martial Excellence", "Dusk Rite",                         # claw
-    "Sky Dance", "Sacred Grove", "Forage", "Sowing", "Withered Crop",   # tree
-    "Plough", "Granary", "Mill", "Animal Husbandry", "Apprenticeship", "Well",  # wheat
-    "Market", "Swindle", "Efficiency",                                  # coin
-    "Purity", "Benefaction",                                            # candle
-    "Royal Hunt",                                                       # sword
+_CASCADE_EVENT = {
+    "Warband": "Brawl", "Racketeering": "Brawl", "Tyranny": "Brawl",
+    "Swindle": "Brawl",                                                # → Brawl
+    "Blood Offering": "Rite", "Dusk Rite": "Rite", "Sky Dance": "Rite",
+    "Sacred Grove": "Rite", "Purity": "Rite",                          # → Rite
+    "Poach": "Feast", "Forage": "Feast", "Granary": "Feast",
+    "Animal Husbandry": "Feast", "Royal Hunt": "Feast",                # → Feast
+    "Benefaction": "Rumour",                                            # → Rumour
+    "Sowing": "Order", "Withered Crop": "Order", "Plough": "Order",
+    "Mill": "Order", "Apprenticeship": "Order", "Well": "Order",
+    "Market": "Order", "Ivory": "Order", "Martial Excellence": "Order",
+    "Efficiency": "Order", "Clergy": "Order",                           # → zone Order
 }
 
 
-def _branch_priority(label: str) -> int:
+def _count_responders(player, event: str) -> int:
+    """Count how many cards in player's domain respond to an event."""
+    from cards import CardBehavior, get_behavior
+    handler_name = f"on_{event.lower()}"
+    base = getattr(CardBehavior, handler_name)
+    count = 0
+    for card in player.domain:
+        beh = get_behavior(card.name)
+        if getattr(type(beh), handler_name) is not base:
+            count += 1
+    return count
+
+
+def _branch_priority(label: str, player=None) -> tuple[int, int]:
+    """Returns (tier, -responder_count) for sorting. Lower = explored first."""
     if label in _ZONE_NAMES:
-        return 0
-    if label in _CASCADE_NAMES:
-        return 1
-    return 2
+        return (0, 0)
+    event = _CASCADE_EVENT.get(label)
+    if event:
+        # Cascading card — rank by how many responders we have for its event
+        listeners = _count_responders(player, event) if player else 0
+        return (1, -listeners)
+    return (2, 0)
 
 
 def evaluate(state, player_name: str) -> float:
@@ -151,10 +172,10 @@ def build_tree(state, player, engine_cls, strategies: dict,
                     seen[lbl] = i
                     unique_indices.append(i)
 
-            # Order branches: zones first, cascades second; shuffle within tiers
+            # Order branches: zones first, cascades ranked by listener count
             if rng:
                 rng.shuffle(unique_indices)
-            unique_indices.sort(key=lambda i: _branch_priority(labels[i]))
+            unique_indices.sort(key=lambda i: _branch_priority(labels[i], player))
 
             node = TreeNode(
                 source=ctx.source,
