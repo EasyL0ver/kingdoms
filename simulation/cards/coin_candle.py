@@ -337,6 +337,12 @@ class Zealot(CardBehavior):
     def on_brawl(self, ctx):
         if ctx.target is None:
             return False
+        # Defensive: if Zealot's owner is the target and has Religion, cancel brawl
+        if ctx.target is ctx.player and any(c.has_tag("Religion") for c in ctx.player.domain if c is not ctx.card):
+            ctx.state.log(f"  → Zealot defends {ctx.player.name}'s domain — Brawl cancelled!")
+            ctx.engine.cancel_event()
+            return True
+        # Offensive: destroy a card from the defender's domain
         defender = ctx.target
         destroyable = [c for c in defender.domain if c is not ctx.card]
         if not destroyable:
