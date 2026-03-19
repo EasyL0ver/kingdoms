@@ -100,7 +100,7 @@ On Brawl (*not your turn*) — the active player takes 1 card from your discard.
 
 ```
 🐾  BLOOD OFFERING
-On Order — discard 1 card from your Domain. Rite your Domain.
+On Order — discard 1 card from your Domain. Rite every Domain.
 ```
 
 ```
