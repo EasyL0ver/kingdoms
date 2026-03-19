@@ -376,7 +376,7 @@
         "Nature"
       ],
       "count": 2,
-      "text": "On Brawl — if another Floods is in play, cancel the Brawl.\nOn Dawn — refill the Season. If another Floods is in play, every player discards a card from their Domain."
+      "text": "On Brawl (*another Floods in play*) — cancel the Brawl in your Domain.\nOn Dawn — refill the Season.\nOn Dawn (*another Floods in play*) — every player discards a card from their Domain."
     },
     {
       "name": "Bog",

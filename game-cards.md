@@ -317,8 +317,9 @@ On Harvest — for each player with Kinship, return a card from your discard to 
 ```
 🌳  FLOODS
 [Nature]
-On Brawl — if another Floods is in play, cancel the Brawl.
-On Dawn — refill the Season. If another Floods is in play, every player discards a card from their Domain.
+On Brawl (*another Floods in play*) — cancel the Brawl in your Domain.
+On Dawn — refill the Season.
+On Dawn (*another Floods in play*) — every player discards a card from their Domain.
 ```
 
 ```
