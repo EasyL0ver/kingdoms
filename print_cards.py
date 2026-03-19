@@ -169,7 +169,7 @@ body {
 }
 
 .card-tags {
-  padding: 0 3mm;
+  padding: 1.5mm 3mm;
   font-size: 8pt;
   font-weight: 700;
   letter-spacing: 0.3pt;
@@ -180,6 +180,7 @@ body {
   gap: 1.5mm;
   flex-wrap: nowrap;
   overflow: hidden;
+  box-sizing: content-box;
 }
 
 .tag {
