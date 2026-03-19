@@ -217,7 +217,7 @@ On Dawn — Brawl your Domain. Discard Uprising.
 
 ```
 🐾  RANSACK
-On Order — discard a card from your Domain. Draw 2 cards from the Claw deck. Take 1 from the Season.
+On Order — discard a card from your Domain. Draw 2 cards from the Claw deck. Take a card from the Season.
 ```
 
 ```
