@@ -186,14 +186,45 @@ body {
 .tag {
   display: inline-block;
   padding: 0.3mm 1.5mm;
-  border: 0.3mm solid #000;
   border-radius: 1mm;
   font-size: 7.5pt;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2pt;
-  color: #000;
+  color: #fff;
 }
+
+.tag-discontent  { background: #8B1A1A; }
+.tag-mob         { background: #6D1B1B; }
+.tag-unit        { background: #4A4A4A; }
+.tag-hunt        { background: #5D4037; }
+.tag-trophy      { background: #B8860B; }
+.tag-nature      { background: #2E7D32; }
+.tag-spiritual   { background: #4A148C; }
+.tag-religion    { background: #6A1B9A; }
+.tag-knowledge   { background: #1565C0; }
+.tag-labour      { background: #7B5B3A; }
+.tag-amenity     { background: #00695C; }
+.tag-wealth      { background: #AF8800; }
+.tag-chivalry    { background: #37474F; }
+
+.inline-tag {
+  font-weight: 800;
+}
+
+.inline-tag-discontent  { color: #8B1A1A; }
+.inline-tag-mob         { color: #6D1B1B; }
+.inline-tag-unit        { color: #4A4A4A; }
+.inline-tag-hunt        { color: #5D4037; }
+.inline-tag-trophy      { color: #B8860B; }
+.inline-tag-nature      { color: #2E7D32; }
+.inline-tag-spiritual   { color: #4A148C; }
+.inline-tag-religion    { color: #6A1B9A; }
+.inline-tag-knowledge   { color: #1565C0; }
+.inline-tag-labour      { color: #7B5B3A; }
+.inline-tag-amenity     { color: #00695C; }
+.inline-tag-wealth      { color: #AF8800; }
+.inline-tag-chivalry    { color: #37474F; }
 
 .card-body {
   padding: 2.5mm 3mm 2mm;
@@ -294,7 +325,8 @@ def render_card(card: dict) -> str:
 
     tags_row = ""
     if not is_zone:
-        tags_inner = "".join(f'<span class="tag">{t}</span>' for t in tags)
+        tags_inner = "".join(
+            f'<span class="tag tag-{t.lower()}">{t}</span>' for t in tags)
         tags_row = f'<div class="card-tags">{tags_inner}</div>'
 
     if is_zone:
@@ -354,10 +386,22 @@ _BOLD_KEYWORDS = re.compile(
     r')\b'
 )
 
+_INLINE_TAG = re.compile(
+    r'\[('
+    r'Discontent|Mob|Unit|Hunt|Trophy|Nature|Spiritual|Religion'
+    r'|Knowledge|Labour|Amenity|Wealth|Chivalry|Land'
+    r')\]'
+)
+
 def bold_keywords(text: str) -> str:
-    """Wrap game keywords in <b> tags after HTML-escaping."""
+    """Wrap game keywords in <b> tags and color [Tag] refs after HTML-escaping."""
     safe = esc(text)
-    return _BOLD_KEYWORDS.sub(r'<b>\1</b>', safe)
+    safe = _BOLD_KEYWORDS.sub(r'<b>\1</b>', safe)
+    safe = _INLINE_TAG.sub(
+        lambda m: f'<span class="inline-tag inline-tag-{m.group(1).lower()}">[{m.group(1)}]</span>',
+        safe,
+    )
+    return safe
 
 
 def render_page(cards: list[dict]) -> str:
