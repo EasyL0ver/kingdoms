@@ -398,7 +398,7 @@ _EVENT_KEYWORD = re.compile(
 _BOLD_KEYWORDS = re.compile(
     r'\b('
     r'Brawl|Rite|Feast|Harvest|Rumour|Order'
-    r'|Hunt|Discard|Domain|Season|Fields|Wares|Opportunities|Revelation|Tourney'
+    r'|Hunt|Domain|Season|Fields|Wares|Opportunities|Revelation|Tourney'
     r'|Requires'
     r')\b'
 )
