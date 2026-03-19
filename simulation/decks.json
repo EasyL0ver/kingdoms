@@ -30,7 +30,12 @@
     { "name": "Enforcers", "tags": ["Mob", "Discontent"], "count": 2 }
   ],
   "sword": [
-    { "name": "Royal Hunt", "tags": ["Unit", "Trophy", "Hunt"], "count": 3 }
+    { "name": "Royal Hunt", "tags": ["Unit", "Trophy", "Hunt"], "count": 3 },
+    { "name": "Knight of the Gold Coat", "tags": ["Unit", "Chivalry", "Wealth"], "count": 2 },
+    { "name": "Knight of the Iron Crown", "tags": ["Unit", "Chivalry", "Trophy"], "count": 2 },
+    { "name": "Knight of the Green Mantle", "tags": ["Unit", "Chivalry", "Nature"], "count": 2 },
+    { "name": "Knight of the White Shield", "tags": ["Unit", "Chivalry", "Amenity"], "count": 2 },
+    { "name": "Knight of the Holy Cross", "tags": ["Unit", "Chivalry", "Religion"], "count": 2 }
   ],
   "tree": [
     { "name": "Kinship", "tags": [], "count": 4 },
