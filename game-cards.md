@@ -12,7 +12,7 @@ All designed cards in one place, organised by deck.
 SETUP: Start with this card.
 It cannot be discarded or moved.
 On Dawn — choose one:
-• Order on the Claw zone or Tree zone.
+• Order the Claw zone or Tree zone.
 • Order a card in your Domain.
 ```
 
@@ -41,7 +41,7 @@ On Order — take 1–5 from the bottom.
 Reveal Claw cards equal to [Labour] tags
 taken → to your Domain.
 If [Discontent] in your Domain ≥ 3:
-Revolt — Brawl in every Domain with Wheat.
+Revolt — Brawl every Domain with Wheat.
 Refills to 5 after drawing.
 ```
 
@@ -52,7 +52,7 @@ Discarded cards go to the Wares.
 On Order — choose one:
 • Buy — take 1 card from the Wares.
 • Trade — give 1 Domain card to Wares,
-  take 1 Opportunity. Rumour in every Domain.
+  take 1 Opportunity. Rumour every Domain.
 ```
 
 ```
@@ -98,13 +98,13 @@ On Brawl — if the active player is someone else, they take 1 card from your di
 
 ```
 🐾  BLOOD OFFERING
-On Order — discard 1 card from your Domain. Rite in your Domain.
+On Order — discard 1 card from your Domain. Rite your Domain.
 ```
 
 ```
 🐾  POACH
 [Discontent] [Hunt] [Mob] [Unit]
-On Order — Feast in your Domain. Draw 1 from Claw. Hunt — blocked if another player has [Hunt].
+On Order — Feast your Domain. Draw 1 from Claw. Hunt — blocked if another player has [Hunt].
 ```
 
 ```
@@ -138,19 +138,19 @@ On Dawn — move up to 2 [Mob] cards from your Domain or a culture ally's to any
 
 ```
 🐾  KINSHIP
-On Harvest — Order on the Tree zone.
+On Harvest — Order the Tree zone.
 ```
 
 ```
 🐾  RACKETEERING
 [Discontent]
-On Order — choose a player. They offer you 1 card. Take it, or refuse and Brawl in their Domain.
+On Order — choose a player. They offer you 1 card. Take it, or refuse and Brawl their Domain.
 ```
 
 ```
 🐾  TYRANNY
 [Discontent] [Trophy]
-On Order — draw from Claw equal to your [Discontent] count. Brawl in your Domain.
+On Order — draw from Claw equal to your [Discontent] count. Brawl your Domain.
 ```
 
 ```
@@ -167,7 +167,7 @@ On Feast — draw 1 from Claw.
 ```
 🐾  MARTIAL EXCELLENCE
 [Chivalry] [Trophy]
-On Order — Order on the Sword zone. Requires another [Trophy] in your Domain.
+On Order — Order the Sword zone. Requires another [Trophy] in your Domain.
 ```
 
 ```
@@ -196,7 +196,7 @@ On Dawn — the player with the most cards discards 1–2 cards of their choice.
 ```
 🐾  IVORY
 [Trophy] [Wealth]
-On Order — discard Ivory. Order on the Coin zone.
+On Order — discard Ivory. Order the Coin zone.
 ```
 
 ```
@@ -209,7 +209,7 @@ On Feast — return 1 card from your discard to top of the Claw pile.
 ```
 🐾  UPRISING
 [Discontent]
-On Dawn — Brawl in your Domain. Discard Uprising.
+On Dawn — Brawl your Domain. Discard Uprising.
 ```
 
 ```
@@ -227,13 +227,13 @@ On Brawl — moves to the active player. They draw from Claw and Tree equal to t
 ```
 🐾  VEIL TEAR
 [Discontent] [Spiritual]
-On Order — remove any number of cards from your discard from the game. Return that many [Spiritual] cards from any discard to their owner's Domain. Rite in every Domain that many times. Discard Veil Tear.
+On Order — remove any number of cards from your discard from the game. Return that many [Spiritual] cards from any discard to their owner's Domain. Rite every Domain that many times. Discard Veil Tear.
 ```
 
 ```
 🐾  BLOOD FEUD
 [Discontent] [Mob]
-On Brawl — draw 2 from Claw. Move up to 2 [Mob] to the active player. Discard Blood Feud, then Brawl in the active player's Domain.
+On Brawl — draw 2 from Claw. Move up to 2 [Mob] to the active player. Discard Blood Feud, then Brawl the active player's Domain.
 ```
 
 ```
@@ -250,7 +250,7 @@ On Brawl — both you and the active player draw 2 from Claw.
 
 ```
 🌳  KINSHIP
-On Harvest — Order on the Tree zone.
+On Harvest — Order the Tree zone.
 ```
 
 ```
@@ -267,7 +267,7 @@ On Rite — return 1 card from your discard to your Domain. If Worship of the Du
 
 ```
 🌳  HARVEST
-On Dawn — Harvest in every zone. Discard Harvest.
+On Dawn — Harvest every zone. Discard Harvest.
 ```
 
 ```
@@ -278,30 +278,30 @@ On Dawn — choose Brawl, Rite, or Rumour. Fires in your Domain and all culture 
 ```
 🌳  SACRED GROVE
 [Nature] [Spiritual]
-On Order — choose one: • Rite in your Domain. • Look at the top 3 Tree cards. Take any [Spiritual] cards. Return the rest.
+On Order — choose one: • Rite your Domain. • Look at the top 3 Tree cards. Take any [Spiritual] cards. Return the rest.
 ```
 
 ```
 🌳  WORSHIP OF THE HEARTH
 [Nature] [Spiritual]
-On Rite — Harvest in every Domain that has Kinship.
+On Rite — Harvest every Domain that has Kinship.
 ```
 
 ```
 🌳  FORAGE
-On Order — discard top 2 Tree and top 2 Claw cards to your discard. Feast in your Domain.
+On Order — discard top 2 Tree and top 2 Claw cards to your discard. Feast your Domain.
 ```
 
 ```
 🌳  SOWING
 [Knowledge]
-On Order — Order on the Wheat zone.
+On Order — Order the Wheat zone.
 On Harvest — refill Season buffer, then take all [Nature] cards from Season for free. Requires 2+ [Nature] in your Domain.
 ```
 
 ```
 🌳  COMPOST
-On Order — remove a Harvest card from your discard from the game. Harvest in your Domain.
+On Order — remove a Harvest card from your discard from the game. Harvest your Domain.
 ```
 
 ```
@@ -359,7 +359,7 @@ On Order — choose a player with Kinship. You may Order 1 card in their Domain.
 ```
 🌾  ANIMAL HUSBANDRY
 [Labour]
-On Order — choose one: • Order on the Wheat zone. • Order on the Coin zone. • Feast in your Domain.
+On Order — choose one: • Order the Wheat zone. • Order the Coin zone. • Feast your Domain.
 ```
 
 ```
@@ -372,7 +372,7 @@ On Feast — you may return 1 [Discontent] from your Domain to top of Claw pile.
 🌾  MILITIA
 [Unit]
 On Rumour — discard 1 [Mob] from your Domain.
-On Brawl — discard Militia to cancel the Brawl in your Domain.
+On Brawl — discard Militia to cancel the Brawl your Domain.
 ```
 
 ```
@@ -390,13 +390,13 @@ On Order — take any 1 card from the Village. Put 1 card from your Domain back 
 ```
 🌾  TURNIP PATCH
 [Labour]
-On Order, Harvest — Order on the Wheat zone.
+On Order, Harvest — Order the Wheat zone.
 ```
 
 ```
 🌾  RITUAL PYRE
 [Nature] [Spiritual]
-On Order — discard a card from your Domain. If you do, Harvest in your Domain. Rite in your Domain.
+On Order — discard a card from your Domain. If you do, Harvest your Domain. Rite your Domain.
 ```
 
 ```
@@ -414,7 +414,7 @@ On Harvest — If you triggered it: move Wolf Pack to another player's Domain. O
 ```
 🌾  HERB GARDEN
 [Nature]
-On Harvest — Order on the Tree zone or Wheat zone.
+On Harvest — Order the Tree zone or Wheat zone.
 ```
 
 > *Your choice.*
@@ -422,7 +422,7 @@ On Harvest — Order on the Tree zone or Wheat zone.
 ```
 🌾  ORCHARD
 [Labour] [Nature]
-On Harvest — draw 1 from Tree. Feast in your Domain.
+On Harvest — draw 1 from Tree. Feast your Domain.
 ```
 
 ```
@@ -440,19 +440,19 @@ On Rite — rearrange the Village belt.
 ```
 🌾  ORA ET LABORA
 [Labour] [Spiritual]
-On Harvest — Order on the Candle zone.
-On Rite — Order on the Wheat zone.
+On Harvest — Order the Candle zone.
+On Rite — Order the Wheat zone.
 ```
 
 ```
 🌾  TAX COLLECTORS
 [Discontent] [Mob]
-On Order — requires 3+ [Labour]. Order on the Coin zone. Rumour in your Domain.
+On Order — requires 3+ [Labour]. Order the Coin zone. Rumour your Domain.
 ```
 
 ```
 🌾  LOOKOUT
-On Dawn — if you have [Discontent], Rumour in your Domain.
+On Dawn — if you have [Discontent], Rumour your Domain.
 ```
 
 ```
@@ -481,20 +481,20 @@ On Order — give 1+ cards from your Domain to another player. They decide: if t
 
 ```
 🪙  MARKET
-On Order — offer a Ware to a player. If they accept, Order on the Coin zone.
+On Order — offer a Ware to a player. If they accept, Order the Coin zone.
 ```
 
 > *Buyer picks which Ware.*
 
 ```
 🪙  PAWN SHOP
-On Order — Order on the Coin zone.
+On Order — Order the Coin zone.
 On Rumour — swap 1 Domain card with 1 Wares card.
 ```
 
 ```
 🪙  STOCKPILE
-On Order — put 1 Domain card into Wares. Order on the Coin zone.
+On Order — put 1 Domain card into Wares. Order the Coin zone.
 ```
 
 ```
@@ -506,13 +506,13 @@ On Brawl — you pick 1 from Wares, the active player takes it. Smuggler moves t
 ```
 🪙  FORGERY
 [Discontent]
-On Order — if you have a Coin card in Domain, put Forgery into Wares. Order on the Coin zone.
+On Order — if you have a Coin card in Domain, put Forgery into Wares. Order the Coin zone.
 ```
 
 ```
 🪙  USURER
 On Order — put 1 Domain card into Wares.
-On Rumour — Order on the Coin zone.
+On Rumour — Order the Coin zone.
 ```
 
 ```
@@ -524,12 +524,12 @@ On Brawl — put 1 Domain card into Wares. active player Orders on the Coin zone
 ```
 🪙  SELLSWORD
 [Unit]
-On Brawl — discard Sellsword to the Wares to cancel the Brawl in your Domain.
+On Brawl — discard Sellsword to the Wares to cancel the Brawl your Domain.
 ```
 
 ```
 🪙  SWINDLE
-On Order — give all Wares to a chosen opponent. Brawl in their Domain. Discard Swindle.
+On Order — give all Wares to a chosen opponent. Brawl their Domain. Discard Swindle.
 ```
 
 ```
@@ -599,13 +599,13 @@ On Rite — the active player may discard cards. All other players must discard 
 ```
 🕯️  CLERGY
 [Religion]
-On Order — Order on the Candle zone. Peek at Candle cards, 1 per player with [Religion]. Keep 1, may set 1 as Revelation, remove the rest from the game.
+On Order — Order the Candle zone. Peek at Candle cards, 1 per player with [Religion]. Keep 1, may set 1 as Revelation, remove the rest from the game.
 ```
 
 ```
 🕯️  SABBATH
 [Religion]
-On Dawn — Rite in your Domain.
+On Dawn — Rite your Domain.
 ```
 
 ```
@@ -630,13 +630,13 @@ On Order — each player in turn order claims 1 Revelation. Refill between each.
 ```
 🕯️  PURITY
 [Religion]
-On Order — you may remove the Revelation from the game and reveal the next. Rite in your Domain.
+On Order — you may remove the Revelation from the game and reveal the next. Rite your Domain.
 ```
 
 ```
 🕯️  FLAGELLATION
 [Religion]
-On Rite — Brawl in your Domain.
+On Rite — Brawl your Domain.
 ```
 
 ```
@@ -654,7 +654,7 @@ On Order — move the Revelation to the Wares. Reveal the next card.
 ```
 🕯️  PROTECT THE MEEK
 [Chivalry]
-On Brawl — Order on the Sword zone.
+On Brawl — Order the Sword zone.
 ```
 
 ---
@@ -666,7 +666,7 @@ On Brawl — Order on the Sword zone.
 ```
 ⚔️  ROYAL HUNT
 [Hunt] [Trophy] [Unit]
-On Order — Feast in your Domain twice. Draw 1 from Claw. Hunt — blocked if another player has [Hunt].
+On Order — Feast your Domain twice. Draw 1 from Claw. Hunt — blocked if another player has [Hunt].
 ```
 
 ```

@@ -49,7 +49,7 @@ ZONE_CARDS = [
      "setupText": "Start with this card.\n"
                   "It cannot be discarded or moved.",
      "orderText": "On Dawn — choose one:\n"
-                  "• Order on the Claw zone or Tree zone.\n"
+                  "• Order the Claw zone or Tree zone.\n"
                   "• Order a card in your Domain.",
      "endgameText": ""},
     {"name": "Claw Zone",  "tags": ["Zone"], "deck": "claw",   "count": 1,
@@ -67,7 +67,7 @@ ZONE_CARDS = [
                   "Reveal Claw cards equal to [Labour] tags\n"
                   "taken → to your Domain.\n"
                   "If [Discontent] in your Domain ≥ 3:\n"
-                  "Revolt — Brawl in every Domain with Wheat.\n"
+                  "Revolt — Brawl every Domain with Wheat.\n"
                   "Refills to 5 after drawing.",
      "endgameText": "Player with most [Amenity] wins."},
     {"name": "Coin Zone",  "tags": ["Zone"], "deck": "coin",   "count": 1,
@@ -76,7 +76,7 @@ ZONE_CARDS = [
      "orderText": "On Order — choose one:\n"
                   "• Buy — take 1 card from the Wares.\n"
                   "• Trade — give 1 Domain card to Wares,\n"
-                  "  take 1 Opportunity. Rumour in every Domain.",
+                  "  take 1 Opportunity. Rumour every Domain.",
      "endgameText": "Player with most [Wealth] wins."},
     {"name": "Candle Zone","tags": ["Zone"], "deck": "candle", "count": 1,
      "setupText": "1 face-up card — the Revelation.",

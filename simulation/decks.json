@@ -32,7 +32,7 @@
       "name": "Blood Offering",
       "tags": [],
       "count": 1,
-      "text": "On Order — discard 1 card from your Domain. Rite in your Domain."
+      "text": "On Order — discard 1 card from your Domain. Rite your Domain."
     },
     {
       "name": "Poach",
@@ -43,7 +43,7 @@
         "Discontent"
       ],
       "count": 4,
-      "text": "On Order — Feast in your Domain. Draw 1 from Claw. Hunt — blocked if another player has [Hunt]."
+      "text": "On Order — Feast your Domain. Draw 1 from Claw. Hunt — blocked if another player has [Hunt]."
     },
     {
       "name": "Worship of the Hunt",
@@ -87,7 +87,7 @@
       "name": "Kinship",
       "tags": [],
       "count": 3,
-      "text": "On Harvest — Order on the Tree zone."
+      "text": "On Harvest — Order the Tree zone."
     },
     {
       "name": "Racketeering",
@@ -95,7 +95,7 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Order — choose a player. They offer you 1 card. Take it, or refuse and Brawl in their Domain."
+      "text": "On Order — choose a player. They offer you 1 card. Take it, or refuse and Brawl their Domain."
     },
     {
       "name": "Tyranny",
@@ -104,7 +104,7 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Order — draw from Claw equal to your [Discontent] count. Brawl in your Domain."
+      "text": "On Order — draw from Claw equal to your [Discontent] count. Brawl your Domain."
     },
     {
       "name": "Marauders",
@@ -129,7 +129,7 @@
         "Chivalry"
       ],
       "count": 1,
-      "text": "On Order — Order on the Sword zone. Requires another [Trophy] in your Domain."
+      "text": "On Order — Order the Sword zone. Requires another [Trophy] in your Domain."
     },
     {
       "name": "Outriders",
@@ -168,7 +168,7 @@
         "Wealth"
       ],
       "count": 2,
-      "text": "On Order — discard Ivory. Order on the Coin zone."
+      "text": "On Order — discard Ivory. Order the Coin zone."
     },
     {
       "name": "Hunger",
@@ -184,7 +184,7 @@
         "Discontent"
       ],
       "count": 3,
-      "text": "On Dawn — Brawl in your Domain. Discard Uprising."
+      "text": "On Dawn — Brawl your Domain. Discard Uprising."
     },
     {
       "name": "Ransack",
@@ -208,7 +208,7 @@
         "Discontent"
       ],
       "count": 1,
-      "text": "On Order — remove any number of cards from your discard from the game. Return that many [Spiritual] cards from any discard to their owner's Domain. Rite in every Domain that many times. Discard Veil Tear."
+      "text": "On Order — remove any number of cards from your discard from the game. Return that many [Spiritual] cards from any discard to their owner's Domain. Rite every Domain that many times. Discard Veil Tear."
     },
     {
       "name": "Blood Feud",
@@ -217,7 +217,7 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Brawl — draw 2 from Claw. Move up to 2 [Mob] to the active player. Discard Blood Feud, then Brawl in the active player's Domain."
+      "text": "On Brawl — draw 2 from Claw. Move up to 2 [Mob] to the active player. Discard Blood Feud, then Brawl the active player's Domain."
     },
     {
       "name": "Enforcers",
@@ -238,7 +238,7 @@
         "Hunt"
       ],
       "count": 3,
-      "text": "On Order — Feast in your Domain twice. Draw 1 from Claw. Hunt — blocked if another player has [Hunt]."
+      "text": "On Order — Feast your Domain twice. Draw 1 from Claw. Hunt — blocked if another player has [Hunt]."
     },
     {
       "name": "Gold Coat",
@@ -296,7 +296,7 @@
       "name": "Kinship",
       "tags": [],
       "count": 4,
-      "text": "On Harvest — Order on the Tree zone."
+      "text": "On Harvest — Order the Tree zone."
     },
     {
       "name": "Eldership",
@@ -318,7 +318,7 @@
       "name": "Harvest",
       "tags": [],
       "count": 6,
-      "text": "On Dawn — Harvest in every zone. Discard Harvest."
+      "text": "On Dawn — Harvest every zone. Discard Harvest."
     },
     {
       "name": "Gathering",
@@ -333,7 +333,7 @@
         "Spiritual"
       ],
       "count": 3,
-      "text": "On Order — choose one: • Rite in your Domain. • Look at the top 3 Tree cards. Take any [Spiritual] cards. Return the rest."
+      "text": "On Order — choose one: • Rite your Domain. • Look at the top 3 Tree cards. Take any [Spiritual] cards. Return the rest."
     },
     {
       "name": "Worship of the Hearth",
@@ -342,13 +342,13 @@
         "Spiritual"
       ],
       "count": 1,
-      "text": "On Rite — Harvest in every Domain that has Kinship."
+      "text": "On Rite — Harvest every Domain that has Kinship."
     },
     {
       "name": "Forage",
       "tags": [],
       "count": 2,
-      "text": "On Order — discard top 2 Tree and top 2 Claw cards to your discard. Feast in your Domain."
+      "text": "On Order — discard top 2 Tree and top 2 Claw cards to your discard. Feast your Domain."
     },
     {
       "name": "Sowing",
@@ -356,13 +356,13 @@
         "Knowledge"
       ],
       "count": 3,
-      "text": "On Order — Order on the Wheat zone.\nOn Harvest — refill Season buffer, then take all [Nature] cards from Season for free. Requires 2+ [Nature] in your Domain."
+      "text": "On Order — Order the Wheat zone.\nOn Harvest — refill Season buffer, then take all [Nature] cards from Season for free. Requires 2+ [Nature] in your Domain."
     },
     {
       "name": "Compost",
       "tags": [],
       "count": 2,
-      "text": "On Order — remove a Harvest card from your discard from the game. Harvest in your Domain."
+      "text": "On Order — remove a Harvest card from your discard from the game. Harvest your Domain."
     },
     {
       "name": "Vigil",
@@ -430,7 +430,7 @@
         "Labour"
       ],
       "count": 2,
-      "text": "On Order — choose one: • Order on the Wheat zone. • Order on the Coin zone. • Feast in your Domain."
+      "text": "On Order — choose one: • Order the Wheat zone. • Order the Coin zone. • Feast your Domain."
     },
     {
       "name": "Tavern",
@@ -446,7 +446,7 @@
         "Unit"
       ],
       "count": 2,
-      "text": "On Rumour — discard 1 [Mob] from your Domain.\nOn Brawl — discard Militia to cancel the Brawl in your Domain."
+      "text": "On Rumour — discard 1 [Mob] from your Domain.\nOn Brawl — discard Militia to cancel the Brawl your Domain."
     },
     {
       "name": "Crooked Inn",
@@ -472,7 +472,7 @@
         "Labour"
       ],
       "count": 4,
-      "text": "On Order, Harvest — Order on the Wheat zone."
+      "text": "On Order, Harvest — Order the Wheat zone."
     },
     {
       "name": "Ritual Pyre",
@@ -481,7 +481,7 @@
         "Spiritual"
       ],
       "count": 2,
-      "text": "On Order — discard a card from your Domain. If you do, Harvest in your Domain. Rite in your Domain."
+      "text": "On Order — discard a card from your Domain. If you do, Harvest your Domain. Rite your Domain."
     },
     {
       "name": "Folk Hero",
@@ -508,7 +508,7 @@
         "Nature"
       ],
       "count": 2,
-      "text": "On Harvest — Order on the Tree zone or Wheat zone.",
+      "text": "On Harvest — Order the Tree zone or Wheat zone.",
       "reminder": "Your choice."
     },
     {
@@ -518,7 +518,7 @@
         "Labour"
       ],
       "count": 3,
-      "text": "On Harvest — draw 1 from Tree. Feast in your Domain."
+      "text": "On Harvest — draw 1 from Tree. Feast your Domain."
     },
     {
       "name": "Reeve",
@@ -543,7 +543,7 @@
         "Spiritual"
       ],
       "count": 2,
-      "text": "On Harvest — Order on the Candle zone.\nOn Rite — Order on the Wheat zone."
+      "text": "On Harvest — Order the Candle zone.\nOn Rite — Order the Wheat zone."
     },
     {
       "name": "Tax Collectors",
@@ -552,13 +552,13 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Order — requires 3+ [Labour]. Order on the Coin zone. Rumour in your Domain."
+      "text": "On Order — requires 3+ [Labour]. Order the Coin zone. Rumour your Domain."
     },
     {
       "name": "Lookout",
       "tags": [],
       "count": 2,
-      "text": "On Dawn — if you have [Discontent], Rumour in your Domain."
+      "text": "On Dawn — if you have [Discontent], Rumour your Domain."
     },
     {
       "name": "Tidings",
@@ -591,20 +591,20 @@
       "name": "Market",
       "tags": [],
       "count": 3,
-      "text": "On Order — offer a Ware to a player. If they accept, Order on the Coin zone.",
+      "text": "On Order — offer a Ware to a player. If they accept, Order the Coin zone.",
       "reminder": "Buyer picks which Ware."
     },
     {
       "name": "Pawn Shop",
       "tags": [],
       "count": 3,
-      "text": "On Order — Order on the Coin zone.\nOn Rumour — swap 1 Domain card with 1 Wares card."
+      "text": "On Order — Order the Coin zone.\nOn Rumour — swap 1 Domain card with 1 Wares card."
     },
     {
       "name": "Stockpile",
       "tags": [],
       "count": 3,
-      "text": "On Order — put 1 Domain card into Wares. Order on the Coin zone."
+      "text": "On Order — put 1 Domain card into Wares. Order the Coin zone."
     },
     {
       "name": "Smuggler",
@@ -620,13 +620,13 @@
         "Discontent"
       ],
       "count": 3,
-      "text": "On Order — if you have a Coin card in Domain, put Forgery into Wares. Order on the Coin zone."
+      "text": "On Order — if you have a Coin card in Domain, put Forgery into Wares. Order the Coin zone."
     },
     {
       "name": "Usurer",
       "tags": [],
       "count": 3,
-      "text": "On Order — put 1 Domain card into Wares.\nOn Rumour — Order on the Coin zone."
+      "text": "On Order — put 1 Domain card into Wares.\nOn Rumour — Order the Coin zone."
     },
     {
       "name": "Highwaymen",
@@ -642,13 +642,13 @@
         "Unit"
       ],
       "count": 2,
-      "text": "On Brawl — discard Sellsword to the Wares to cancel the Brawl in your Domain."
+      "text": "On Brawl — discard Sellsword to the Wares to cancel the Brawl your Domain."
     },
     {
       "name": "Swindle",
       "tags": [],
       "count": 2,
-      "text": "On Order — give all Wares to a chosen opponent. Brawl in their Domain. Discard Swindle."
+      "text": "On Order — give all Wares to a chosen opponent. Brawl their Domain. Discard Swindle."
     },
     {
       "name": "Prosperity",
@@ -737,7 +737,7 @@
         "Religion"
       ],
       "count": 3,
-      "text": "On Order — Order on the Candle zone. Peek at Candle cards, 1 per player with [Religion]. Keep 1, may set 1 as Revelation, remove the rest from the game."
+      "text": "On Order — Order the Candle zone. Peek at Candle cards, 1 per player with [Religion]. Keep 1, may set 1 as Revelation, remove the rest from the game."
     },
     {
       "name": "Sabbath",
@@ -745,7 +745,7 @@
         "Religion"
       ],
       "count": 3,
-      "text": "On Dawn — Rite in your Domain."
+      "text": "On Dawn — Rite your Domain."
     },
     {
       "name": "Zealot",
@@ -779,7 +779,7 @@
         "Religion"
       ],
       "count": 2,
-      "text": "On Order — you may remove the Revelation from the game and reveal the next. Rite in your Domain."
+      "text": "On Order — you may remove the Revelation from the game and reveal the next. Rite your Domain."
     },
     {
       "name": "Flagellation",
@@ -787,7 +787,7 @@
         "Religion"
       ],
       "count": 2,
-      "text": "On Rite — Brawl in your Domain."
+      "text": "On Rite — Brawl your Domain."
     },
     {
       "name": "Penance",
@@ -812,7 +812,7 @@
         "Chivalry"
       ],
       "count": 4,
-      "text": "On Brawl — Order on the Sword zone."
+      "text": "On Brawl — Order the Sword zone."
     }
   ]
 }
