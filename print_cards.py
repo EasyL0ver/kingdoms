@@ -380,8 +380,8 @@ import re
 EVENT_EMOJIS = {
     "On Dawn": "☀️",
     "On Order": "🎯",
-    "On Brawl": "⚔️",
-    "On Rite": "🕯️",
+    "On Brawl": "💥",
+    "On Rite": "✨",
     "On Feast": "🍖",
     "On Rumour": "👂",
     "On Harvest": "🌱",
