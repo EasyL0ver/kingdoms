@@ -776,7 +776,7 @@
         "Religion"
       ],
       "count": 2,
-      "text": "On Order — optionally remove from the game the Revelation and reveal the next. Rite in your Domain."
+      "text": "On Order — you may remove the Revelation from the game and reveal the next. Rite in your Domain."
     },
     {
       "name": "Flagellation",
@@ -784,7 +784,7 @@
         "Religion"
       ],
       "count": 2,
-      "text": "On Rite — Brawl in your Domain (no player benefits)."
+      "text": "On Rite — Brawl in your Domain."
     },
     {
       "name": "Penance",

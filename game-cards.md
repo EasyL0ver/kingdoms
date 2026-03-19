@@ -616,13 +616,13 @@ On Order — each player in turn order claims 1 Revelation. Refill between each.
 ```
 🕯️  PURITY
 [Religion]
-On Order — optionally remove from the game the Revelation and reveal the next. Rite in your Domain.
+On Order — you may remove the Revelation from the game and reveal the next. Rite in your Domain.
 ```
 
 ```
 🕯️  FLAGELLATION
 [Religion]
-On Rite — Brawl in your Domain (no player benefits).
+On Rite — Brawl in your Domain.
 ```
 
 ```
