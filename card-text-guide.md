@@ -1,5 +1,11 @@
 # Card Text Templating Guide
 
+> This guide covers two concerns:
+> 1. **Card text authoring** — how to write text in `decks.json` (the source of truth)
+> 2. **Render behaviour** — what `print_cards.py` does automatically (marked with 🖨️)
+>
+> When writing card text, only worry about authoring rules. Render features are handled by the script.
+
 ## Structure
 
 ```
@@ -100,29 +106,38 @@ Order the Coin zone         (not "Order on the Coin zone")
 | triggers | fires |
 | deck | pile |
 
-## Formatting Markers
+## Formatting Markers (authored in JSON)
 
 | Marker | Renders as | Use for |
 |--------|-----------|---------|
 | `*text*` | *italic* | prereqs, mode names (Panic, Fortify) |
-| `[Tag]` | colored bold | tag references in text |
+| `[Tag]` | colored bold 🖨️ | tag references in text |
 | `\n` | line break | separating abilities |
 | `• option` | bullet | choice lists |
 
-## Bold Keywords (auto-bolded in HTML)
+## 🖨️ Bold Keywords (auto-bolded by renderer)
 
 Events: Brawl, Rite, Feast, Harvest, Rumour, Order, Hunt
 Locations: Season, Fields, Wares, Opportunities, Revelation, Tourney
 
 **Not bolded:** Domain, Discard
 
-## Event Emojis (HTML only)
+> You don't need to mark these in JSON — `print_cards.py` detects and bolds them automatically.
+
+## 🖨️ Event Emojis (added by renderer, HTML only)
 
 ☀️ Dawn · 🎯 Order · 💥 Brawl · ✨ Rite · 🍖 Feast · 👂 Rumour · 🌱 Harvest
 
-## Tags
+> Emojis are prepended automatically when rendering. Do **not** put emojis in `decks.json`.
 
-- Always in `[brackets]` in text
+## 🖨️ Inline Tag Coloring (added by renderer)
+
+`[Tag]` references in card text are automatically color-coded in HTML to match the tag bar colors.
+
+> Just write `[Trophy]` in JSON — the renderer handles the styling.
+
+## 🖨️ Tags Display
+
 - Sorted alphabetically in tag bar
 - Cards with no tags show grey italic "No Tag" badge
 - Reminder text: use `"reminder"` property in JSON (renders italic, grey, small)
