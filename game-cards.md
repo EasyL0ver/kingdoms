@@ -426,7 +426,7 @@ On Harvest — draw 1 from Tree. Feast in your Domain.
 ```
 🌾  REEVE
 [Unit]
-On Dawn — Order 1 Wheat card in your Domain (fires its On Order effect).
+On Dawn — Order 1 Wheat card in your Domain.
 ```
 
 ```
