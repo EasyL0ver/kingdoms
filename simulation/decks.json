@@ -95,7 +95,7 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Order — choose a player. They offer you 1 card. Take it, or refuse and Brawl their Domain."
+      "text": "On Order — choose a player. They offer you a card. Put it in your Domain, or refuse and Brawl their Domain."
     },
     {
       "name": "Tyranny",
@@ -143,7 +143,7 @@
         "Discontent"
       ],
       "count": 3,
-      "text": "On Order ([Land] in the Season) — take all [Land] cards from the Season to your Domain. Discard Land Grab."
+      "text": "On Order ([Land] in the Season) — put all [Land] cards from the Season into your Domain. Discard Land Grab."
     },
     {
       "name": "Rite of Passage",
@@ -190,7 +190,7 @@
       "name": "Ransack",
       "tags": [],
       "count": 2,
-      "text": "On Order — discard a card from your Domain. Draw 2 cards from the Claw deck. Take a card from the Season."
+      "text": "On Order — discard a card from your Domain. Draw 2 cards from the Claw deck. Put a card from the Season into your Domain."
     },
     {
       "name": "Spoils of War",
@@ -333,7 +333,7 @@
         "Spiritual"
       ],
       "count": 3,
-      "text": "On Order — choose one: • Rite your Domain. • Look at the top 3 Tree cards. Take any [Spiritual] cards. Return the rest."
+      "text": "On Order — choose one: • Rite your Domain. • Look at the top 3 Tree cards. Put any [Spiritual] cards into your Domain. Return the rest."
     },
     {
       "name": "Worship of the Hearth",
@@ -464,7 +464,7 @@
         "Amenity"
       ],
       "count": 2,
-      "text": "On Order — take any 1 card from the Village. Put 1 card from your Domain back in its place."
+      "text": "On Order — put any card from the Village into your Domain. Put a card from your Domain back in its place."
     },
     {
       "name": "Turnip Patch",
@@ -664,7 +664,7 @@
         "Wealth"
       ],
       "count": 2,
-      "text": "On Dawn (culture ally and Wares) — you and your ally each take 1 card from the Wares."
+      "text": "On Dawn (Kinship and Wares) — you and each player with Kinship put a card from the Wares into your Domains."
     },
     {
       "name": "Efficiency",

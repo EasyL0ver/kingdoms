@@ -58,12 +58,12 @@ ZONE_CARDS = [
      "endgameText": "Player with most [Trophy] wins."},
     {"name": "Tree Zone",  "tags": ["Zone"], "deck": "tree",   "count": 1,
      "setupText": "4 cards face-up — the Season.",
-     "orderText": "On Order — take 1 card from the Season.\n"
+     "orderText": "On Order — put a card from the Season into your Domain.\n"
                   "Refill the Season to 4.",
      "endgameText": "Player with most [Nature] wins."},
     {"name": "Wheat Zone", "tags": ["Zone"], "deck": "wheat",  "count": 1,
      "setupText": "5 face-up cards — the Village (conveyor).",
-     "orderText": "On Order — take 1–5 from the bottom.\n"
+     "orderText": "On Order — put 1–5 from the bottom into your Domain.\n"
                   "Reveal cards from the Claw deck equal to [Labour] tags\n"
                   "taken → to your Domain.\n"
                   "If [Discontent] in your Domain ≥ 3:\n"
@@ -74,9 +74,9 @@ ZONE_CARDS = [
      "setupText": "3 face-up cards — the Opportunities.\n"
                   "Discarded cards go to the Wares.",
      "orderText": "On Order — choose one:\n"
-                  "• Buy — take 1 card from the Wares.\n"
+                  "• Buy — put a card from the Wares into your Domain.\n"
                   "• Trade — give 1 Domain card to Wares,\n"
-                  "  take 1 Opportunity. Rumour every Domain.",
+                  "  put an Opportunity into your Domain. Rumour every Domain.",
      "endgameText": "Player with most [Wealth] wins."},
     {"name": "Candle Zone","tags": ["Zone"], "deck": "candle", "count": 1,
      "setupText": "1 face-up card — the Revelation.",
@@ -86,7 +86,7 @@ ZONE_CARDS = [
     {"name": "Sword Zone", "tags": ["Zone"], "deck": "sword",  "count": 1,
      "setupText": "2 face-up cards — the Tourney.",
      "orderText": "On Order — Injustice (2+ [Mob] in any\n"
-                  "Domain): tyrant takes [Unit], you take rest.\n"
+                  "Domain): tyrant puts [Unit] in their Domain, you put rest in yours.\n"
                   "Peace (Joust): challenge an opponent.\n"
                   "Accept = both pick 1. Refuse = Brawl in\n"
                   "both Domains. Refill Tourney to 2.",

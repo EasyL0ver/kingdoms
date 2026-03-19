@@ -30,14 +30,14 @@ On Order — draw 2 cards from the Claw deck.
 ```
 🌳  TREE ZONE
 SETUP: 4 cards face-up — the Season.
-On Order — take 1 card from the Season.
+On Order — put a card from the Season into your Domain.
 Refill the Season to 4.
 ```
 
 ```
 🌾  WHEAT ZONE
 SETUP: 5 face-up cards — the Village (conveyor).
-On Order — take 1–5 from the bottom.
+On Order — put 1–5 from the bottom into your Domain.
 Reveal cards from the Claw deck equal to [Labour] tags
 taken → to your Domain.
 If [Discontent] in your Domain ≥ 3:
@@ -50,9 +50,9 @@ Refills to 5 after drawing.
 SETUP: 3 face-up cards — the Opportunities.
 Discarded cards go to the Wares.
 On Order — choose one:
-• Buy — take 1 card from the Wares.
+• Buy — put a card from the Wares into your Domain.
 • Trade — give 1 Domain card to Wares,
-  take 1 Opportunity. Rumour every Domain.
+  put an Opportunity into your Domain. Rumour every Domain.
 ```
 
 ```
@@ -66,7 +66,7 @@ Reveal the next card.
 ⚔️  SWORD ZONE
 SETUP: 2 face-up cards — the Tourney.
 On Order — Injustice (2+ [Mob] in any
-Domain): tyrant takes [Unit], you take rest.
+Domain): tyrant puts [Unit] in their Domain, you put rest in yours.
 Peace (Joust): challenge an opponent.
 Accept = both pick 1. Refuse = Brawl in
 both Domains. Refill Tourney to 2.
@@ -147,7 +147,7 @@ On Harvest — Order the Tree zone.
 ```
 🐾  RACKETEERING
 [Discontent]
-On Order — choose a player. They offer you 1 card. Take it, or refuse and Brawl their Domain.
+On Order — choose a player. They offer you a card. Put it in your Domain, or refuse and Brawl their Domain.
 ```
 
 ```
@@ -181,7 +181,7 @@ On Order — draw 3 cards from the Claw deck, then discard 1 of them.
 ```
 🐾  LAND GRAB
 [Discontent]
-On Order ([Land] in the Season) — take all [Land] cards from the Season to your Domain. Discard Land Grab.
+On Order ([Land] in the Season) — put all [Land] cards from the Season into your Domain. Discard Land Grab.
 ```
 
 ```
@@ -217,7 +217,7 @@ On Dawn — Brawl your Domain. Discard Uprising.
 
 ```
 🐾  RANSACK
-On Order — discard a card from your Domain. Draw 2 cards from the Claw deck. Take a card from the Season.
+On Order — discard a card from your Domain. Draw 2 cards from the Claw deck. Put a card from the Season into your Domain.
 ```
 
 ```
@@ -283,7 +283,7 @@ On Dawn — choose Brawl, Rite, or Rumour. Triggers in your Domain and every Dom
 ```
 🌳  SACRED GROVE
 [Nature] [Spiritual]
-On Order — choose one: • Rite your Domain. • Look at the top 3 Tree cards. Take any [Spiritual] cards. Return the rest.
+On Order — choose one: • Rite your Domain. • Look at the top 3 Tree cards. Put any [Spiritual] cards into your Domain. Return the rest.
 ```
 
 ```
@@ -389,7 +389,7 @@ On Rumour — return 1 [Mob] from your discard to your Domain.
 ```
 🌾  ENCLOSURE
 [Amenity] [Labour]
-On Order — take any 1 card from the Village. Put 1 card from your Domain back in its place.
+On Order — put any card from the Village into your Domain. Put a card from your Domain back in its place.
 ```
 
 ```
@@ -547,7 +547,7 @@ On Dawn (Opportunities) — draw a card from the Coin deck.
 ```
 🪙  EMBASSY
 [Wealth]
-On Dawn (culture ally and Wares) — you and your ally each take 1 card from the Wares.
+On Dawn (Kinship and Wares) — you and each player with Kinship put a card from the Wares into your Domains.
 ```
 
 ```
