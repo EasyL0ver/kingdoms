@@ -579,7 +579,7 @@ def main():
 
     # 3. Report any cards without text
     missing = {c["name"] for c in cards
-               if not c.get("text") and not c.get("orderText")}
+               if not c.get("text") and not c.get("orderText") and not c.get("reminder")}
     if missing:
         print(f"⚠  No text for: {', '.join(sorted(missing))}")
 
