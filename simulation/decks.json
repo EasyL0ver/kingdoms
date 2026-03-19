@@ -43,7 +43,7 @@
         "Discontent"
       ],
       "count": 4,
-      "text": "On Order (no other [Hunt] in play) — Feast your Domain. Draw 1 card from the Claw deck."
+      "text": "On Order (no other [Hunt] in play) — Feast your Domain. Draw a card from the Claw deck."
     },
     {
       "name": "Worship of the Hunt",
@@ -114,13 +114,13 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Feast — discard Marauders. Draw 1 card from the Claw deck."
+      "text": "On Feast — discard Marauders. Draw a card from the Claw deck."
     },
     {
       "name": "Share the Spoils",
       "tags": [],
       "count": 2,
-      "text": "On Feast — draw 1 card from the Claw deck."
+      "text": "On Feast — draw a card from the Claw deck."
     },
     {
       "name": "Martial Excellence",
@@ -238,7 +238,7 @@
         "Hunt"
       ],
       "count": 3,
-      "text": "On Order (no other [Hunt] in play) — Feast your Domain twice. Draw 1 card from the Claw deck."
+      "text": "On Order (no other [Hunt] in play) — Feast your Domain twice. Draw a card from the Claw deck."
     },
     {
       "name": "Gold Coat",
@@ -304,7 +304,7 @@
         "Knowledge"
       ],
       "count": 1,
-      "text": "On Brawl — if the active player shares your culture, you may cancel the Brawl. They draw 1 card from the Tree deck."
+      "text": "On Brawl — if the active player shares your culture, you may cancel the Brawl. They draw a card from the Tree deck."
     },
     {
       "name": "Worship of the Dawn",
@@ -392,7 +392,7 @@
         "Nature"
       ],
       "count": 1,
-      "text": "On Feast — draw 1 card from the Claw deck."
+      "text": "On Feast — draw a card from the Claw deck."
     },
     {
       "name": "Ravine",
@@ -518,7 +518,7 @@
         "Labour"
       ],
       "count": 3,
-      "text": "On Harvest — draw 1 card from the Tree deck. Feast your Domain."
+      "text": "On Harvest — draw a card from the Tree deck. Feast your Domain."
     },
     {
       "name": "Reeve",
@@ -656,7 +656,7 @@
         "Wealth"
       ],
       "count": 2,
-      "text": "On Dawn (Opportunities) — draw 1 card from the Coin deck."
+      "text": "On Dawn (Opportunities) — draw a card from the Coin deck."
     },
     {
       "name": "Embassy",
@@ -684,7 +684,7 @@
       "name": "Commodities",
       "tags": [],
       "count": 2,
-      "text": "On Rumour — draw 1 card from a chosen deck. Add it to the Wares."
+      "text": "On Rumour — draw a card from a chosen deck. Add it to the Wares."
     },
     {
       "name": "Provisions",
@@ -692,7 +692,7 @@
         "Amenity"
       ],
       "count": 2,
-      "text": "On Feast — draw 1 card from the Coin deck."
+      "text": "On Feast — draw a card from the Coin deck."
     },
     {
       "name": "Worship of Gold",

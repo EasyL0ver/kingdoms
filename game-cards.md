@@ -106,7 +106,7 @@ On Order — discard 1 card from your Domain. Rite every Domain.
 ```
 🐾  POACH
 [Discontent] [Hunt] [Mob] [Unit]
-On Order (no other [Hunt] in play) — Feast your Domain. Draw 1 card from the Claw deck.
+On Order (no other [Hunt] in play) — Feast your Domain. Draw a card from the Claw deck.
 ```
 
 ```
@@ -159,12 +159,12 @@ On Order — draw cards from the Claw deck equal to your [Discontent] count. Bra
 ```
 🐾  MARAUDERS
 [Discontent] [Mob] [Unit]
-On Feast — discard Marauders. Draw 1 card from the Claw deck.
+On Feast — discard Marauders. Draw a card from the Claw deck.
 ```
 
 ```
 🐾  SHARE THE SPOILS
-On Feast — draw 1 card from the Claw deck.
+On Feast — draw a card from the Claw deck.
 ```
 
 ```
@@ -260,7 +260,7 @@ On Harvest — Order the Tree zone.
 ```
 🌳  ELDERSHIP
 [Knowledge]
-On Brawl — if the active player shares your culture, you may cancel the Brawl. They draw 1 card from the Tree deck.
+On Brawl — if the active player shares your culture, you may cancel the Brawl. They draw a card from the Tree deck.
 ```
 
 ```
@@ -330,7 +330,7 @@ On Rumour — remove 1 card from the Season from the game.
 ```
 🌳  BEAR'S DEN
 [Nature]
-On Feast — draw 1 card from the Claw deck.
+On Feast — draw a card from the Claw deck.
 ```
 
 ```
@@ -428,7 +428,7 @@ On Harvest — Order the Tree zone or Wheat zone.
 ```
 🌾  ORCHARD
 [Labour] [Nature]
-On Harvest — draw 1 card from the Tree deck. Feast your Domain.
+On Harvest — draw a card from the Tree deck. Feast your Domain.
 ```
 
 ```
@@ -541,7 +541,7 @@ On Order — give all Wares to a chosen opponent. Brawl their Domain. Discard Sw
 ```
 🪙  PROSPERITY
 [Wealth]
-On Dawn (Opportunities) — draw 1 card from the Coin deck.
+On Dawn (Opportunities) — draw a card from the Coin deck.
 ```
 
 ```
@@ -563,13 +563,13 @@ On Order — draw cards from the Coin deck equal to your count of unique tags in
 
 ```
 🪙  COMMODITIES
-On Rumour — draw 1 card from a chosen deck. Add it to the Wares.
+On Rumour — draw a card from a chosen deck. Add it to the Wares.
 ```
 
 ```
 🪙  PROVISIONS
 [Amenity]
-On Feast — draw 1 card from the Coin deck.
+On Feast — draw a card from the Coin deck.
 ```
 
 ```
@@ -672,7 +672,7 @@ On Brawl — Order the Sword zone.
 ```
 ⚔️  ROYAL HUNT
 [Hunt] [Trophy] [Unit]
-On Order (no other [Hunt] in play) — Feast your Domain twice. Draw 1 card from the Claw deck.
+On Order (no other [Hunt] in play) — Feast your Domain twice. Draw a card from the Claw deck.
 ```
 
 ```
