@@ -193,7 +193,7 @@ On Brawl — draw a card from the Tree deck.
 ```
 🐾  CULLING
 [Discontent]
-On Dawn — the player with the most cards discards 2 cards from their Domain. Discard Culling.
+On Dawn — the player with the most cards in their Domain discards 2 cards from their Domain. Discard Culling.
 ```
 
 ```
