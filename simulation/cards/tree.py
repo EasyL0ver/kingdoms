@@ -302,12 +302,19 @@ class Sowing(CardBehavior):
         ctx.engine.order_zone(ctx.player, "wheat")
 
     def on_harvest(self, ctx):
-        s = ctx.state
-        old_count = len(s.fields)
-        s.refill_fields()
-        if len(s.fields) > old_count:
-            s.log(f"  → Sowing: Fields refilled {old_count} → {len(s.fields)}")
-        return True
+        if ctx.location != "domain":
+            return
+        # Refill season buffer
+        tree_zone_beh = ctx.engine.behavior(ctx.state.zone_cards["tree"])
+        tree_zone_beh.refill(ctx.state)
+        ctx.state.log(f"  → Sowing refills Season buffer")
+        # Take all Nature-tagged cards from season for free
+        nature_cards = [c for c in list(ctx.state.season)
+                        if "Nature" in c.tags]
+        for c in nature_cards:
+            ctx.state.season.remove(c)
+            ctx.engine.receive_card(ctx.player, c)
+            ctx.state.log(f"  → Sowing: {ctx.player.name} takes {c.name} (Nature) for free")
 
 
 @_register
@@ -316,22 +323,16 @@ class Compost(CardBehavior):
     tags = []
     deck = 'tree'
     def on_order(self, ctx):
-        if ctx.location != "domain" or not ctx.player.discard:
+        if ctx.location != "domain":
             return
-        to_exile = ctx.engine.strat(ctx.player).resolve_n(
-            ctx.state, ctx.player, list(ctx.player.discard),
-            1, len(ctx.player.discard),
-            DecisionContext(event="Order", source="Compost", intent=Intent.DISCARD))
-        for c in to_exile:
-            ctx.player.discard.remove(c)
-        ctx.state.log(f"  → Compost: exiles {len(to_exile)} cards, restocks fields")
-        old = len(ctx.state.fields)
-        ctx.state.refill_fields(old + len(to_exile))
-        new = len(ctx.state.fields)
-        if new > old:
-            ctx.state.log(f"  → Fields refilled {old} → {new}")
-        if ctx.state.fields:
-            ctx.engine.order_zone(ctx.player, "wheat")
+        harvests = [c for c in ctx.player.discard if c.name == "Harvest"]
+        if not harvests:
+            return
+        h = harvests[0]
+        ctx.player.discard.remove(h)
+        ctx.state.log(f"  → Compost: {ctx.player.name} purges Harvest from discard")
+        ctx.state.log(f"  → Compost: Harvest!")
+        ctx.engine.resolve_event("Harvest", ctx.player, ctx.player)
 
 
 @_register

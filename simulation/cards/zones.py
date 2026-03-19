@@ -39,14 +39,6 @@ class Presence(CardBehavior):
                 seen.add(card.name)
                 options.append(card)
 
-        # Wells in other players' domains
-        for p in s.players:
-            if p is player:
-                continue
-            for card in p.domain:
-                if card.name == "Well" and self._orderable(ctx.engine, card):
-                    options.append(card)
-
         if not options:
             s.log("  *(no valid actions)*")
             return
@@ -155,9 +147,7 @@ class WheatZone(CardBehavior):
                 if has_wheat:
                     s.log(f"  → Revolt Brawl in {p.name}'s domain")
                     ctx.engine.resolve_event("Brawl", ctx.player, p)
-
-    def on_dawn(self, ctx):
-        """Auto-refill Village to 5 on Dawn."""
+        # Refill Village after taking
         self.refill(ctx.state)
 
     def refill(self, state, target: int = 5):

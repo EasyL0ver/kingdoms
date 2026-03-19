@@ -4,89 +4,6 @@ from strategy import Intent, DecisionContext
 
 
 @_register
-class Plough(CardBehavior):
-    name = 'Plough'
-    tags = ['Labour']
-    deck = 'wheat'
-
-    def on_order(self, ctx):
-        if ctx.location != "domain" or not ctx.state.fields:
-            return
-        ctx.engine.order_zone(ctx.player, "wheat")
-        # Return 1 Discontent to claw pile
-        discontent = ctx.player.cards_with_tag("Discontent")
-        if discontent:
-            victim = ctx.engine.strat(ctx.player).resolve(
-                ctx.state, ctx.player, discontent,
-                DecisionContext(event="Order", source="Plough", intent=Intent.DISCARD))
-            ctx.player.remove_from_domain(victim)
-            ctx.state.return_to_pile("claw", victim)
-            ctx.state.log(f"  → Plough: returns {victim.name} to claw pile")
-
-    def on_harvest(self, ctx):
-        options = ["feast", "wheat"]
-        choice = ctx.engine.strat(ctx.player).resolve(
-            ctx.state, ctx.player, options,
-            DecisionContext(event="Harvest", source="Plough", intent=Intent.OPTION))
-        if choice == "feast":
-            ctx.state.log(f"  → {ctx.player.name}'s Plough: Feast")
-            ctx.engine.resolve_event("Feast", ctx.player, ctx.player)
-        else:
-            if ctx.state.fields:
-                ctx.state.log(f"  → {ctx.player.name}'s Plough: Orders Wheat zone")
-                ctx.engine.order_zone(ctx.player, "wheat")
-        return True
-
-
-@_register
-class Granary(CardBehavior):
-    name = 'Granary'
-    tags = ['Labour']
-    deck = 'wheat'
-    def on_order(self, ctx):
-        if ctx.location != "domain":
-            return
-        ctx.player.discard_from_domain(ctx.card)
-        ctx.state.log(f"  → discards Granary, Feast")
-        ctx.engine.resolve_event("Feast", ctx.player, ctx.player)
-
-
-@_register
-class Mill(CardBehavior):
-    name = 'Mill'
-    tags = ['Labour']
-    deck = 'wheat'
-    def on_order(self, ctx):
-        if ctx.location != "domain":
-            return
-        ctx.player.discard_from_domain(ctx.card)
-        ctx.state.log(f"  → Mill discarded, orders Coin zone")
-        ctx.engine.order_zone(ctx.player, "coin")
-
-
-@_register
-class Famine(CardBehavior):
-    name = 'Famine'
-    tags = []
-    deck = 'wheat'
-    def on_dawn(self, ctx):
-        targets = ctx.state.other_players(ctx.player)
-        valid_targets = [p for p in targets if any(c.deck == "wheat" for c in p.domain)]
-        if valid_targets:
-            target = ctx.engine.strat(ctx.player).resolve(
-                ctx.state, ctx.player, valid_targets,
-                DecisionContext(event="Dawn", source="Famine", intent=Intent.TARGET))
-            wheat_cards = [c for c in target.domain if c.deck == "wheat"]
-            if wheat_cards:
-                victim = ctx.engine.strat(ctx.player).resolve(
-                    ctx.state, ctx.player, wheat_cards,
-                    DecisionContext(event="Dawn", source="Famine", intent=Intent.TARGET))
-                target.discard_from_domain(victim)
-                ctx.state.log(f"  → Famine: {target.name} discards {victim.name}")
-        ctx.discard_self()
-
-
-@_register
 class AnimalHusbandry(CardBehavior):
     name = 'Animal Husbandry'
     tags = ['Labour']
@@ -108,48 +25,34 @@ class Tavern(CardBehavior):
     tags = ['Amenity']
     deck = 'wheat'
     def on_feast(self, ctx):
+        s = ctx.state
+        acted = False
+        # Optionally return 1 Discontent from domain to top of Claw pile
         discontent = ctx.player.cards_with_tag("Discontent")
         if discontent:
-            victim = ctx.engine.strat(ctx.player).resolve(
-                ctx.state, ctx.player, discontent,
+            options = discontent + [None]
+            pick = ctx.engine.strat(ctx.player).resolve(
+                s, ctx.player, options,
                 DecisionContext(event="Feast", source="Tavern", intent=Intent.DISCARD))
-            ctx.player.remove_from_domain(victim)
-            ctx.state.return_to_pile("claw", victim)
-            ctx.state.log(f"  → Tavern: returns {victim.name} to claw pile")
-        return True
+            if pick is not None:
+                ctx.player.remove_from_domain(pick)
+                s.return_to_pile("claw", pick)
+                s.log(f"  → Tavern: returns {pick.name} to top of Claw pile")
+                acted = True
+        # Optionally return 1 Claw card from discard to top of Claw pile
+        claw_in_discard = [c for c in ctx.player.discard if c.deck == "claw"]
+        if claw_in_discard:
+            options = claw_in_discard + [None]
+            pick = ctx.engine.strat(ctx.player).resolve(
+                s, ctx.player, options,
+                DecisionContext(event="Feast", source="Tavern", intent=Intent.DISCARD))
+            if pick is not None:
+                ctx.player.discard.remove(pick)
+                s.return_to_pile("claw", pick)
+                s.log(f"  → Tavern: returns {pick.name} from discard to top of Claw pile")
+                acted = True
+        return acted
 
-
-@_register
-class FeedTheCommoners(CardBehavior):
-    name = 'Feed the Commoners'
-    tags = []
-    deck = 'wheat'
-    def on_dawn(self, ctx):
-        discontent = ctx.player.cards_with_tag("Discontent")
-        if discontent:
-            to_return = ctx.engine.strat(ctx.player).resolve_n(
-                ctx.state, ctx.player, discontent,
-                0, min(3, len(discontent)),
-                DecisionContext(event="Dawn", source="Feed the Commoners", intent=Intent.DISCARD))
-            for c in to_return:
-                ctx.player.remove_from_domain(c)
-                ctx.state.return_to_pile("claw", c)
-                ctx.state.log(f"  → Feed the Commoners returns {c.name} to claw pile")
-        ctx.discard_self()
-
-
-@_register
-class Apprenticeship(CardBehavior):
-    name = 'Apprenticeship'
-    tags = ['Labour']
-    deck = 'wheat'
-    def on_order(self, ctx):
-        if ctx.location != "domain":
-            return
-        if not any(p.count_tag("Wealth") > 0 for p in ctx.state.other_players(ctx.player)):
-            return
-        ctx.state.log(f"  → Orders Coin zone via Apprenticeship")
-        ctx.engine.order_zone(ctx.player, "coin")
 
 
 @_register
@@ -179,40 +82,6 @@ class Militia(CardBehavior):
         return False
 
 
-@_register
-class Well(CardBehavior):
-    name = 'Well'
-    tags = ['Amenity']
-    deck = 'wheat'
-
-    def on_order(self, ctx):
-        if not ctx.state.season:
-            return
-        # Orderer orders tree zone
-        ctx.state.log(f"  → {ctx.active_player.name} orders Tree zone via Well")
-        ctx.engine.order_zone(ctx.active_player, "tree")
-        # Owner also orders tree zone (if different from orderer)
-        if ctx.player is not ctx.active_player:
-            ctx.state.log(f"  → {ctx.player.name} (Well owner) orders Tree zone")
-            ctx.engine.order_zone(ctx.player, "tree")
-        # Refill 1 Season + 1 Fields
-        old_season = len(ctx.state.season)
-        ctx.state.refill_season(old_season + 1)
-        if len(ctx.state.season) > old_season:
-            ctx.state.log(f"  → Well: Season refilled {old_season} → {len(ctx.state.season)}")
-        old_fields = len(ctx.state.fields)
-        ctx.state.refill_fields(old_fields + 1)
-        if len(ctx.state.fields) > old_fields:
-            ctx.state.log(f"  → Well: Fields refilled {old_fields} → {len(ctx.state.fields)}")
-
-
-@_register
-class Maypole(CardBehavior):
-    name = 'Maypole'
-    tags = ['Amenity']
-    deck = 'wheat'
-    pass  # Pure [Amenity] tag, no effects
-
 
 @_register
 class VillageGossip(CardBehavior):
@@ -241,72 +110,259 @@ class VillageGossip(CardBehavior):
 
 
 @_register
-class Orchard(CardBehavior):
-    name = 'Orchard'
-    tags = ['Nature', 'Land']
+class CrookedInn(CardBehavior):
+    name = 'Crooked Inn'
+    tags = ['Amenity', 'Discontent']
+    deck = 'wheat'
+
+    def on_rumour(self, ctx):
+        # Return 1 Mob from discard to domain
+        mobs = [c for c in ctx.player.discard if c.has_tag("Mob")]
+        if not mobs:
+            return False
+        mob = mobs[0]
+        ctx.player.discard.remove(mob)
+        ctx.player.add_to_domain(mob, ctx.state)
+        ctx.state.log(f"  → Crooked Inn: {mob.name} crawls back to {ctx.player.name}'s domain")
+        return True
+
+
+@_register
+class Enclosure(CardBehavior):
+    name = 'Enclosure'
+    tags = ['Labour', 'Amenity']
     deck = 'wheat'
 
     def on_order(self, ctx):
-        if ctx.location != "domain" or not ctx.state.fields:
+        if ctx.location != "domain":
             return
-        card = ctx.engine.strat(ctx.player).resolve(
-            ctx.state, ctx.player, list(ctx.state.fields),
-            DecisionContext(event="Order", source="Orchard", intent=Intent.GAIN))
-        if card and card in ctx.state.fields:
-            ctx.state.fields.remove(card)
-            ctx.engine.receive_card(ctx.player, card)
-            ctx.state.log(f"  → Orchard: {ctx.player.name} picks {card.name} from Fields (no tax)")
+        village = ctx.state.fields
+        if not village:
+            return False
+        # Pick any card from the Village
+        pick = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, list(village),
+            f"Enclosure: take which card from Village?"
+        )
+        idx = village.index(pick)
+        village.remove(pick)
+        ctx.player.add_to_domain(pick, ctx.state)
+        ctx.state.log(f"  → Enclosure: takes {pick.name} from Village")
+        # Put a card from domain back into the same slot
+        returnable = [c for c in ctx.player.domain if c is not ctx.card and c is not pick]
+        if returnable:
+            give_back = ctx.engine.strat(ctx.player).resolve(
+                ctx.state, ctx.player, returnable + [None],
+                f"Enclosure: put which card back into Village?"
+            )
+            if give_back is not None:
+                ctx.player.remove_from_domain(give_back)
+                village.insert(min(idx, len(village)), give_back)
+                ctx.state.log(f"  → Enclosure: puts {give_back.name} back into Village")
+        return True
 
 
 @_register
-class Stewardship(CardBehavior):
-    name = 'Stewardship'
-    tags = []
-    deck = 'wheat'
-
-    def on_dawn(self, ctx):
-        options = []
-        if ctx.state.fields:
-            options.append("wheat")
-        if ctx.state.season:
-            options.append("tree")
-        if not options:
-            return
-        choice = ctx.engine.strat(ctx.player).resolve(
-            ctx.state, ctx.player, options,
-            DecisionContext(event="Dawn", source="Stewardship", intent=Intent.OPTION))
-        ctx.state.log(f"  → Stewardship: {ctx.player.name} orders {choice} zone")
-        ctx.engine.order_zone(ctx.player, choice)
-
-
-@_register
-class Irrigation(CardBehavior):
-    name = 'Irrigation'
+class TurnipPatch(CardBehavior):
+    name = 'Turnip Patch'
     tags = ['Labour']
     deck = 'wheat'
 
-    def on_dawn(self, ctx):
-        if ctx.location != "domain":
-            return
-        old = len(ctx.state.fields)
-        ctx.state.refill_fields(old + 1)
-        if len(ctx.state.fields) > old:
-            ctx.state.log(f"  → Irrigation: Fields refilled {old} → {len(ctx.state.fields)}")
-
-
-@_register
-class Taxation(CardBehavior):
-    name = 'Taxation'
-    tags = []
-    deck = 'wheat'
     def on_order(self, ctx):
         if ctx.location != "domain":
             return
-        ctx.state.log(f"  → Taxation: orders Coin zone, draws 2 Claw")
+        ctx.state.log(f"  → Turnip Patch: orders Village")
+        ctx.engine.order_zone(ctx.player, "wheat")
+        return True
+
+    def on_harvest(self, ctx):
+        ctx.state.log(f"  → Turnip Patch: orders Village")
+        ctx.engine.order_zone(ctx.player, "wheat")
+        return True
+
+
+@_register
+class RitualPyre(CardBehavior):
+    name = 'Ritual Pyre'
+    tags = ['Nature', 'Spiritual']
+    deck = 'wheat'
+
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
+        # Sacrifice any card from domain
+        targets = [c for c in ctx.player.domain if c is not ctx.card]
+        if not targets:
+            return False
+        victim = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, targets + [None],
+            f"Ritual Pyre: sacrifice which card?"
+        )
+        if victim is None:
+            return False
+        ctx.player.discard_from_domain(victim)
+        ctx.state.log(f"  → Ritual Pyre: {ctx.player.name} sacrifices {victim.name}")
+        ctx.state.log(f"  → Ritual Pyre: Harvest!")
+        ctx.engine.resolve_event("Harvest", ctx.player, ctx.player)
+        ctx.state.log(f"  → Ritual Pyre: Rite!")
+        ctx.engine.resolve_event("Rite", ctx.player, ctx.player)
+        return True
+
+
+@_register
+class FolkHero(CardBehavior):
+    name = 'Folk Hero'
+    tags = ['Unit', 'Trophy']
+    deck = 'wheat'
+
+    def on_dawn(self, ctx):
+        # Move 1 Mob or Wheat card between domains that have wheat
+        wheat_domains = [p for p in ctx.state.players
+                         if any(c.deck == "wheat" for c in p.domain)]
+        sources = []
+        for p in wheat_domains:
+            for c in p.domain:
+                if c is ctx.card:
+                    continue
+                if c.has_tag("Mob") or c.has_tag("Labour") or c.has_tag("Amenity"):
+                    sources.append((p, c))
+        if not sources:
+            return False
+        chosen = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, sources + [None],
+            f"Folk Hero: move a card? (from_player, card)"
+        )
+        if chosen is None:
+            return False
+        source_player, card = chosen
+        targets = [p for p in wheat_domains if p is not source_player]
+        if not targets:
+            return False
+        target = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, targets,
+            f"Folk Hero: send {card.name} to?"
+        )
+        source_player.remove_from_domain(card)
+        target.add_to_domain(card, ctx.state)
+        ctx.state.log(f"  → Folk Hero: moves {card.name} from {source_player.name} to {target.name}")
+        return True
+
+
+@_register
+class HerbGarden(CardBehavior):
+    name = 'Herb Garden'
+    tags = ['Nature']
+    deck = 'wheat'
+
+    def on_harvest(self, ctx):
+        zone = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, ["tree", "wheat"],
+            f"Herb Garden: order Tree or Village?"
+        )
+        ctx.state.log(f"  → Herb Garden: {ctx.player.name} orders {zone}")
+        ctx.engine.order_zone(ctx.player, zone)
+        return True
+
+
+@_register
+class WolfPack(CardBehavior):
+    name = 'Wolf Pack'
+    tags = ['Mob', 'Nature', 'Discontent']
+    deck = 'wheat'
+
+    def on_harvest(self, ctx):
+        if ctx.active_player == ctx.player:
+            # You control the wolves — move them to an enemy
+            others = [p for p in ctx.state.players if p is not ctx.player]
+            if not others:
+                return False
+            target = ctx.engine.strat(ctx.player).resolve(
+                ctx.state, ctx.player, others,
+                f"Wolf Pack: send to which player?"
+            )
+            ctx.player.remove_from_domain(ctx.card)
+            target.add_to_domain(ctx.card, ctx.state)
+            ctx.state.log(f"  → Wolf Pack: {ctx.player.name} sends wolves to {target.name}")
+            return True
+        else:
+            # Wolves ravage your domain
+            ctx.state.log(f"  → Wolf Pack: wolves ravage {ctx.player.name}'s domain!")
+            # Discard 2 from domain
+            targets = [c for c in ctx.player.domain if c is not ctx.card]
+            to_discard = min(2, len(targets))
+            for _ in range(to_discard):
+                targets = [c for c in ctx.player.domain if c is not ctx.card]
+                if not targets:
+                    break
+                victim = ctx.engine.strat(ctx.player).resolve(
+                    ctx.state, ctx.player, targets,
+                    f"Wolf Pack: discard which card?"
+                )
+                ctx.player.discard_from_domain(victim)
+                ctx.state.log(f"  → Wolf Pack: wolves destroy {victim.name}")
+            # Draw 2 Claw
+            drawn = ctx.engine.draw_and_receive(ctx.player, "claw", 2)
+            names = [c.name for c in drawn] if drawn else []
+            ctx.state.log(f"  → Wolf Pack: draws {len(names)} Claw: {names}")
+            return True
+
+
+@_register
+class Orchard(CardBehavior):
+    name = 'Orchard'
+    tags = ['Nature', 'Labour']
+    deck = 'wheat'
+
+    def on_harvest(self, ctx):
+        drawn = ctx.engine.draw_and_receive(ctx.player, "tree", 1)
+        if drawn:
+            ctx.state.log(f"  → Orchard: {ctx.player.name} draws {drawn[0].name} from Tree")
+        ctx.state.log(f"  → Orchard: Feast")
+        ctx.engine.resolve_event("Feast", ctx.player, ctx.player)
+        return True
+
+
+@_register
+class Reeve(CardBehavior):
+    name = 'Reeve'
+    tags = ['Unit']
+    deck = 'wheat'
+
+    def on_dawn(self, ctx):
+        # Pick a wheat card in domain to fire its on_order
+        wheat_cards = [c for c in ctx.player.domain
+                       if c.deck == "wheat" and c is not ctx.card]
+        if not wheat_cards:
+            return False
+        pick = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, wheat_cards + [None],
+            f"Reeve: order which wheat card?"
+        )
+        if pick is None:
+            return False
+        ctx.state.log(f"  → Reeve: {ctx.player.name} orders {pick.name}")
+        ctx.engine.resolve_event("Order", ctx.player, pick)
+        return True
+
+
+
+@_register
+class TaxCollectors(CardBehavior):
+    name = 'Tax Collectors'
+    tags = ['Mob', 'Discontent']
+    deck = 'wheat'
+
+    def on_order(self, ctx):
+        """Collect tax — requires 3+ Labour tags in domain."""
+        if ctx.location != "domain":
+            return
+        if ctx.player.count_tag("Labour") < 3:
+            return
+        ctx.state.log(f"  → Tax Collectors: {ctx.player.name} collects tax (3+ Labour)")
         ctx.engine.order_zone(ctx.player, "coin")
-        drawn = ctx.engine.draw_and_receive(ctx.player, "claw", 2)
-        for c in drawn:
-            ctx.state.log(f"    tax: {c.name}")
+        ctx.state.log(f"  → Tax Collectors: Rumour!")
+        ctx.engine.resolve_event("Rumour", ctx.player, ctx.player)
+        return True
 
 
 @_register
@@ -316,38 +372,40 @@ class Lookout(CardBehavior):
     deck = 'wheat'
     def on_dawn(self, ctx):
         if ctx.player.count_tag("Discontent") > 0:
-            ctx.state.log(f"  → Lookout: spots trouble, spreads Rumour")
-            ctx.engine.resolve_event("Rumour", ctx.player,
-                                     scope=ctx.state.other_players(ctx.player))
+            ctx.state.log(f"  → Lookout: spots trouble, spreads Rumour locally")
+            ctx.engine.resolve_event("Rumour", ctx.player, scope=ctx.player)
             return True
         return False
 
 
 @_register
-class TownCrier(CardBehavior):
-    name = 'Town Crier'
+class IllTidings(CardBehavior):
+    name = 'Ill Tidings'
     tags = []
     deck = 'wheat'
     def on_rumour(self, ctx):
         options = ["panic", "fortify"]
         choice = ctx.engine.strat(ctx.player).resolve(
             ctx.state, ctx.player, options,
-            DecisionContext(event="Rumour", source="Town Crier", intent=Intent.OPTION))
+            DecisionContext(event="Rumour", source="Ill Tidings", intent=Intent.OPTION))
         if choice == "panic":
             drawn = ctx.engine.draw_and_receive(ctx.player, "claw", 2)
             names = ", ".join(c.name for c in drawn) if drawn else "nothing"
-            ctx.state.log(f"  → Town Crier: PANIC! {ctx.player.name} draws {names} from Claw")
+            ctx.state.log(f"  → Ill Tidings: PANIC! {ctx.player.name} draws {names} from Claw")
         else:
             discontent = ctx.player.cards_with_tag("Discontent")
             if discontent:
                 victim = ctx.engine.strat(ctx.player).resolve(
                     ctx.state, ctx.player, discontent,
-                    DecisionContext(event="Rumour", source="Town Crier", intent=Intent.DISCARD))
+                    DecisionContext(event="Rumour", source="Ill Tidings", intent=Intent.DISCARD))
                 ctx.player.remove_from_domain(victim)
                 ctx.state.return_to_pile("claw", victim)
-                ctx.state.log(f"  → Town Crier: FORTIFY! {ctx.player.name} returns {victim.name} to Claw pile")
+                ctx.state.log(f"  → Ill Tidings: FORTIFY! {ctx.player.name} returns {victim.name} to Claw pile")
             else:
-                ctx.state.log(f"  → Town Crier: FORTIFY! No Discontent to return")
+                ctx.state.log(f"  → Ill Tidings: FORTIFY! No Discontent to return")
+        # One-shot: discard after use
+        ctx.player.discard_from_domain(ctx.card)
+        ctx.state.log(f"  → Ill Tidings: discarded")
         return True
 
 
@@ -356,15 +414,15 @@ class OraEtLabora(CardBehavior):
     name = 'Ora et Labora'
     tags = ['Labour', 'Spiritual']
     deck = 'wheat'
+
     def on_harvest(self, ctx):
-        s = ctx.state
-        if not s.revelation:
-            return False
-        rev_card = s.revelation.pop(0)
-        ctx.player.add_to_domain(rev_card, s)
-        s.log(f"  → Ora et Labora: {ctx.player.name} claims Revelation ({rev_card.name})")
-        from cards import get_behavior
-        get_behavior("Candle Zone").refill(s)
+        ctx.state.log(f"  → Ora et Labora: {ctx.player.name} prays — orders Candle")
+        ctx.engine.order_zone(ctx.player, "candle")
+        return True
+
+    def on_rite(self, ctx):
+        ctx.state.log(f"  → Ora et Labora: {ctx.player.name} works — orders Village")
+        ctx.engine.order_zone(ctx.player, "wheat")
         return True
 
 
@@ -374,20 +432,24 @@ class WorshipOfTheBread(CardBehavior):
     tags = ['Spiritual']
     deck = 'wheat'
 
-    def _refill_one_field(self, ctx):
-        s = ctx.state
-        old = len(s.fields)
-        s.refill_fields(old + 1)
-        if len(s.fields) > old:
-            s.log(f"  → Worship of the Bread: refills 1 Field ({s.fields[-1].name})")
-            return True
-        return False
-
-    def on_feast(self, ctx):
-        return self._refill_one_field(ctx)
-
     def on_rite(self, ctx):
-        return self._refill_one_field(ctx)
+        village = ctx.state.fields
+        if len(village) < 2:
+            return False
+        # Rearrange the Village belt
+        ordered = []
+        remaining = list(village)
+        for _ in range(len(remaining)):
+            pick = ctx.engine.strat(ctx.player).resolve(
+                ctx.state, ctx.player, remaining,
+                f"Worship of the Bread: place next in Village (bottom first)"
+            )
+            ordered.append(pick)
+            remaining.remove(pick)
+        village.clear()
+        village.extend(ordered)
+        ctx.state.log(f"  → Worship of the Bread: rearranges Village")
+        return True
 
 
 @_register
@@ -416,8 +478,16 @@ class Pilgrimage(CardBehavior):
             target.add_to_domain(c, ctx.state)
         n = len(to_give)
         names = ", ".join(c.name for c in to_give)
-        ctx.state.log(f"  → Pilgrimage: gives {names} to {target.name}, draws {n} Candle")
-        drawn = ctx.engine.draw_and_receive(ctx.player, "candle", n)
-        if drawn:
-            ctx.state.log(f"    receives {', '.join(c.name for c in drawn)}")
+        ctx.state.log(f"  → Pilgrimage: gives {names} to {target.name}")
+        # Target decides if pilgrim gets rewarded
+        accept = ctx.engine.strat(target).resolve(
+            ctx.state, target, [True, False],
+            f"Pilgrimage: {ctx.player.name} gave you {names}. Reward them with {n} Candle?")
+        if accept:
+            ctx.state.log(f"  → Pilgrimage: {target.name} accepts — draws {n} Candle")
+            drawn = ctx.engine.draw_and_receive(ctx.player, "candle", n)
+            if drawn:
+                ctx.state.log(f"    receives {', '.join(c.name for c in drawn)}")
+        else:
+            ctx.state.log(f"  → Pilgrimage: {target.name} refuses — no reward")
         ctx.player.discard_from_domain(ctx.card)

@@ -259,9 +259,6 @@ class CardSynergy(Evaluator):
                     s += 2.5 if dawn_exists else 1.5
                 case "Sacred Grove":
                     s += 1.0 + player.count_tag("Spiritual") * 0.3
-                case "Well":
-                    if has_season:
-                        s += 2.0
 
                 # ── Wheat ──
                 case "Sowing":

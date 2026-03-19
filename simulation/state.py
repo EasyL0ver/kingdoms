@@ -94,9 +94,9 @@ class Player:
             return True
         if self.has_card("Compost") and self.has_discard("Harvest"):
             return True
-        if self.has_card("Plough"):
-            return True
         if self.has_card("Orchard"):
+            return True
+        if self.has_card("Reeve"):
             return True
         return False
 

@@ -65,7 +65,7 @@ CARD_TEXT = {
         "taken → to your Domain.\n"
         "If [Discontent] in your Domain ≥ 3:\n"
         "Revolt — Brawl in every Domain with Wheat.\n"
-        "Refills to 5 on Dawn.",
+        "Refills to 5 after drawing.",
 
     "Coin Zone":
         "3 face-up cards — the Opportunities.\n"
@@ -284,13 +284,12 @@ CARD_TEXT = {
 
     "Sowing":
         "On Order — Order on the Wheat zone.\n"
-        "On Harvest — refill 1 Field.\n"
+        "On Harvest — refill Season buffer, then take all [Nature] cards from Season for free.\n"
         "Requires 2+ [Nature] in your Domain.",
 
     "Compost":
-        "On Order — exile cards from your discard.\n"
-        "Refill Fields by that count from the Wheat\n"
-        "pile. Order on the Wheat zone.",
+        "On Order — purge a Harvest card from your\n"
+        "discard. Harvest (local).",
 
     "Vigil":
         "On Harvest — for each player with Kinship,\n"
@@ -298,30 +297,12 @@ CARD_TEXT = {
         "Domain.",
 
     "Pilgrimage":
-        "On Order — give any number of cards from\n"
-        "your Domain to a chosen player. Draw that\n"
-        "many from Candle. Discard Pilgrimage.",
+        "On Order — give 1+ cards from your domain\n"
+        "to another player. They decide: if they\n"
+        "accept, draw that many Candle cards.\n"
+        "If they refuse, no reward. Discard this.",
 
     # ── Wheat deck ──────────────────────────────────────────────────────
-    "Plough":
-        "On Order — Order on the Wheat zone. Return\n"
-        "1 [Discontent] to the Claw pile.\n"
-        "On Harvest — choose: Feast in your Domain,\n"
-        "or Order on the Wheat zone.",
-
-    "Granary":
-        "On Order — Feast in your Domain.\n"
-        "Discard Granary.",
-
-    "Mill":
-        "On Order — draw 1 from Coin.\n"
-        "Discard Mill.",
-
-    "Famine":
-        "On Dawn — choose a player. They discard\n"
-        "1 Wheat card from their Domain.\n"
-        "Discard Famine.",
-
     "Animal Husbandry":
         "On Order — choose one:\n"
         "• Order on the Wheat zone.\n"
@@ -329,17 +310,10 @@ CARD_TEXT = {
         "• Feast in your Domain.",
 
     "Tavern":
-        "On Feast — return 1 [Discontent] card from\n"
-        "your Domain to the Claw pile.",
-
-    "Feed the Commoners":
-        "On Dawn — return up to 3 [Discontent] cards\n"
-        "from your Domain to the Claw pile.\n"
-        "Discard Feed the Commoners.",
-
-    "Apprenticeship":
-        "On Order — Order on the Coin zone.\n"
-        "Requires an opponent with [Wealth].",
+        "On Feast — you may return 1 [Discontent]\n"
+        "from your Domain to top of Claw pile.\n"
+        "You may return 1 Claw card from your\n"
+        "discard to top of Claw pile.",
 
     "Militia":
         "On Rumour — discard 1 [Mob] from your\n"
@@ -347,47 +321,61 @@ CARD_TEXT = {
         "On Brawl — discard Militia to cancel\n"
         "the Brawl in your Domain.",
 
-    "Well":
-        "On Order (any player) — the orderer and the\n"
-        "owner each Order on the Tree zone.\n"
-        "Refill 1 Season card and 1 Field.",
-
-    "Maypole":
-        "No effect — pure [Amenity] tag.",
-
     "Ora et Labora":
-        "On Harvest — claim the Revelation.",
+        "On Harvest — order Candle zone.\n"
+        "On Rite — order the Village.",
 
-    "Taxation":
-        "On Order — Order on the Coin zone.\n"
-        "Draw 2 from Claw.",
+    "Tax Collectors":
+        "On Order (requires 3+ [Labour]) —\n"
+        "order Coin zone. Rumour (local).",
 
     "Lookout":
-        "On Dawn — if you have [Discontent] in your\n"
-        "Domain, Rumour.",
+        "On Dawn — if you have [Discontent],\n"
+        "Rumour in your domain.",
 
-    "Town Crier":
-        "On Rumour — choose one:\n"
+    "Ill Tidings":
+        "On Rumour — choose one, then discard this:\n"
         "• Panic — draw 2 from Claw.\n"
         "• Fortify — return 1 [Discontent] to\n"
         "  the Claw pile.",
 
+    "Crooked Inn":
+        "On Rumour — return 1 [Mob] from your discard\n"
+        "to your domain.",
+
+    "Enclosure":
+        "On Order — take any 1 card from the Village.\n"
+        "Put 1 card from your domain back in its place.",
+
+    "Turnip Patch":
+        "On Order / On Harvest — order the Village.",
+
+    "Ritual Pyre":
+        "On Order — sacrifice a card from your domain.\n"
+        "If you do, Harvest. Rite.",
+
+    "Folk Hero":
+        "On Dawn — move 1 [Mob], [Labour], or [Amenity]\n"
+        "card between domains that have Wheat cards.",
+
+    "Wolf Pack":
+        "On Harvest —\n"
+        "If you triggered it: move Wolf Pack to another player's domain.\n"
+        "Otherwise: discard 2 from domain, draw 2 Claw.",
+
+    "Herb Garden":
+        "On Harvest — order Tree or Village\n"
+        "(your choice).",
+
     "Orchard":
-        "On Order — take 1 card from the Fields\n"
-        "(no Claw tax).",
+        "On Harvest — draw 1 from Tree. Feast.",
 
-    "Stewardship":
-        "On Dawn — choose one:\n"
-        "• Order on the Wheat zone (if Fields exist).\n"
-        "• Order on the Tree zone (if Season exists).",
-
-    "Irrigation":
-        "On Dawn — refill 1 Field from the Wheat\n"
-        "pile.",
+    "Reeve":
+        "On Dawn — order 1 Wheat card in your domain\n"
+        "(fires its On Order effect).",
 
     "Worship of the Bread":
-        "On Feast — refill 1 Field.\n"
-        "On Rite — refill 1 Field.",
+        "On Rite — rearrange the Village belt.",
 
     # ── Coin deck ───────────────────────────────────────────────────────
     "Treasure":
