@@ -294,7 +294,7 @@ On Rite — Harvest every Domain that has Kinship.
 
 ```
 🌳  FORAGE
-On Order — discard top 2 Tree and top 2 Claw cards to your discard. Feast your Domain.
+On Order — discard the top 2 cards from the Tree deck and the top 2 cards from the Claw deck. Feast your Domain.
 ```
 
 ```
