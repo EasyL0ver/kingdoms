@@ -54,7 +54,7 @@ ZONE_CARDS = [
      "endgameText": ""},
     {"name": "Claw Zone",  "tags": ["Zone"], "deck": "claw",   "count": 1,
      "setupText": "",
-     "orderText": "On Order — draw 2 cards from the Claw pile.",
+     "orderText": "On Order — draw 2 cards from the Claw deck.",
      "endgameText": "Player with most [Trophy] wins."},
     {"name": "Tree Zone",  "tags": ["Zone"], "deck": "tree",   "count": 1,
      "setupText": "4 cards face-up — the Season.",
@@ -64,7 +64,7 @@ ZONE_CARDS = [
     {"name": "Wheat Zone", "tags": ["Zone"], "deck": "wheat",  "count": 1,
      "setupText": "5 face-up cards — the Village (conveyor).",
      "orderText": "On Order — take 1–5 from the bottom.\n"
-                  "Reveal Claw cards equal to [Labour] tags\n"
+                  "Reveal cards from the Claw deck equal to [Labour] tags\n"
                   "taken → to your Domain.\n"
                   "If [Discontent] in your Domain ≥ 3:\n"
                   "Revolt — Brawl every Domain with Wheat.\n"

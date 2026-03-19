@@ -24,7 +24,7 @@ One per deck. Placed next to their draw pile at setup.
 
 ```
 🐾  CLAW ZONE
-On Order — draw 2 cards from the Claw pile.
+On Order — draw 2 cards from the Claw deck.
 ```
 
 ```
@@ -38,7 +38,7 @@ Refill the Season to 4.
 🌾  WHEAT ZONE
 SETUP: 5 face-up cards — the Village (conveyor).
 On Order — take 1–5 from the bottom.
-Reveal Claw cards equal to [Labour] tags
+Reveal cards from the Claw deck equal to [Labour] tags
 taken → to your Domain.
 If [Discontent] in your Domain ≥ 3:
 Revolt — Brawl every Domain with Wheat.
@@ -104,7 +104,7 @@ On Order — discard 1 card from your Domain. Rite your Domain.
 ```
 🐾  POACH
 [Discontent] [Hunt] [Mob] [Unit]
-On Order — Feast your Domain. Draw 1 from Claw. Hunt — blocked if another player has [Hunt].
+On Order — Feast your Domain. Draw 1 card from the Claw deck. Hunt — blocked if another player has [Hunt].
 ```
 
 ```
@@ -150,18 +150,18 @@ On Order — choose a player. They offer you 1 card. Take it, or refuse and Braw
 ```
 🐾  TYRANNY
 [Discontent] [Trophy]
-On Order — draw from Claw equal to your [Discontent] count. Brawl your Domain.
+On Order — draw cards from the Claw deck equal to your [Discontent] count. Brawl your Domain.
 ```
 
 ```
 🐾  MARAUDERS
 [Discontent] [Mob] [Unit]
-On Feast — discard Marauders. Draw 1 from Claw.
+On Feast — discard Marauders. Draw 1 card from the Claw deck.
 ```
 
 ```
 🐾  SHARE THE SPOILS
-On Feast — draw 1 from Claw.
+On Feast — draw 1 card from the Claw deck.
 ```
 
 ```
@@ -172,7 +172,7 @@ On Order — Order the Sword zone. Requires another [Trophy] in your Domain.
 
 ```
 🐾  OUTRIDERS
-On Order — draw 3 from Claw. Discard 1 of your choice.
+On Order — draw 3 cards from the Claw deck. Discard 1 of your choice.
 ```
 
 ```
@@ -184,7 +184,7 @@ On Order — take all [Land] cards from the Season to your Domain. Discard Land 
 ```
 🐾  RITE OF PASSAGE
 [Discontent]
-On Brawl — draw 1 from Tree.
+On Brawl — draw 1 card from the Tree deck.
 ```
 
 ```
@@ -203,7 +203,7 @@ On Order — discard Ivory. Order the Coin zone.
 🐾  HUNGER
 [Discontent]
 On Harvest — discard 1 Claw card to your discard.
-On Feast — return 1 card from your discard to top of the Claw pile.
+On Feast — return 1 card from your discard to top of the Claw deck.
 ```
 
 ```
@@ -214,14 +214,14 @@ On Dawn — Brawl your Domain. Discard Uprising.
 
 ```
 🐾  RANSACK
-On Order — discard 1 card from your Domain. Draw 2 from Claw. Take 1 from the Season.
+On Order — discard 1 card from your Domain. Draw 2 cards from the Claw deck. Take 1 from the Season.
 ```
 
 ```
 🐾  SPOILS OF WAR
 [Mob] [Trophy]
 On Dawn — place Spoils of War in another player's Domain.
-On Brawl — moves to the active player. They draw from Claw and Tree equal to their [Trophy] count.
+On Brawl — moves to the active player. They draw cards from the Claw and Tree decks equal to their [Trophy] count.
 ```
 
 ```
@@ -233,13 +233,13 @@ On Order — remove any number of cards from your discard from the game. Return 
 ```
 🐾  BLOOD FEUD
 [Discontent] [Mob]
-On Brawl — draw 2 from Claw. Move up to 2 [Mob] to the active player. Discard Blood Feud, then Brawl the active player's Domain.
+On Brawl — draw 2 cards from the Claw deck. Move up to 2 [Mob] to the active player. Discard Blood Feud, then Brawl the active player's Domain.
 ```
 
 ```
 🐾  ENFORCERS
 [Discontent] [Mob]
-On Brawl — both you and the active player draw 2 from Claw.
+On Brawl — both you and the active player draw 2 cards from the Claw deck.
 ```
 
 ---
@@ -256,7 +256,7 @@ On Harvest — Order the Tree zone.
 ```
 🌳  ELDERSHIP
 [Knowledge]
-On Brawl — if the active player shares your culture, you may cancel the Brawl. They draw 1 from Tree.
+On Brawl — if the active player shares your culture, you may cancel the Brawl. They draw 1 card from the Tree deck.
 ```
 
 ```
@@ -325,7 +325,7 @@ On Rumour — remove 1 card from the Season from the game.
 ```
 🌳  BEAR'S DEN
 [Nature]
-On Feast — draw 1 from Claw.
+On Feast — draw 1 card from the Claw deck.
 ```
 
 ```
@@ -365,7 +365,7 @@ On Order — choose one: • Order the Wheat zone. • Order the Coin zone. • 
 ```
 🌾  TAVERN
 [Amenity]
-On Feast — you may return 1 [Discontent] from your Domain to top of Claw pile. You may return 1 Claw card from your discard to top of Claw pile.
+On Feast — you may return 1 [Discontent] from your Domain to top of Claw deck. You may return 1 Claw card from your discard to top of Claw deck.
 ```
 
 ```
@@ -408,7 +408,7 @@ On Dawn — move 1 [Mob], [Labour], or [Amenity] card between domains that have 
 ```
 🌾  WOLF PACK
 [Discontent] [Mob] [Nature]
-On Harvest — If you triggered it: move Wolf Pack to another player's Domain. Otherwise: discard 2 from Domain, draw 2 Claw.
+On Harvest — If you triggered it: move Wolf Pack to another player's Domain. Otherwise: discard 2 from Domain, draw 2 cards from the Claw deck.
 ```
 
 ```
@@ -422,7 +422,7 @@ On Harvest — Order the Tree zone or Wheat zone.
 ```
 🌾  ORCHARD
 [Labour] [Nature]
-On Harvest — draw 1 from Tree. Feast your Domain.
+On Harvest — draw 1 card from the Tree deck. Feast your Domain.
 ```
 
 ```
@@ -457,13 +457,13 @@ On Dawn — if you have [Discontent], Rumour your Domain.
 
 ```
 🌾  TIDINGS
-On Rumour — choose one, then Discard Tidings. • *Panic* — draw 2 from Claw. • *Fortify* — return 1 [Discontent] to the Claw pile.
+On Rumour — choose one, then Discard Tidings. • *Panic* — draw 2 cards from the Claw deck. • *Fortify* — return 1 [Discontent] to the Claw deck.
 ```
 
 ```
 🌾  PILGRIMAGE
 [Spiritual]
-On Order — give 1+ cards from your Domain to another player. They decide: if they accept, draw that many Candle cards. If they refuse, no reward. Discard Pilgrimage.
+On Order — give 1+ cards from your Domain to another player. They decide: if they accept, draw that many cards from the Candle deck. If they refuse, no reward. Discard Pilgrimage.
 ```
 
 ---
@@ -535,7 +535,7 @@ On Order — give all Wares to a chosen opponent. Brawl their Domain. Discard Sw
 ```
 🪙  PROSPERITY
 [Wealth]
-On Dawn — draw 1 from Coin if Opportunities exist.
+On Dawn — draw 1 card from the Coin deck if Opportunities exist.
 ```
 
 ```
@@ -552,18 +552,18 @@ On Order — Order up to 4 other cards in your Domain. Discard Efficiency.
 ```
 🪙  SPICE MARKET
 [Wealth]
-On Order — draw Coin cards equal to your count of unique tags in your Domain.
+On Order — draw cards from the Coin deck equal to your count of unique tags in your Domain.
 ```
 
 ```
 🪙  COMMODITIES
-On Rumour — draw 1 from a chosen pile. Add it to the Wares.
+On Rumour — draw 1 card from a chosen deck. Add it to the Wares.
 ```
 
 ```
 🪙  PROVISIONS
 [Amenity]
-On Feast — draw 1 from Coin.
+On Feast — draw 1 card from the Coin deck.
 ```
 
 ```
@@ -587,7 +587,7 @@ On Rite — the active player peeks at Candle cards, scales with [Spiritual]. Ke
 ```
 🕯️  WORSHIP OF THE RELIC
 [Religion] [Spiritual]
-On Rite — peek at cards from a chosen pile, scales with [Spiritual]. May replace the Revelation. Return rest to top.
+On Rite — peek at cards from a chosen deck, scales with [Spiritual]. May replace the Revelation. Return rest to top.
 ```
 
 ```
@@ -618,7 +618,7 @@ On Rite — active player may move Zealot to another Domain.
 ```
 🕯️  ALMS
 [Religion]
-On Feast — refill 1 Field. Return 1 [Discontent] to the Claw pile.
+On Feast — refill 1 Field. Return 1 [Discontent] to the Claw deck.
 ```
 
 ```
@@ -666,7 +666,7 @@ On Brawl — Order the Sword zone.
 ```
 ⚔️  ROYAL HUNT
 [Hunt] [Trophy] [Unit]
-On Order — Feast your Domain twice. Draw 1 from Claw. Hunt — blocked if another player has [Hunt].
+On Order — Feast your Domain twice. Draw 1 card from the Claw deck. Hunt — blocked if another player has [Hunt].
 ```
 
 ```
