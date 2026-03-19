@@ -457,7 +457,7 @@ On Dawn — if you have [Discontent], Rumour your Domain.
 
 ```
 🌾  TIDINGS
-On Rumour — choose one, then Discard Tidings. • Panic — draw 2 from Claw. • Fortify — return 1 [Discontent] to the Claw pile.
+On Rumour — choose one, then Discard Tidings. • *Panic* — draw 2 from Claw. • *Fortify* — return 1 [Discontent] to the Claw pile.
 ```
 
 ```
