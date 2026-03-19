@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Generate printable A4 card sheets from decks.json.
+"""Generate printable A4 card sheets and a Markdown card catalogue from decks.json.
 
 Cards are sized ~3mm smaller than Magic: The Gathering (60×85mm vs 63×88mm).
-Output: cards.html — open in a browser and Print → Save as PDF.
+Output:
+  cards.html      — open in a browser and Print → Save as PDF.
+  game-cards.md   — full card catalogue in Markdown.
 
 Usage:  python print_cards.py
 """
@@ -40,516 +42,55 @@ DECK_ICONS = {
 }
 
 # ---------------------------------------------------------------------------
-# Card rules text — written from simulation code (source of truth)
-# ---------------------------------------------------------------------------
-CARD_TEXT = {
-    # ── Zone cards ──────────────────────────────────────────────────────
-    "Presence":
-        "On Dawn — choose one:\n"
-        "• Order on the Claw zone or Tree zone.\n"
-        "• Order a card in your Domain.\n"
-        "• Order a card from your discard.",
-
-    "Claw Zone":
-        "On Order — draw 2 cards from the Claw pile.",
-
-    "Tree Zone":
-        "4 cards face-up — the Season.\n"
-        "On Order — take 1 card from the Season.\n"
-        "Refill the Season to 4.",
-
-    "Wheat Zone":
-        "5 face-up cards — the Village (conveyor).\n"
-        "On Order — take 1–5 from the bottom.\n"
-        "Reveal Claw cards equal to [Labour] tags\n"
-        "taken → to your Domain.\n"
-        "If [Discontent] in your Domain ≥ 3:\n"
-        "Revolt — Brawl in every Domain with Wheat.\n"
-        "Refills to 5 after drawing.",
-
-    "Coin Zone":
-        "3 face-up cards — the Opportunities.\n"
-        "Discarded cards go to the Wares.\n"
-        "On Order — choose one:\n"
-        "• Buy — take 1 card from the Wares.\n"
-        "• Trade — give 1 Domain card to Wares,\n"
-        "  take 1 Opportunity. Rumour.",
-
-    "Candle Zone":
-        "1 face-up card — the Revelation.\n"
-        "On Order — claim the Revelation.\n"
-        "Reveal the next card.",
-
-    "Sword Zone":
-        "2 face-up cards — the Tourney.\n"
-        "On Order — Injustice (2+ [Mob] in any\n"
-        "Domain): tyrant takes [Unit], you take rest.\n"
-        "Peace (Joust): challenge an opponent.\n"
-        "Accept = both pick 1. Refuse = Brawl in\n"
-        "both Domains. Refill Tourney to 2.",
-
-    # ── Claw deck ───────────────────────────────────────────────────────
-    "Warband":
-        "On Order — you may move 1 [Mob] to the\n"
-        "Domain with the most cards. Brawl there.",
-
-    "Raid":
-        "On Brawl — discard 1 card from your Domain.\n"
-        "If the active player is someone else,\n"
-        "they get the card instead.",
-
-    "Scavenge":
-        "On Brawl — if the active player is someone\n"
-        "else, they take 1 card from your discard.",
-
-    "Blood Offering":
-        "On Order — discard 1 card from your Domain.\n"
-        "Rite in your Domain.",
-
-    "Poach":
-        "On Order — Feast in your Domain. Draw 1\n"
-        "from Claw.\n"
-        "Hunt — blocked if another player has [Hunt].",
-
-    "Worship of the Hunt":
-        "On Rite — dump 5 Claw cards to the active\n"
-        "player's discard.",
-
-    "Worship of War":
-        "On Rite — the active player Brawls in a\n"
-        "Domain of their choice.",
-
-    "Incite":
-        "On Dawn — move up to 3 [Mob] cards from\n"
-        "your Domain to other Domains.\n"
-        "Discard Incite.",
-
-    "Chiefdom":
-        "On Dawn — move up to 2 [Mob] cards from\n"
-        "your Domain or a culture ally's to any\n"
-        "other Domain.",
-
-    "Kinship":
-        "On Harvest — Order on the Tree zone.",
-
-    "Racketeering":
-        "On Order — choose a player. They offer you\n"
-        "1 card. Take it, or refuse and Brawl in\n"
-        "their Domain.",
-
-    "Tyranny":
-        "On Order — draw from Claw equal to your\n"
-        "[Discontent] count. Brawl in your Domain.",
-
-    "Marauders":
-        "On Feast — discard Marauders.\n"
-        "Draw 1 from Claw.",
-
-    "Share the Spoils":
-        "On Feast — draw 1 from Claw.",
-
-    "Martial Excellence":
-        "On Order — Order on the Sword zone.\n"
-        "Requires another [Trophy] in your Domain.",
-
-    "Outriders":
-        "On Order — draw 3 from Claw.\n"
-        "Discard 1 of your choice.",
-
-    "Land Grab":
-        "On Order — take all [Land] cards from the\n"
-        "Season to your Domain. Discard Land Grab.\n"
-        "Requires [Land] in the Season.",
-
-    "Rite of Passage":
-        "On Brawl — draw 1 from Tree.",
-
-    "Culling":
-        "On Dawn — the player with the most cards\n"
-        "discards 1–2 cards of their choice.\n"
-        "Discard Culling.",
-
-    "Ivory":
-        "On Order — discard Ivory.\n"
-        "Order on the Coin zone.",
-
-    "Hunger":
-        "On Harvest — dump 1 Claw card to your\n"
-        "discard.\n"
-        "On Feast — return 1 card from your discard\n"
-        "to top of the Claw pile.",
-
-    "Uprising":
-        "On Dawn — Brawl in your Domain.\n"
-        "Discard Uprising.",
-
-    "Ransack":
-        "On Order — discard 1 card from your Domain.\n"
-        "Draw 2 from Claw. Take 1 from the Season.",
-
-    "Spoils of War":
-        "On Dawn — place Spoils of War in another\n"
-        "player's Domain.\n"
-        "On Brawl — moves to the active player. They\n"
-        "draw from Claw and Tree equal to their\n"
-        "[Trophy] count.",
-
-    "Worship of the Dusk":
-        "On Rite — every player discards 1 card from\n"
-        "their Domain.\n"
-        "If Worship of the Dawn is in play,\n"
-        "discard 2 instead.",
-
-    "Veil Tear":
-        "On Order — purge any number of cards from\n"
-        "your discard. Return that many [Spiritual]\n"
-        "cards from any discard to their owner's\n"
-        "Domain. Trigger that many Rites.\n"
-        "Discard Veil Tear.",
-
-    "Blood Feud":
-        "On Brawl — draw 2 from Claw. Move up to\n"
-        "2 [Mob] to the active player. Discard\n"
-        "Blood Feud, then Brawl the attacker back.",
-
-    "Enforcers":
-        "On Brawl — both you and the active player\n"
-        "draw 2 from Claw.",
-
-    # ── Tree deck ───────────────────────────────────────────────────────
-    "Eldership":
-        "On Brawl — if the active player shares your\n"
-        "culture, you may cancel the Brawl.\n"
-        "They draw 1 from Tree.",
-
-    "Worship of the Dawn":
-        "On Rite — return 1 card from your discard\n"
-        "to your Domain.\n"
-        "If Worship of the Dusk is in play,\n"
-        "return 2 instead.",
-
-    "Worship of the Hearth":
-        "On Rite — Harvest in every Domain that\n"
-        "has Kinship.",
-
-    "Harvest":
-        "On Dawn — Harvest in every zone.\n"
-        "Discard Harvest.",
-
-    "Gathering":
-        "On Dawn — choose Brawl, Rite, or Rumour.\n"
-        "Fires in your Domain and all culture\n"
-        "allies' Domains. Discard Gathering.",
-
-    "Sacred Grove":
-        "On Order — choose one:\n"
-        "• Rite in your Domain.\n"
-        "• Look at the top 3 Tree cards. Take any\n"
-        "  [Spiritual] cards. Return the rest.",
-
-    "Floods":
-        "On Brawl — if another Floods is in play,\n"
-        "cancel the Brawl.\n"
-        "On Dawn — refill the Season. If another\n"
-        "Floods is in play, every player discards\n"
-        "1 card from their Domain.",
-
-    "Regrowth":
-        "On Dawn — all [Nature] cards in every\n"
-        "player's discard return to their owner's\n"
-        "Domain. Discard Regrowth.",
-
-    "Hospitality":
-        "On Order — choose a player with Kinship.\n"
-        "You may Order 1 card in their Domain.\n"
-        "They may Order 1 card in yours.",
-
-    "Bog":
-        "On Rumour — swallow 1 card from the Season.",
-
-    "Bear's Den":
-        "On Feast — draw 1 from Claw.",
-
-    "Ravine":
-        "On Brawl — the active player discards 1\n"
-        "card from their Domain.",
-
-    "Meadow":
-        "On Harvest — refill the Season to full.",
-
-    "Forage":
-        "On Order — dump top 2 Tree and top 2 Claw\n"
-        "cards to your discard.\n"
-        "Feast in your Domain.",
-
-    "Sowing":
-        "On Order — Order on the Wheat zone.\n"
-        "On Harvest — refill Season buffer, then take all [Nature] cards from Season for free.\n"
-        "Requires 2+ [Nature] in your Domain.",
-
-    "Compost":
-        "On Order — purge a Harvest card from your\n"
-        "discard. Harvest (local).",
-
-    "Vigil":
-        "On Harvest — for each player with Kinship,\n"
-        "return 1 card from your discard to your\n"
-        "Domain.",
-
-    "Pilgrimage":
-        "On Order — give 1+ cards from your domain\n"
-        "to another player. They decide: if they\n"
-        "accept, draw that many Candle cards.\n"
-        "If they refuse, no reward. Discard this.",
-
-    # ── Wheat deck ──────────────────────────────────────────────────────
-    "Animal Husbandry":
-        "On Order — choose one:\n"
-        "• Order on the Wheat zone.\n"
-        "• Order on the Coin zone.\n"
-        "• Feast in your Domain.",
-
-    "Tavern":
-        "On Feast — you may return 1 [Discontent]\n"
-        "from your Domain to top of Claw pile.\n"
-        "You may return 1 Claw card from your\n"
-        "discard to top of Claw pile.",
-
-    "Militia":
-        "On Rumour — discard 1 [Mob] from your\n"
-        "Domain.\n"
-        "On Brawl — discard Militia to cancel\n"
-        "the Brawl in your Domain.",
-
-    "Ora et Labora":
-        "On Harvest — order Candle zone.\n"
-        "On Rite — order the Village.",
-
-    "Tax Collectors":
-        "On Order (requires 3+ [Labour]) —\n"
-        "order Coin zone. Rumour (local).",
-
-    "Lookout":
-        "On Dawn — if you have [Discontent],\n"
-        "Rumour in your domain.",
-
-    "Ill Tidings":
-        "On Rumour — choose one, then discard this:\n"
-        "• Panic — draw 2 from Claw.\n"
-        "• Fortify — return 1 [Discontent] to\n"
-        "  the Claw pile.",
-
-    "Crooked Inn":
-        "On Rumour — return 1 [Mob] from your discard\n"
-        "to your domain.",
-
-    "Enclosure":
-        "On Order — take any 1 card from the Village.\n"
-        "Put 1 card from your domain back in its place.",
-
-    "Turnip Patch":
-        "On Order / On Harvest — order the Village.",
-
-    "Ritual Pyre":
-        "On Order — sacrifice a card from your domain.\n"
-        "If you do, Harvest. Rite.",
-
-    "Folk Hero":
-        "On Dawn — move 1 [Mob], [Labour], or [Amenity]\n"
-        "card between domains that have Wheat cards.",
-
-    "Wolf Pack":
-        "On Harvest —\n"
-        "If you triggered it: move Wolf Pack to another player's domain.\n"
-        "Otherwise: discard 2 from domain, draw 2 Claw.",
-
-    "Herb Garden":
-        "On Harvest — order Tree or Village\n"
-        "(your choice).",
-
-    "Orchard":
-        "On Harvest — draw 1 from Tree. Feast.",
-
-    "Reeve":
-        "On Dawn — order 1 Wheat card in your domain\n"
-        "(fires its On Order effect).",
-
-    "Worship of the Bread":
-        "On Rite — rearrange the Village belt.",
-
-    # ── Coin deck ───────────────────────────────────────────────────────
-    "Treasure":
-        "No effect — pure tags.",
-
-    "Market":
-        "On Order — offer a Ware to a player\n"
-        "(buyer picks which). If they accept,\n"
-        "order Coin zone.",
-
-    "Pawn Shop":
-        "On Order — Order on the Coin zone.\n"
-        "On Rumour — swap 1 Domain card with\n"
-        "1 Wares card.",
-
-    "Stockpile":
-        "On Order — put 1 Domain card into Wares.\n"
-        "Order Coin zone.",
-
-    "Smuggler":
-        "On Brawl — controller picks 1 from Wares,\n"
-        "Brawl starter takes it. (No Opp. refill.)\n"
-        "Smuggler moves to starter's domain.",
-
-    "Forgery":
-        "On Order — if you have a Coin card in\n"
-        "Domain, put Forgery into Wares.\n"
-        "Order Coin zone.",
-
-    "Usurer":
-        "On Order — put 1 Domain card into Wares.\n"
-        "On Rumour — order Coin zone.",
-
-    "Highwaymen":
-        "On Brawl — put 1 Domain card into Wares.\n"
-        "Brawl starter orders Coin zone.",
-
-    "Sellsword":
-        "On Brawl — discard Sellsword to the Wares\n"
-        "to cancel the Brawl in your Domain.",
-
-    "Swindle":
-        "On Order — give all Wares to a chosen\n"
-        "opponent. Brawl in their Domain.\n"
-        "Discard Swindle.",
-
-    "Prosperity":
-        "On Dawn — draw 1 from Coin if Opportunities\n"
-        "exist.",
-
-    "Embassy":
-        "On Dawn — if you have a culture ally and\n"
-        "Wares exist: you and your ally each take\n"
-        "1 card from the Wares.",
-
-    "Efficiency":
-        "On Order — Order up to 4 other cards in\n"
-        "your Domain. Discard Efficiency.",
-
-    "Spice Market":
-        "On Order — draw Coin cards equal to your\n"
-        "count of unique tags in your Domain.",
-
-    "Commodities":
-        "On Rumour — draw 1 card from a chosen pile.\n"
-        "Add it to the Wares.",
-
-    "Provisions":
-        "On Feast — draw 1 from Coin.",
-
-    "Worship of Gold":
-        "On Rite — the active player takes 1 card\n"
-        "from the Wares.",
-
-    # ── Candle deck ─────────────────────────────────────────────────────
-    "Worship of the Scripture":
-        "On Rite — the active player peeks at Candle\n"
-        "cards (scales with [Spiritual]). Keep 1,\n"
-        "purge the rest.",
-
-    "Worship of the Relic":
-        "On Rite — peek at cards from a chosen pile\n"
-        "(scales with [Spiritual]). May replace the\n"
-        "Revelation. Return rest to top.",
-
-    "Worship of the Martyr":
-        "On Rite — the active player may discard\n"
-        "cards. All other players must discard\n"
-        "equal to [Spiritual] scaling.",
-
-    "Clergy":
-        "On Order — Order Candle zone. Peek at Candle\n"
-        "cards (1 per player with [Religion]). Keep 1,\n"
-        "may set 1 as Revelation, purge rest.",
-
-    "Sabbath":
-        "On Dawn — Rite in your Domain.",
-
-    "Zealot":
-        "On Brawl — cancel if you have [Religion];\n"
-        "else discard 1 Domain card.\n"
-        "On Rite — active player may move Zealot\n"
-        "to another Domain.",
-
-    "Alms":
-        "On Feast — refill 1 Field. Return\n"
-        "1 [Discontent] to the Claw pile.",
-
-    "Evangelism":
-        "On Order — each player in turn order claims\n"
-        "1 Revelation. Refill between each.",
-
-    "Purity":
-        "On Order — optionally purge the Revelation\n"
-        "and reveal the next. Rite in your Domain.",
-
-    "Flagellation":
-        "On Rite — Brawl in your Domain (no player\n"
-        "benefits).",
-
-    "Penance":
-        "On Dawn — discard 2 cards from your Domain.\n"
-        "You may sacrifice Penance for an extra\n"
-        "effect.",
-
-    "Benefaction":
-        "On Order — draw 1 from Coin. Refill\n"
-        "Opportunities to 3. Optionally trigger\n"
-        "2 Rumours.",
-
-    "Ornament":
-        "On Order — move the Revelation to the Wares.\n"
-        "Reveal the next card.",
-
-    "Protect the Meek":
-        "On Brawl — Order on the Sword zone.",
-
-    # ── Sword deck ──────────────────────────────────────────────────────
-    "Royal Hunt":
-        "On Order — Feast twice. Draw 1 from Claw.\n"
-        "Hunt — blocked if another player has [Hunt].",
-
-    "Knight of the Gold Coat":
-        "On Rumour / On Brawl — slay a [Unit]\n"
-        "anywhere. Knight moves to that Domain.",
-
-    "Knight of the Iron Crown":
-        "On Dawn — slay a [Unit] anywhere.\n"
-        "Knight moves to that Domain.",
-
-    "Knight of the Green Mantle":
-        "On Harvest — slay a [Unit] anywhere.\n"
-        "Knight moves to that Domain.",
-
-    "Knight of the White Shield":
-        "On Feast — slay a [Unit] anywhere.\n"
-        "Knight moves to that Domain.",
-
-    "Knight of the Holy Cross":
-        "On Rite — slay a [Unit] anywhere.\n"
-        "Knight moves to that Domain.",
-}
-
-# ---------------------------------------------------------------------------
-# Zone card definitions (not in decks.json)
+# Zone card definitions (not in decks.json — text kept here)
 # ---------------------------------------------------------------------------
 ZONE_CARDS = [
-    {"name": "Presence",   "tags": [],       "deck": "zone",   "count": 3},
-    {"name": "Claw Zone",  "tags": ["Zone"], "deck": "claw",   "count": 1},
-    {"name": "Tree Zone",  "tags": ["Zone"], "deck": "tree",   "count": 1},
-    {"name": "Wheat Zone", "tags": ["Zone"], "deck": "wheat",  "count": 1},
-    {"name": "Coin Zone",  "tags": ["Zone"], "deck": "coin",   "count": 1},
-    {"name": "Candle Zone","tags": ["Zone"], "deck": "candle", "count": 1},
-    {"name": "Sword Zone", "tags": ["Zone"], "deck": "sword",  "count": 1},
+    {"name": "Presence",   "tags": [],       "deck": "zone",   "count": 3,
+     "setupText": "Start with this card.\n"
+                  "It cannot be discarded or moved.",
+     "orderText": "On Dawn — choose one:\n"
+                  "• Order on the Claw zone or Tree zone.\n"
+                  "• Order a card in your Domain.",
+     "endgameText": ""},
+    {"name": "Claw Zone",  "tags": ["Zone"], "deck": "claw",   "count": 1,
+     "setupText": "",
+     "orderText": "On Order — draw 2 cards from the Claw pile.",
+     "endgameText": "Player with most [Trophy] wins."},
+    {"name": "Tree Zone",  "tags": ["Zone"], "deck": "tree",   "count": 1,
+     "setupText": "4 cards face-up — the Season.",
+     "orderText": "On Order — take 1 card from the Season.\n"
+                  "Refill the Season to 4.",
+     "endgameText": "Player with most [Nature] wins."},
+    {"name": "Wheat Zone", "tags": ["Zone"], "deck": "wheat",  "count": 1,
+     "setupText": "5 face-up cards — the Village (conveyor).",
+     "orderText": "On Order — take 1–5 from the bottom.\n"
+                  "Reveal Claw cards equal to [Labour] tags\n"
+                  "taken → to your Domain.\n"
+                  "If [Discontent] in your Domain ≥ 3:\n"
+                  "Revolt — Brawl in every Domain with Wheat.\n"
+                  "Refills to 5 after drawing.",
+     "endgameText": "Player with most [Amenity] wins."},
+    {"name": "Coin Zone",  "tags": ["Zone"], "deck": "coin",   "count": 1,
+     "setupText": "3 face-up cards — the Opportunities.\n"
+                  "Discarded cards go to the Wares.",
+     "orderText": "On Order — choose one:\n"
+                  "• Buy — take 1 card from the Wares.\n"
+                  "• Trade — give 1 Domain card to Wares,\n"
+                  "  take 1 Opportunity. Rumour in every Domain.",
+     "endgameText": "Player with most [Wealth] wins."},
+    {"name": "Candle Zone","tags": ["Zone"], "deck": "candle", "count": 1,
+     "setupText": "1 face-up card — the Revelation.",
+     "orderText": "On Order — claim the Revelation.\n"
+                  "Reveal the next card.",
+     "endgameText": "Player with most [Religion] wins."},
+    {"name": "Sword Zone", "tags": ["Zone"], "deck": "sword",  "count": 1,
+     "setupText": "2 face-up cards — the Tourney.",
+     "orderText": "On Order — Injustice (2+ [Mob] in any\n"
+                  "Domain): tyrant takes [Unit], you take rest.\n"
+                  "Peace (Joust): challenge an opponent.\n"
+                  "Accept = both pick 1. Refuse = Brawl in\n"
+                  "both Domains. Refill Tourney to 2.",
+     "endgameText": "Player with most [Chivalry] wins."},
 ]
 
 # ---------------------------------------------------------------------------
@@ -683,6 +224,44 @@ body {
   color: #000;
   border-top: 0.3mm solid #999;
 }
+
+.card-endgame {
+  padding: 1.5mm 3mm;
+  font-size: 8.5pt;
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.3pt;
+  color: #000;
+  border-top: 0.5mm solid #000;
+  background: #f0f0f0;
+}
+
+.card-section-label {
+  padding: 1mm 3mm 0.5mm;
+  font-size: 7pt;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4pt;
+  color: #555;
+  border-top: 0.3mm solid #999;
+}
+
+.card-section-label:first-of-type {
+  border-top: none;
+}
+
+.card-section-body {
+  padding: 1mm 3mm 2mm;
+  font-size: 11pt;
+  line-height: 1.25;
+  color: #000;
+  white-space: pre-wrap;
+}
+
+.card-section-body b {
+  font-weight: 800;
+}
 """
 
 
@@ -694,26 +273,51 @@ def render_card(card: dict) -> str:
     deck = card["deck"]
     name = card["name"]
     tags = card.get("tags", [])
-    text = CARD_TEXT.get(name, "")
+    text = card.get("text", "")
+    endgame = card.get("endgameText", "")
     icon = DECK_ICONS.get(deck, "")
+    is_zone = "Zone" in name or name == "Presence"
 
-    tags_html = "".join(f'<span class="tag">{t}</span>' for t in tags)
-    if not tags_html:
-        tags_html = '<span style="visibility:hidden;font-size:5pt">&nbsp;</span>'
+    tags_row = ""
+    if not is_zone:
+        tags_inner = "".join(f'<span class="tag">{t}</span>' for t in tags)
+        if not tags_inner:
+            tags_inner = '<span style="visibility:hidden;font-size:5pt">&nbsp;</span>'
+        tags_row = f'<div class="card-tags">{tags_inner}</div>'
 
-    if text:
+    if is_zone:
+        setup = card.get("setupText", "")
+        order = card.get("orderText", "")
+        sections = ""
+        if setup:
+            sections += (f'<div class="card-section-label">Setup</div>'
+                         f'<div class="card-section-body">{bold_keywords(setup)}</div>')
+        if order:
+            sections += (f'<div class="card-section-label">Order</div>'
+                         f'<div class="card-section-body">{bold_keywords(order)}</div>')
+        body_html = f'<div class="card-body" style="padding:0">{sections}</div>'
+    elif text:
         body_html = f'<div class="card-body">{bold_keywords(text)}</div>'
     else:
         body_html = '<div class="card-body empty">— no effect —</div>'
 
+    endgame_html = ""
+    if endgame:
+        endgame_html = f'<div class="card-endgame">{esc(endgame)}</div>'
+
     deck_label = name if "Zone" in name else deck.title()
+
+    footer_html = ""
+    if not is_zone:
+        footer_html = f'<div class="card-footer">{icon} {esc(deck_label)}</div>'
 
     return (
         f'<div class="card deck-{deck}">'
         f'  <div class="card-header"><span class="icon">{icon}</span> {esc(name)}</div>'
-        f'  <div class="card-tags">{tags_html}</div>'
+        f'  {tags_row}'
         f'  {body_html}'
-        f'  <div class="card-footer">{icon} {esc(deck_label)}</div>'
+        f'  {endgame_html}'
+        f'  {footer_html}'
         f'</div>'
     )
 
@@ -765,6 +369,113 @@ def generate_html(cards: list[dict]) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Markdown generation
+# ---------------------------------------------------------------------------
+
+DECK_FLAVOUR = {
+    "claw":   "Violence, ambition, raw power, societal sentiment. The primal "
+              "human element — anger, passion, desire, fear. The uncontrollable "
+              "voice of the people that every civilisation must contend with.",
+    "tree":   "Family, spirituality, harmony, roots, nature. Community bonds, "
+              "ancestral wisdom, peaceful growth. The seasonal engine and "
+              "communal heartbeat.",
+    "wheat":  "Labour, agriculture, the common folk. The working class that "
+              "sustains kingdoms — but every harvest comes with unrest.",
+    "coin":   "Trade, commerce, social mobility. The merchant class and flow "
+              "of wealth. The Wares evolve into a chaotic bazaar as players "
+              "trade cards through it.",
+    "candle": "Faith, religion, moral authority, divine right. Alternative "
+              "path to power through spiritual influence.",
+    "sword":  "Chivalry, martial prowess, feudal loyalty. The warrior "
+              "aristocracy and feudal military order.",
+}
+
+DECK_NAMES = {
+    "claw": "Claw", "tree": "Tree", "wheat": "Wheat",
+    "coin": "Coin", "candle": "Candle", "sword": "Sword",
+}
+
+
+def _md_card_block(name: str, tags: list[str], text: str, icon: str) -> str:
+    """Return a fenced code block for a single card entry."""
+    header = f"{icon}  {name.upper()}"
+    tag_line = " ".join(f"[{t}]" for t in tags)
+    lines = [header]
+    if tag_line:
+        lines.append(tag_line)
+    if text:
+        lines.append(text)
+    inner = "\n".join(lines)
+    return f"```\n{inner}\n```"
+
+
+def _md_zone_block(zc: dict, icon: str) -> str:
+    """Return a fenced code block for a zone card with setup/order sections."""
+    header = f"{icon}  {zc['name'].upper()}"
+    setup = zc.get("setupText", "")
+    order = zc.get("orderText", "")
+    lines = [header]
+    if setup:
+        lines.append(f"SETUP: {setup}")
+    if order:
+        lines.append(order)
+    inner = "\n".join(lines)
+    return f"```\n{inner}\n```"
+
+
+def generate_markdown(decks: dict) -> str:
+    parts: list[str] = []
+
+    parts.append("# Kingdoms — Card Catalogue\n")
+    parts.append("All designed cards in one place, organised by deck.  \n"
+                 "*Auto-generated by `print_cards.py` — do not edit by hand.*\n")
+
+    # ── Zone cards ────────────────────────────────────────────────
+    parts.append("---\n")
+    parts.append("## Domain\n")
+    presence = next(z for z in ZONE_CARDS if z["name"] == "Presence")
+    parts.append(_md_zone_block(
+        presence,
+        DECK_ICONS.get(presence["deck"], ""),
+    ))
+    parts.append("")
+
+    parts.append("---\n")
+    parts.append("## Deck Zone Cards\n")
+    parts.append("One per deck. Placed next to their draw pile at setup.\n")
+    for zc in ZONE_CARDS:
+        if zc["name"] == "Presence":
+            continue
+        parts.append(_md_zone_block(
+            zc,
+            DECK_ICONS.get(zc["deck"], ""),
+        ))
+        parts.append("")
+
+    # ── Deck cards ────────────────────────────────────────────────
+    for deck_key in ("claw", "tree", "wheat", "coin", "candle", "sword"):
+        if deck_key not in decks:
+            continue
+        icon = DECK_ICONS.get(deck_key, "")
+        label = DECK_NAMES[deck_key]
+        flavour = DECK_FLAVOUR.get(deck_key, "")
+
+        parts.append("---\n")
+        parts.append(f"## {icon} {label} Deck Cards\n")
+        if flavour:
+            parts.append(f"> {flavour}\n")
+
+        for card_def in decks[deck_key]:
+            name = card_def["name"]
+            tags = card_def["tags"]
+            text = card_def.get("text", "")
+            parts.append(_md_card_block(name, tags, text, icon))
+            parts.append("")
+
+    return "\n".join(parts)
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -781,6 +492,9 @@ def main():
                 "name": zc["name"],
                 "tags": zc["tags"],
                 "deck": zc["deck"],
+                "setupText": zc.get("setupText", ""),
+                "orderText": zc.get("orderText", ""),
+                "endgameText": zc.get("endgameText", ""),
             })
 
     # 2. Deck cards in order
@@ -793,24 +507,29 @@ def main():
                     "name": card_def["name"],
                     "tags": card_def["tags"],
                     "deck": deck_name,
+                    "text": card_def.get("text", ""),
                 })
 
     # 3. Report any cards without text
-    missing = set()
-    for c in cards:
-        if c["name"] not in CARD_TEXT:
-            missing.add(c["name"])
+    missing = {c["name"] for c in cards
+               if not c.get("text") and not c.get("orderText")}
     if missing:
         print(f"⚠  No text for: {', '.join(sorted(missing))}")
 
     # 4. Generate HTML
     html = generate_html(cards)
-    out = Path(__file__).parent / "cards.html"
-    out.write_text(html, encoding="utf-8")
+    out_html = Path(__file__).parent / "cards.html"
+    out_html.write_text(html, encoding="utf-8")
 
     total_pages = math.ceil(len(cards) / CARDS_PER_PAGE)
-    print(f"✅  Generated {out.name}: {len(cards)} cards on {total_pages} pages")
+    print(f"✅  Generated {out_html.name}: {len(cards)} cards on {total_pages} pages")
     print(f"    Open in browser → Print → Save as PDF (A4, no margins)")
+
+    # 5. Generate Markdown catalogue
+    md = generate_markdown(decks)
+    out_md = Path(__file__).parent / "game-cards.md"
+    out_md.write_text(md, encoding="utf-8")
+    print(f"✅  Generated {out_md.name}")
 
 
 if __name__ == "__main__":

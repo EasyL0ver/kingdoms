@@ -1,116 +1,823 @@
 {
   "claw": [
-    { "name": "Warband", "tags": ["Discontent"], "count": 2 },
-    { "name": "Raid", "tags": ["Unit", "Mob", "Discontent"], "count": 4 },
-    { "name": "Scavenge", "tags": ["Unit", "Mob", "Discontent"], "count": 3 },
-    { "name": "Blood Offering", "tags": [], "count": 1 },
-    { "name": "Poach", "tags": ["Unit", "Mob", "Hunt", "Discontent"], "count": 4 },
-    { "name": "Worship of the Hunt", "tags": ["Spiritual"], "count": 1 },
-    { "name": "Worship of the Dusk", "tags": ["Spiritual"], "count": 1 },
-    { "name": "Worship of War", "tags": ["Spiritual"], "count": 1 },
-    { "name": "Incite", "tags": [], "count": 2 },
-    { "name": "Chiefdom", "tags": ["Trophy"], "count": 2 },
-    { "name": "Kinship", "tags": [], "count": 3 },
-    { "name": "Racketeering", "tags": ["Discontent"], "count": 2 },
-    { "name": "Tyranny", "tags": ["Trophy", "Discontent"], "count": 2 },
-    { "name": "Marauders", "tags": ["Unit", "Mob", "Discontent"], "count": 2 },
-    { "name": "Share the Spoils", "tags": [], "count": 2 },
-    { "name": "Martial Excellence", "tags": ["Trophy", "Chivalry"], "count": 1 },
-    { "name": "Outriders", "tags": [], "count": 2 },
-    { "name": "Land Grab", "tags": ["Discontent"], "count": 3 },
-    { "name": "Rite of Passage", "tags": ["Discontent"], "count": 2 },
-    { "name": "Culling", "tags": ["Discontent"], "count": 2 },
-    { "name": "Ivory", "tags": ["Trophy", "Wealth"], "count": 2 },
-    { "name": "Hunger", "tags": ["Discontent"], "count": 5 },
-    { "name": "Uprising", "tags": ["Discontent"], "count": 3 },
-    { "name": "Ransack", "tags": [], "count": 2 },
-    { "name": "Spoils of War", "tags": ["Trophy", "Mob"], "count": 2 },
-    { "name": "Veil Tear", "tags": ["Spiritual", "Discontent"], "count": 1 },
-    { "name": "Blood Feud", "tags": ["Mob", "Discontent"], "count": 2 },
-    { "name": "Enforcers", "tags": ["Mob", "Discontent"], "count": 2 }
+    {
+      "name": "Warband",
+      "tags": [
+        "Discontent"
+      ],
+      "count": 2,
+      "text": "On Order — you may move 1 [Mob] to the Domain with the most cards. Brawl there."
+    },
+    {
+      "name": "Raid",
+      "tags": [
+        "Unit",
+        "Mob",
+        "Discontent"
+      ],
+      "count": 4,
+      "text": "On Brawl — discard 1 card from your Domain. If the active player is someone else, they get the card instead."
+    },
+    {
+      "name": "Scavenge",
+      "tags": [
+        "Unit",
+        "Mob",
+        "Discontent"
+      ],
+      "count": 3,
+      "text": "On Brawl — if the active player is someone else, they take 1 card from your discard."
+    },
+    {
+      "name": "Blood Offering",
+      "tags": [],
+      "count": 1,
+      "text": "On Order — discard 1 card from your Domain. Rite in your Domain."
+    },
+    {
+      "name": "Poach",
+      "tags": [
+        "Unit",
+        "Mob",
+        "Hunt",
+        "Discontent"
+      ],
+      "count": 4,
+      "text": "On Order — Feast in your Domain. Draw 1 from Claw. Hunt — blocked if another player has [Hunt]."
+    },
+    {
+      "name": "Worship of the Hunt",
+      "tags": [
+        "Spiritual"
+      ],
+      "count": 1,
+      "text": "On Rite — dump 5 Claw cards to the active player's discard."
+    },
+    {
+      "name": "Worship of the Dusk",
+      "tags": [
+        "Spiritual"
+      ],
+      "count": 1,
+      "text": "On Rite — every player discards 1 card from their Domain. If Worship of the Dawn is in play, discard 2 instead."
+    },
+    {
+      "name": "Worship of War",
+      "tags": [
+        "Spiritual"
+      ],
+      "count": 1,
+      "text": "On Rite — the active player Brawls in a Domain of their choice."
+    },
+    {
+      "name": "Incite",
+      "tags": [],
+      "count": 2,
+      "text": "On Dawn — move up to 3 [Mob] cards from your Domain to other Domains. Discard Incite."
+    },
+    {
+      "name": "Chiefdom",
+      "tags": [
+        "Trophy"
+      ],
+      "count": 2,
+      "text": "On Dawn — move up to 2 [Mob] cards from your Domain or a culture ally's to any other Domain."
+    },
+    {
+      "name": "Kinship",
+      "tags": [],
+      "count": 3,
+      "text": "On Harvest — Order on the Tree zone."
+    },
+    {
+      "name": "Racketeering",
+      "tags": [
+        "Discontent"
+      ],
+      "count": 2,
+      "text": "On Order — choose a player. They offer you 1 card. Take it, or refuse and Brawl in their Domain."
+    },
+    {
+      "name": "Tyranny",
+      "tags": [
+        "Trophy",
+        "Discontent"
+      ],
+      "count": 2,
+      "text": "On Order — draw from Claw equal to your [Discontent] count. Brawl in your Domain."
+    },
+    {
+      "name": "Marauders",
+      "tags": [
+        "Unit",
+        "Mob",
+        "Discontent"
+      ],
+      "count": 2,
+      "text": "On Feast — discard Marauders. Draw 1 from Claw."
+    },
+    {
+      "name": "Share the Spoils",
+      "tags": [],
+      "count": 2,
+      "text": "On Feast — draw 1 from Claw."
+    },
+    {
+      "name": "Martial Excellence",
+      "tags": [
+        "Trophy",
+        "Chivalry"
+      ],
+      "count": 1,
+      "text": "On Order — Order on the Sword zone. Requires another [Trophy] in your Domain."
+    },
+    {
+      "name": "Outriders",
+      "tags": [],
+      "count": 2,
+      "text": "On Order — draw 3 from Claw. Discard 1 of your choice."
+    },
+    {
+      "name": "Land Grab",
+      "tags": [
+        "Discontent"
+      ],
+      "count": 3,
+      "text": "On Order — take all [Land] cards from the Season to your Domain. Discard Land Grab. Requires [Land] in the Season."
+    },
+    {
+      "name": "Rite of Passage",
+      "tags": [
+        "Discontent"
+      ],
+      "count": 2,
+      "text": "On Brawl — draw 1 from Tree."
+    },
+    {
+      "name": "Culling",
+      "tags": [
+        "Discontent"
+      ],
+      "count": 2,
+      "text": "On Dawn — the player with the most cards discards 1–2 cards of their choice. Discard Culling."
+    },
+    {
+      "name": "Ivory",
+      "tags": [
+        "Trophy",
+        "Wealth"
+      ],
+      "count": 2,
+      "text": "On Order — discard Ivory. Order on the Coin zone."
+    },
+    {
+      "name": "Hunger",
+      "tags": [
+        "Discontent"
+      ],
+      "count": 5,
+      "text": "On Harvest — dump 1 Claw card to your discard. On Feast — return 1 card from your discard to top of the Claw pile."
+    },
+    {
+      "name": "Uprising",
+      "tags": [
+        "Discontent"
+      ],
+      "count": 3,
+      "text": "On Dawn — Brawl in your Domain. Discard Uprising."
+    },
+    {
+      "name": "Ransack",
+      "tags": [],
+      "count": 2,
+      "text": "On Order — discard 1 card from your Domain. Draw 2 from Claw. Take 1 from the Season."
+    },
+    {
+      "name": "Spoils of War",
+      "tags": [
+        "Trophy",
+        "Mob"
+      ],
+      "count": 2,
+      "text": "On Dawn — place Spoils of War in another player's Domain. On Brawl — moves to the active player. They draw from Claw and Tree equal to their [Trophy] count."
+    },
+    {
+      "name": "Veil Tear",
+      "tags": [
+        "Spiritual",
+        "Discontent"
+      ],
+      "count": 1,
+      "text": "On Order — purge any number of cards from your discard. Return that many [Spiritual] cards from any discard to their owner's Domain. Rite in every Domain that many times. Discard Veil Tear."
+    },
+    {
+      "name": "Blood Feud",
+      "tags": [
+        "Mob",
+        "Discontent"
+      ],
+      "count": 2,
+      "text": "On Brawl — draw 2 from Claw. Move up to 2 [Mob] to the active player. Discard Blood Feud, then Brawl in the attacker's Domain."
+    },
+    {
+      "name": "Enforcers",
+      "tags": [
+        "Mob",
+        "Discontent"
+      ],
+      "count": 2,
+      "text": "On Brawl — both you and the active player draw 2 from Claw."
+    }
   ],
   "sword": [
-    { "name": "Royal Hunt", "tags": ["Unit", "Trophy", "Hunt"], "count": 3 },
-    { "name": "Knight of the Gold Coat", "tags": ["Unit", "Chivalry", "Wealth"], "count": 2 },
-    { "name": "Knight of the Iron Crown", "tags": ["Unit", "Chivalry", "Trophy"], "count": 2 },
-    { "name": "Knight of the Green Mantle", "tags": ["Unit", "Chivalry", "Nature"], "count": 2 },
-    { "name": "Knight of the White Shield", "tags": ["Unit", "Chivalry", "Amenity"], "count": 2 },
-    { "name": "Knight of the Holy Cross", "tags": ["Unit", "Chivalry", "Religion"], "count": 2 }
+    {
+      "name": "Royal Hunt",
+      "tags": [
+        "Unit",
+        "Trophy",
+        "Hunt"
+      ],
+      "count": 3,
+      "text": "On Order — Feast in your Domain twice. Draw 1 from Claw. Hunt — blocked if another player has [Hunt]."
+    },
+    {
+      "name": "Knight of the Gold Coat",
+      "tags": [
+        "Unit",
+        "Chivalry",
+        "Wealth"
+      ],
+      "count": 2,
+      "text": "On Rumour / On Brawl — slay a [Unit] anywhere. Knight moves to that Domain."
+    },
+    {
+      "name": "Knight of the Iron Crown",
+      "tags": [
+        "Unit",
+        "Chivalry",
+        "Trophy"
+      ],
+      "count": 2,
+      "text": "On Dawn — slay a [Unit] anywhere. Knight moves to that Domain."
+    },
+    {
+      "name": "Knight of the Green Mantle",
+      "tags": [
+        "Unit",
+        "Chivalry",
+        "Nature"
+      ],
+      "count": 2,
+      "text": "On Harvest — slay a [Unit] anywhere. Knight moves to that Domain."
+    },
+    {
+      "name": "Knight of the White Shield",
+      "tags": [
+        "Unit",
+        "Chivalry",
+        "Amenity"
+      ],
+      "count": 2,
+      "text": "On Feast — slay a [Unit] anywhere. Knight moves to that Domain."
+    },
+    {
+      "name": "Knight of the Holy Cross",
+      "tags": [
+        "Unit",
+        "Chivalry",
+        "Religion"
+      ],
+      "count": 2,
+      "text": "On Rite — slay a [Unit] anywhere. Knight moves to that Domain."
+    }
   ],
   "tree": [
-    { "name": "Kinship", "tags": [], "count": 4 },
-    { "name": "Eldership", "tags": ["Knowledge"], "count": 1 },
-    { "name": "Worship of the Dawn", "tags": ["Spiritual"], "count": 1 },
-    { "name": "Harvest", "tags": [], "count": 6 },
-    { "name": "Gathering", "tags": [], "count": 2 },
-    { "name": "Sacred Grove", "tags": ["Nature", "Spiritual"], "count": 3 },
-    { "name": "Worship of the Hearth", "tags": ["Nature", "Spiritual"], "count": 1 },
-
-    { "name": "Forage", "tags": [], "count": 2 },
-    { "name": "Sowing", "tags": ["Knowledge"], "count": 3 },
-    { "name": "Compost", "tags": [], "count": 2 },
-    { "name": "Vigil", "tags": [], "count": 2 },
-    { "name": "Floods", "tags": ["Nature"], "count": 2 },
-    { "name": "Bog", "tags": ["Nature"], "count": 1 },
-    { "name": "Bear's Den", "tags": ["Nature"], "count": 1 },
-    { "name": "Ravine", "tags": ["Nature"], "count": 1 },
-    { "name": "Meadow", "tags": ["Nature"], "count": 1 },
-    { "name": "Regrowth", "tags": [], "count": 1 },
-    { "name": "Hospitality", "tags": [], "count": 2 }
+    {
+      "name": "Kinship",
+      "tags": [],
+      "count": 4,
+      "text": "On Harvest — Order on the Tree zone."
+    },
+    {
+      "name": "Eldership",
+      "tags": [
+        "Knowledge"
+      ],
+      "count": 1,
+      "text": "On Brawl — if the active player shares your culture, you may cancel the Brawl. They draw 1 from Tree."
+    },
+    {
+      "name": "Worship of the Dawn",
+      "tags": [
+        "Spiritual"
+      ],
+      "count": 1,
+      "text": "On Rite — return 1 card from your discard to your Domain. If Worship of the Dusk is in play, return 2 instead."
+    },
+    {
+      "name": "Harvest",
+      "tags": [],
+      "count": 6,
+      "text": "On Dawn — Harvest in every zone. Discard Harvest."
+    },
+    {
+      "name": "Gathering",
+      "tags": [],
+      "count": 2,
+      "text": "On Dawn — choose Brawl, Rite, or Rumour. Fires in your Domain and all culture allies' Domains. Discard Gathering."
+    },
+    {
+      "name": "Sacred Grove",
+      "tags": [
+        "Nature",
+        "Spiritual"
+      ],
+      "count": 3,
+      "text": "On Order — choose one: • Rite in your Domain. • Look at the top 3 Tree cards. Take any [Spiritual] cards. Return the rest."
+    },
+    {
+      "name": "Worship of the Hearth",
+      "tags": [
+        "Nature",
+        "Spiritual"
+      ],
+      "count": 1,
+      "text": "On Rite — Harvest in every Domain that has Kinship."
+    },
+    {
+      "name": "Forage",
+      "tags": [],
+      "count": 2,
+      "text": "On Order — dump top 2 Tree and top 2 Claw cards to your discard. Feast in your Domain."
+    },
+    {
+      "name": "Sowing",
+      "tags": [
+        "Knowledge"
+      ],
+      "count": 3,
+      "text": "On Order — Order on the Wheat zone. On Harvest — refill Season buffer, then take all [Nature] cards from Season for free. Requires 2+ [Nature] in your Domain."
+    },
+    {
+      "name": "Compost",
+      "tags": [],
+      "count": 2,
+      "text": "On Order — purge a Harvest card from your discard. Harvest in your Domain."
+    },
+    {
+      "name": "Vigil",
+      "tags": [],
+      "count": 2,
+      "text": "On Harvest — for each player with Kinship, return 1 card from your discard to your Domain."
+    },
+    {
+      "name": "Floods",
+      "tags": [
+        "Nature"
+      ],
+      "count": 2,
+      "text": "On Brawl — if another Floods is in play, cancel the Brawl. On Dawn — refill the Season. If another Floods is in play, every player discards 1 card from their Domain."
+    },
+    {
+      "name": "Bog",
+      "tags": [
+        "Nature"
+      ],
+      "count": 1,
+      "text": "On Rumour — swallow 1 card from the Season."
+    },
+    {
+      "name": "Bear's Den",
+      "tags": [
+        "Nature"
+      ],
+      "count": 1,
+      "text": "On Feast — draw 1 from Claw."
+    },
+    {
+      "name": "Ravine",
+      "tags": [
+        "Nature"
+      ],
+      "count": 1,
+      "text": "On Brawl — the active player discards 1 card from their Domain."
+    },
+    {
+      "name": "Meadow",
+      "tags": [
+        "Nature"
+      ],
+      "count": 1,
+      "text": "On Harvest — refill the Season to full."
+    },
+    {
+      "name": "Regrowth",
+      "tags": [],
+      "count": 1,
+      "text": "On Dawn — all [Nature] cards in every player's discard return to their owner's Domain. Discard Regrowth."
+    },
+    {
+      "name": "Hospitality",
+      "tags": [],
+      "count": 2,
+      "text": "On Order — choose a player with Kinship. You may Order 1 card in their Domain. They may Order 1 card in yours."
+    }
   ],
   "wheat": [
-    { "name": "Animal Husbandry", "tags": ["Labour"], "count": 2 },
-    { "name": "Tavern", "tags": ["Amenity"], "count": 2 },
-    { "name": "Militia", "tags": ["Unit"], "count": 2 },
-    { "name": "Crooked Inn", "tags": ["Amenity", "Discontent"], "count": 2 },
-    { "name": "Enclosure", "tags": ["Labour", "Amenity"], "count": 2 },
-    { "name": "Turnip Patch", "tags": ["Labour"], "count": 4 },
-    { "name": "Ritual Pyre", "tags": ["Nature", "Spiritual"], "count": 2 },
-    { "name": "Folk Hero", "tags": ["Unit", "Trophy"], "count": 2 },
-    { "name": "Wolf Pack", "tags": ["Mob", "Nature", "Discontent"], "count": 2 },
-    { "name": "Herb Garden", "tags": ["Nature"], "count": 2 },
-    { "name": "Orchard", "tags": ["Nature", "Labour"], "count": 3 },
-    { "name": "Reeve", "tags": ["Unit"], "count": 2 },
-    { "name": "Worship of the Bread", "tags": ["Spiritual"], "count": 1 },
-    { "name": "Ora et Labora", "tags": ["Labour", "Spiritual"], "count": 2 },
-    { "name": "Tax Collectors", "tags": ["Mob", "Discontent"], "count": 2 },
-    { "name": "Lookout", "tags": [], "count": 2 },
-    { "name": "Ill Tidings", "tags": [], "count": 2 },
-    { "name": "Pilgrimage", "tags": ["Spiritual"], "count": 3 }
+    {
+      "name": "Animal Husbandry",
+      "tags": [
+        "Labour"
+      ],
+      "count": 2,
+      "text": "On Order — choose one: • Order on the Wheat zone. • Order on the Coin zone. • Feast in your Domain."
+    },
+    {
+      "name": "Tavern",
+      "tags": [
+        "Amenity"
+      ],
+      "count": 2,
+      "text": "On Feast — you may return 1 [Discontent] from your Domain to top of Claw pile. You may return 1 Claw card from your discard to top of Claw pile."
+    },
+    {
+      "name": "Militia",
+      "tags": [
+        "Unit"
+      ],
+      "count": 2,
+      "text": "On Rumour — discard 1 [Mob] from your Domain. On Brawl — discard Militia to cancel the Brawl in your Domain."
+    },
+    {
+      "name": "Crooked Inn",
+      "tags": [
+        "Amenity",
+        "Discontent"
+      ],
+      "count": 2,
+      "text": "On Rumour — return 1 [Mob] from your discard to your domain."
+    },
+    {
+      "name": "Enclosure",
+      "tags": [
+        "Labour",
+        "Amenity"
+      ],
+      "count": 2,
+      "text": "On Order — take any 1 card from the Village. Put 1 card from your domain back in its place."
+    },
+    {
+      "name": "Turnip Patch",
+      "tags": [
+        "Labour"
+      ],
+      "count": 4,
+      "text": "On Order / On Harvest — Order on the Wheat zone."
+    },
+    {
+      "name": "Ritual Pyre",
+      "tags": [
+        "Nature",
+        "Spiritual"
+      ],
+      "count": 2,
+      "text": "On Order — sacrifice a card from your domain. If you do, Harvest in your Domain. Rite in your Domain."
+    },
+    {
+      "name": "Folk Hero",
+      "tags": [
+        "Unit",
+        "Trophy"
+      ],
+      "count": 2,
+      "text": "On Dawn — move 1 [Mob], [Labour], or [Amenity] card between domains that have Wheat cards."
+    },
+    {
+      "name": "Wolf Pack",
+      "tags": [
+        "Mob",
+        "Nature",
+        "Discontent"
+      ],
+      "count": 2,
+      "text": "On Harvest — If you triggered it: move Wolf Pack to another player's domain. Otherwise: discard 2 from domain, draw 2 Claw."
+    },
+    {
+      "name": "Herb Garden",
+      "tags": [
+        "Nature"
+      ],
+      "count": 2,
+      "text": "On Harvest — Order on the Tree zone or Wheat zone (your choice)."
+    },
+    {
+      "name": "Orchard",
+      "tags": [
+        "Nature",
+        "Labour"
+      ],
+      "count": 3,
+      "text": "On Harvest — draw 1 from Tree. Feast in your Domain."
+    },
+    {
+      "name": "Reeve",
+      "tags": [
+        "Unit"
+      ],
+      "count": 2,
+      "text": "On Dawn — order 1 Wheat card in your domain (fires its On Order effect)."
+    },
+    {
+      "name": "Worship of the Bread",
+      "tags": [
+        "Spiritual"
+      ],
+      "count": 1,
+      "text": "On Rite — rearrange the Village belt."
+    },
+    {
+      "name": "Ora et Labora",
+      "tags": [
+        "Labour",
+        "Spiritual"
+      ],
+      "count": 2,
+      "text": "On Harvest — Order on the Candle zone. On Rite — Order on the Wheat zone."
+    },
+    {
+      "name": "Tax Collectors",
+      "tags": [
+        "Mob",
+        "Discontent"
+      ],
+      "count": 2,
+      "text": "On Order (requires 3+ [Labour]) — Order on the Coin zone. Rumour in your Domain."
+    },
+    {
+      "name": "Lookout",
+      "tags": [],
+      "count": 2,
+      "text": "On Dawn — if you have [Discontent], Rumour in your domain."
+    },
+    {
+      "name": "Ill Tidings",
+      "tags": [],
+      "count": 2,
+      "text": "On Rumour — choose one, then discard this: • Panic — draw 2 from Claw. • Fortify — return 1 [Discontent] to the Claw pile."
+    },
+    {
+      "name": "Pilgrimage",
+      "tags": [
+        "Spiritual"
+      ],
+      "count": 3,
+      "text": "On Order — give 1+ cards from your domain to another player. They decide: if they accept, draw that many Candle cards. If they refuse, no reward. Discard this."
+    }
   ],
   "coin": [
-    { "name": "Treasure", "tags": ["Trophy", "Amenity", "Wealth"], "count": 6 },
-    { "name": "Market", "tags": [], "count": 3 },
-    { "name": "Pawn Shop", "tags": [], "count": 3 },
-    { "name": "Stockpile", "tags": [], "count": 3 },
-    { "name": "Smuggler", "tags": ["Mob"], "count": 3 },
-    { "name": "Forgery", "tags": ["Discontent"], "count": 3 },
-    { "name": "Usurer", "tags": [], "count": 3 },
-    { "name": "Highwaymen", "tags": ["Mob"], "count": 3 },
-    { "name": "Sellsword", "tags": ["Unit"], "count": 2 },
-    { "name": "Swindle", "tags": [], "count": 2 },
-    { "name": "Prosperity", "tags": ["Wealth"], "count": 2 },
-    { "name": "Embassy", "tags": ["Wealth"], "count": 2 },
-    { "name": "Efficiency", "tags": [], "count": 2 },
-    { "name": "Spice Market", "tags": ["Wealth"], "count": 2 },
-    { "name": "Commodities", "tags": [], "count": 2 },
-    { "name": "Provisions", "tags": ["Amenity"], "count": 2 },
-    { "name": "Worship of Gold", "tags": ["Spiritual"], "count": 1 }
+    {
+      "name": "Treasure",
+      "tags": [
+        "Trophy",
+        "Amenity",
+        "Wealth"
+      ],
+      "count": 6,
+      "text": "No effect — pure tags."
+    },
+    {
+      "name": "Market",
+      "tags": [],
+      "count": 3,
+      "text": "On Order — offer a Ware to a player (buyer picks which). If they accept, Order on the Coin zone."
+    },
+    {
+      "name": "Pawn Shop",
+      "tags": [],
+      "count": 3,
+      "text": "On Order — Order on the Coin zone. On Rumour — swap 1 Domain card with 1 Wares card."
+    },
+    {
+      "name": "Stockpile",
+      "tags": [],
+      "count": 3,
+      "text": "On Order — put 1 Domain card into Wares. Order on the Coin zone."
+    },
+    {
+      "name": "Smuggler",
+      "tags": [
+        "Mob"
+      ],
+      "count": 3,
+      "text": "On Brawl — controller picks 1 from Wares, Brawl starter takes it. (No Opp. refill.) Smuggler moves to starter's domain."
+    },
+    {
+      "name": "Forgery",
+      "tags": [
+        "Discontent"
+      ],
+      "count": 3,
+      "text": "On Order — if you have a Coin card in Domain, put Forgery into Wares. Order on the Coin zone."
+    },
+    {
+      "name": "Usurer",
+      "tags": [],
+      "count": 3,
+      "text": "On Order — put 1 Domain card into Wares. On Rumour — Order on the Coin zone."
+    },
+    {
+      "name": "Highwaymen",
+      "tags": [
+        "Mob"
+      ],
+      "count": 3,
+      "text": "On Brawl — put 1 Domain card into Wares. Brawl starter Orders on the Coin zone."
+    },
+    {
+      "name": "Sellsword",
+      "tags": [
+        "Unit"
+      ],
+      "count": 2,
+      "text": "On Brawl — discard Sellsword to the Wares to cancel the Brawl in your Domain."
+    },
+    {
+      "name": "Swindle",
+      "tags": [],
+      "count": 2,
+      "text": "On Order — give all Wares to a chosen opponent. Brawl in their Domain. Discard Swindle."
+    },
+    {
+      "name": "Prosperity",
+      "tags": [
+        "Wealth"
+      ],
+      "count": 2,
+      "text": "On Dawn — draw 1 from Coin if Opportunities exist."
+    },
+    {
+      "name": "Embassy",
+      "tags": [
+        "Wealth"
+      ],
+      "count": 2,
+      "text": "On Dawn — if you have a culture ally and Wares exist: you and your ally each take 1 card from the Wares."
+    },
+    {
+      "name": "Efficiency",
+      "tags": [],
+      "count": 2,
+      "text": "On Order — Order up to 4 other cards in your Domain. Discard Efficiency."
+    },
+    {
+      "name": "Spice Market",
+      "tags": [
+        "Wealth"
+      ],
+      "count": 2,
+      "text": "On Order — draw Coin cards equal to your count of unique tags in your Domain."
+    },
+    {
+      "name": "Commodities",
+      "tags": [],
+      "count": 2,
+      "text": "On Rumour — draw 1 card from a chosen pile. Add it to the Wares."
+    },
+    {
+      "name": "Provisions",
+      "tags": [
+        "Amenity"
+      ],
+      "count": 2,
+      "text": "On Feast — draw 1 from Coin."
+    },
+    {
+      "name": "Worship of Gold",
+      "tags": [
+        "Spiritual"
+      ],
+      "count": 1,
+      "text": "On Rite — the active player takes 1 card from the Wares."
+    }
   ],
   "candle": [
-    { "name": "Worship of the Scripture", "tags": ["Spiritual", "Religion"], "count": 1 },
-    { "name": "Worship of the Relic", "tags": ["Spiritual", "Religion"], "count": 1 },
-    { "name": "Worship of the Martyr", "tags": ["Spiritual", "Religion"], "count": 1 },
-    { "name": "Clergy", "tags": ["Religion"], "count": 3 },
-    { "name": "Sabbath", "tags": ["Religion"], "count": 3 },
-    { "name": "Zealot", "tags": ["Spiritual", "Religion", "Mob"], "count": 2 },
-    { "name": "Alms", "tags": ["Religion"], "count": 2 },
-    { "name": "Evangelism", "tags": ["Religion"], "count": 2 },
-    { "name": "Purity", "tags": ["Religion"], "count": 2 },
-    { "name": "Flagellation", "tags": ["Religion"], "count": 2 },
-    { "name": "Penance", "tags": ["Spiritual", "Religion"], "count": 2 },
-    { "name": "Benefaction", "tags": ["Religion"], "count": 2 },
-    { "name": "Ornament", "tags": ["Religion"], "count": 2 },
-    { "name": "Protect the Meek", "tags": ["Chivalry"], "count": 4 }
+    {
+      "name": "Worship of the Scripture",
+      "tags": [
+        "Spiritual",
+        "Religion"
+      ],
+      "count": 1,
+      "text": "On Rite — the active player peeks at Candle cards (scales with [Spiritual]). Keep 1, purge the rest."
+    },
+    {
+      "name": "Worship of the Relic",
+      "tags": [
+        "Spiritual",
+        "Religion"
+      ],
+      "count": 1,
+      "text": "On Rite — peek at cards from a chosen pile (scales with [Spiritual]). May replace the Revelation. Return rest to top."
+    },
+    {
+      "name": "Worship of the Martyr",
+      "tags": [
+        "Spiritual",
+        "Religion"
+      ],
+      "count": 1,
+      "text": "On Rite — the active player may discard cards. All other players must discard equal to [Spiritual] scaling."
+    },
+    {
+      "name": "Clergy",
+      "tags": [
+        "Religion"
+      ],
+      "count": 3,
+      "text": "On Order — Order on the Candle zone. Peek at Candle cards (1 per player with [Religion]). Keep 1, may set 1 as Revelation, purge rest."
+    },
+    {
+      "name": "Sabbath",
+      "tags": [
+        "Religion"
+      ],
+      "count": 3,
+      "text": "On Dawn — Rite in your Domain."
+    },
+    {
+      "name": "Zealot",
+      "tags": [
+        "Spiritual",
+        "Religion",
+        "Mob"
+      ],
+      "count": 2,
+      "text": "On Brawl — cancel if you have [Religion]; else discard 1 Domain card. On Rite — active player may move Zealot to another Domain."
+    },
+    {
+      "name": "Alms",
+      "tags": [
+        "Religion"
+      ],
+      "count": 2,
+      "text": "On Feast — refill 1 Field. Return 1 [Discontent] to the Claw pile."
+    },
+    {
+      "name": "Evangelism",
+      "tags": [
+        "Religion"
+      ],
+      "count": 2,
+      "text": "On Order — each player in turn order claims 1 Revelation. Refill between each."
+    },
+    {
+      "name": "Purity",
+      "tags": [
+        "Religion"
+      ],
+      "count": 2,
+      "text": "On Order — optionally purge the Revelation and reveal the next. Rite in your Domain."
+    },
+    {
+      "name": "Flagellation",
+      "tags": [
+        "Religion"
+      ],
+      "count": 2,
+      "text": "On Rite — Brawl in your Domain (no player benefits)."
+    },
+    {
+      "name": "Penance",
+      "tags": [
+        "Spiritual",
+        "Religion"
+      ],
+      "count": 2,
+      "text": "On Dawn — discard 2 cards from your Domain. You may sacrifice Penance for an extra effect."
+    },
+    {
+      "name": "Benefaction",
+      "tags": [
+        "Religion"
+      ],
+      "count": 2,
+      "text": "On Order — draw 1 from Coin. Refill Opportunities to 3. Rumour in your Domain twice."
+    },
+    {
+      "name": "Ornament",
+      "tags": [
+        "Religion"
+      ],
+      "count": 2,
+      "text": "On Order — move the Revelation to the Wares. Reveal the next card."
+    },
+    {
+      "name": "Protect the Meek",
+      "tags": [
+        "Chivalry"
+      ],
+      "count": 4,
+      "text": "On Brawl — Order on the Sword zone."
+    }
   ]
 }
