@@ -406,8 +406,10 @@ _INLINE_TAG = re.compile(
     r')\]'
 )
 
+_ITALIC = re.compile(r'\*(.+?)\*')
+
 def bold_keywords(text: str) -> str:
-    """Wrap game keywords in <b> tags, add event emojis, and color [Tag] refs."""
+    """Wrap game keywords in <b> tags, add event emojis, color [Tag] refs, and *italic*."""
     safe = esc(text)
     safe = _EVENT_KEYWORD.sub(
         lambda m: f'<b>{EVENT_EMOJIS[m.group(1)]} {m.group(1)}</b>', safe)
@@ -416,6 +418,7 @@ def bold_keywords(text: str) -> str:
         lambda m: f'<span class="inline-tag inline-tag-{m.group(1).lower()}">[{m.group(1)}]</span>',
         safe,
     )
+    safe = _ITALIC.sub(r'<i>\1</i>', safe)
     return safe
 
 
