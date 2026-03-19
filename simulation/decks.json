@@ -508,7 +508,8 @@
         "Nature"
       ],
       "count": 2,
-      "text": "On Harvest — Order on the Tree zone or Wheat zone (your choice)."
+      "text": "On Harvest — Order on the Tree zone or Wheat zone.",
+      "reminder": "Your choice."
     },
     {
       "name": "Orchard",
@@ -551,7 +552,8 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Order (requires 3+ [Labour]) — Order on the Coin zone. Rumour in your Domain."
+      "text": "On Order — Order on the Coin zone. Rumour in your Domain.",
+      "reminder": "Requires 3+ [Labour]."
     },
     {
       "name": "Lookout",
@@ -583,13 +585,15 @@
         "Wealth"
       ],
       "count": 6,
-      "text": "No effect — pure tags."
+      "text": "",
+      "reminder": "No effect — pure tags."
     },
     {
       "name": "Market",
       "tags": [],
       "count": 3,
-      "text": "On Order — offer a Ware to a player (buyer picks which). If they accept, Order on the Coin zone."
+      "text": "On Order — offer a Ware to a player. If they accept, Order on the Coin zone.",
+      "reminder": "Buyer picks which Ware."
     },
     {
       "name": "Pawn Shop",
@@ -708,7 +712,8 @@
         "Religion"
       ],
       "count": 1,
-      "text": "On Rite — the active player peeks at Candle cards (scales with [Spiritual]). Keep 1, remove the rest from the game."
+      "text": "On Rite — the active player peeks at Candle cards. Keep 1, remove the rest from the game.",
+      "reminder": "Scales with [Spiritual]."
     },
     {
       "name": "Worship of the Relic",
@@ -717,7 +722,8 @@
         "Religion"
       ],
       "count": 1,
-      "text": "On Rite — peek at cards from a chosen pile (scales with [Spiritual]). May replace the Revelation. Return rest to top."
+      "text": "On Rite — peek at cards from a chosen pile. May replace the Revelation. Return rest to top.",
+      "reminder": "Scales with [Spiritual]."
     },
     {
       "name": "Worship of the Martyr",
@@ -734,7 +740,8 @@
         "Religion"
       ],
       "count": 3,
-      "text": "On Order — Order on the Candle zone. Peek at Candle cards (1 per player with [Religion]). Keep 1, may set 1 as Revelation, remove the rest from the game."
+      "text": "On Order — Order on the Candle zone. Peek at Candle cards. Keep 1, may set 1 as Revelation, remove the rest from the game.",
+      "reminder": "1 card per player with [Religion]."
     },
     {
       "name": "Sabbath",

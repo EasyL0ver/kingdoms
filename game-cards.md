@@ -414,8 +414,10 @@ On Harvest — If you triggered it: move Wolf Pack to another player's Domain. O
 ```
 🌾  HERB GARDEN
 [Nature]
-On Harvest — Order on the Tree zone or Wheat zone (your choice).
+On Harvest — Order on the Tree zone or Wheat zone.
 ```
+
+> *Your choice.*
 
 ```
 🌾  ORCHARD
@@ -445,8 +447,10 @@ On Rite — Order on the Wheat zone.
 ```
 🌾  TAX COLLECTORS
 [Discontent] [Mob]
-On Order (requires 3+ [Labour]) — Order on the Coin zone. Rumour in your Domain.
+On Order — Order on the Coin zone. Rumour in your Domain.
 ```
+
+> *Requires 3+ [Labour].*
 
 ```
 🌾  LOOKOUT
@@ -473,13 +477,16 @@ On Order — give 1+ cards from your Domain to another player. They decide: if t
 ```
 🪙  TREASURE
 [Amenity] [Trophy] [Wealth]
-No effect — pure tags.
 ```
+
+> *No effect — pure tags.*
 
 ```
 🪙  MARKET
-On Order — offer a Ware to a player (buyer picks which). If they accept, Order on the Coin zone.
+On Order — offer a Ware to a player. If they accept, Order on the Coin zone.
 ```
+
+> *Buyer picks which Ware.*
 
 ```
 🪙  PAWN SHOP
@@ -576,14 +583,18 @@ On Rite — the active player takes 1 card from the Wares.
 ```
 🕯️  WORSHIP OF THE SCRIPTURE
 [Religion] [Spiritual]
-On Rite — the active player peeks at Candle cards (scales with [Spiritual]). Keep 1, remove the rest from the game.
+On Rite — the active player peeks at Candle cards. Keep 1, remove the rest from the game.
 ```
+
+> *Scales with [Spiritual].*
 
 ```
 🕯️  WORSHIP OF THE RELIC
 [Religion] [Spiritual]
-On Rite — peek at cards from a chosen pile (scales with [Spiritual]). May replace the Revelation. Return rest to top.
+On Rite — peek at cards from a chosen pile. May replace the Revelation. Return rest to top.
 ```
+
+> *Scales with [Spiritual].*
 
 ```
 🕯️  WORSHIP OF THE MARTYR
@@ -594,8 +605,10 @@ On Rite — the active player may discard cards. All other players must discard 
 ```
 🕯️  CLERGY
 [Religion]
-On Order — Order on the Candle zone. Peek at Candle cards (1 per player with [Religion]). Keep 1, may set 1 as Revelation, remove the rest from the game.
+On Order — Order on the Candle zone. Peek at Candle cards. Keep 1, may set 1 as Revelation, remove the rest from the game.
 ```
+
+> *1 card per player with [Religion].*
 
 ```
 🕯️  SABBATH
