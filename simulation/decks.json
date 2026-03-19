@@ -796,14 +796,6 @@
       "text": "On Dawn — discard 2 cards from your Domain. You may discard Penance."
     },
     {
-      "name": "Benefaction",
-      "tags": [
-        "Religion"
-      ],
-      "count": 2,
-      "text": "On Order — draw 1 from Coin. Refill Opportunities to 3. Rumour in your Domain twice."
-    },
-    {
       "name": "Ornament",
       "tags": [
         "Religion"

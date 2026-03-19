@@ -632,12 +632,6 @@ On Dawn — discard 2 cards from your Domain. You may discard Penance.
 ```
 
 ```
-🕯️  BENEFACTION
-[Religion]
-On Order — draw 1 from Coin. Refill Opportunities to 3. Rumour in your Domain twice.
-```
-
-```
 🕯️  ORNAMENT
 [Religion]
 On Order — move the Revelation to the Wares. Reveal the next card.
