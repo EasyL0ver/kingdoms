@@ -110,7 +110,7 @@ On Order — Feast in your Domain. Draw 1 from Claw. Hunt — blocked if another
 ```
 🐾  WORSHIP OF THE HUNT
 [Spiritual]
-On Rite — dump 5 Claw cards to the active player's discard.
+On Rite — discard 5 Claw cards to the active player's discard.
 ```
 
 ```
@@ -202,7 +202,7 @@ On Order — discard Ivory. Order on the Coin zone.
 ```
 🐾  HUNGER
 [Discontent]
-On Harvest — dump 1 Claw card to your discard. On Feast — return 1 card from your discard to top of the Claw pile.
+On Harvest — discard 1 Claw card to your discard. On Feast — return 1 card from your discard to top of the Claw pile.
 ```
 
 ```
@@ -225,13 +225,13 @@ On Dawn — place Spoils of War in another player's Domain. On Brawl — moves t
 ```
 🐾  VEIL TEAR
 [Spiritual] [Discontent]
-On Order — purge any number of cards from your discard. Return that many [Spiritual] cards from any discard to their owner's Domain. Rite in every Domain that many times. Discard Veil Tear.
+On Order — remove any number of cards from your discard from the game. Return that many [Spiritual] cards from any discard to their owner's Domain. Rite in every Domain that many times. Discard Veil Tear.
 ```
 
 ```
 🐾  BLOOD FEUD
 [Mob] [Discontent]
-On Brawl — draw 2 from Claw. Move up to 2 [Mob] to the active player. Discard Blood Feud, then Brawl in the attacker's Domain.
+On Brawl — draw 2 from Claw. Move up to 2 [Mob] to the active player. Discard Blood Feud, then Brawl in the active player's Domain.
 ```
 
 ```
@@ -287,7 +287,7 @@ On Rite — Harvest in every Domain that has Kinship.
 
 ```
 🌳  FORAGE
-On Order — dump top 2 Tree and top 2 Claw cards to your discard. Feast in your Domain.
+On Order — discard top 2 Tree and top 2 Claw cards to your discard. Feast in your Domain.
 ```
 
 ```
@@ -298,7 +298,7 @@ On Order — Order on the Wheat zone. On Harvest — refill Season buffer, then 
 
 ```
 🌳  COMPOST
-On Order — purge a Harvest card from your discard. Harvest in your Domain.
+On Order — remove a Harvest card from your discard from the game. Harvest in your Domain.
 ```
 
 ```
@@ -315,7 +315,7 @@ On Brawl — if another Floods is in play, cancel the Brawl. On Dawn — refill 
 ```
 🌳  BOG
 [Nature]
-On Rumour — swallow 1 card from the Season.
+On Rumour — remove 1 card from the Season from the game.
 ```
 
 ```
@@ -373,13 +373,13 @@ On Rumour — discard 1 [Mob] from your Domain. On Brawl — discard Militia to 
 ```
 🌾  CROOKED INN
 [Amenity] [Discontent]
-On Rumour — return 1 [Mob] from your discard to your domain.
+On Rumour — return 1 [Mob] from your discard to your Domain.
 ```
 
 ```
 🌾  ENCLOSURE
 [Labour] [Amenity]
-On Order — take any 1 card from the Village. Put 1 card from your domain back in its place.
+On Order — take any 1 card from the Village. Put 1 card from your Domain back in its place.
 ```
 
 ```
@@ -391,7 +391,7 @@ On Order / On Harvest — Order on the Wheat zone.
 ```
 🌾  RITUAL PYRE
 [Nature] [Spiritual]
-On Order — sacrifice a card from your domain. If you do, Harvest in your Domain. Rite in your Domain.
+On Order — discard a card from your Domain. If you do, Harvest in your Domain. Rite in your Domain.
 ```
 
 ```
@@ -403,7 +403,7 @@ On Dawn — move 1 [Mob], [Labour], or [Amenity] card between domains that have 
 ```
 🌾  WOLF PACK
 [Mob] [Nature] [Discontent]
-On Harvest — If you triggered it: move Wolf Pack to another player's domain. Otherwise: discard 2 from domain, draw 2 Claw.
+On Harvest — If you triggered it: move Wolf Pack to another player's Domain. Otherwise: discard 2 from Domain, draw 2 Claw.
 ```
 
 ```
@@ -421,7 +421,7 @@ On Harvest — draw 1 from Tree. Feast in your Domain.
 ```
 🌾  REEVE
 [Unit]
-On Dawn — order 1 Wheat card in your domain (fires its On Order effect).
+On Dawn — Order 1 Wheat card in your Domain (fires its On Order effect).
 ```
 
 ```
@@ -444,18 +444,18 @@ On Order (requires 3+ [Labour]) — Order on the Coin zone. Rumour in your Domai
 
 ```
 🌾  LOOKOUT
-On Dawn — if you have [Discontent], Rumour in your domain.
+On Dawn — if you have [Discontent], Rumour in your Domain.
 ```
 
 ```
 🌾  ILL TIDINGS
-On Rumour — choose one, then discard this: • Panic — draw 2 from Claw. • Fortify — return 1 [Discontent] to the Claw pile.
+On Rumour — choose one, then Discard Ill Tidings. • Panic — draw 2 from Claw. • Fortify — return 1 [Discontent] to the Claw pile.
 ```
 
 ```
 🌾  PILGRIMAGE
 [Spiritual]
-On Order — give 1+ cards from your domain to another player. They decide: if they accept, draw that many Candle cards. If they refuse, no reward. Discard this.
+On Order — give 1+ cards from your Domain to another player. They decide: if they accept, draw that many Candle cards. If they refuse, no reward. Discard Pilgrimage.
 ```
 
 ---
@@ -488,7 +488,7 @@ On Order — put 1 Domain card into Wares. Order on the Coin zone.
 ```
 🪙  SMUGGLER
 [Mob]
-On Brawl — controller picks 1 from Wares, Brawl starter takes it. (No Opp. refill.) Smuggler moves to starter's domain.
+On Brawl — you pick 1 from Wares, the active player takes it. Smuggler moves to the active player's Domain.
 ```
 
 ```
@@ -505,7 +505,7 @@ On Order — put 1 Domain card into Wares. On Rumour — Order on the Coin zone.
 ```
 🪙  HIGHWAYMEN
 [Mob]
-On Brawl — put 1 Domain card into Wares. Brawl starter Orders on the Coin zone.
+On Brawl — put 1 Domain card into Wares. active player Orders on the Coin zone.
 ```
 
 ```
@@ -544,7 +544,7 @@ On Order — draw Coin cards equal to your count of unique tags in your Domain.
 
 ```
 🪙  COMMODITIES
-On Rumour — draw 1 card from a chosen pile. Add it to the Wares.
+On Rumour — draw 1 from a chosen pile. Add it to the Wares.
 ```
 
 ```
@@ -568,7 +568,7 @@ On Rite — the active player takes 1 card from the Wares.
 ```
 🕯️  WORSHIP OF THE SCRIPTURE
 [Spiritual] [Religion]
-On Rite — the active player peeks at Candle cards (scales with [Spiritual]). Keep 1, purge the rest.
+On Rite — the active player peeks at Candle cards (scales with [Spiritual]). Keep 1, remove the rest from the game.
 ```
 
 ```
@@ -586,7 +586,7 @@ On Rite — the active player may discard cards. All other players must discard 
 ```
 🕯️  CLERGY
 [Religion]
-On Order — Order on the Candle zone. Peek at Candle cards (1 per player with [Religion]). Keep 1, may set 1 as Revelation, purge rest.
+On Order — Order on the Candle zone. Peek at Candle cards (1 per player with [Religion]). Keep 1, may set 1 as Revelation, remove the rest from the game.
 ```
 
 ```
@@ -616,7 +616,7 @@ On Order — each player in turn order claims 1 Revelation. Refill between each.
 ```
 🕯️  PURITY
 [Religion]
-On Order — optionally purge the Revelation and reveal the next. Rite in your Domain.
+On Order — optionally remove from the game the Revelation and reveal the next. Rite in your Domain.
 ```
 
 ```
@@ -628,7 +628,7 @@ On Rite — Brawl in your Domain (no player benefits).
 ```
 🕯️  PENANCE
 [Spiritual] [Religion]
-On Dawn — discard 2 cards from your Domain. You may sacrifice Penance for an extra effect.
+On Dawn — discard 2 cards from your Domain. You may discard Penance for an extra effect.
 ```
 
 ```
@@ -664,29 +664,29 @@ On Order — Feast in your Domain twice. Draw 1 from Claw. Hunt — blocked if a
 ```
 ⚔️  KNIGHT OF THE GOLD COAT
 [Unit] [Chivalry] [Wealth]
-On Rumour / On Brawl — slay a [Unit] anywhere. Knight moves to that Domain.
+On Rumour / On Brawl — discard a [Unit] anywhere. Knight moves to that Domain.
 ```
 
 ```
 ⚔️  KNIGHT OF THE IRON CROWN
 [Unit] [Chivalry] [Trophy]
-On Dawn — slay a [Unit] anywhere. Knight moves to that Domain.
+On Dawn — discard a [Unit] anywhere. Knight moves to that Domain.
 ```
 
 ```
 ⚔️  KNIGHT OF THE GREEN MANTLE
 [Unit] [Chivalry] [Nature]
-On Harvest — slay a [Unit] anywhere. Knight moves to that Domain.
+On Harvest — discard a [Unit] anywhere. Knight moves to that Domain.
 ```
 
 ```
 ⚔️  KNIGHT OF THE WHITE SHIELD
 [Unit] [Chivalry] [Amenity]
-On Feast — slay a [Unit] anywhere. Knight moves to that Domain.
+On Feast — discard a [Unit] anywhere. Knight moves to that Domain.
 ```
 
 ```
 ⚔️  KNIGHT OF THE HOLY CROSS
 [Unit] [Chivalry] [Religion]
-On Rite — slay a [Unit] anywhere. Knight moves to that Domain.
+On Rite — discard a [Unit] anywhere. Knight moves to that Domain.
 ```
