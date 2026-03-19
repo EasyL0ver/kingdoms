@@ -500,7 +500,7 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Harvest (*your turn*) — move Wolf Pack to another player's Domain.\nOn Harvest (*not your turn*) — discard 2 from Domain, draw 2 cards from the Claw deck."
+      "text": "On Harvest (*your turn*) — move Wolf Pack to another player's Domain.\nOn Harvest (*not your turn*) — discard 2 cards from your Domain, draw 2 cards from the Claw deck."
     },
     {
       "name": "Herb Garden",
@@ -729,7 +729,7 @@
         "Religion"
       ],
       "count": 1,
-      "text": "On Rite — the active player may discard cards. All other players must discard equal to [Spiritual] scaling."
+      "text": "On Rite — the active player may discard cards from their Domain. All other players must discard from their Domain equal to [Spiritual] scaling."
     },
     {
       "name": "Clergy",
@@ -755,7 +755,7 @@
         "Mob"
       ],
       "count": 2,
-      "text": "On Brawl — cancel if you have [Religion]; else discard 1 Domain card.\nOn Rite — active player may move Zealot to another Domain."
+      "text": "On Brawl — cancel if you have [Religion]; else discard a card from your Domain.\nOn Rite — active player may move Zealot to another Domain."
     },
     {
       "name": "Alms",

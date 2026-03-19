@@ -414,7 +414,7 @@ On Dawn — move 1 [Mob], [Labour], or [Amenity] card between domains that have 
 🌾  WOLF PACK
 [Discontent] [Mob] [Nature]
 On Harvest (*your turn*) — move Wolf Pack to another player's Domain.
-On Harvest (*not your turn*) — discard 2 from Domain, draw 2 cards from the Claw deck.
+On Harvest (*not your turn*) — discard 2 cards from your Domain, draw 2 cards from the Claw deck.
 ```
 
 ```
@@ -599,7 +599,7 @@ On Rite — peek at cards from a chosen deck, scales with [Spiritual]. May repla
 ```
 🕯️  WORSHIP OF THE MARTYR
 [Religion] [Spiritual]
-On Rite — the active player may discard cards. All other players must discard equal to [Spiritual] scaling.
+On Rite — the active player may discard cards from their Domain. All other players must discard from their Domain equal to [Spiritual] scaling.
 ```
 
 ```
@@ -617,7 +617,7 @@ On Dawn — Rite your Domain.
 ```
 🕯️  ZEALOT
 [Mob] [Religion] [Spiritual]
-On Brawl — cancel if you have [Religion]; else discard 1 Domain card.
+On Brawl — cancel if you have [Religion]; else discard a card from your Domain.
 On Rite — active player may move Zealot to another Domain.
 ```
 
