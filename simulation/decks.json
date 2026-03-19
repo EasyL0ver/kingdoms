@@ -6,7 +6,7 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Order — you may move 1 [Mob] to the Domain with the most cards. Brawl there."
+      "text": "On Order — you may move a [Mob] to the Domain with the most cards. Brawl there."
     },
     {
       "name": "Raid",
@@ -16,7 +16,7 @@
         "Discontent"
       ],
       "count": 4,
-      "text": "On Brawl (*your turn*) — discard a card from your Domain.\nOn Brawl (*not your turn*) — give 1 card from your Domain to the active player."
+      "text": "On Brawl (*your turn*) — discard a card from your Domain.\nOn Brawl (*not your turn*) — give a card from your Domain to the active player."
     },
     {
       "name": "Scavenge",
@@ -26,7 +26,7 @@
         "Discontent"
       ],
       "count": 3,
-      "text": "On Brawl (*your turn*) — remove 1 card from your discard from the game.\nOn Brawl (*not your turn*) — the active player takes 1 card from your discard."
+      "text": "On Brawl (*your turn*) — remove a card from your discard from the game.\nOn Brawl (*not your turn*) — the active player takes a card from your discard."
     },
     {
       "name": "Blood Offering",
@@ -59,7 +59,7 @@
         "Spiritual"
       ],
       "count": 1,
-      "text": "On Rite — every player discards 1 card from their Domain.\nOn Rite (*Worship of the Dawn in play*) — every player discards 1 card from their Domain."
+      "text": "On Rite — every player discards a card from their Domain.\nOn Rite (*Worship of the Dawn in play*) — every player discards a card from their Domain."
     },
     {
       "name": "Worship of War",
@@ -312,7 +312,7 @@
         "Spiritual"
       ],
       "count": 1,
-      "text": "On Rite — return 1 card from your discard to your Domain.\nOn Rite (*Worship of the Dusk in play*) — return 1 card from your discard to your Domain."
+      "text": "On Rite — return a card from your discard to your Domain.\nOn Rite (*Worship of the Dusk in play*) — return a card from your discard to your Domain."
     },
     {
       "name": "Reaping",
@@ -376,7 +376,7 @@
         "Nature"
       ],
       "count": 2,
-      "text": "On Brawl — if another Floods is in play, cancel the Brawl.\nOn Dawn — refill the Season. If another Floods is in play, every player discards 1 card from their Domain."
+      "text": "On Brawl — if another Floods is in play, cancel the Brawl.\nOn Dawn — refill the Season. If another Floods is in play, every player discards a card from their Domain."
     },
     {
       "name": "Bog",
@@ -384,7 +384,7 @@
         "Nature"
       ],
       "count": 1,
-      "text": "On Rumour — remove 1 card from the Season from the game."
+      "text": "On Rumour — remove a card from the Season from the game."
     },
     {
       "name": "Bear's Den",
@@ -400,7 +400,7 @@
         "Nature"
       ],
       "count": 1,
-      "text": "On Brawl — the active player discards 1 card from their Domain."
+      "text": "On Brawl — the active player discards a card from their Domain."
     },
     {
       "name": "Meadow",
@@ -420,7 +420,7 @@
       "name": "Hospitality",
       "tags": [],
       "count": 2,
-      "text": "On Order — choose a player with Kinship. You may Order 1 card in their Domain. They may Order 1 card in yours."
+      "text": "On Order — choose a player with Kinship. You may Order a card in their Domain. They may Order a card in yours."
     }
   ],
   "wheat": [
@@ -438,7 +438,7 @@
         "Amenity"
       ],
       "count": 2,
-      "text": "On Feast — you may return 1 [Discontent] from your Domain to top of the Claw deck. You may return 1 Claw card from your discard to top of the Claw deck."
+      "text": "On Feast — you may return a [Discontent] from your Domain to top of the Claw deck. You may return a Claw card from your discard to top of the Claw deck."
     },
     {
       "name": "Militia",
@@ -446,7 +446,7 @@
         "Unit"
       ],
       "count": 2,
-      "text": "On Rumour — discard 1 [Mob] from your Domain.\nOn Brawl — discard Militia to cancel the Brawl in your Domain."
+      "text": "On Rumour — discard a [Mob] from your Domain.\nOn Brawl — discard Militia to cancel the Brawl in your Domain."
     },
     {
       "name": "Crooked Inn",
@@ -455,7 +455,7 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Rumour — return 1 [Mob] from your discard to your Domain."
+      "text": "On Rumour — return a [Mob] from your discard to your Domain."
     },
     {
       "name": "Enclosure",
@@ -490,7 +490,7 @@
         "Trophy"
       ],
       "count": 2,
-      "text": "On Dawn — move 1 [Mob], [Labour], or [Amenity] card between domains that have Wheat cards."
+      "text": "On Dawn — move a [Mob], [Labour], or [Amenity] card between domains that have Wheat cards."
     },
     {
       "name": "Wolf Pack",
@@ -564,7 +564,7 @@
       "name": "Tidings",
       "tags": [],
       "count": 2,
-      "text": "On Rumour — choose one, then Discard Tidings. • *Panic* — draw 2 cards from the Claw deck. • *Fortify* — return 1 [Discontent] to top of the Claw deck."
+      "text": "On Rumour — choose one, then Discard Tidings. • *Panic* — draw 2 cards from the Claw deck. • *Fortify* — return a [Discontent] to top of the Claw deck."
     },
     {
       "name": "Pilgrimage",
@@ -700,7 +700,7 @@
         "Spiritual"
       ],
       "count": 1,
-      "text": "On Rite — the active player takes 1 card from the Wares."
+      "text": "On Rite — the active player takes a card from the Wares."
     }
   ],
   "candle": [
@@ -763,7 +763,7 @@
         "Religion"
       ],
       "count": 2,
-      "text": "On Feast — refill 1 Field. Return 1 [Discontent] to top of the Claw deck."
+      "text": "On Feast — refill a Field. Return a [Discontent] to top of the Claw deck."
     },
     {
       "name": "Evangelism",

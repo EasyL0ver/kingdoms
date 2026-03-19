@@ -81,21 +81,21 @@ both Domains. Refill Tourney to 2.
 ```
 🐾  WARBAND
 [Discontent]
-On Order — you may move 1 [Mob] to the Domain with the most cards. Brawl there.
+On Order — you may move a [Mob] to the Domain with the most cards. Brawl there.
 ```
 
 ```
 🐾  RAID
 [Discontent] [Mob] [Unit]
 On Brawl (*your turn*) — discard a card from your Domain.
-On Brawl (*not your turn*) — give 1 card from your Domain to the active player.
+On Brawl (*not your turn*) — give a card from your Domain to the active player.
 ```
 
 ```
 🐾  SCAVENGE
 [Discontent] [Mob] [Unit]
-On Brawl (*your turn*) — remove 1 card from your discard from the game.
-On Brawl (*not your turn*) — the active player takes 1 card from your discard.
+On Brawl (*your turn*) — remove a card from your discard from the game.
+On Brawl (*not your turn*) — the active player takes a card from your discard.
 ```
 
 ```
@@ -118,8 +118,8 @@ On Rite — discard 5 Claw cards to the active player's discard.
 ```
 🐾  WORSHIP OF THE DUSK
 [Spiritual]
-On Rite — every player discards 1 card from their Domain.
-On Rite (*Worship of the Dawn in play*) — every player discards 1 card from their Domain.
+On Rite — every player discards a card from their Domain.
+On Rite (*Worship of the Dawn in play*) — every player discards a card from their Domain.
 ```
 
 ```
@@ -266,8 +266,8 @@ On Brawl (active player has Kinship) — cancel the Brawl in your Domain. They d
 ```
 🌳  WORSHIP OF THE DAWN
 [Spiritual]
-On Rite — return 1 card from your discard to your Domain.
-On Rite (*Worship of the Dusk in play*) — return 1 card from your discard to your Domain.
+On Rite — return a card from your discard to your Domain.
+On Rite (*Worship of the Dusk in play*) — return a card from your discard to your Domain.
 ```
 
 ```
@@ -318,13 +318,13 @@ On Harvest — for each player with Kinship, return a card from your discard to 
 🌳  FLOODS
 [Nature]
 On Brawl — if another Floods is in play, cancel the Brawl.
-On Dawn — refill the Season. If another Floods is in play, every player discards 1 card from their Domain.
+On Dawn — refill the Season. If another Floods is in play, every player discards a card from their Domain.
 ```
 
 ```
 🌳  BOG
 [Nature]
-On Rumour — remove 1 card from the Season from the game.
+On Rumour — remove a card from the Season from the game.
 ```
 
 ```
@@ -336,7 +336,7 @@ On Feast — draw a card from the Claw deck.
 ```
 🌳  RAVINE
 [Nature]
-On Brawl — the active player discards 1 card from their Domain.
+On Brawl — the active player discards a card from their Domain.
 ```
 
 ```
@@ -352,7 +352,7 @@ On Dawn — all [Nature] cards in every player's discard return to their owner's
 
 ```
 🌳  HOSPITALITY
-On Order — choose a player with Kinship. You may Order 1 card in their Domain. They may Order 1 card in yours.
+On Order — choose a player with Kinship. You may Order a card in their Domain. They may Order a card in yours.
 ```
 
 ---
@@ -370,20 +370,20 @@ On Order — choose one: • Order the Wheat zone. • Order the Coin zone. • 
 ```
 🌾  TAVERN
 [Amenity]
-On Feast — you may return 1 [Discontent] from your Domain to top of the Claw deck. You may return 1 Claw card from your discard to top of the Claw deck.
+On Feast — you may return a [Discontent] from your Domain to top of the Claw deck. You may return a Claw card from your discard to top of the Claw deck.
 ```
 
 ```
 🌾  MILITIA
 [Unit]
-On Rumour — discard 1 [Mob] from your Domain.
+On Rumour — discard a [Mob] from your Domain.
 On Brawl — discard Militia to cancel the Brawl in your Domain.
 ```
 
 ```
 🌾  CROOKED INN
 [Amenity] [Discontent]
-On Rumour — return 1 [Mob] from your discard to your Domain.
+On Rumour — return a [Mob] from your discard to your Domain.
 ```
 
 ```
@@ -407,7 +407,7 @@ On Order — discard a card from your Domain. If you do, Harvest your Domain. Ri
 ```
 🌾  FOLK HERO
 [Trophy] [Unit]
-On Dawn — move 1 [Mob], [Labour], or [Amenity] card between domains that have Wheat cards.
+On Dawn — move a [Mob], [Labour], or [Amenity] card between domains that have Wheat cards.
 ```
 
 ```
@@ -463,7 +463,7 @@ On Dawn ([Discontent]) — Rumour your Domain.
 
 ```
 🌾  TIDINGS
-On Rumour — choose one, then Discard Tidings. • *Panic* — draw 2 cards from the Claw deck. • *Fortify* — return 1 [Discontent] to top of the Claw deck.
+On Rumour — choose one, then Discard Tidings. • *Panic* — draw 2 cards from the Claw deck. • *Fortify* — return a [Discontent] to top of the Claw deck.
 ```
 
 ```
@@ -575,7 +575,7 @@ On Feast — draw a card from the Coin deck.
 ```
 🪙  WORSHIP OF GOLD
 [Spiritual]
-On Rite — the active player takes 1 card from the Wares.
+On Rite — the active player takes a card from the Wares.
 ```
 
 ---
@@ -624,7 +624,7 @@ On Rite — active player may move Zealot to another Domain.
 ```
 🕯️  ALMS
 [Religion]
-On Feast — refill 1 Field. Return 1 [Discontent] to top of the Claw deck.
+On Feast — refill a Field. Return a [Discontent] to top of the Claw deck.
 ```
 
 ```
