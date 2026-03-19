@@ -315,10 +315,10 @@
       "text": "On Rite — return 1 card from your discard to your Domain. If Worship of the Dusk is in play, return 2 instead."
     },
     {
-      "name": "Harvest",
+      "name": "Reaping",
       "tags": [],
       "count": 6,
-      "text": "On Dawn — Harvest every zone. Discard Harvest."
+      "text": "On Dawn — Harvest every zone. Discard Reaping."
     },
     {
       "name": "Gathering",
@@ -362,7 +362,7 @@
       "name": "Compost",
       "tags": [],
       "count": 2,
-      "text": "On Order (Harvest card in your discard) — choose one: • Order the Wheat zone. • Harvest your Domain."
+      "text": "On Order (Reaping card in your discard) — choose one: • Order the Wheat zone. • Harvest your Domain."
     },
     {
       "name": "Vigil",

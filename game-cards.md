@@ -266,8 +266,8 @@ On Rite — return 1 card from your discard to your Domain. If Worship of the Du
 ```
 
 ```
-🌳  HARVEST
-On Dawn — Harvest every zone. Discard Harvest.
+🌳  REAPING
+On Dawn — Harvest every zone. Discard Reaping.
 ```
 
 ```
@@ -301,7 +301,7 @@ On Harvest — refill the Season, then put all [Nature] cards from the Season in
 
 ```
 🌳  COMPOST
-On Order (Harvest card in your discard) — choose one: • Order the Wheat zone. • Harvest your Domain.
+On Order (Reaping card in your discard) — choose one: • Order the Wheat zone. • Harvest your Domain.
 ```
 
 ```
