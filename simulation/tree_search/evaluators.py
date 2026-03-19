@@ -267,7 +267,7 @@ class CardSynergy(Evaluator):
                 case "Sowing":
                     if has_nature >= 2 and has_fields:
                         s += 2.0
-                case "Withered Crop":
+                case "Compost":
                     has_harvest_discard = any(c.name == "Harvest" for c in player.discard)
                     if has_harvest_discard and has_fields:
                         s += 2.5

@@ -118,7 +118,7 @@ class WheatZone(CardBehavior):
         if not s.fields:
             s.log("  → Fields empty, nothing to take")
             return
-        max_take = min(3, len(s.fields))
+        max_take = len(s.fields)
         to_take = ctx.engine.strat(ctx.player).resolve_n(
             s, ctx.player, list(s.fields), 1, max_take,
             DecisionContext(event="Order", source="Wheat Zone", intent=Intent.GAIN))

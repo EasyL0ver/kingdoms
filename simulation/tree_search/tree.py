@@ -84,7 +84,7 @@ _CASCADE_EVENT = {
     "Poach": "Feast", "Forage": "Feast", "Granary": "Feast",
     "Animal Husbandry": "Feast", "Royal Hunt": "Feast",                # → Feast
     "Benefaction": "Rumour",                                            # → Rumour
-    "Sowing": "Order", "Withered Crop": "Order", "Plough": "Order",
+    "Sowing": "Order", "Compost": "Order", "Plough": "Order",
     "Mill": "Order", "Apprenticeship": "Order", "Well": "Order",
     "Market": "Order", "Ivory": "Order", "Martial Excellence": "Order",
     "Efficiency": "Order", "Clergy": "Order",                           # → zone Order

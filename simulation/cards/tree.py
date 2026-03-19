@@ -190,6 +190,63 @@ class Regrowth(CardBehavior):
 
 
 @_register
+class Bog(CardBehavior):
+    name = 'Bog'
+    tags = ['Nature']
+    deck = 'tree'
+    def on_rumour(self, ctx):
+        if not ctx.state.season:
+            return False
+        victim = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, list(ctx.state.season),
+            DecisionContext(event="Rumour", source="Bog", intent=Intent.DISCARD))
+        ctx.state.season.remove(victim)
+        ctx.state.log(f"  → Bog swallows {victim.name} from Season")
+        return True
+
+
+@_register
+class BearsDen(CardBehavior):
+    name = "Bear's Den"
+    tags = ['Nature']
+    deck = 'tree'
+    def on_feast(self, ctx):
+        drawn = ctx.engine.draw_and_receive(ctx.player, "claw")
+        if drawn:
+            ctx.state.log(f"  → Bear's Den: {ctx.player.name} draws {drawn[0].name} from Claw")
+            return True
+        return False
+
+
+@_register
+class Ravine(CardBehavior):
+    name = 'Ravine'
+    tags = ['Nature']
+    deck = 'tree'
+    def on_brawl(self, ctx):
+        if ctx.active_player is ctx.player:
+            return False
+        if ctx.active_player.domain:
+            victim = ctx.engine.strat(ctx.active_player).resolve(
+                ctx.state, ctx.active_player, list(ctx.active_player.domain),
+                DecisionContext(event="Brawl", source="Ravine", intent=Intent.DISCARD))
+            ctx.active_player.discard_from_domain(victim)
+            ctx.state.log(f"  → Ravine: {ctx.active_player.name} discards {victim.name} (treacherous terrain)")
+        return True
+
+
+@_register
+class Meadow(CardBehavior):
+    name = 'Meadow'
+    tags = ['Nature']
+    deck = 'tree'
+    def on_harvest(self, ctx):
+        ctx.state.refill_season()
+        ctx.state.log(f"  → Meadow: Season refilled to {len(ctx.state.season)}")
+        return True
+
+
+@_register
 class WorshipOfTheHearth(CardBehavior):
     name = 'Worship of the Hearth'
     tags = ['Nature', 'Spiritual']
@@ -254,8 +311,8 @@ class Sowing(CardBehavior):
 
 
 @_register
-class WitheredCrop(CardBehavior):
-    name = 'Withered Crop'
+class Compost(CardBehavior):
+    name = 'Compost'
     tags = []
     deck = 'tree'
     def on_order(self, ctx):
@@ -264,10 +321,10 @@ class WitheredCrop(CardBehavior):
         to_exile = ctx.engine.strat(ctx.player).resolve_n(
             ctx.state, ctx.player, list(ctx.player.discard),
             1, len(ctx.player.discard),
-            DecisionContext(event="Order", source="Withered Crop", intent=Intent.DISCARD))
+            DecisionContext(event="Order", source="Compost", intent=Intent.DISCARD))
         for c in to_exile:
             ctx.player.discard.remove(c)
-        ctx.state.log(f"  → Withered Crop: exiles {len(to_exile)} cards, restocks fields")
+        ctx.state.log(f"  → Compost: exiles {len(to_exile)} cards, restocks fields")
         old = len(ctx.state.fields)
         ctx.state.refill_fields(old + len(to_exile))
         new = len(ctx.state.fields)
@@ -352,51 +409,3 @@ class Hospitality(CardBehavior):
             ctx.engine.resolve_event("Order", partner, scope=pick2)
 
 
-@_register
-class Pilgrimage(CardBehavior):
-    name = 'Pilgrimage'
-    tags = ['Spiritual']
-    deck = 'tree'
-
-    def _claim_revelation(self, ctx):
-        s = ctx.state
-        if not s.revelation:
-            return
-        rev_card = s.revelation.pop(0)
-        ctx.player.add_to_domain(rev_card, s)
-        s.log(f"  → Pilgrimage: {ctx.player.name} claims Revelation ({rev_card.name})")
-        from cards import get_behavior
-        get_behavior("Candle Zone").refill(s)
-
-    def on_order(self, ctx):
-        if ctx.location != "domain":
-            return
-        # Gather participants — owner always joins, others may opt in
-        participants = [ctx.player]
-        for p in ctx.state.other_players(ctx.player):
-            if ctx.engine.strat(p).resolve(
-                    ctx.state, p, [True, False],
-                    DecisionContext(event="Order", source="Pilgrimage", intent=Intent.OPTION)):
-                participants.append(p)
-                ctx.state.log(f"  → {p.name} joins the Pilgrimage")
-        # Draw from Candle for each participant
-        drawn = []
-        for _ in participants:
-            c = ctx.state.draw_from_pile("candle")
-            if c:
-                drawn.append(c)
-        if not drawn:
-            ctx.state.log(f"  → Pilgrimage: Candle pile empty")
-            return
-        ctx.state.log(f"  → Pilgrimage: {len(participants)} pilgrims, drew {', '.join(c.name for c in drawn)}")
-        # Owner distributes cards among participants
-        for c in drawn:
-            recipient = ctx.engine.strat(ctx.player).resolve(
-                ctx.state, ctx.player, participants,
-                DecisionContext(event="Order", source="Pilgrimage", intent=Intent.OPTION))
-            recipient.add_to_domain(c, ctx.state)
-            ctx.state.log(f"    {recipient.name} receives {c.name}")
-
-    def on_rite(self, ctx):
-        self._claim_revelation(ctx)
-        return True

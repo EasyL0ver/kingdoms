@@ -92,7 +92,7 @@ class Player:
             return True
         if self.has_card("Sowing") and self.count_tag("Nature") >= 2:
             return True
-        if self.has_card("Withered Crop") and self.has_discard("Harvest"):
+        if self.has_card("Compost") and self.has_discard("Harvest"):
             return True
         if self.has_card("Plough"):
             return True

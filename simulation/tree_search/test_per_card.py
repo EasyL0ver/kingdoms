@@ -28,7 +28,7 @@ ORDERABLE = [
     ("Floods", ["Nature"], "tree"),
     ("Forage", [], "tree"),
     ("Sowing", ["Knowledge"], "tree"),
-    ("Withered Crop", [], "tree"),
+    ("Compost", [], "tree"),
     ("Remembrance", ["Knowledge"], "tree"),
     ("Pilgrimage", ["Spiritual"], "tree"),
     ("Plough", ["Labour"], "wheat"),

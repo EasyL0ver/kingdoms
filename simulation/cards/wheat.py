@@ -146,7 +146,7 @@ class Apprenticeship(CardBehavior):
     def on_order(self, ctx):
         if ctx.location != "domain":
             return
-        if not any(p.count_tag("Craftsmanship") > 0 for p in ctx.state.other_players(ctx.player)):
+        if not any(p.count_tag("Wealth") > 0 for p in ctx.state.other_players(ctx.player)):
             return
         ctx.state.log(f"  → Orders Coin zone via Apprenticeship")
         ctx.engine.order_zone(ctx.player, "coin")
@@ -157,15 +157,16 @@ class Militia(CardBehavior):
     name = 'Militia'
     tags = ['Unit']
     deck = 'wheat'
-    def on_order(self, ctx):
-        if ctx.location != "domain" or ctx.player.count_tag("Mob") <= 0:
-            return
+    def on_rumour(self, ctx):
         mobs = ctx.player.cards_with_tag("Mob")
+        if not mobs:
+            return False
         mob = ctx.engine.strat(ctx.player).resolve(
             ctx.state, ctx.player, mobs,
-            DecisionContext(event="Order", source="Militia", intent=Intent.DISCARD))
+            DecisionContext(event="Rumour", source="Militia", intent=Intent.DISCARD))
         ctx.player.discard_from_domain(mob)
-        ctx.state.log(f"  → Militia discards {mob.name}")
+        ctx.state.log(f"  → Militia kills {mob.name}")
+        return True
 
     def on_brawl(self, ctx):
         if ctx.engine.strat(ctx.player).resolve(
@@ -294,6 +295,80 @@ class Irrigation(CardBehavior):
 
 
 @_register
+class Taxation(CardBehavior):
+    name = 'Taxation'
+    tags = []
+    deck = 'wheat'
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
+        ctx.state.log(f"  → Taxation: orders Coin zone, draws 2 Claw")
+        ctx.engine.order_zone(ctx.player, "coin")
+        drawn = ctx.engine.draw_and_receive(ctx.player, "claw", 2)
+        for c in drawn:
+            ctx.state.log(f"    tax: {c.name}")
+
+
+@_register
+class Lookout(CardBehavior):
+    name = 'Lookout'
+    tags = []
+    deck = 'wheat'
+    def on_dawn(self, ctx):
+        if ctx.player.count_tag("Discontent") > 0:
+            ctx.state.log(f"  → Lookout: spots trouble, spreads Rumour")
+            ctx.engine.resolve_event("Rumour", ctx.player,
+                                     scope=ctx.state.other_players(ctx.player))
+            return True
+        return False
+
+
+@_register
+class TownCrier(CardBehavior):
+    name = 'Town Crier'
+    tags = []
+    deck = 'wheat'
+    def on_rumour(self, ctx):
+        options = ["panic", "fortify"]
+        choice = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, options,
+            DecisionContext(event="Rumour", source="Town Crier", intent=Intent.OPTION))
+        if choice == "panic":
+            drawn = ctx.engine.draw_and_receive(ctx.player, "claw", 2)
+            names = ", ".join(c.name for c in drawn) if drawn else "nothing"
+            ctx.state.log(f"  → Town Crier: PANIC! {ctx.player.name} draws {names} from Claw")
+        else:
+            discontent = ctx.player.cards_with_tag("Discontent")
+            if discontent:
+                victim = ctx.engine.strat(ctx.player).resolve(
+                    ctx.state, ctx.player, discontent,
+                    DecisionContext(event="Rumour", source="Town Crier", intent=Intent.DISCARD))
+                ctx.player.remove_from_domain(victim)
+                ctx.state.return_to_pile("claw", victim)
+                ctx.state.log(f"  → Town Crier: FORTIFY! {ctx.player.name} returns {victim.name} to Claw pile")
+            else:
+                ctx.state.log(f"  → Town Crier: FORTIFY! No Discontent to return")
+        return True
+
+
+@_register
+class OraEtLabora(CardBehavior):
+    name = 'Ora et Labora'
+    tags = ['Labour', 'Spiritual']
+    deck = 'wheat'
+    def on_harvest(self, ctx):
+        s = ctx.state
+        if not s.revelation:
+            return False
+        rev_card = s.revelation.pop(0)
+        ctx.player.add_to_domain(rev_card, s)
+        s.log(f"  → Ora et Labora: {ctx.player.name} claims Revelation ({rev_card.name})")
+        from cards import get_behavior
+        get_behavior("Candle Zone").refill(s)
+        return True
+
+
+@_register
 class WorshipOfTheBread(CardBehavior):
     name = 'Worship of the Bread'
     tags = ['Spiritual']
@@ -313,3 +388,36 @@ class WorshipOfTheBread(CardBehavior):
 
     def on_rite(self, ctx):
         return self._refill_one_field(ctx)
+
+
+@_register
+class Pilgrimage(CardBehavior):
+    name = 'Pilgrimage'
+    tags = ['Spiritual']
+    deck = 'wheat'
+
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
+        giveable = [c for c in ctx.player.domain if c is not ctx.card]
+        targets = ctx.state.other_players(ctx.player)
+        if not giveable or not targets:
+            ctx.player.discard_from_domain(ctx.card)
+            return
+        target = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, targets,
+            DecisionContext(event="Order", source="Pilgrimage", intent=Intent.TARGET))
+        to_give = ctx.engine.strat(ctx.player).resolve_n(
+            ctx.state, ctx.player, giveable,
+            1, len(giveable),
+            DecisionContext(event="Order", source="Pilgrimage", intent=Intent.GIVE_AWAY))
+        for c in to_give:
+            ctx.player.remove_from_domain(c)
+            target.add_to_domain(c, ctx.state)
+        n = len(to_give)
+        names = ", ".join(c.name for c in to_give)
+        ctx.state.log(f"  → Pilgrimage: gives {names} to {target.name}, draws {n} Candle")
+        drawn = ctx.engine.draw_and_receive(ctx.player, "candle", n)
+        if drawn:
+            ctx.state.log(f"    receives {', '.join(c.name for c in drawn)}")
+        ctx.player.discard_from_domain(ctx.card)

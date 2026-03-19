@@ -1,0 +1,1085 @@
+{
+  "timestamp": "2026-03-18T23:28:42.541052+00:00",
+  "config": {
+    "games": 200,
+    "players": 3,
+    "max_turns": 200,
+    "seed": null,
+    "strategies": [],
+    "evaluators": null
+  },
+  "summary": {
+    "avg_turns": 75.58,
+    "avg_time": 0.004060744499875,
+    "total_time": 0.812148899975,
+    "pile_depletion": {
+      "tree": 80,
+      "none": 41,
+      "sword": 44,
+      "claw": 29,
+      "candle": 3,
+      "coin": 1,
+      "wheat": 2
+    },
+    "winners": {
+      "Tie(Alice/Charlie)": 10,
+      "Charlie": 53,
+      "none": 41,
+      "Alice": 39,
+      "Bob": 46,
+      "Tie(Bob/Charlie)": 2,
+      "Tie(Alice/Bob)": 9
+    }
+  },
+  "card_winrates": {
+    "Presence": {
+      "win_rate": 0.398,
+      "in_win": 97,
+      "in_lose": 147,
+      "lift": 0.064,
+      "games": 244
+    },
+    "Land Grab": {
+      "win_rate": 0.484,
+      "in_win": 46,
+      "in_lose": 49,
+      "lift": 0.151,
+      "games": 95
+    },
+    "Scavenge": {
+      "win_rate": 0.312,
+      "in_win": 30,
+      "in_lose": 66,
+      "lift": -0.021,
+      "games": 96
+    },
+    "Kinship": {
+      "win_rate": 0.533,
+      "in_win": 97,
+      "in_lose": 85,
+      "lift": 0.2,
+      "games": 182
+    },
+    "Share the Spoils": {
+      "win_rate": 0.429,
+      "in_win": 33,
+      "in_lose": 44,
+      "lift": 0.095,
+      "games": 77
+    },
+    "Veil Tear": {
+      "win_rate": 0.441,
+      "in_win": 15,
+      "in_lose": 19,
+      "lift": 0.108,
+      "games": 34
+    },
+    "Harvest": {
+      "win_rate": 0.516,
+      "in_win": 94,
+      "in_lose": 88,
+      "lift": 0.183,
+      "games": 182
+    },
+    "Pilgrimage": {
+      "win_rate": 0.551,
+      "in_win": 92,
+      "in_lose": 75,
+      "lift": 0.218,
+      "games": 167
+    },
+    "Floods": {
+      "win_rate": 0.624,
+      "in_win": 83,
+      "in_lose": 50,
+      "lift": 0.291,
+      "games": 133
+    },
+    "Sowing": {
+      "win_rate": 0.537,
+      "in_win": 86,
+      "in_lose": 74,
+      "lift": 0.204,
+      "games": 160
+    },
+    "Gathering": {
+      "win_rate": 0.609,
+      "in_win": 84,
+      "in_lose": 54,
+      "lift": 0.275,
+      "games": 138
+    },
+    "Incite": {
+      "win_rate": 0.505,
+      "in_win": 47,
+      "in_lose": 46,
+      "lift": 0.172,
+      "games": 93
+    },
+    "Eldership": {
+      "win_rate": 0.64,
+      "in_win": 48,
+      "in_lose": 27,
+      "lift": 0.307,
+      "games": 75
+    },
+    "Alms": {
+      "win_rate": 0.558,
+      "in_win": 24,
+      "in_lose": 19,
+      "lift": 0.225,
+      "games": 43
+    },
+    "Worship of the Dawn": {
+      "win_rate": 0.676,
+      "in_win": 50,
+      "in_lose": 24,
+      "lift": 0.342,
+      "games": 74
+    },
+    "Raid": {
+      "win_rate": 0.268,
+      "in_win": 34,
+      "in_lose": 93,
+      "lift": -0.066,
+      "games": 127
+    },
+    "Racketeering": {
+      "win_rate": 0.328,
+      "in_win": 21,
+      "in_lose": 43,
+      "lift": -0.005,
+      "games": 64
+    },
+    "Worship of the Hunt": {
+      "win_rate": 0.391,
+      "in_win": 18,
+      "in_lose": 28,
+      "lift": 0.058,
+      "games": 46
+    },
+    "Hospitality": {
+      "win_rate": 0.508,
+      "in_win": 62,
+      "in_lose": 60,
+      "lift": 0.175,
+      "games": 122
+    },
+    "Zealot": {
+      "win_rate": 0.525,
+      "in_win": 21,
+      "in_lose": 19,
+      "lift": 0.192,
+      "games": 40
+    },
+    "Poach": {
+      "win_rate": 0.363,
+      "in_win": 41,
+      "in_lose": 72,
+      "lift": 0.029,
+      "games": 113
+    },
+    "Vigil": {
+      "win_rate": 0.542,
+      "in_win": 71,
+      "in_lose": 60,
+      "lift": 0.209,
+      "games": 131
+    },
+    "Worship of the Martyr": {
+      "win_rate": 0.565,
+      "in_win": 13,
+      "in_lose": 10,
+      "lift": 0.232,
+      "games": 23
+    },
+    "Rite of Passage": {
+      "win_rate": 0.505,
+      "in_win": 48,
+      "in_lose": 47,
+      "lift": 0.172,
+      "games": 95
+    },
+    "Bog": {
+      "win_rate": 0.656,
+      "in_win": 63,
+      "in_lose": 33,
+      "lift": 0.323,
+      "games": 96
+    },
+    "Culling": {
+      "win_rate": 0.475,
+      "in_win": 29,
+      "in_lose": 32,
+      "lift": 0.142,
+      "games": 61
+    },
+    "Chiefdom": {
+      "win_rate": 0.556,
+      "in_win": 40,
+      "in_lose": 32,
+      "lift": 0.222,
+      "games": 72
+    },
+    "Withered Crop": {
+      "win_rate": 0.566,
+      "in_win": 73,
+      "in_lose": 56,
+      "lift": 0.233,
+      "games": 129
+    },
+    "Uprising": {
+      "win_rate": 0.452,
+      "in_win": 42,
+      "in_lose": 51,
+      "lift": 0.118,
+      "games": 93
+    },
+    "Hunger": {
+      "win_rate": 0.447,
+      "in_win": 67,
+      "in_lose": 83,
+      "lift": 0.113,
+      "games": 150
+    },
+    "Outriders": {
+      "win_rate": 0.48,
+      "in_win": 36,
+      "in_lose": 39,
+      "lift": 0.147,
+      "games": 75
+    },
+    "Forage": {
+      "win_rate": 0.534,
+      "in_win": 70,
+      "in_lose": 61,
+      "lift": 0.201,
+      "games": 131
+    },
+    "Sacred Grove": {
+      "win_rate": 0.702,
+      "in_win": 66,
+      "in_lose": 28,
+      "lift": 0.369,
+      "games": 94
+    },
+    "Worship of the Hearth": {
+      "win_rate": 0.761,
+      "in_win": 67,
+      "in_lose": 21,
+      "lift": 0.428,
+      "games": 88
+    },
+    "Worship of the Dusk": {
+      "win_rate": 0.472,
+      "in_win": 17,
+      "in_lose": 19,
+      "lift": 0.139,
+      "games": 36
+    },
+    "Enforcers": {
+      "win_rate": 0.368,
+      "in_win": 25,
+      "in_lose": 43,
+      "lift": 0.034,
+      "games": 68
+    },
+    "Bear's Den": {
+      "win_rate": 0.628,
+      "in_win": 54,
+      "in_lose": 32,
+      "lift": 0.295,
+      "games": 86
+    },
+    "Ransack": {
+      "win_rate": 0.493,
+      "in_win": 37,
+      "in_lose": 38,
+      "lift": 0.16,
+      "games": 75
+    },
+    "Ivory": {
+      "win_rate": 0.405,
+      "in_win": 30,
+      "in_lose": 44,
+      "lift": 0.072,
+      "games": 74
+    },
+    "Benefaction": {
+      "win_rate": 0.523,
+      "in_win": 23,
+      "in_lose": 21,
+      "lift": 0.189,
+      "games": 44
+    },
+    "Spice Market": {
+      "win_rate": 0.571,
+      "in_win": 4,
+      "in_lose": 3,
+      "lift": 0.238,
+      "games": 7
+    },
+    "Treasure": {
+      "win_rate": 0.481,
+      "in_win": 13,
+      "in_lose": 14,
+      "lift": 0.148,
+      "games": 27
+    },
+    "Prosperity": {
+      "win_rate": 0.538,
+      "in_win": 7,
+      "in_lose": 6,
+      "lift": 0.205,
+      "games": 13
+    },
+    "Embassy": {
+      "win_rate": 0.5,
+      "in_win": 8,
+      "in_lose": 8,
+      "lift": 0.167,
+      "games": 16
+    },
+    "Mine": {
+      "win_rate": 0.583,
+      "in_win": 7,
+      "in_lose": 5,
+      "lift": 0.25,
+      "games": 12
+    },
+    "Commodities": {
+      "win_rate": 0.467,
+      "in_win": 7,
+      "in_lose": 8,
+      "lift": 0.133,
+      "games": 15
+    },
+    "Market": {
+      "win_rate": 0.455,
+      "in_win": 10,
+      "in_lose": 12,
+      "lift": 0.121,
+      "games": 22
+    },
+    "Efficiency": {
+      "win_rate": 0.357,
+      "in_win": 5,
+      "in_lose": 9,
+      "lift": 0.024,
+      "games": 14
+    },
+    "Provisions": {
+      "win_rate": 0.312,
+      "in_win": 5,
+      "in_lose": 11,
+      "lift": -0.021,
+      "games": 16
+    },
+    "Sabbath": {
+      "win_rate": 0.636,
+      "in_win": 35,
+      "in_lose": 20,
+      "lift": 0.303,
+      "games": 55
+    },
+    "Purity": {
+      "win_rate": 0.674,
+      "in_win": 31,
+      "in_lose": 15,
+      "lift": 0.341,
+      "games": 46
+    },
+    "Clergy": {
+      "win_rate": 0.6,
+      "in_win": 33,
+      "in_lose": 22,
+      "lift": 0.267,
+      "games": 55
+    },
+    "Evangelism": {
+      "win_rate": 0.514,
+      "in_win": 19,
+      "in_lose": 18,
+      "lift": 0.18,
+      "games": 37
+    },
+    "Sellsword": {
+      "win_rate": 0.333,
+      "in_win": 4,
+      "in_lose": 8,
+      "lift": 0.0,
+      "games": 12
+    },
+    "Worship of Gold": {
+      "win_rate": 0.714,
+      "in_win": 5,
+      "in_lose": 2,
+      "lift": 0.381,
+      "games": 7
+    },
+    "Flagellation": {
+      "win_rate": 0.6,
+      "in_win": 27,
+      "in_lose": 18,
+      "lift": 0.267,
+      "games": 45
+    },
+    "Protect the Meek": {
+      "win_rate": 0.683,
+      "in_win": 43,
+      "in_lose": 20,
+      "lift": 0.349,
+      "games": 63
+    },
+    "Royal Hunt": {
+      "win_rate": 0.414,
+      "in_win": 29,
+      "in_lose": 41,
+      "lift": 0.081,
+      "games": 70
+    },
+    "Marauders": {
+      "win_rate": 0.321,
+      "in_win": 18,
+      "in_lose": 38,
+      "lift": -0.012,
+      "games": 56
+    },
+    "Ornament": {
+      "win_rate": 0.575,
+      "in_win": 23,
+      "in_lose": 17,
+      "lift": 0.242,
+      "games": 40
+    },
+    "Smuggler": {
+      "win_rate": 0.353,
+      "in_win": 6,
+      "in_lose": 11,
+      "lift": 0.02,
+      "games": 17
+    },
+    "Spoils of War": {
+      "win_rate": 0.341,
+      "in_win": 28,
+      "in_lose": 54,
+      "lift": 0.008,
+      "games": 82
+    },
+    "Tyranny": {
+      "win_rate": 0.481,
+      "in_win": 39,
+      "in_lose": 42,
+      "lift": 0.148,
+      "games": 81
+    },
+    "Blood Offering": {
+      "win_rate": 0.375,
+      "in_win": 15,
+      "in_lose": 25,
+      "lift": 0.042,
+      "games": 40
+    },
+    "Martial Excellence": {
+      "win_rate": 0.574,
+      "in_win": 27,
+      "in_lose": 20,
+      "lift": 0.241,
+      "games": 47
+    },
+    "Regrowth": {
+      "win_rate": 0.56,
+      "in_win": 42,
+      "in_lose": 33,
+      "lift": 0.227,
+      "games": 75
+    },
+    "Stewardship": {
+      "win_rate": 0.636,
+      "in_win": 14,
+      "in_lose": 8,
+      "lift": 0.303,
+      "games": 22
+    },
+    "Worship of War": {
+      "win_rate": 0.341,
+      "in_win": 14,
+      "in_lose": 27,
+      "lift": 0.008,
+      "games": 41
+    },
+    "Famine": {
+      "win_rate": 0.6,
+      "in_win": 15,
+      "in_lose": 10,
+      "lift": 0.267,
+      "games": 25
+    },
+    "Maypole": {
+      "win_rate": 0.667,
+      "in_win": 12,
+      "in_lose": 6,
+      "lift": 0.333,
+      "games": 18
+    },
+    "Granary": {
+      "win_rate": 0.571,
+      "in_win": 12,
+      "in_lose": 9,
+      "lift": 0.238,
+      "games": 21
+    },
+    "Warband": {
+      "win_rate": 0.522,
+      "in_win": 36,
+      "in_lose": 33,
+      "lift": 0.188,
+      "games": 69
+    },
+    "Worship of the Relic": {
+      "win_rate": 0.636,
+      "in_win": 14,
+      "in_lose": 8,
+      "lift": 0.303,
+      "games": 22
+    },
+    "Worship of the Scripture": {
+      "win_rate": 0.55,
+      "in_win": 11,
+      "in_lose": 9,
+      "lift": 0.217,
+      "games": 20
+    },
+    "Swindle": {
+      "win_rate": 0.462,
+      "in_win": 6,
+      "in_lose": 7,
+      "lift": 0.128,
+      "games": 13
+    },
+    "Plough": {
+      "win_rate": 0.714,
+      "in_win": 15,
+      "in_lose": 6,
+      "lift": 0.381,
+      "games": 21
+    },
+    "Militia": {
+      "win_rate": 0.6,
+      "in_win": 6,
+      "in_lose": 4,
+      "lift": 0.267,
+      "games": 10
+    },
+    "Tavern": {
+      "win_rate": 0.684,
+      "in_win": 13,
+      "in_lose": 6,
+      "lift": 0.351,
+      "games": 19
+    },
+    "Well": {
+      "win_rate": 0.6,
+      "in_win": 9,
+      "in_lose": 6,
+      "lift": 0.267,
+      "games": 15
+    },
+    "Orchard": {
+      "win_rate": 0.731,
+      "in_win": 19,
+      "in_lose": 7,
+      "lift": 0.397,
+      "games": 26
+    },
+    "Village Gossip": {
+      "win_rate": 0.929,
+      "in_win": 13,
+      "in_lose": 1,
+      "lift": 0.595,
+      "games": 14
+    },
+    "Apprenticeship": {
+      "win_rate": 0.667,
+      "in_win": 6,
+      "in_lose": 3,
+      "lift": 0.333,
+      "games": 9
+    },
+    "Mill": {
+      "win_rate": 0.667,
+      "in_win": 8,
+      "in_lose": 4,
+      "lift": 0.333,
+      "games": 12
+    },
+    "Blood Feud": {
+      "win_rate": 0.311,
+      "in_win": 14,
+      "in_lose": 31,
+      "lift": -0.022,
+      "games": 45
+    },
+    "Worship of the Bread": {
+      "win_rate": 0.545,
+      "in_win": 6,
+      "in_lose": 5,
+      "lift": 0.212,
+      "games": 11
+    },
+    "Animal Husbandry": {
+      "win_rate": 0.688,
+      "in_win": 11,
+      "in_lose": 5,
+      "lift": 0.354,
+      "games": 16
+    },
+    "Feed the Commoners": {
+      "win_rate": 0.571,
+      "in_win": 4,
+      "in_lose": 3,
+      "lift": 0.238,
+      "games": 7
+    },
+    "Irrigation": {
+      "win_rate": 0.588,
+      "in_win": 10,
+      "in_lose": 7,
+      "lift": 0.255,
+      "games": 17
+    },
+    "Penance": {
+      "win_rate": 0.429,
+      "in_win": 9,
+      "in_lose": 12,
+      "lift": 0.095,
+      "games": 21
+    }
+  },
+  "order_stats": {
+    "Tree Zone": {
+      "total": 3546,
+      "per_game": 17.73,
+      "in_wins": 1776,
+      "win_share": 0.501
+    },
+    "Claw Zone": {
+      "total": 1250,
+      "per_game": 6.25,
+      "in_wins": 306,
+      "win_share": 0.245
+    },
+    "Forage": {
+      "total": 187,
+      "per_game": 0.94,
+      "in_wins": 37,
+      "win_share": 0.198
+    },
+    "Warband": {
+      "total": 165,
+      "per_game": 0.82,
+      "in_wins": 60,
+      "win_share": 0.364
+    },
+    "Poach": {
+      "total": 344,
+      "per_game": 1.72,
+      "in_wins": 66,
+      "win_share": 0.192
+    },
+    "Racketeering": {
+      "total": 190,
+      "per_game": 0.95,
+      "in_wins": 48,
+      "win_share": 0.253
+    },
+    "Coin Zone": {
+      "total": 188,
+      "per_game": 0.94,
+      "in_wins": 43,
+      "win_share": 0.229
+    },
+    "Ivory": {
+      "total": 255,
+      "per_game": 1.27,
+      "in_wins": 74,
+      "win_share": 0.29
+    },
+    "Pilgrimage": {
+      "total": 289,
+      "per_game": 1.45,
+      "in_wins": 113,
+      "win_share": 0.391
+    },
+    "Spice Market": {
+      "total": 11,
+      "per_game": 0.06,
+      "in_wins": 2,
+      "win_share": 0.182
+    },
+    "Outriders": {
+      "total": 191,
+      "per_game": 0.95,
+      "in_wins": 73,
+      "win_share": 0.382
+    },
+    "Sowing": {
+      "total": 297,
+      "per_game": 1.49,
+      "in_wins": 87,
+      "win_share": 0.293
+    },
+    "Swindle": {
+      "total": 7,
+      "per_game": 0.04,
+      "in_wins": 2,
+      "win_share": 0.286
+    },
+    "Land Grab": {
+      "total": 302,
+      "per_game": 1.51,
+      "in_wins": 75,
+      "win_share": 0.248
+    },
+    "Evangelism": {
+      "total": 38,
+      "per_game": 0.19,
+      "in_wins": 12,
+      "win_share": 0.316
+    },
+    "Hospitality": {
+      "total": 234,
+      "per_game": 1.17,
+      "in_wins": 52,
+      "win_share": 0.222
+    },
+    "Sacred Grove": {
+      "total": 107,
+      "per_game": 0.54,
+      "in_wins": 30,
+      "win_share": 0.28
+    },
+    "Tyranny": {
+      "total": 159,
+      "per_game": 0.8,
+      "in_wins": 55,
+      "win_share": 0.346
+    },
+    "Ransack": {
+      "total": 171,
+      "per_game": 0.85,
+      "in_wins": 51,
+      "win_share": 0.298
+    },
+    "Purity": {
+      "total": 50,
+      "per_game": 0.25,
+      "in_wins": 16,
+      "win_share": 0.32
+    },
+    "Ornament": {
+      "total": 44,
+      "per_game": 0.22,
+      "in_wins": 9,
+      "win_share": 0.205
+    },
+    "Sword Zone": {
+      "total": 155,
+      "per_game": 0.78,
+      "in_wins": 97,
+      "win_share": 0.626
+    },
+    "Wheat Zone": {
+      "total": 222,
+      "per_game": 1.11,
+      "in_wins": 129,
+      "win_share": 0.581
+    },
+    "Withered Crop": {
+      "total": 197,
+      "per_game": 0.98,
+      "in_wins": 60,
+      "win_share": 0.305
+    },
+    "Martial Excellence": {
+      "total": 109,
+      "per_game": 0.55,
+      "in_wins": 46,
+      "win_share": 0.422
+    },
+    "Blood Offering": {
+      "total": 92,
+      "per_game": 0.46,
+      "in_wins": 32,
+      "win_share": 0.348
+    },
+    "Militia": {
+      "total": 10,
+      "per_game": 0.05,
+      "in_wins": 7,
+      "win_share": 0.7
+    },
+    "Well": {
+      "total": 25,
+      "per_game": 0.12,
+      "in_wins": 3,
+      "win_share": 0.12
+    },
+    "Veil Tear": {
+      "total": 104,
+      "per_game": 0.52,
+      "in_wins": 23,
+      "win_share": 0.221
+    },
+    "Benefaction": {
+      "total": 44,
+      "per_game": 0.22,
+      "in_wins": 13,
+      "win_share": 0.295
+    },
+    "Candle Zone": {
+      "total": 61,
+      "per_game": 0.3,
+      "in_wins": 20,
+      "win_share": 0.328
+    },
+    "Clergy": {
+      "total": 72,
+      "per_game": 0.36,
+      "in_wins": 17,
+      "win_share": 0.236
+    },
+    "Plough": {
+      "total": 10,
+      "per_game": 0.05,
+      "in_wins": 7,
+      "win_share": 0.7
+    },
+    "Apprenticeship": {
+      "total": 8,
+      "per_game": 0.04,
+      "in_wins": 5,
+      "win_share": 0.625
+    },
+    "Granary": {
+      "total": 3,
+      "per_game": 0.01,
+      "in_wins": 2,
+      "win_share": 0.667
+    },
+    "Mill": {
+      "total": 11,
+      "per_game": 0.06,
+      "in_wins": 2,
+      "win_share": 0.182
+    },
+    "Royal Hunt": {
+      "total": 31,
+      "per_game": 0.15,
+      "in_wins": 5,
+      "win_share": 0.161
+    },
+    "Market": {
+      "total": 11,
+      "per_game": 0.06,
+      "in_wins": 3,
+      "win_share": 0.273
+    },
+    "Orchard": {
+      "total": 13,
+      "per_game": 0.07,
+      "in_wins": 6,
+      "win_share": 0.462
+    },
+    "Mine": {
+      "total": 18,
+      "per_game": 0.09,
+      "in_wins": 5,
+      "win_share": 0.278
+    },
+    "Animal Husbandry": {
+      "total": 9,
+      "per_game": 0.04,
+      "in_wins": 6,
+      "win_share": 0.667
+    },
+    "Efficiency": {
+      "total": 10,
+      "per_game": 0.05,
+      "in_wins": 3,
+      "win_share": 0.3
+    }
+  },
+  "strategy_winrates": {
+    "RandomStrategy": {
+      "wins": 138,
+      "losses": 276,
+      "ties": 186,
+      "win_rate": 0.333,
+      "decisive": 414
+    },
+    "by_win_condition": {
+      "tree": {
+        "RandomStrategy": {
+          "wins": 71,
+          "games": 240,
+          "win_rate": 0.296
+        }
+      },
+      "sword": {
+        "RandomStrategy": {
+          "wins": 33,
+          "games": 132,
+          "win_rate": 0.25
+        }
+      },
+      "claw": {
+        "RandomStrategy": {
+          "wins": 28,
+          "games": 87,
+          "win_rate": 0.322
+        }
+      },
+      "candle": {
+        "RandomStrategy": {
+          "wins": 3,
+          "games": 9,
+          "win_rate": 0.333
+        }
+      },
+      "coin": {
+        "RandomStrategy": {
+          "wins": 1,
+          "games": 3,
+          "win_rate": 0.333
+        }
+      },
+      "wheat": {
+        "RandomStrategy": {
+          "wins": 2,
+          "games": 6,
+          "win_rate": 0.333
+        }
+      }
+    }
+  },
+  "events": {
+    "Order": {
+      "total": 9264,
+      "per_game": 46.3,
+      "cancelled": 24,
+      "cancel_rate": 0.003,
+      "avg_responders": 0.0
+    },
+    "Dawn": {
+      "total": 15116,
+      "per_game": 75.6,
+      "cancelled": 253,
+      "cancel_rate": 0.017,
+      "avg_responders": 0.0
+    },
+    "Harvest": {
+      "total": 1964,
+      "per_game": 9.8,
+      "cancelled": 0,
+      "cancel_rate": 0.0,
+      "avg_responders": 2.7
+    },
+    "Feast": {
+      "total": 411,
+      "per_game": 2.1,
+      "cancelled": 0,
+      "cancel_rate": 0.0,
+      "avg_responders": 0.76
+    },
+    "Brawl": {
+      "total": 2571,
+      "per_game": 12.9,
+      "cancelled": 279,
+      "cancel_rate": 0.109,
+      "avg_responders": 0.87
+    },
+    "Rumour": {
+      "total": 618,
+      "per_game": 3.1,
+      "cancelled": 0,
+      "cancel_rate": 0.0,
+      "avg_responders": 0.26
+    },
+    "Rite": {
+      "total": 1139,
+      "per_game": 5.7,
+      "cancelled": 84,
+      "cancel_rate": 0.074,
+      "avg_responders": 1.52
+    }
+  },
+  "game_length": {
+    "total_games": 200,
+    "avg_turns": 75.6,
+    "median_turns": 43,
+    "min_turns": 11,
+    "max_turns": 200,
+    "avg_time": 0.0041,
+    "total_time": 0.811,
+    "timeouts": 41,
+    "by_pile": {
+      "tree": {
+        "games": 80,
+        "avg_turns": 39.6,
+        "median_turns": 33,
+        "min_turns": 16,
+        "max_turns": 142,
+        "avg_time": 0.0048
+      },
+      "timeout": {
+        "games": 41,
+        "avg_turns": 200.0,
+        "median_turns": 200,
+        "min_turns": 200,
+        "max_turns": 200,
+        "avg_time": 0.0038
+      },
+      "sword": {
+        "games": 44,
+        "avg_turns": 44.5,
+        "median_turns": 30,
+        "min_turns": 11,
+        "max_turns": 160,
+        "avg_time": 0.0027
+      },
+      "claw": {
+        "games": 29,
+        "avg_turns": 46.3,
+        "median_turns": 41,
+        "min_turns": 24,
+        "max_turns": 147,
+        "avg_time": 0.004
+      },
+      "candle": {
+        "games": 3,
+        "avg_turns": 77.7,
+        "median_turns": 53,
+        "min_turns": 52,
+        "max_turns": 128,
+        "avg_time": 0.0051
+      },
+      "coin": {
+        "games": 1,
+        "avg_turns": 70.0,
+        "median_turns": 70,
+        "min_turns": 70,
+        "max_turns": 70,
+        "avg_time": 0.0058
+      },
+      "wheat": {
+        "games": 2,
+        "avg_turns": 73.5,
+        "median_turns": 75,
+        "min_turns": 72,
+        "max_turns": 75,
+        "avg_time": 0.0085
+      }
+    }
+  }
+}
