@@ -86,13 +86,13 @@ On Order — you may move 1 [Mob] to the Domain with the most cards. Brawl there
 
 ```
 🐾  RAID
-[Unit] [Mob] [Discontent]
+[Discontent] [Mob] [Unit]
 On Brawl — discard 1 card from your Domain. If the active player is someone else, they get the card instead.
 ```
 
 ```
 🐾  SCAVENGE
-[Unit] [Mob] [Discontent]
+[Discontent] [Mob] [Unit]
 On Brawl — if the active player is someone else, they take 1 card from your discard.
 ```
 
@@ -103,7 +103,7 @@ On Order — discard 1 card from your Domain. Rite in your Domain.
 
 ```
 🐾  POACH
-[Unit] [Mob] [Hunt] [Discontent]
+[Discontent] [Hunt] [Mob] [Unit]
 On Order — Feast in your Domain. Draw 1 from Claw. Hunt — blocked if another player has [Hunt].
 ```
 
@@ -149,13 +149,13 @@ On Order — choose a player. They offer you 1 card. Take it, or refuse and Braw
 
 ```
 🐾  TYRANNY
-[Trophy] [Discontent]
+[Discontent] [Trophy]
 On Order — draw from Claw equal to your [Discontent] count. Brawl in your Domain.
 ```
 
 ```
 🐾  MARAUDERS
-[Unit] [Mob] [Discontent]
+[Discontent] [Mob] [Unit]
 On Feast — discard Marauders. Draw 1 from Claw.
 ```
 
@@ -166,7 +166,7 @@ On Feast — draw 1 from Claw.
 
 ```
 🐾  MARTIAL EXCELLENCE
-[Trophy] [Chivalry]
+[Chivalry] [Trophy]
 On Order — Order on the Sword zone. Requires another [Trophy] in your Domain.
 ```
 
@@ -219,26 +219,26 @@ On Order — discard 1 card from your Domain. Draw 2 from Claw. Take 1 from the 
 
 ```
 🐾  SPOILS OF WAR
-[Trophy] [Mob]
+[Mob] [Trophy]
 On Dawn — place Spoils of War in another player's Domain.
 On Brawl — moves to the active player. They draw from Claw and Tree equal to their [Trophy] count.
 ```
 
 ```
 🐾  VEIL TEAR
-[Spiritual] [Discontent]
+[Discontent] [Spiritual]
 On Order — remove any number of cards from your discard from the game. Return that many [Spiritual] cards from any discard to their owner's Domain. Rite in every Domain that many times. Discard Veil Tear.
 ```
 
 ```
 🐾  BLOOD FEUD
-[Mob] [Discontent]
+[Discontent] [Mob]
 On Brawl — draw 2 from Claw. Move up to 2 [Mob] to the active player. Discard Blood Feud, then Brawl in the active player's Domain.
 ```
 
 ```
 🐾  ENFORCERS
-[Mob] [Discontent]
+[Discontent] [Mob]
 On Brawl — both you and the active player draw 2 from Claw.
 ```
 
@@ -383,7 +383,7 @@ On Rumour — return 1 [Mob] from your discard to your Domain.
 
 ```
 🌾  ENCLOSURE
-[Labour] [Amenity]
+[Amenity] [Labour]
 On Order — take any 1 card from the Village. Put 1 card from your Domain back in its place.
 ```
 
@@ -401,13 +401,13 @@ On Order — discard a card from your Domain. If you do, Harvest in your Domain.
 
 ```
 🌾  FOLK HERO
-[Unit] [Trophy]
+[Trophy] [Unit]
 On Dawn — move 1 [Mob], [Labour], or [Amenity] card between domains that have Wheat cards.
 ```
 
 ```
 🌾  WOLF PACK
-[Mob] [Nature] [Discontent]
+[Discontent] [Mob] [Nature]
 On Harvest — If you triggered it: move Wolf Pack to another player's Domain. Otherwise: discard 2 from Domain, draw 2 Claw.
 ```
 
@@ -419,7 +419,7 @@ On Harvest — Order on the Tree zone or Wheat zone (your choice).
 
 ```
 🌾  ORCHARD
-[Nature] [Labour]
+[Labour] [Nature]
 On Harvest — draw 1 from Tree. Feast in your Domain.
 ```
 
@@ -444,7 +444,7 @@ On Rite — Order on the Wheat zone.
 
 ```
 🌾  TAX COLLECTORS
-[Mob] [Discontent]
+[Discontent] [Mob]
 On Order (requires 3+ [Labour]) — Order on the Coin zone. Rumour in your Domain.
 ```
 
@@ -472,7 +472,7 @@ On Order — give 1+ cards from your Domain to another player. They decide: if t
 
 ```
 🪙  TREASURE
-[Trophy] [Amenity] [Wealth]
+[Amenity] [Trophy] [Wealth]
 No effect — pure tags.
 ```
 
@@ -575,19 +575,19 @@ On Rite — the active player takes 1 card from the Wares.
 
 ```
 🕯️  WORSHIP OF THE SCRIPTURE
-[Spiritual] [Religion]
+[Religion] [Spiritual]
 On Rite — the active player peeks at Candle cards (scales with [Spiritual]). Keep 1, remove the rest from the game.
 ```
 
 ```
 🕯️  WORSHIP OF THE RELIC
-[Spiritual] [Religion]
+[Religion] [Spiritual]
 On Rite — peek at cards from a chosen pile (scales with [Spiritual]). May replace the Revelation. Return rest to top.
 ```
 
 ```
 🕯️  WORSHIP OF THE MARTYR
-[Spiritual] [Religion]
+[Religion] [Spiritual]
 On Rite — the active player may discard cards. All other players must discard equal to [Spiritual] scaling.
 ```
 
@@ -605,7 +605,7 @@ On Dawn — Rite in your Domain.
 
 ```
 🕯️  ZEALOT
-[Spiritual] [Religion] [Mob]
+[Mob] [Religion] [Spiritual]
 On Brawl — cancel if you have [Religion]; else discard 1 Domain card.
 On Rite — active player may move Zealot to another Domain.
 ```
@@ -636,7 +636,7 @@ On Rite — Brawl in your Domain.
 
 ```
 🕯️  PENANCE
-[Spiritual] [Religion]
+[Religion] [Spiritual]
 On Dawn — discard 2 cards from your Domain. You may discard Penance.
 ```
 
@@ -660,36 +660,36 @@ On Brawl — Order on the Sword zone.
 
 ```
 ⚔️  ROYAL HUNT
-[Unit] [Trophy] [Hunt]
+[Hunt] [Trophy] [Unit]
 On Order — Feast in your Domain twice. Draw 1 from Claw. Hunt — blocked if another player has [Hunt].
 ```
 
 ```
 ⚔️  KNIGHT OF THE GOLD COAT
-[Unit] [Chivalry] [Wealth]
+[Chivalry] [Unit] [Wealth]
 On Rumour, Brawl — discard a [Unit] anywhere. Knight moves to that Domain.
 ```
 
 ```
 ⚔️  KNIGHT OF THE IRON CROWN
-[Unit] [Chivalry] [Trophy]
+[Chivalry] [Trophy] [Unit]
 On Dawn — discard a [Unit] anywhere. Knight moves to that Domain.
 ```
 
 ```
 ⚔️  KNIGHT OF THE GREEN MANTLE
-[Unit] [Chivalry] [Nature]
+[Chivalry] [Nature] [Unit]
 On Harvest — discard a [Unit] anywhere. Knight moves to that Domain.
 ```
 
 ```
 ⚔️  KNIGHT OF THE WHITE SHIELD
-[Unit] [Chivalry] [Amenity]
+[Amenity] [Chivalry] [Unit]
 On Feast — discard a [Unit] anywhere. Knight moves to that Domain.
 ```
 
 ```
 ⚔️  KNIGHT OF THE HOLY CROSS
-[Unit] [Chivalry] [Religion]
+[Chivalry] [Religion] [Unit]
 On Rite — discard a [Unit] anywhere. Knight moves to that Domain.
 ```

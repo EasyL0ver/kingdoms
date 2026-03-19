@@ -326,7 +326,7 @@ def render_card(card: dict) -> str:
     tags_row = ""
     if not is_zone:
         tags_inner = "".join(
-            f'<span class="tag tag-{t.lower()}">{t}</span>' for t in tags)
+            f'<span class="tag tag-{t.lower()}">{t}</span>' for t in sorted(tags))
         tags_row = f'<div class="card-tags">{tags_inner}</div>'
 
     if is_zone:
@@ -461,7 +461,7 @@ def _md_card_block(name: str, tags: list[str], text: str, icon: str,
                    reminder: str = "") -> str:
     """Return a fenced code block for a single card entry."""
     header = f"{icon}  {name.upper()}"
-    tag_line = " ".join(f"[{t}]" for t in tags)
+    tag_line = " ".join(f"[{t}]" for t in sorted(tags))
     lines = [header]
     if tag_line:
         lines.append(tag_line)
