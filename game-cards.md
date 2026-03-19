@@ -187,7 +187,7 @@ On Order ([Land] in the Season) — take all [Land] cards from the Season to you
 ```
 🐾  RITE OF PASSAGE
 [Discontent]
-On Brawl — draw 1 card from the Tree deck.
+On Brawl — draw a card from the Tree deck.
 ```
 
 ```
