@@ -552,8 +552,7 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Order — Order on the Coin zone. Rumour in your Domain.",
-      "reminder": "Requires 3+ [Labour]."
+      "text": "On Order — requires 3+ [Labour]. Order on the Coin zone. Rumour in your Domain."
     },
     {
       "name": "Lookout",
@@ -712,8 +711,7 @@
         "Religion"
       ],
       "count": 1,
-      "text": "On Rite — the active player peeks at Candle cards. Keep 1, remove the rest from the game.",
-      "reminder": "Scales with [Spiritual]."
+      "text": "On Rite — the active player peeks at Candle cards, scales with [Spiritual]. Keep 1, remove the rest from the game."
     },
     {
       "name": "Worship of the Relic",
@@ -722,8 +720,7 @@
         "Religion"
       ],
       "count": 1,
-      "text": "On Rite — peek at cards from a chosen pile. May replace the Revelation. Return rest to top.",
-      "reminder": "Scales with [Spiritual]."
+      "text": "On Rite — peek at cards from a chosen pile, scales with [Spiritual]. May replace the Revelation. Return rest to top."
     },
     {
       "name": "Worship of the Martyr",
@@ -740,8 +737,7 @@
         "Religion"
       ],
       "count": 3,
-      "text": "On Order — Order on the Candle zone. Peek at Candle cards. Keep 1, may set 1 as Revelation, remove the rest from the game.",
-      "reminder": "1 card per player with [Religion]."
+      "text": "On Order — Order on the Candle zone. Peek at Candle cards, 1 per player with [Religion]. Keep 1, may set 1 as Revelation, remove the rest from the game."
     },
     {
       "name": "Sabbath",
