@@ -343,7 +343,7 @@ def render_card(card: dict) -> str:
     elif text:
         body_html = f'<div class="card-body">{bold_keywords(text)}</div>'
     else:
-        body_html = '<div class="card-body empty">— no effect —</div>'
+        body_html = '<div class="card-body empty"></div>'
 
     reminder_html = ""
     if reminder:
