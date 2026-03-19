@@ -377,10 +377,23 @@ def esc(s: str) -> str:
 
 import re
 
+EVENT_EMOJIS = {
+    "On Dawn": "☀️",
+    "On Order": "🎯",
+    "On Brawl": "⚔️",
+    "On Rite": "🕯️",
+    "On Feast": "🍖",
+    "On Rumour": "👂",
+    "On Harvest": "🌱",
+}
+
+_EVENT_KEYWORD = re.compile(
+    r'\b(On Dawn|On Order|On Brawl|On Rite|On Feast|On Harvest|On Rumour)\b'
+)
+
 _BOLD_KEYWORDS = re.compile(
     r'\b('
-    r'On Order|On Dawn|On Brawl|On Rite|On Feast|On Harvest|On Rumour'
-    r'|Brawl|Rite|Feast|Harvest|Rumour|Order'
+    r'Brawl|Rite|Feast|Harvest|Rumour|Order'
     r'|Hunt|Discard|Domain|Season|Fields|Wares|Opportunities|Revelation|Tourney'
     r'|Requires'
     r')\b'
@@ -394,8 +407,10 @@ _INLINE_TAG = re.compile(
 )
 
 def bold_keywords(text: str) -> str:
-    """Wrap game keywords in <b> tags and color [Tag] refs after HTML-escaping."""
+    """Wrap game keywords in <b> tags, add event emojis, and color [Tag] refs."""
     safe = esc(text)
+    safe = _EVENT_KEYWORD.sub(
+        lambda m: f'<b>{EVENT_EMOJIS[m.group(1)]} {m.group(1)}</b>', safe)
     safe = _BOLD_KEYWORDS.sub(r'<b>\1</b>', safe)
     safe = _INLINE_TAG.sub(
         lambda m: f'<span class="inline-tag inline-tag-{m.group(1).lower()}">[{m.group(1)}]</span>',
