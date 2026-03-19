@@ -260,7 +260,7 @@ On Harvest — Order the Tree zone.
 ```
 🌳  ELDERSHIP
 [Knowledge]
-On Brawl (active player has Kinship) — cancel the Brawl. They draw a card from the Tree deck.
+On Brawl (active player has Kinship) — cancel the Brawl in your Domain. They draw a card from the Tree deck.
 ```
 
 ```
