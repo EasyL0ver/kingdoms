@@ -670,31 +670,31 @@ On Order — Feast in your Domain twice. Draw 1 from Claw. Hunt — blocked if a
 ```
 
 ```
-⚔️  KNIGHT OF THE GOLD COAT
+⚔️  GOLD COAT
 [Chivalry] [Unit] [Wealth]
-On Rumour, Brawl — discard a [Unit] anywhere. Knight moves to that Domain.
+On Rumour, Brawl — discard a [Unit] anywhere. Gold Coat moves to that Domain.
 ```
 
 ```
-⚔️  KNIGHT OF THE IRON CROWN
+⚔️  IRON CROWN
 [Chivalry] [Trophy] [Unit]
-On Dawn — discard a [Unit] anywhere. Knight moves to that Domain.
+On Dawn — discard a [Unit] anywhere. Iron Crown moves to that Domain.
 ```
 
 ```
-⚔️  KNIGHT OF THE GREEN MANTLE
+⚔️  GREEN MANTLE
 [Chivalry] [Nature] [Unit]
-On Harvest — discard a [Unit] anywhere. Knight moves to that Domain.
+On Harvest — discard a [Unit] anywhere. Green Mantle moves to that Domain.
 ```
 
 ```
-⚔️  KNIGHT OF THE WHITE SHIELD
+⚔️  WHITE SHIELD
 [Amenity] [Chivalry] [Unit]
-On Feast — discard a [Unit] anywhere. Knight moves to that Domain.
+On Feast — discard a [Unit] anywhere. White Shield moves to that Domain.
 ```
 
 ```
-⚔️  KNIGHT OF THE HOLY CROSS
+⚔️  HOLY CROSS
 [Chivalry] [Religion] [Unit]
-On Rite — discard a [Unit] anywhere. Knight moves to that Domain.
+On Rite — discard a [Unit] anywhere. Holy Cross moves to that Domain.
 ```

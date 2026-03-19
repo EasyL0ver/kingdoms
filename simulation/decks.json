@@ -241,54 +241,54 @@
       "text": "On Order — Feast in your Domain twice. Draw 1 from Claw. Hunt — blocked if another player has [Hunt]."
     },
     {
-      "name": "Knight of the Gold Coat",
+      "name": "Gold Coat",
       "tags": [
         "Unit",
         "Chivalry",
         "Wealth"
       ],
       "count": 2,
-      "text": "On Rumour, Brawl — discard a [Unit] anywhere. Knight moves to that Domain."
+      "text": "On Rumour, Brawl — discard a [Unit] anywhere. Gold Coat moves to that Domain."
     },
     {
-      "name": "Knight of the Iron Crown",
+      "name": "Iron Crown",
       "tags": [
         "Unit",
         "Chivalry",
         "Trophy"
       ],
       "count": 2,
-      "text": "On Dawn — discard a [Unit] anywhere. Knight moves to that Domain."
+      "text": "On Dawn — discard a [Unit] anywhere. Iron Crown moves to that Domain."
     },
     {
-      "name": "Knight of the Green Mantle",
+      "name": "Green Mantle",
       "tags": [
         "Unit",
         "Chivalry",
         "Nature"
       ],
       "count": 2,
-      "text": "On Harvest — discard a [Unit] anywhere. Knight moves to that Domain."
+      "text": "On Harvest — discard a [Unit] anywhere. Green Mantle moves to that Domain."
     },
     {
-      "name": "Knight of the White Shield",
+      "name": "White Shield",
       "tags": [
         "Unit",
         "Chivalry",
         "Amenity"
       ],
       "count": 2,
-      "text": "On Feast — discard a [Unit] anywhere. Knight moves to that Domain."
+      "text": "On Feast — discard a [Unit] anywhere. White Shield moves to that Domain."
     },
     {
-      "name": "Knight of the Holy Cross",
+      "name": "Holy Cross",
       "tags": [
         "Unit",
         "Chivalry",
         "Religion"
       ],
       "count": 2,
-      "text": "On Rite — discard a [Unit] anywhere. Knight moves to that Domain."
+      "text": "On Rite — discard a [Unit] anywhere. Holy Cross moves to that Domain."
     }
   ],
   "tree": [
