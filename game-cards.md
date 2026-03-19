@@ -311,7 +311,7 @@ On Order (Reaping card in your discard) — choose one: • Order the Wheat zone
 
 ```
 🌳  VIGIL
-On Harvest — for each player with Kinship, return 1 card from your discard to your Domain.
+On Harvest — for each player with Kinship, return a card from your discard to your Domain.
 ```
 
 ```
