@@ -372,7 +372,7 @@ On Feast — you may return 1 [Discontent] from your Domain to top of the Claw d
 🌾  MILITIA
 [Unit]
 On Rumour — discard 1 [Mob] from your Domain.
-On Brawl — discard Militia to cancel the Brawl your Domain.
+On Brawl — discard Militia to cancel the Brawl in your Domain.
 ```
 
 ```
