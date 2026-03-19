@@ -160,6 +160,7 @@ body {
   gap: 1.5mm;
   min-height: 9mm;
   border-bottom: 0.5mm solid #000;
+  white-space: nowrap;
 }
 
 .card-header .icon {
@@ -292,8 +293,6 @@ def render_card(card: dict) -> str:
     tags_row = ""
     if not is_zone:
         tags_inner = "".join(f'<span class="tag">{t}</span>' for t in tags)
-        if not tags_inner:
-            tags_inner = '<span style="visibility:hidden;font-size:5pt">&nbsp;</span>'
         tags_row = f'<div class="card-tags">{tags_inner}</div>'
 
     if is_zone:
