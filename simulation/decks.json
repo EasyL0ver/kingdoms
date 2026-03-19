@@ -438,7 +438,7 @@
         "Amenity"
       ],
       "count": 2,
-      "text": "On Feast — you may return 1 [Discontent] from your Domain to top of Claw deck. You may return 1 Claw card from your discard to top of Claw deck."
+      "text": "On Feast — you may return 1 [Discontent] from your Domain to top of the Claw deck. You may return 1 Claw card from your discard to top of the Claw deck."
     },
     {
       "name": "Militia",
@@ -564,7 +564,7 @@
       "name": "Tidings",
       "tags": [],
       "count": 2,
-      "text": "On Rumour — choose one, then Discard Tidings. • *Panic* — draw 2 cards from the Claw deck. • *Fortify* — return 1 [Discontent] to the Claw deck."
+      "text": "On Rumour — choose one, then Discard Tidings. • *Panic* — draw 2 cards from the Claw deck. • *Fortify* — return 1 [Discontent] to top of the Claw deck."
     },
     {
       "name": "Pilgrimage",
@@ -763,7 +763,7 @@
         "Religion"
       ],
       "count": 2,
-      "text": "On Feast — refill 1 Field. Return 1 [Discontent] to the Claw deck."
+      "text": "On Feast — refill 1 Field. Return 1 [Discontent] to top of the Claw deck."
     },
     {
       "name": "Evangelism",

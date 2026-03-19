@@ -365,7 +365,7 @@ On Order — choose one: • Order the Wheat zone. • Order the Coin zone. • 
 ```
 🌾  TAVERN
 [Amenity]
-On Feast — you may return 1 [Discontent] from your Domain to top of Claw deck. You may return 1 Claw card from your discard to top of Claw deck.
+On Feast — you may return 1 [Discontent] from your Domain to top of the Claw deck. You may return 1 Claw card from your discard to top of the Claw deck.
 ```
 
 ```
@@ -457,7 +457,7 @@ On Dawn — if you have [Discontent], Rumour your Domain.
 
 ```
 🌾  TIDINGS
-On Rumour — choose one, then Discard Tidings. • *Panic* — draw 2 cards from the Claw deck. • *Fortify* — return 1 [Discontent] to the Claw deck.
+On Rumour — choose one, then Discard Tidings. • *Panic* — draw 2 cards from the Claw deck. • *Fortify* — return 1 [Discontent] to top of the Claw deck.
 ```
 
 ```
@@ -618,7 +618,7 @@ On Rite — active player may move Zealot to another Domain.
 ```
 🕯️  ALMS
 [Religion]
-On Feast — refill 1 Field. Return 1 [Discontent] to the Claw deck.
+On Feast — refill 1 Field. Return 1 [Discontent] to top of the Claw deck.
 ```
 
 ```
