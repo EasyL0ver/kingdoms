@@ -11,8 +11,8 @@ class Treasure(CardBehavior):
 
 
 @_register
-class Market(CardBehavior):
-    name = 'Market'
+class PawnShop(CardBehavior):
+    name = 'Pawn Shop'
     tags = []
     deck = 'coin'
     def on_order(self, ctx):
@@ -25,19 +25,19 @@ class Market(CardBehavior):
             return False
         if not ctx.engine.strat(ctx.player).resolve(
                 ctx.state, ctx.player, [True, False],
-                DecisionContext(event="Rumour", source="Market", intent=Intent.OPTION)):
+                DecisionContext(event="Rumour", source="Pawn Shop", intent=Intent.OPTION)):
             return False
         to_trade = ctx.engine.strat(ctx.player).resolve(
             ctx.state, ctx.player, list(ctx.player.domain),
-            DecisionContext(event="Rumour", source="Market", intent=Intent.DISCARD))
+            DecisionContext(event="Rumour", source="Pawn Shop", intent=Intent.DISCARD))
         ctx.player.remove_from_domain(to_trade)
         ctx.state.wares.append(to_trade)
         pick = ctx.engine.strat(ctx.player).resolve(
             ctx.state, ctx.player, list(ctx.state.wares),
-            DecisionContext(event="Rumour", source="Market", intent=Intent.GAIN))
+            DecisionContext(event="Rumour", source="Pawn Shop", intent=Intent.GAIN))
         ctx.state.wares.remove(pick)
         ctx.player.add_to_domain(pick, ctx.state)
-        ctx.state.log(f"  → Market: {ctx.player.name} trades {to_trade.name} for {pick.name}")
+        ctx.state.log(f"  → Pawn Shop: {ctx.player.name} trades {to_trade.name} for {pick.name}")
         return True
 
 
@@ -47,23 +47,20 @@ class Smuggler(CardBehavior):
     tags = ['Mob']
     deck = 'coin'
     def on_brawl(self, ctx):
-        moveable = [c for c in ctx.player.domain if c is not ctx.card]
-        if not moveable:
+        if not ctx.state.wares or ctx.active_player is None:
             return False
-        victim = ctx.engine.strat(ctx.player).resolve(
-            ctx.state, ctx.player, moveable,
+        # Controller picks which Ware the brawl starter gets
+        pick = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, list(ctx.state.wares),
             DecisionContext(event="Brawl", source="Smuggler", intent=Intent.DISCARD))
-        ctx.player.remove_from_domain(victim)
-        ctx.state.wares.append(victim)
-        ctx.state.log(f"  → Smuggler: {victim.name} from {ctx.player.name} goes to Wares")
-        return True
-
-    def on_rumour(self, ctx):
-        if ctx.active_player is None or ctx.active_player is ctx.player:
-            return False
-        ctx.player.remove_from_domain(ctx.card)
-        ctx.active_player.add_to_domain(ctx.card, ctx.state)
-        ctx.state.log(f"  → Smuggler: moves to {ctx.active_player.name}")
+        ctx.state.wares.remove(pick)
+        ctx.active_player.add_to_domain(pick, ctx.state)
+        ctx.state.log(f"  → Smuggler: {ctx.player.name} gives {pick.name} from Wares to {ctx.active_player.name}")
+        # Smuggler moves to brawl starter's domain
+        if ctx.active_player is not ctx.player:
+            ctx.player.remove_from_domain(ctx.card)
+            ctx.active_player.add_to_domain(ctx.card, ctx.state)
+            ctx.state.log(f"  → Smuggler moves to {ctx.active_player.name}")
         return True
 
 
@@ -225,16 +222,117 @@ class Commodities(CardBehavior):
 
 
 @_register
-class Mine(CardBehavior):
-    name = 'Mine'
-    tags = ['Labour']
+class Market(CardBehavior):
+    name = 'Market'
+    tags = []
     deck = 'coin'
     def on_order(self, ctx):
-        if ctx.location != "domain" or ctx.state.pile_remaining("coin") <= 0:
+        if ctx.location != "domain" or not ctx.state.wares:
             return
-        drawn = ctx.engine.draw_and_receive(ctx.player, "coin")
-        if drawn:
-            ctx.state.log(f"  → Mine draws {drawn[0].name} from Coin")
+        # Offer a Ware — buyer picks which one
+        targets = ctx.state.other_players(ctx.player)
+        if not targets:
+            return
+        target = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, list(targets),
+            DecisionContext(event="Order", source="Market", intent=Intent.OPTION))
+        pick = ctx.engine.strat(target).resolve(
+            ctx.state, target, list(ctx.state.wares),
+            DecisionContext(event="Order", source="Market", intent=Intent.GAIN))
+        # Target decides to accept or not
+        accept = ctx.engine.strat(target).resolve(
+            ctx.state, target, [True, False],
+            DecisionContext(event="Order", source="Market", intent=Intent.OPTION))
+        if accept:
+            ctx.state.wares.remove(pick)
+            target.add_to_domain(pick, ctx.state)
+            ctx.state.log(f"  → Market: {target.name} buys {pick.name} from Wares")
+            ctx.engine.order_zone(ctx.player, "coin")
+        else:
+            ctx.state.log(f"  → Market: {target.name} declines")
+
+
+@_register
+class Stockpile(CardBehavior):
+    name = 'Stockpile'
+    tags = []
+    deck = 'coin'
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
+        moveable = [c for c in ctx.player.domain if c is not ctx.card]
+        if not moveable:
+            return
+        pick = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, moveable,
+            DecisionContext(event="Order", source="Stockpile", intent=Intent.DISCARD))
+        ctx.player.remove_from_domain(pick)
+        ctx.state.wares.append(pick)
+        ctx.state.log(f"  → Stockpile: {ctx.player.name} puts {pick.name} into Wares")
+        ctx.engine.order_zone(ctx.player, "coin")
+
+
+@_register
+class Forgery(CardBehavior):
+    name = 'Forgery'
+    tags = ['Discontent']
+    deck = 'coin'
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
+        # Need a coin card in domain to push the forgery
+        has_coin = any(c for c in ctx.player.domain
+                       if c is not ctx.card and c.deck == "coin")
+        if not has_coin:
+            return
+        ctx.player.remove_from_domain(ctx.card)
+        ctx.state.wares.append(ctx.card)
+        ctx.state.log(f"  → Forgery: {ctx.player.name} dumps Forgery into Wares")
+        ctx.engine.order_zone(ctx.player, "coin")
+
+
+@_register
+class Usurer(CardBehavior):
+    name = 'Usurer'
+    tags = []
+    deck = 'coin'
+    def on_order(self, ctx):
+        if ctx.location != "domain":
+            return
+        moveable = [c for c in ctx.player.domain if c is not ctx.card]
+        if not moveable:
+            return
+        pick = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, moveable,
+            DecisionContext(event="Order", source="Usurer", intent=Intent.DISCARD))
+        ctx.player.remove_from_domain(pick)
+        ctx.state.wares.append(pick)
+        ctx.state.log(f"  → Usurer: {ctx.player.name} puts {pick.name} into Wares")
+
+    def on_rumour(self, ctx):
+        ctx.state.log(f"  → Usurer: {ctx.player.name} orders Coin zone on Rumour")
+        ctx.engine.order_zone(ctx.player, "coin")
+        return True
+
+
+@_register
+class Highwaymen(CardBehavior):
+    name = 'Highwaymen'
+    tags = ['Mob']
+    deck = 'coin'
+    def on_brawl(self, ctx):
+        moveable = [c for c in ctx.player.domain if c is not ctx.card]
+        if not moveable or ctx.active_player is None:
+            return False
+        pick = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, moveable,
+            DecisionContext(event="Brawl", source="Highwaymen", intent=Intent.DISCARD))
+        ctx.player.remove_from_domain(pick)
+        ctx.state.wares.append(pick)
+        ctx.state.log(f"  → Highwaymen: {pick.name} goes to Wares")
+        ctx.state.log(f"  → Highwaymen: {ctx.active_player.name} orders Coin zone")
+        ctx.engine.order_zone(ctx.active_player, "coin")
+        return True
 
 
 

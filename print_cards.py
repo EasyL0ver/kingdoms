@@ -201,8 +201,8 @@ CARD_TEXT = {
         "discard 2 instead.",
 
     "Veil Tear":
-        "On Order — exile any number of cards from\n"
-        "your discard. Resurrect that many [Spiritual]\n"
+        "On Order — purge any number of cards from\n"
+        "your discard. Return that many [Spiritual]\n"
         "cards from any discard to their owner's\n"
         "Domain. Trigger that many Rites.\n"
         "Discard Veil Tear.",
@@ -265,7 +265,7 @@ CARD_TEXT = {
         "They may Order 1 card in yours.",
 
     "Bog":
-        "On Rumour — destroy 1 card from the Season.",
+        "On Rumour — swallow 1 card from the Season.",
 
     "Bear's Den":
         "On Feast — draw 1 from Claw.",
@@ -382,14 +382,36 @@ CARD_TEXT = {
         "No effect — pure tags.",
 
     "Market":
+        "On Order — offer a Ware to a player\n"
+        "(buyer picks which). If they accept,\n"
+        "order Coin zone.",
+
+    "Pawn Shop":
         "On Order — Order on the Coin zone.\n"
         "On Rumour — swap 1 Domain card with\n"
         "1 Wares card.",
 
+    "Stockpile":
+        "On Order — put 1 Domain card into Wares.\n"
+        "Order Coin zone.",
+
     "Smuggler":
-        "On Brawl — move 1 Domain card to Wares.\n"
-        "On Rumour — move Smuggler to the active\n"
-        "player's Domain.",
+        "On Brawl — controller picks 1 from Wares,\n"
+        "Brawl starter takes it. (No Opp. refill.)\n"
+        "Smuggler moves to starter's domain.",
+
+    "Forgery":
+        "On Order — if you have a Coin card in\n"
+        "Domain, put Forgery into Wares.\n"
+        "Order Coin zone.",
+
+    "Usurer":
+        "On Order — put 1 Domain card into Wares.\n"
+        "On Rumour — order Coin zone.",
+
+    "Highwaymen":
+        "On Brawl — put 1 Domain card into Wares.\n"
+        "Brawl starter orders Coin zone.",
 
     "Sellsword":
         "On Brawl — discard Sellsword to the Wares\n"
@@ -421,10 +443,6 @@ CARD_TEXT = {
         "On Rumour — draw 1 card from a chosen pile.\n"
         "Add it to the Wares.",
 
-    "Mine":
-        "On Dawn — discard Mine if you have no Crags.\n"
-        "On Order — draw 1 from Coin.",
-
     "Provisions":
         "On Feast — draw 1 from Coin.",
 
@@ -436,7 +454,7 @@ CARD_TEXT = {
     "Worship of the Scripture":
         "On Rite — the active player peeks at Candle\n"
         "cards (scales with [Spiritual]). Keep 1,\n"
-        "exile the rest.",
+        "purge the rest.",
 
     "Worship of the Relic":
         "On Rite — peek at cards from a chosen pile\n"
@@ -451,7 +469,7 @@ CARD_TEXT = {
     "Clergy":
         "On Order — Order Candle zone. Peek at Candle\n"
         "cards (1 per player with [Religion]). Keep 1,\n"
-        "may set 1 as Revelation, exile rest.",
+        "may set 1 as Revelation, purge rest.",
 
     "Sabbath":
         "On Dawn — Rite in your Domain.",
@@ -471,7 +489,7 @@ CARD_TEXT = {
         "1 Revelation. Refill between each.",
 
     "Purity":
-        "On Order — optionally exile the Revelation\n"
+        "On Order — optionally purge the Revelation\n"
         "and reveal the next. Rite in your Domain.",
 
     "Flagellation":
@@ -501,23 +519,23 @@ CARD_TEXT = {
         "Hunt — blocked if another player has [Hunt].",
 
     "Knight of the Gold Coat":
-        "On Rumour / On Brawl — destroy a [Unit]\n"
+        "On Rumour / On Brawl — slay a [Unit]\n"
         "anywhere. Knight moves to that Domain.",
 
     "Knight of the Iron Crown":
-        "On Dawn — destroy a [Unit] anywhere.\n"
+        "On Dawn — slay a [Unit] anywhere.\n"
         "Knight moves to that Domain.",
 
     "Knight of the Green Mantle":
-        "On Harvest — destroy a [Unit] anywhere.\n"
+        "On Harvest — slay a [Unit] anywhere.\n"
         "Knight moves to that Domain.",
 
     "Knight of the White Shield":
-        "On Feast — destroy a [Unit] anywhere.\n"
+        "On Feast — slay a [Unit] anywhere.\n"
         "Knight moves to that Domain.",
 
     "Knight of the Holy Cross":
-        "On Rite — destroy a [Unit] anywhere.\n"
+        "On Rite — slay a [Unit] anywhere.\n"
         "Knight moves to that Domain.",
 }
 

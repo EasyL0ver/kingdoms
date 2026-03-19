@@ -103,13 +103,18 @@ class Player:
     def has_coin_access(self) -> bool:
         if self.has_card("Animal Husbandry"):
             return True
-        if self.has_card("Mill"):
-            return True
-        if self.has_card("Mine"):
+        if self.has_card("Tax Collectors"):
             return True
         if self.has_card("Market"):
             return True
-        # Apprenticeship needs a player with Craftsmanship to agree — handled at action level
+        if self.has_card("Pawn Shop"):
+            return True
+        if self.has_card("Stockpile"):
+            return True
+        if self.has_card("Forgery"):
+            return True
+        if self.has_card("Usurer"):
+            return True
         return False
 
     def has_candle_access(self) -> bool:
