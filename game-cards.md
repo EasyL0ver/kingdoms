@@ -301,7 +301,7 @@ On Harvest — refill the Season, then put all [Nature] cards from the Season in
 
 ```
 🌳  COMPOST
-On Order (Reaping card in your discard) — choose one: • Order the Wheat zone. • Harvest your Domain.
+On Order (Reaping card in your discard) — choose one: • Order the Wheat zone. • Remove the Reaping card from the game, then Harvest your Domain.
 ```
 
 ```
