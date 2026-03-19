@@ -16,7 +16,7 @@
         "Discontent"
       ],
       "count": 4,
-      "text": "On Brawl (*your turn*) — discard 1 card from your Domain.\nOn Brawl (*not your turn*) — give 1 card from your Domain to the active player."
+      "text": "On Brawl (*your turn*) — discard a card from your Domain.\nOn Brawl (*not your turn*) — give 1 card from your Domain to the active player."
     },
     {
       "name": "Scavenge",
@@ -32,7 +32,7 @@
       "name": "Blood Offering",
       "tags": [],
       "count": 1,
-      "text": "On Order — discard 1 card from your Domain. Rite every Domain."
+      "text": "On Order — discard a card from your Domain. Rite every Domain."
     },
     {
       "name": "Poach",
@@ -190,7 +190,7 @@
       "name": "Ransack",
       "tags": [],
       "count": 2,
-      "text": "On Order — discard 1 card from your Domain. Draw 2 cards from the Claw deck. Take 1 from the Season."
+      "text": "On Order — discard a card from your Domain. Draw 2 cards from the Claw deck. Take 1 from the Season."
     },
     {
       "name": "Spoils of War",

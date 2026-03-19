@@ -87,7 +87,7 @@ On Order — you may move 1 [Mob] to the Domain with the most cards. Brawl there
 ```
 🐾  RAID
 [Discontent] [Mob] [Unit]
-On Brawl (*your turn*) — discard 1 card from your Domain.
+On Brawl (*your turn*) — discard a card from your Domain.
 On Brawl (*not your turn*) — give 1 card from your Domain to the active player.
 ```
 
@@ -100,7 +100,7 @@ On Brawl (*not your turn*) — the active player takes 1 card from your discard.
 
 ```
 🐾  BLOOD OFFERING
-On Order — discard 1 card from your Domain. Rite every Domain.
+On Order — discard a card from your Domain. Rite every Domain.
 ```
 
 ```
@@ -217,7 +217,7 @@ On Dawn — Brawl your Domain. Discard Uprising.
 
 ```
 🐾  RANSACK
-On Order — discard 1 card from your Domain. Draw 2 cards from the Claw deck. Take 1 from the Season.
+On Order — discard a card from your Domain. Draw 2 cards from the Claw deck. Take 1 from the Season.
 ```
 
 ```
