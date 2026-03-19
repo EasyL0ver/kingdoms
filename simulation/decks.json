@@ -248,7 +248,7 @@
         "Wealth"
       ],
       "count": 2,
-      "text": "On Rumour / On Brawl — discard a [Unit] anywhere. Knight moves to that Domain."
+      "text": "On Rumour, Brawl — discard a [Unit] anywhere. Knight moves to that Domain."
     },
     {
       "name": "Knight of the Iron Crown",
@@ -472,7 +472,7 @@
         "Labour"
       ],
       "count": 4,
-      "text": "On Order / On Harvest — Order on the Wheat zone."
+      "text": "On Order, Harvest — Order on the Wheat zone."
     },
     {
       "name": "Ritual Pyre",

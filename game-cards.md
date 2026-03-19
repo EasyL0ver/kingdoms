@@ -390,7 +390,7 @@ On Order — take any 1 card from the Village. Put 1 card from your Domain back 
 ```
 🌾  TURNIP PATCH
 [Labour]
-On Order / On Harvest — Order on the Wheat zone.
+On Order, Harvest — Order on the Wheat zone.
 ```
 
 ```
@@ -667,7 +667,7 @@ On Order — Feast in your Domain twice. Draw 1 from Claw. Hunt — blocked if a
 ```
 ⚔️  KNIGHT OF THE GOLD COAT
 [Unit] [Chivalry] [Wealth]
-On Rumour / On Brawl — discard a [Unit] anywhere. Knight moves to that Domain.
+On Rumour, Brawl — discard a [Unit] anywhere. Knight moves to that Domain.
 ```
 
 ```
