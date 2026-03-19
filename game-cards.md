@@ -118,7 +118,8 @@ On Rite — discard 5 Claw cards to the active player's discard.
 ```
 🐾  WORSHIP OF THE DUSK
 [Spiritual]
-On Rite — every player discards 1 card from their Domain. If Worship of the Dawn is in play, discard 2 instead.
+On Rite — every player discards 1 card from their Domain.
+On Rite (*Worship of the Dawn in play*) — every player discards 2 cards from their Domain instead.
 ```
 
 ```
@@ -265,7 +266,8 @@ On Brawl — if the active player shares your culture, you may cancel the Brawl.
 ```
 🌳  WORSHIP OF THE DAWN
 [Spiritual]
-On Rite — return 1 card from your discard to your Domain. If Worship of the Dusk is in play, return 2 instead.
+On Rite — return 1 card from your discard to your Domain.
+On Rite (*Worship of the Dusk in play*) — return 2 cards instead.
 ```
 
 ```

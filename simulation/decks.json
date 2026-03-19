@@ -59,7 +59,7 @@
         "Spiritual"
       ],
       "count": 1,
-      "text": "On Rite — every player discards 1 card from their Domain. If Worship of the Dawn is in play, discard 2 instead."
+      "text": "On Rite — every player discards 1 card from their Domain.\nOn Rite (*Worship of the Dawn in play*) — every player discards 2 cards from their Domain instead."
     },
     {
       "name": "Worship of War",
@@ -312,7 +312,7 @@
         "Spiritual"
       ],
       "count": 1,
-      "text": "On Rite — return 1 card from your discard to your Domain. If Worship of the Dusk is in play, return 2 instead."
+      "text": "On Rite — return 1 card from your discard to your Domain.\nOn Rite (*Worship of the Dusk in play*) — return 2 cards instead."
     },
     {
       "name": "Reaping",
