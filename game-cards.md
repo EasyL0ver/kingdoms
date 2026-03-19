@@ -87,13 +87,14 @@ On Order — you may move 1 [Mob] to the Domain with the most cards. Brawl there
 ```
 🐾  RAID
 [Discontent] [Mob] [Unit]
-On Brawl — discard 1 card from your Domain. If the active player is someone else, they get the card instead.
+On Brawl (*your turn*) — discard 1 card from your Domain.
+On Brawl (*not your turn*) — give 1 card from your Domain to the active player.
 ```
 
 ```
 🐾  SCAVENGE
 [Discontent] [Mob] [Unit]
-On Brawl — if the active player is someone else, they take 1 card from your discard.
+On Brawl (*not your turn*) — the active player takes 1 card from your discard.
 ```
 
 ```
@@ -239,7 +240,8 @@ On Brawl — draw 2 cards from the Claw deck. Move up to 2 [Mob] to the active p
 ```
 🐾  ENFORCERS
 [Discontent] [Mob]
-On Brawl — both you and the active player draw 2 cards from the Claw deck.
+On Brawl (*your turn*) — draw 2 cards from the Claw deck.
+On Brawl (*not your turn*) — you and the active player each draw 2 cards from the Claw deck.
 ```
 
 ---

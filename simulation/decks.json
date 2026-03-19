@@ -16,7 +16,7 @@
         "Discontent"
       ],
       "count": 4,
-      "text": "On Brawl — discard 1 card from your Domain. If the active player is someone else, they get the card instead."
+      "text": "On Brawl (*your turn*) — discard 1 card from your Domain.\nOn Brawl (*not your turn*) — give 1 card from your Domain to the active player."
     },
     {
       "name": "Scavenge",
@@ -26,7 +26,7 @@
         "Discontent"
       ],
       "count": 3,
-      "text": "On Brawl — if the active player is someone else, they take 1 card from your discard."
+      "text": "On Brawl (*not your turn*) — the active player takes 1 card from your discard."
     },
     {
       "name": "Blood Offering",
@@ -226,7 +226,7 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Brawl — both you and the active player draw 2 cards from the Claw deck."
+      "text": "On Brawl (*your turn*) — draw 2 cards from the Claw deck.\nOn Brawl (*not your turn*) — you and the active player each draw 2 cards from the Claw deck."
     }
   ],
   "sword": [
