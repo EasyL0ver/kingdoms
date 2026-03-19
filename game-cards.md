@@ -277,7 +277,7 @@ On Dawn — Harvest every Domain. Discard Reaping.
 
 ```
 🌳  GATHERING
-On Dawn — choose Brawl, Rite, or Rumour. Fires in your Domain and all culture allies' Domains. Discard Gathering.
+On Dawn — choose Brawl, Rite, or Rumour. Triggers in your Domain and every Domain with Kinship. Discard Gathering.
 ```
 
 ```
