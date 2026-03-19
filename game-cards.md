@@ -628,7 +628,7 @@ On Rite — Brawl in your Domain.
 ```
 🕯️  PENANCE
 [Spiritual] [Religion]
-On Dawn — discard 2 cards from your Domain. You may discard Penance for an extra effect.
+On Dawn — discard 2 cards from your Domain. You may discard Penance.
 ```
 
 ```
