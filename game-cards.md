@@ -205,8 +205,8 @@ On Order — discard Ivory. Order the Coin zone.
 ```
 🐾  HUNGER
 [Discontent]
-On Harvest — discard 1 Claw card to your discard.
-On Feast — return 1 card from your discard to top of the Claw deck.
+On Harvest — discard the top card of the Claw deck to your discard.
+On Feast — return a card from your discard to top of the Claw deck.
 ```
 
 ```
