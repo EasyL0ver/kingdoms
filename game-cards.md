@@ -408,7 +408,7 @@ On Dawn — move 1 [Mob], [Labour], or [Amenity] card between domains that have 
 ```
 🌾  WOLF PACK
 [Discontent] [Mob] [Nature]
-On Harvest — If you triggered it: move Wolf Pack to another player's Domain. Otherwise: discard 2 from Domain, draw 2 cards from the Claw deck.
+On Harvest — if you are the active player: move Wolf Pack to another player's Domain. Otherwise: discard 2 from Domain, draw 2 cards from the Claw deck.
 ```
 
 ```

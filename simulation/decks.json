@@ -500,7 +500,7 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Harvest — If you triggered it: move Wolf Pack to another player's Domain. Otherwise: discard 2 from Domain, draw 2 cards from the Claw deck."
+      "text": "On Harvest — if you are the active player: move Wolf Pack to another player's Domain. Otherwise: discard 2 from Domain, draw 2 cards from the Claw deck."
     },
     {
       "name": "Herb Garden",
