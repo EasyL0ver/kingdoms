@@ -272,7 +272,7 @@ On Rite (*Worship of the Dusk in play*) — return 1 card from your discard to y
 
 ```
 🌳  REAPING
-On Dawn — Harvest every zone. Discard Reaping.
+On Dawn — Harvest every Domain. Discard Reaping.
 ```
 
 ```
