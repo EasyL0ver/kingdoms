@@ -114,29 +114,54 @@ class WheatZone(CardBehavior):
     deck = "zone"
 
     def on_order(self, ctx):
+        """Conveyor belt: take 1-5 from bottom, reveal Claw equal to Labour tags,
+        check Discontent ≥ 3 → revolt (Brawl in every domain with Wheat)."""
         s = ctx.state
-        if not s.fields:
-            s.log("  → Fields empty, nothing to take")
+        village = s.fields  # face-up conveyor
+        if not village:
+            s.log("  → Village empty, nothing to take")
             return
-        max_take = len(s.fields)
+        # Take 1-N from bottom (index 0 = bottom of conveyor)
+        max_take = min(5, len(village))
         to_take = ctx.engine.strat(ctx.player).resolve_n(
-            s, ctx.player, list(s.fields), 1, max_take,
+            s, ctx.player, list(village[:max_take]), 1, max_take,
             DecisionContext(event="Order", source="Wheat Zone", intent=Intent.GAIN))
-        for c in to_take:
-            if c in s.fields:
-                s.fields.remove(c)
-                ctx.engine.receive_card(ctx.player, c)
-                s.log(f"  → takes {c.name} from Fields")
-        tax = len(to_take)
-        s.log(f"  → Claw tax: draws {tax}")
-        for _ in range(tax):
+        # Must take from bottom — enforce contiguous bottom slice
+        take_count = len(to_take)
+        taken = village[:take_count]
+        for c in taken:
+            village.remove(c)
+            ctx.engine.receive_card(ctx.player, c)
+            s.log(f"  → takes {c.name} from Village")
+        # Count Labour tags in taken cards
+        labour_count = sum(1 for c in taken for t in c.tags if t == "Labour")
+        # Reveal that many from Claw → always go to domain
+        revealed_claw = []
+        for _ in range(labour_count):
             claw = s.draw_from_pile("claw")
             if claw:
-                s.log(f"    → tax: {claw.name}")
+                revealed_claw.append(claw)
                 ctx.engine.receive_card(ctx.player, claw)
+                s.log(f"  → Labour tax: {claw.name}")
+        # Count total Discontent in domain
+        discontent = ctx.player.count_tag("Discontent")
+        s.log(f"  → Discontent check: {discontent} in domain (threshold 3)")
+        if discontent >= 3:
+            s.log(f"  → REVOLT! Brawl in every domain with Wheat cards")
+            for p in s.players:
+                if s.game_over:
+                    break
+                has_wheat = any(c.deck == "wheat" for c in p.domain)
+                if has_wheat:
+                    s.log(f"  → Revolt Brawl in {p.name}'s domain")
+                    ctx.engine.resolve_event("Brawl", ctx.player, p)
+
+    def on_dawn(self, ctx):
+        """Auto-refill Village to 5 on Dawn."""
+        self.refill(ctx.state)
 
     def refill(self, state, target: int = 5):
-        """Refill Fields up to target."""
+        """Refill Village up to target (new cards enter at end = top of conveyor)."""
         zone = state.zone_cards["wheat"]
         while len(zone.face_up) < target and zone.pile_ptr < len(zone.pile):
             zone.face_up.append(zone.pile[zone.pile_ptr])

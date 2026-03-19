@@ -59,9 +59,13 @@ CARD_TEXT = {
         "Refill the Season to 4.",
 
     "Wheat Zone":
-        "Face-up cards — the Fields.\n"
-        "On Order — take 1–3 cards from the Fields.\n"
-        "For each card taken, draw 1 from Claw.",
+        "5 face-up cards — the Village (conveyor).\n"
+        "On Order — take 1–5 from the bottom.\n"
+        "Reveal Claw cards equal to [Labour] tags\n"
+        "taken → to your Domain.\n"
+        "If [Discontent] in your Domain ≥ 3:\n"
+        "Revolt — Brawl in every Domain with Wheat.\n"
+        "Refills to 5 on Dawn.",
 
     "Coin Zone":
         "3 face-up cards — the Opportunities.\n"
@@ -90,13 +94,13 @@ CARD_TEXT = {
         "Domain with the most cards. Brawl there.",
 
     "Raid":
-        "On Brawl — give 1 card from your Domain\n"
-        "to the active player.\n"
-        "If Uprising, discard 1 instead.",
+        "On Brawl — discard 1 card from your Domain.\n"
+        "If the active player is someone else,\n"
+        "they get the card instead.",
 
     "Scavenge":
-        "On Brawl — the active player takes 1 card\n"
-        "from your discard.",
+        "On Brawl — if the active player is someone\n"
+        "else, they take 1 card from your discard.",
 
     "Blood Offering":
         "On Order — discard 1 card from your Domain.\n"
@@ -135,8 +139,7 @@ CARD_TEXT = {
 
     "Tyranny":
         "On Order — draw from Claw equal to your\n"
-        "[Discontent] count. Brawl in your Domain\n"
-        "(spoils are discarded, not taken).",
+        "[Discontent] count. Brawl in your Domain.",
 
     "Marauders":
         "On Feast — discard Marauders.\n"
@@ -177,8 +180,7 @@ CARD_TEXT = {
         "to top of the Claw pile.",
 
     "Uprising":
-        "On Dawn — Brawl in your Domain. No player\n"
-        "benefits from the Brawl.\n"
+        "On Dawn — Brawl in your Domain.\n"
         "Discard Uprising.",
 
     "Ransack":
@@ -192,10 +194,18 @@ CARD_TEXT = {
         "draw from Claw and Tree equal to their\n"
         "[Trophy] count.",
 
-    "Dusk Rite":
+    "Worship of the Dusk":
+        "On Rite — every player discards 1 card from\n"
+        "their Domain.\n"
+        "If Worship of the Dawn is in play,\n"
+        "discard 2 instead.",
+
+    "Veil Tear":
         "On Order — exile any number of cards from\n"
-        "your discard. Rite in your Domain.\n"
-        "Discard Dusk Rite.",
+        "your discard. Resurrect that many [Spiritual]\n"
+        "cards from any discard to their owner's\n"
+        "Domain. Trigger that many Rites.\n"
+        "Discard Veil Tear.",
 
     "Blood Feud":
         "On Brawl — draw 2 from Claw. Move up to\n"
@@ -212,17 +222,24 @@ CARD_TEXT = {
         "culture, you may cancel the Brawl.\n"
         "They draw 1 from Tree.",
 
-    "Sky Dance":
-        "On Order — Rite in your Domain.",
+    "Worship of the Dawn":
+        "On Rite — return 1 card from your discard\n"
+        "to your Domain.\n"
+        "If Worship of the Dusk is in play,\n"
+        "return 2 instead.",
+
+    "Worship of the Hearth":
+        "On Rite — Harvest in every Domain that\n"
+        "has Kinship.",
 
     "Harvest":
         "On Dawn — Harvest in every zone.\n"
         "Discard Harvest.",
 
     "Gathering":
-        "On Dawn — choose Brawl or Rite. Fires in\n"
-        "your Domain and all culture allies' Domains.\n"
-        "Discard Gathering.",
+        "On Dawn — choose Brawl, Rite, or Rumour.\n"
+        "Fires in your Domain and all culture\n"
+        "allies' Domains. Discard Gathering.",
 
     "Sacred Grove":
         "On Order — choose one:\n"
@@ -247,13 +264,18 @@ CARD_TEXT = {
         "You may Order 1 card in their Domain.\n"
         "They may Order 1 card in yours.",
 
-    "Worship of the Rain":
-        "On Rite — swap 1 Season card with the top\n"
-        "card of the Candle pile.",
+    "Bog":
+        "On Rumour — destroy 1 card from the Season.",
 
-    "Worship of Fertility":
-        "On Rite — Harvest in the active player's\n"
-        "Domain.",
+    "Bear's Den":
+        "On Feast — draw 1 from Claw.",
+
+    "Ravine":
+        "On Brawl — the active player discards 1\n"
+        "card from their Domain.",
+
+    "Meadow":
+        "On Harvest — refill the Season to full.",
 
     "Forage":
         "On Order — dump top 2 Tree and top 2 Claw\n"
@@ -265,7 +287,7 @@ CARD_TEXT = {
         "On Harvest — refill 1 Field.\n"
         "Requires 2+ [Nature] in your Domain.",
 
-    "Withered Crop":
+    "Compost":
         "On Order — exile cards from your discard.\n"
         "Refill Fields by that count from the Wheat\n"
         "pile. Order on the Wheat zone.",
@@ -276,10 +298,9 @@ CARD_TEXT = {
         "Domain.",
 
     "Pilgrimage":
-        "On Order — any player may join. Draw 1\n"
-        "from Candle per participant. You distribute\n"
-        "the drawn cards among participants.\n"
-        "On Rite — claim the Revelation.",
+        "On Order — give any number of cards from\n"
+        "your Domain to a chosen player. Draw that\n"
+        "many from Candle. Discard Pilgrimage.",
 
     # ── Wheat deck ──────────────────────────────────────────────────────
     "Plough":
@@ -318,10 +339,11 @@ CARD_TEXT = {
 
     "Apprenticeship":
         "On Order — Order on the Coin zone.\n"
-        "Requires an opponent with [Craftsmanship].",
+        "Requires an opponent with [Wealth].",
 
     "Militia":
-        "On Order — discard 1 [Mob] from your Domain.\n"
+        "On Rumour — discard 1 [Mob] from your\n"
+        "Domain.\n"
         "On Brawl — discard Militia to cancel\n"
         "the Brawl in your Domain.",
 
@@ -333,9 +355,22 @@ CARD_TEXT = {
     "Maypole":
         "No effect — pure [Amenity] tag.",
 
-    "Village Gossip":
-        "On Rumour — look at the top card of any\n"
-        "pile. You may put it on the bottom.",
+    "Ora et Labora":
+        "On Harvest — claim the Revelation.",
+
+    "Taxation":
+        "On Order — Order on the Coin zone.\n"
+        "Draw 2 from Claw.",
+
+    "Lookout":
+        "On Dawn — if you have [Discontent] in your\n"
+        "Domain, Rumour.",
+
+    "Town Crier":
+        "On Rumour — choose one:\n"
+        "• Panic — draw 2 from Claw.\n"
+        "• Fortify — return 1 [Discontent] to\n"
+        "  the Claw pile.",
 
     "Orchard":
         "On Order — take 1 card from the Fields\n"
@@ -476,6 +511,26 @@ CARD_TEXT = {
     "Royal Hunt":
         "On Order — Feast twice. Draw 1 from Claw.\n"
         "Hunt — blocked if another player has [Hunt].",
+
+    "Knight of the Gold Coat":
+        "On Rumour / On Brawl — destroy a [Unit]\n"
+        "anywhere. Knight moves to that Domain.",
+
+    "Knight of the Iron Crown":
+        "On Dawn — destroy a [Unit] anywhere.\n"
+        "Knight moves to that Domain.",
+
+    "Knight of the Green Mantle":
+        "On Harvest — destroy a [Unit] anywhere.\n"
+        "Knight moves to that Domain.",
+
+    "Knight of the White Shield":
+        "On Feast — destroy a [Unit] anywhere.\n"
+        "Knight moves to that Domain.",
+
+    "Knight of the Holy Cross":
+        "On Rite — destroy a [Unit] anywhere.\n"
+        "Knight moves to that Domain.",
 }
 
 # ---------------------------------------------------------------------------

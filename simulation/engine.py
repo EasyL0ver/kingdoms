@@ -53,7 +53,7 @@ class GameEngine:
         s.log("---\n")
         s.log("## Initial State\n")
         s.log(f"Season: {', '.join(c.name for c in s.season)}")
-        s.log(f"Fields ({len(s.fields)}): {', '.join(c.name for c in s.fields)}")
+        s.log(f"Village ({len(s.fields)}): {', '.join(c.name for c in s.fields)}")
         s.log(f"Opportunities ({len(s.opportunities)}): {', '.join(c.name for c in s.opportunities)}")
         s.log(f"Wares ({len(s.wares)}): {', '.join(c.name for c in s.wares)}")
         s.log(f"Tourney ({len(s.tourney)}): {', '.join(c.name for c in s.tourney)}")
@@ -142,8 +142,7 @@ class GameEngine:
     # ── Generic Event Resolution ──
 
     def resolve_event(self, event: str, active_player: Player,
-                      scope: 'Card | Player | list[Player] | None' = None,
-                      uprising: bool = False):
+                      scope: 'Card | Player | list[Player] | None' = None):
         """Fire an event to responding cards.
         scope controls what receives the event:
           Card   → just that one card (Order on a specific card/zone)
@@ -177,7 +176,7 @@ class GameEngine:
                         owner = p
                         break
                 ctx = self.make_ctx(owner, scope, event=event,
-                                    active_player=active_player, uprising=uprising)
+                                    active_player=active_player)
                 handler = getattr(beh, handler_name)
                 if handler(ctx):
                     self._fired_this_dawn.add(id(scope))
@@ -193,7 +192,7 @@ class GameEngine:
             beh = self.behavior(zone_card)
             if getattr(type(beh), handler_name) is not base_handler:
                 ctx = self.make_ctx(active_player, zone_card, event=event,
-                                    active_player=active_player, uprising=uprising)
+                                    active_player=active_player)
                 handler = getattr(beh, handler_name)
                 handler(ctx)
 
@@ -239,8 +238,8 @@ class GameEngine:
                     continue  # already triggered this dawn
 
                 beh = self.behavior(card)
-                ctx = self.make_ctx(p, card, event=event, active_player=active_player,
-                                    uprising=uprising)
+                ctx = self.make_ctx(p, card, event=event,
+                                    active_player=active_player)
                 handler = getattr(beh, handler_name)
                 if handler(ctx):
                     self._fired_this_dawn.add(id(card))
@@ -263,7 +262,7 @@ class GameEngine:
                 s.log(f"  Discard: {disc}")
         s.log("")
         s.log(f"Season: {', '.join(c.name for c in s.season)}")
-        s.log(f"Fields ({len(s.fields)}): {', '.join(c.name for c in s.fields)}")
+        s.log(f"Village ({len(s.fields)}): {', '.join(c.name for c in s.fields)}")
         s.log(f"Opportunities ({len(s.opportunities)}): {', '.join(c.name for c in s.opportunities)}")
         s.log(f"Wares ({len(s.wares)}): {', '.join(c.name for c in s.wares)}")
         s.log(f"Tourney ({len(s.tourney)}): {', '.join(c.name for c in s.tourney)}")

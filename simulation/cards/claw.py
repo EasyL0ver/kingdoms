@@ -42,16 +42,13 @@ class Raid(CardBehavior):
         giveable = [c for c in ctx.player.domain if c is not ctx.card]
         if not giveable:
             return True
-        if ctx.uprising:
-            victim = ctx.engine.strat(ctx.player).resolve(
-                ctx.state, ctx.player, giveable,
-                DecisionContext(event="Brawl", source="Raid", intent=Intent.DISCARD))
+        victim = ctx.engine.strat(ctx.player).resolve(
+            ctx.state, ctx.player, giveable,
+            DecisionContext(event="Brawl", source="Raid", intent=Intent.DISCARD))
+        if ctx.active_player == ctx.player:
             ctx.player.discard_from_domain(victim)
-            ctx.state.log(f"  → Raid: {ctx.player.name} discards {victim.name} (Uprising)")
+            ctx.state.log(f"  → Raid: {ctx.player.name} discards {victim.name}")
         else:
-            victim = ctx.engine.strat(ctx.player).resolve(
-                ctx.state, ctx.player, giveable,
-                DecisionContext(event="Brawl", source="Raid", intent=Intent.GIVE_AWAY))
             ctx.player.remove_from_domain(victim)
             ctx.active_player.add_to_domain(victim, ctx.state)
             ctx.state.log(f"  → Raid: {ctx.player.name} gives {victim.name} to {ctx.active_player.name}")
@@ -66,8 +63,8 @@ class Scavenge(CardBehavior):
     def on_brawl(self, ctx):
         if not ctx.player.discard:
             return True
-        if ctx.uprising:
-            ctx.state.log(f"  → Scavenge: no effect (Uprising)")
+        if ctx.active_player == ctx.player:
+            ctx.state.log(f"  → Scavenge: no effect (self-Brawl)")
         else:
             victim = ctx.engine.strat(ctx.player).resolve(
                 ctx.state, ctx.player, list(ctx.player.discard),
@@ -291,7 +288,7 @@ class Tyranny(CardBehavior):
         if ctx.state.game_over:
             return
         ctx.state.log(f"  → self-Brawl (spoils discarded, not given)")
-        ctx.engine.resolve_event("Brawl", ctx.player, ctx.player, uprising=True)
+        ctx.engine.resolve_event("Brawl", ctx.player, ctx.player)
 
 
 @_register
@@ -499,7 +496,7 @@ class Uprising(CardBehavior):
     deck = 'claw'
     def on_dawn(self, ctx):
         ctx.state.log(f"  → Dawn: Uprising — self-Brawl (no benefits)")
-        ctx.engine.resolve_event("Brawl", ctx.player, ctx.player, uprising=True)
+        ctx.engine.resolve_event("Brawl", ctx.player, ctx.player)
         ctx.discard_self()
 
 
@@ -519,8 +516,8 @@ class SpoilsOfWar(CardBehavior):
             ctx.state.log(f"  → Spoils of War placed in {target.name}'s Domain")
 
     def on_brawl(self, ctx):
-        if ctx.uprising:
-            ctx.state.log(f"  → Spoils of War: no effect (Uprising)")
+        if ctx.active_player == ctx.player:
+            ctx.state.log(f"  → Spoils of War: no effect (self-Brawl)")
             return True
         ctx.player.remove_from_domain(ctx.card)
         ctx.active_player.add_to_domain(ctx.card, ctx.state)
@@ -579,9 +576,8 @@ class BloodFeud(CardBehavior):
     tags = ['Mob', 'Discontent']
     deck = 'claw'
     def on_brawl(self, ctx):
-        if ctx.uprising:
+        if ctx.active_player == ctx.player:
             return False
-        # Draw 2 from claw
         drawn = ctx.engine.draw_and_receive(ctx.player, "claw", 2)
         for c in drawn:
             ctx.state.log(f"  → Blood Feud: {ctx.player.name} draws {c.name}")
@@ -608,9 +604,8 @@ class Enforcers(CardBehavior):
     tags = ['Mob', 'Discontent']
     deck = 'claw'
     def on_brawl(self, ctx):
-        if ctx.uprising:
+        if ctx.active_player == ctx.player:
             return False
-        # Both sides draw 2 claw — arms race
         for c in ctx.engine.draw_and_receive(ctx.player, "claw", 2):
             ctx.state.log(f"  → Enforcers: {ctx.player.name} draws {c.name}")
         for c in ctx.engine.draw_and_receive(ctx.active_player, "claw", 2):
