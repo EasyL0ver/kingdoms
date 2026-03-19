@@ -236,7 +236,7 @@ On Order — remove any number of cards from your discard from the game. Return 
 ```
 🐾  BLOOD FEUD
 [Discontent] [Mob]
-On Brawl — draw 2 cards from the Claw deck. Move up to 2 [Mob] to the active player. Discard Blood Feud, then Brawl the active player's Domain.
+On Brawl — draw 2 cards from the Claw deck. Move up to 2 [Mob] to the active player's Domain. Discard Blood Feud, then Brawl the active player's Domain.
 ```
 
 ```
