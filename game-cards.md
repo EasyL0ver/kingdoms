@@ -167,7 +167,7 @@ On Feast — draw 1 card from the Claw deck.
 ```
 🐾  MARTIAL EXCELLENCE
 [Chivalry] [Trophy]
-On Order — Order the Sword zone. Requires another [Trophy] in your Domain.
+On Order (Requires [Trophy] in your Domain) — Order the Sword zone.
 ```
 
 ```
@@ -178,7 +178,7 @@ On Order — draw 3 cards from the Claw deck. Discard 1 of your choice.
 ```
 🐾  LAND GRAB
 [Discontent]
-On Order — take all [Land] cards from the Season to your Domain. Discard Land Grab. Requires [Land] in the Season.
+On Order (Requires [Land] in the Season) — take all [Land] cards from the Season to your Domain. Discard Land Grab.
 ```
 
 ```
@@ -296,7 +296,7 @@ On Order — discard top 2 Tree and top 2 Claw cards to your discard. Feast your
 🌳  SOWING
 [Knowledge]
 On Order — Order the Wheat zone.
-On Harvest — refill Season buffer, then take all [Nature] cards from Season for free. Requires 2+ [Nature] in your Domain.
+On Harvest (Requires 2+ [Nature] in your Domain) — refill Season buffer, then take all [Nature] cards from Season for free.
 ```
 
 ```
@@ -447,12 +447,12 @@ On Rite — Order the Wheat zone.
 ```
 🌾  TAX COLLECTORS
 [Discontent] [Mob]
-On Order — requires 3+ [Labour]. Order the Coin zone. Rumour your Domain.
+On Order (Requires 3+ [Labour]) — Order the Coin zone. Rumour your Domain.
 ```
 
 ```
 🌾  LOOKOUT
-On Dawn — if you have [Discontent], Rumour your Domain.
+On Dawn (Requires [Discontent]) — Rumour your Domain.
 ```
 
 ```
@@ -506,7 +506,7 @@ On Brawl — you pick 1 from Wares, the active player takes it. Smuggler moves t
 ```
 🪙  FORGERY
 [Discontent]
-On Order — if you have a Coin card in Domain, put Forgery into Wares. Order the Coin zone.
+On Order (Requires Coin card in Domain) — put Forgery into Wares. Order the Coin zone.
 ```
 
 ```
@@ -535,13 +535,13 @@ On Order — give all Wares to a chosen opponent. Brawl their Domain. Discard Sw
 ```
 🪙  PROSPERITY
 [Wealth]
-On Dawn — draw 1 card from the Coin deck if Opportunities exist.
+On Dawn (Requires Opportunities) — draw 1 card from the Coin deck.
 ```
 
 ```
 🪙  EMBASSY
 [Wealth]
-On Dawn — if you have a culture ally and Wares exist: you and your ally each take 1 card from the Wares.
+On Dawn (Requires culture ally and Wares) — you and your ally each take 1 card from the Wares.
 ```
 
 ```
