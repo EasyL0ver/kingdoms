@@ -301,7 +301,7 @@ On Harvest — refill the Season, then put all [Nature] cards from the Season in
 
 ```
 🌳  COMPOST
-On Order — remove a Harvest card from your discard from the game. Harvest your Domain.
+On Order (Harvest card in your discard) — choose one: • Order the Wheat zone. • Harvest your Domain.
 ```
 
 ```
