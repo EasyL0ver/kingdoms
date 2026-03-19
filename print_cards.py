@@ -237,6 +237,16 @@ body {
   background: #f0f0f0;
 }
 
+.card-reminder {
+  padding: 1.5mm 3mm 1.5mm;
+  font-size: 9pt;
+  font-style: italic;
+  line-height: 1.2;
+  color: #555;
+  border-top: 0.3mm solid #999;
+  white-space: pre-wrap;
+}
+
 .card-section-label {
   padding: 1mm 3mm 0.5mm;
   font-size: 7pt;
@@ -274,6 +284,7 @@ def render_card(card: dict) -> str:
     name = card["name"]
     tags = card.get("tags", [])
     text = card.get("text", "")
+    reminder = card.get("reminder", "")
     endgame = card.get("endgameText", "")
     icon = DECK_ICONS.get(deck, "")
     is_zone = "Zone" in name or name == "Presence"
@@ -301,6 +312,10 @@ def render_card(card: dict) -> str:
     else:
         body_html = '<div class="card-body empty">— no effect —</div>'
 
+    reminder_html = ""
+    if reminder:
+        reminder_html = f'<div class="card-reminder">{esc(reminder)}</div>'
+
     endgame_html = ""
     if endgame:
         endgame_html = f'<div class="card-endgame">{esc(endgame)}</div>'
@@ -316,6 +331,7 @@ def render_card(card: dict) -> str:
         f'  <div class="card-header"><span class="icon">{icon}</span> {esc(name)}</div>'
         f'  {tags_row}'
         f'  {body_html}'
+        f'  {reminder_html}'
         f'  {endgame_html}'
         f'  {footer_html}'
         f'</div>'
@@ -396,7 +412,8 @@ DECK_NAMES = {
 }
 
 
-def _md_card_block(name: str, tags: list[str], text: str, icon: str) -> str:
+def _md_card_block(name: str, tags: list[str], text: str, icon: str,
+                   reminder: str = "") -> str:
     """Return a fenced code block for a single card entry."""
     header = f"{icon}  {name.upper()}"
     tag_line = " ".join(f"[{t}]" for t in tags)
@@ -406,7 +423,10 @@ def _md_card_block(name: str, tags: list[str], text: str, icon: str) -> str:
     if text:
         lines.append(text)
     inner = "\n".join(lines)
-    return f"```\n{inner}\n```"
+    block = f"```\n{inner}\n```"
+    if reminder:
+        block += f"\n\n> *{reminder}*"
+    return block
 
 
 def _md_zone_block(zc: dict, icon: str) -> str:
@@ -469,7 +489,8 @@ def generate_markdown(decks: dict) -> str:
             name = card_def["name"]
             tags = card_def["tags"]
             text = card_def.get("text", "")
-            parts.append(_md_card_block(name, tags, text, icon))
+            reminder = card_def.get("reminder", "")
+            parts.append(_md_card_block(name, tags, text, icon, reminder))
             parts.append("")
 
     return "\n".join(parts)
@@ -508,6 +529,7 @@ def main():
                     "tags": card_def["tags"],
                     "deck": deck_name,
                     "text": card_def.get("text", ""),
+                    "reminder": card_def.get("reminder", ""),
                 })
 
     # 3. Report any cards without text
