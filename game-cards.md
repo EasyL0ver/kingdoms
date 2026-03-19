@@ -104,7 +104,7 @@ On Order — discard 1 card from your Domain. Rite your Domain.
 ```
 🐾  POACH
 [Discontent] [Hunt] [Mob] [Unit]
-On Order — Feast your Domain. Draw 1 card from the Claw deck. Hunt — blocked if another player has [Hunt].
+On Order (Requires no other [Hunt] in play) — Feast your Domain. Draw 1 card from the Claw deck.
 ```
 
 ```
@@ -666,7 +666,7 @@ On Brawl — Order the Sword zone.
 ```
 ⚔️  ROYAL HUNT
 [Hunt] [Trophy] [Unit]
-On Order — Feast your Domain twice. Draw 1 card from the Claw deck. Hunt — blocked if another player has [Hunt].
+On Order (Requires no other [Hunt] in play) — Feast your Domain twice. Draw 1 card from the Claw deck.
 ```
 
 ```

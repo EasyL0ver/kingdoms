@@ -43,7 +43,7 @@
         "Discontent"
       ],
       "count": 4,
-      "text": "On Order — Feast your Domain. Draw 1 card from the Claw deck. Hunt — blocked if another player has [Hunt]."
+      "text": "On Order (Requires no other [Hunt] in play) — Feast your Domain. Draw 1 card from the Claw deck."
     },
     {
       "name": "Worship of the Hunt",
@@ -238,7 +238,7 @@
         "Hunt"
       ],
       "count": 3,
-      "text": "On Order — Feast your Domain twice. Draw 1 card from the Claw deck. Hunt — blocked if another player has [Hunt]."
+      "text": "On Order (Requires no other [Hunt] in play) — Feast your Domain twice. Draw 1 card from the Claw deck."
     },
     {
       "name": "Gold Coat",
