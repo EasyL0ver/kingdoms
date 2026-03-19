@@ -174,11 +174,12 @@ body {
   font-weight: 700;
   letter-spacing: 0.3pt;
   border-bottom: 0.3mm solid #999;
-  min-height: 5mm;
+  height: 5mm;
   display: flex;
   align-items: center;
   gap: 1.5mm;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow: hidden;
 }
 
 .tag {
