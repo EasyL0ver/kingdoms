@@ -202,7 +202,8 @@ On Order — discard Ivory. Order on the Coin zone.
 ```
 🐾  HUNGER
 [Discontent]
-On Harvest — discard 1 Claw card to your discard. On Feast — return 1 card from your discard to top of the Claw pile.
+On Harvest — discard 1 Claw card to your discard.
+On Feast — return 1 card from your discard to top of the Claw pile.
 ```
 
 ```
@@ -219,7 +220,8 @@ On Order — discard 1 card from your Domain. Draw 2 from Claw. Take 1 from the 
 ```
 🐾  SPOILS OF WAR
 [Trophy] [Mob]
-On Dawn — place Spoils of War in another player's Domain. On Brawl — moves to the active player. They draw from Claw and Tree equal to their [Trophy] count.
+On Dawn — place Spoils of War in another player's Domain.
+On Brawl — moves to the active player. They draw from Claw and Tree equal to their [Trophy] count.
 ```
 
 ```
@@ -293,7 +295,8 @@ On Order — discard top 2 Tree and top 2 Claw cards to your discard. Feast in y
 ```
 🌳  SOWING
 [Knowledge]
-On Order — Order on the Wheat zone. On Harvest — refill Season buffer, then take all [Nature] cards from Season for free. Requires 2+ [Nature] in your Domain.
+On Order — Order on the Wheat zone.
+On Harvest — refill Season buffer, then take all [Nature] cards from Season for free. Requires 2+ [Nature] in your Domain.
 ```
 
 ```
@@ -309,7 +312,8 @@ On Harvest — for each player with Kinship, return 1 card from your discard to 
 ```
 🌳  FLOODS
 [Nature]
-On Brawl — if another Floods is in play, cancel the Brawl. On Dawn — refill the Season. If another Floods is in play, every player discards 1 card from their Domain.
+On Brawl — if another Floods is in play, cancel the Brawl.
+On Dawn — refill the Season. If another Floods is in play, every player discards 1 card from their Domain.
 ```
 
 ```
@@ -367,7 +371,8 @@ On Feast — you may return 1 [Discontent] from your Domain to top of Claw pile.
 ```
 🌾  MILITIA
 [Unit]
-On Rumour — discard 1 [Mob] from your Domain. On Brawl — discard Militia to cancel the Brawl in your Domain.
+On Rumour — discard 1 [Mob] from your Domain.
+On Brawl — discard Militia to cancel the Brawl in your Domain.
 ```
 
 ```
@@ -433,7 +438,8 @@ On Rite — rearrange the Village belt.
 ```
 🌾  ORA ET LABORA
 [Labour] [Spiritual]
-On Harvest — Order on the Candle zone. On Rite — Order on the Wheat zone.
+On Harvest — Order on the Candle zone.
+On Rite — Order on the Wheat zone.
 ```
 
 ```
@@ -477,7 +483,8 @@ On Order — offer a Ware to a player (buyer picks which). If they accept, Order
 
 ```
 🪙  PAWN SHOP
-On Order — Order on the Coin zone. On Rumour — swap 1 Domain card with 1 Wares card.
+On Order — Order on the Coin zone.
+On Rumour — swap 1 Domain card with 1 Wares card.
 ```
 
 ```
@@ -499,7 +506,8 @@ On Order — if you have a Coin card in Domain, put Forgery into Wares. Order on
 
 ```
 🪙  USURER
-On Order — put 1 Domain card into Wares. On Rumour — Order on the Coin zone.
+On Order — put 1 Domain card into Wares.
+On Rumour — Order on the Coin zone.
 ```
 
 ```
@@ -598,7 +606,8 @@ On Dawn — Rite in your Domain.
 ```
 🕯️  ZEALOT
 [Spiritual] [Religion] [Mob]
-On Brawl — cancel if you have [Religion]; else discard 1 Domain card. On Rite — active player may move Zealot to another Domain.
+On Brawl — cancel if you have [Religion]; else discard 1 Domain card.
+On Rite — active player may move Zealot to another Domain.
 ```
 
 ```
