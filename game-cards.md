@@ -283,7 +283,7 @@ On Dawn — choose Brawl, Rite, or Rumour. Triggers in your Domain and every Dom
 ```
 🌳  SACRED GROVE
 [Nature] [Spiritual]
-On Order — choose one: • Rite your Domain. • Look at the top 3 Tree cards. Put any [Spiritual] cards into your Domain. Return the rest.
+On Order — choose one: • Rite your Domain. • Reveal the top 3 cards from the Tree deck. Put any [Spiritual] cards from the revealed and the Season into your Domain. Discard the rest of the revealed.
 ```
 
 ```
