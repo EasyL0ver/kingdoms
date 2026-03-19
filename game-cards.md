@@ -94,7 +94,7 @@ On Brawl (*not your turn*) — give 1 card from your Domain to the active player
 ```
 🐾  SCAVENGE
 [Discontent] [Mob] [Unit]
-On Brawl (*not your turn*) — the active player takes 1 card from your discard.
+On Brawl (*not your turn*) — remove 1 card from your discard from the game.
 ```
 
 ```
