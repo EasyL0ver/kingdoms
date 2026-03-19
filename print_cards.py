@@ -207,6 +207,7 @@ body {
 .tag-amenity     { background: #00838F; }
 .tag-wealth      { background: #E65100; }
 .tag-chivalry    { background: #37474F; }
+.tag-none        { background: #999999; font-style: italic; }
 
 .inline-tag {
   font-weight: 800;
@@ -325,8 +326,11 @@ def render_card(card: dict) -> str:
 
     tags_row = ""
     if not is_zone:
-        tags_inner = "".join(
-            f'<span class="tag tag-{t.lower()}">{t}</span>' for t in sorted(tags))
+        if tags:
+            tags_inner = "".join(
+                f'<span class="tag tag-{t.lower()}">{t}</span>' for t in sorted(tags))
+        else:
+            tags_inner = '<span class="tag tag-none">No Tag</span>'
         tags_row = f'<div class="card-tags">{tags_inner}</div>'
 
     if is_zone:
