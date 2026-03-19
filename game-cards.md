@@ -477,6 +477,8 @@ On Order — give 1+ cards from your Domain to another player. They decide: if t
 [Amenity] [Trophy] [Wealth]
 ```
 
+> *No effect — pure tags.*
+
 ```
 🪙  MARKET
 On Order — offer a Ware to a player. If they accept, Order the Coin zone.
