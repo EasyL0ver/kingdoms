@@ -104,7 +104,7 @@ On Order — discard 1 card from your Domain. Rite your Domain.
 ```
 🐾  POACH
 [Discontent] [Hunt] [Mob] [Unit]
-On Order (Requires no other [Hunt] in play) — Feast your Domain. Draw 1 card from the Claw deck.
+On Order (no other [Hunt] in play) — Feast your Domain. Draw 1 card from the Claw deck.
 ```
 
 ```
@@ -167,7 +167,7 @@ On Feast — draw 1 card from the Claw deck.
 ```
 🐾  MARTIAL EXCELLENCE
 [Chivalry] [Trophy]
-On Order (Requires [Trophy] in your Domain) — Order the Sword zone.
+On Order ([Trophy] in your Domain) — Order the Sword zone.
 ```
 
 ```
@@ -178,7 +178,7 @@ On Order — draw 3 cards from the Claw deck. Discard 1 of your choice.
 ```
 🐾  LAND GRAB
 [Discontent]
-On Order (Requires [Land] in the Season) — take all [Land] cards from the Season to your Domain. Discard Land Grab.
+On Order ([Land] in the Season) — take all [Land] cards from the Season to your Domain. Discard Land Grab.
 ```
 
 ```
@@ -296,7 +296,7 @@ On Order — discard top 2 Tree and top 2 Claw cards to your discard. Feast your
 🌳  SOWING
 [Knowledge]
 On Order — Order the Wheat zone.
-On Harvest (Requires 2+ [Nature] in your Domain) — refill Season buffer, then take all [Nature] cards from Season for free.
+On Harvest (2+ [Nature] in your Domain) — refill Season buffer, then take all [Nature] cards from Season for free.
 ```
 
 ```
@@ -447,12 +447,12 @@ On Rite — Order the Wheat zone.
 ```
 🌾  TAX COLLECTORS
 [Discontent] [Mob]
-On Order (Requires 3+ [Labour]) — Order the Coin zone. Rumour your Domain.
+On Order (3+ [Labour]) — Order the Coin zone. Rumour your Domain.
 ```
 
 ```
 🌾  LOOKOUT
-On Dawn (Requires [Discontent]) — Rumour your Domain.
+On Dawn ([Discontent]) — Rumour your Domain.
 ```
 
 ```
@@ -506,7 +506,7 @@ On Brawl — you pick 1 from Wares, the active player takes it. Smuggler moves t
 ```
 🪙  FORGERY
 [Discontent]
-On Order (Requires Coin card in Domain) — put Forgery into Wares. Order the Coin zone.
+On Order (Coin card in Domain) — put Forgery into Wares. Order the Coin zone.
 ```
 
 ```
@@ -535,13 +535,13 @@ On Order — give all Wares to a chosen opponent. Brawl their Domain. Discard Sw
 ```
 🪙  PROSPERITY
 [Wealth]
-On Dawn (Requires Opportunities) — draw 1 card from the Coin deck.
+On Dawn (Opportunities) — draw 1 card from the Coin deck.
 ```
 
 ```
 🪙  EMBASSY
 [Wealth]
-On Dawn (Requires culture ally and Wares) — you and your ally each take 1 card from the Wares.
+On Dawn (culture ally and Wares) — you and your ally each take 1 card from the Wares.
 ```
 
 ```
@@ -666,7 +666,7 @@ On Brawl — Order the Sword zone.
 ```
 ⚔️  ROYAL HUNT
 [Hunt] [Trophy] [Unit]
-On Order (Requires no other [Hunt] in play) — Feast your Domain twice. Draw 1 card from the Claw deck.
+On Order (no other [Hunt] in play) — Feast your Domain twice. Draw 1 card from the Claw deck.
 ```
 
 ```

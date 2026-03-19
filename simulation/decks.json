@@ -43,7 +43,7 @@
         "Discontent"
       ],
       "count": 4,
-      "text": "On Order (Requires no other [Hunt] in play) — Feast your Domain. Draw 1 card from the Claw deck."
+      "text": "On Order (no other [Hunt] in play) — Feast your Domain. Draw 1 card from the Claw deck."
     },
     {
       "name": "Worship of the Hunt",
@@ -129,7 +129,7 @@
         "Chivalry"
       ],
       "count": 1,
-      "text": "On Order (Requires [Trophy] in your Domain) — Order the Sword zone."
+      "text": "On Order ([Trophy] in your Domain) — Order the Sword zone."
     },
     {
       "name": "Outriders",
@@ -143,7 +143,7 @@
         "Discontent"
       ],
       "count": 3,
-      "text": "On Order (Requires [Land] in the Season) — take all [Land] cards from the Season to your Domain. Discard Land Grab."
+      "text": "On Order ([Land] in the Season) — take all [Land] cards from the Season to your Domain. Discard Land Grab."
     },
     {
       "name": "Rite of Passage",
@@ -238,7 +238,7 @@
         "Hunt"
       ],
       "count": 3,
-      "text": "On Order (Requires no other [Hunt] in play) — Feast your Domain twice. Draw 1 card from the Claw deck."
+      "text": "On Order (no other [Hunt] in play) — Feast your Domain twice. Draw 1 card from the Claw deck."
     },
     {
       "name": "Gold Coat",
@@ -356,7 +356,7 @@
         "Knowledge"
       ],
       "count": 3,
-      "text": "On Order — Order the Wheat zone.\nOn Harvest (Requires 2+ [Nature] in your Domain) — refill Season buffer, then take all [Nature] cards from Season for free."
+      "text": "On Order — Order the Wheat zone.\nOn Harvest (2+ [Nature] in your Domain) — refill Season buffer, then take all [Nature] cards from Season for free."
     },
     {
       "name": "Compost",
@@ -552,13 +552,13 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Order (Requires 3+ [Labour]) — Order the Coin zone. Rumour your Domain."
+      "text": "On Order (3+ [Labour]) — Order the Coin zone. Rumour your Domain."
     },
     {
       "name": "Lookout",
       "tags": [],
       "count": 2,
-      "text": "On Dawn (Requires [Discontent]) — Rumour your Domain."
+      "text": "On Dawn ([Discontent]) — Rumour your Domain."
     },
     {
       "name": "Tidings",
@@ -620,7 +620,7 @@
         "Discontent"
       ],
       "count": 3,
-      "text": "On Order (Requires Coin card in Domain) — put Forgery into Wares. Order the Coin zone."
+      "text": "On Order (Coin card in Domain) — put Forgery into Wares. Order the Coin zone."
     },
     {
       "name": "Usurer",
@@ -656,7 +656,7 @@
         "Wealth"
       ],
       "count": 2,
-      "text": "On Dawn (Requires Opportunities) — draw 1 card from the Coin deck."
+      "text": "On Dawn (Opportunities) — draw 1 card from the Coin deck."
     },
     {
       "name": "Embassy",
@@ -664,7 +664,7 @@
         "Wealth"
       ],
       "count": 2,
-      "text": "On Dawn (Requires culture ally and Wares) — you and your ally each take 1 card from the Wares."
+      "text": "On Dawn (culture ally and Wares) — you and your ally each take 1 card from the Wares."
     },
     {
       "name": "Efficiency",
