@@ -296,7 +296,7 @@ On Order — discard top 2 Tree and top 2 Claw cards to your discard. Feast your
 🌳  SOWING
 [Knowledge]
 On Order (2+ [Nature] in your Domain) — Order the Wheat zone.
-On Harvest — refill Season buffer, then take all [Nature] cards from Season for free.
+On Harvest — refill the Season, then take all [Nature] cards from Season for free.
 ```
 
 ```
