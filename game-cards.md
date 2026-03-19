@@ -175,7 +175,7 @@ On Order ([Trophy] in your Domain) — Order the Sword zone.
 
 ```
 🐾  OUTRIDERS
-On Order — draw 3 cards from the Claw deck. Discard 1 of your choice.
+On Order — draw 3 cards from the Claw deck, then discard 1 of them.
 ```
 
 ```
