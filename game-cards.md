@@ -102,7 +102,7 @@ On Order — discard a card from your Domain. Rite every Domain.
 ```
 🐾  POACH
 [Discontent] [Hunt] [Mob] [Unit]
-On Order (no other [Hunt] in play) — Feast your Domain. Draw a card from the Claw deck.
+On Order (*no other [Hunt] in play*) — Feast your Domain. Draw a card from the Claw deck.
 ```
 
 ```
@@ -166,7 +166,7 @@ On Feast — draw a card from the Claw deck.
 ```
 🐾  MARTIAL EXCELLENCE
 [Chivalry] [Trophy]
-On Order ([Trophy] in your Domain) — Order Challenge.
+On Order (*[Trophy] in your Domain*) — Order Challenge.
 ```
 
 ```
@@ -177,7 +177,7 @@ On Order — draw 3 cards from the Claw deck, then discard one of them.
 ```
 🐾  LAND GRAB
 [Discontent]
-On Order ([Land] in the Season) — put all [Land] cards from the Season into your Domain. Discard Land Grab.
+On Order (*[Land] in the Season*) — put all [Land] cards from the Season into your Domain. Discard Land Grab.
 ```
 
 ```
@@ -256,7 +256,7 @@ On Harvest — Order Advice.
 ```
 🌳  ELDERSHIP
 [Knowledge]
-On Brawl (active player has Kinship) — cancel the Brawl in your Domain. They draw a card from the Tree deck.
+On Brawl (*active player has Kinship*) — cancel the Brawl in your Domain. They draw a card from the Tree deck.
 ```
 
 ```
@@ -296,13 +296,13 @@ On Order — discard the top 2 cards from the Tree deck and the top 2 cards from
 ```
 🌳  SOWING
 [Knowledge]
-On Order (2+ [Nature] in your Domain) — Order Expand.
+On Order (*2+ [Nature] in your Domain*) — Order Expand.
 On Harvest — refill the Season, then put all [Nature] cards from the Season into your Domain.
 ```
 
 ```
 🌳  COMPOST
-On Order (Reaping card in your discard) — choose one:
+On Order (*Reaping card in your discard*) — choose one:
 • Order Expand.
 • Remove the Reaping card from your discard from the game, then Harvest your Domain.
 ```
@@ -455,12 +455,12 @@ On Rite — Order Expand.
 ```
 🌾  TAX COLLECTORS
 [Discontent] [Mob]
-On Order (3+ [Labour]) — Order Barter. Rumour your Domain.
+On Order (*3+ [Labour]*) — Order Barter. Rumour your Domain.
 ```
 
 ```
 🌾  LOOKOUT
-On Dawn ([Discontent]) — Rumour your Domain.
+On Dawn (*[Discontent]*) — Rumour your Domain.
 ```
 
 ```
@@ -522,7 +522,7 @@ On Brawl — choose a card from the Wares. Put it into the active player's Domai
 ```
 🪙  FORGERY
 [Discontent]
-On Order (Coin card in your Domain) — put Forgery into Wares. Order Barter.
+On Order (*Coin card in your Domain*) — put Forgery into Wares. Order Barter.
 ```
 
 ```
@@ -557,7 +557,7 @@ On Dawn — draw a card from the Coin deck.
 ```
 🪙  EMBASSY
 [Wealth]
-On Dawn (Kinship) — you and each player with Kinship put a card from the Wares into your Domains.
+On Dawn (*Kinship*) — you and each player with Kinship put a card from the Wares into your Domains.
 ```
 
 ```
@@ -627,8 +627,8 @@ On Dawn — Rite your Domain.
 ```
 🕯️  ZEALOT
 [Mob] [Religion] [Spiritual]
-On Brawl ([Religion]) — cancel the Brawl in your Domain.
-On Brawl (no [Religion]) — discard a card from your Domain.
+On Brawl (*[Religion]*) — cancel the Brawl in your Domain.
+On Brawl (*no [Religion]*) — discard a card from your Domain.
 On Rite — the active player may move Zealot to another Domain.
 ```
 
@@ -679,7 +679,7 @@ On Brawl — Order Challenge.
 ```
 ⚔️  ROYAL HUNT
 [Hunt] [Trophy] [Unit]
-On Order (no other [Hunt] in play) — Feast your Domain twice. Draw a card from the Claw deck.
+On Order (*no other [Hunt] in play*) — Feast your Domain twice. Draw a card from the Claw deck.
 ```
 
 ```

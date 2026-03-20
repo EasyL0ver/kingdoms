@@ -43,7 +43,7 @@
         "Discontent"
       ],
       "count": 4,
-      "text": "On Order (no other [Hunt] in play) — Feast your Domain. Draw a card from the Claw deck."
+      "text": "On Order (*no other [Hunt] in play*) — Feast your Domain. Draw a card from the Claw deck."
     },
     {
       "name": "Worship of the Hunt",
@@ -129,7 +129,7 @@
         "Chivalry"
       ],
       "count": 1,
-      "text": "On Order ([Trophy] in your Domain) — Order Challenge."
+      "text": "On Order (*[Trophy] in your Domain*) — Order Challenge."
     },
     {
       "name": "Outriders",
@@ -143,7 +143,7 @@
         "Discontent"
       ],
       "count": 3,
-      "text": "On Order ([Land] in the Season) — put all [Land] cards from the Season into your Domain. Discard Land Grab."
+      "text": "On Order (*[Land] in the Season*) — put all [Land] cards from the Season into your Domain. Discard Land Grab."
     },
     {
       "name": "Rite of Passage",
@@ -238,7 +238,7 @@
         "Hunt"
       ],
       "count": 3,
-      "text": "On Order (no other [Hunt] in play) — Feast your Domain twice. Draw a card from the Claw deck."
+      "text": "On Order (*no other [Hunt] in play*) — Feast your Domain twice. Draw a card from the Claw deck."
     },
     {
       "name": "Gold Coat",
@@ -304,7 +304,7 @@
         "Knowledge"
       ],
       "count": 1,
-      "text": "On Brawl (active player has Kinship) — cancel the Brawl in your Domain. They draw a card from the Tree deck."
+      "text": "On Brawl (*active player has Kinship*) — cancel the Brawl in your Domain. They draw a card from the Tree deck."
     },
     {
       "name": "Worship of the Dawn",
@@ -356,13 +356,13 @@
         "Knowledge"
       ],
       "count": 3,
-      "text": "On Order (2+ [Nature] in your Domain) — Order Expand.\nOn Harvest — refill the Season, then put all [Nature] cards from the Season into your Domain."
+      "text": "On Order (*2+ [Nature] in your Domain*) — Order Expand.\nOn Harvest — refill the Season, then put all [Nature] cards from the Season into your Domain."
     },
     {
       "name": "Compost",
       "tags": [],
       "count": 2,
-      "text": "On Order (Reaping card in your discard) — choose one:\n• Order Expand.\n• Remove the Reaping card from your discard from the game, then Harvest your Domain."
+      "text": "On Order (*Reaping card in your discard*) — choose one:\n• Order Expand.\n• Remove the Reaping card from your discard from the game, then Harvest your Domain."
     },
     {
       "name": "Vigil",
@@ -552,13 +552,13 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Order (3+ [Labour]) — Order Barter. Rumour your Domain."
+      "text": "On Order (*3+ [Labour]*) — Order Barter. Rumour your Domain."
     },
     {
       "name": "Lookout",
       "tags": [],
       "count": 2,
-      "text": "On Dawn ([Discontent]) — Rumour your Domain."
+      "text": "On Dawn (*[Discontent]*) — Rumour your Domain."
     },
     {
       "name": "Tidings",
@@ -620,7 +620,7 @@
         "Discontent"
       ],
       "count": 3,
-      "text": "On Order (Coin card in your Domain) — put Forgery into Wares. Order Barter."
+      "text": "On Order (*Coin card in your Domain*) — put Forgery into Wares. Order Barter."
     },
     {
       "name": "Usurer",
@@ -664,7 +664,7 @@
         "Wealth"
       ],
       "count": 2,
-      "text": "On Dawn (Kinship) — you and each player with Kinship put a card from the Wares into your Domains."
+      "text": "On Dawn (*Kinship*) — you and each player with Kinship put a card from the Wares into your Domains."
     },
     {
       "name": "Efficiency",
@@ -755,7 +755,7 @@
         "Mob"
       ],
       "count": 2,
-      "text": "On Brawl ([Religion]) — cancel the Brawl in your Domain.\nOn Brawl (no [Religion]) — discard a card from your Domain.\nOn Rite — the active player may move Zealot to another Domain."
+      "text": "On Brawl (*[Religion]*) — cancel the Brawl in your Domain.\nOn Brawl (*no [Religion]*) — discard a card from your Domain.\nOn Rite — the active player may move Zealot to another Domain."
     },
     {
       "name": "Evangelism",
