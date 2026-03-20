@@ -351,7 +351,7 @@ def render_card(card: dict) -> str:
 
     endgame_html = ""
     if endgame:
-        endgame_html = f'<div class="card-endgame">{esc(endgame)}</div>'
+        endgame_html = f'<div class="card-endgame">{bold_keywords(endgame)}</div>'
 
     deck_label = name if "Zone" in tags else deck.title()
 
