@@ -87,7 +87,7 @@
       "name": "Kinship",
       "tags": [],
       "count": 3,
-      "text": "On Harvest — Order the Tree zone."
+      "text": "On Harvest — Order Advice."
     },
     {
       "name": "Racketeering",
@@ -129,7 +129,7 @@
         "Chivalry"
       ],
       "count": 1,
-      "text": "On Order ([Trophy] in your Domain) — Order the Sword zone."
+      "text": "On Order ([Trophy] in your Domain) — Order Challenge."
     },
     {
       "name": "Outriders",
@@ -168,7 +168,7 @@
         "Wealth"
       ],
       "count": 2,
-      "text": "On Order — Discard Ivory. Order the Coin zone."
+      "text": "On Order — Discard Ivory. Order Barter."
     },
     {
       "name": "Hunger",
@@ -296,7 +296,7 @@
       "name": "Kinship",
       "tags": [],
       "count": 4,
-      "text": "On Harvest — Order the Tree zone."
+      "text": "On Harvest — Order Advice."
     },
     {
       "name": "Eldership",
@@ -356,13 +356,13 @@
         "Knowledge"
       ],
       "count": 3,
-      "text": "On Order (2+ [Nature] in your Domain) — Order the Wheat zone.\nOn Harvest — refill the Season, then put all [Nature] cards from the Season into your Domain."
+      "text": "On Order (2+ [Nature] in your Domain) — Order Expand.\nOn Harvest — refill the Season, then put all [Nature] cards from the Season into your Domain."
     },
     {
       "name": "Compost",
       "tags": [],
       "count": 2,
-      "text": "On Order (Reaping card in your discard) — choose one:\n• Order the Wheat zone.\n• Remove the Reaping card from your discard from the game, then Harvest your Domain."
+      "text": "On Order (Reaping card in your discard) — choose one:\n• Order Expand.\n• Remove the Reaping card from your discard from the game, then Harvest your Domain."
     },
     {
       "name": "Vigil",
@@ -430,7 +430,7 @@
         "Labour"
       ],
       "count": 2,
-      "text": "On Order — choose one:\n• Order the Wheat zone.\n• Order the Coin zone.\n• Feast your Domain."
+      "text": "On Order — choose one:\n• Order Expand.\n• Order Barter.\n• Feast your Domain."
     },
     {
       "name": "Tavern",
@@ -472,7 +472,7 @@
         "Labour"
       ],
       "count": 4,
-      "text": "On Order, Harvest — Order the Wheat zone."
+      "text": "On Order, Harvest — Order Expand."
     },
     {
       "name": "Ritual Pyre",
@@ -508,7 +508,7 @@
         "Nature"
       ],
       "count": 2,
-      "text": "On Harvest — Order the Tree zone or Wheat zone.",
+      "text": "On Harvest — Order Advice or Wheat zone.",
       "reminder": "Your choice."
     },
     {
@@ -543,7 +543,7 @@
         "Spiritual"
       ],
       "count": 2,
-      "text": "On Harvest — Order the Candle zone.\nOn Rite — Order the Wheat zone."
+      "text": "On Harvest — Order Worship.\nOn Rite — Order Expand."
     },
     {
       "name": "Tax Collectors",
@@ -552,7 +552,7 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Order (3+ [Labour]) — Order the Coin zone. Rumour your Domain."
+      "text": "On Order (3+ [Labour]) — Order Barter. Rumour your Domain."
     },
     {
       "name": "Lookout",
@@ -572,7 +572,7 @@
         "Spiritual"
       ],
       "count": 3,
-      "text": "On Order — choose a player. Move any number of cards from your Domain to theirs. They choose this card's effect:\n• *Pray* — Order the Candle zone once per card moved.\n• *Fight* — Brawl their Domain.\n\nDiscard Pilgrimage."
+      "text": "On Order — choose a player. Move any number of cards from your Domain to theirs. They choose this card's effect:\n• *Pray* — Order Worship once per card moved.\n• *Fight* — Brawl their Domain.\n\nDiscard Pilgrimage."
     }
   ],
   "coin": [
@@ -591,20 +591,20 @@
       "name": "Market",
       "tags": [],
       "count": 3,
-      "text": "On Order — choose a player and a card from the Wares. They may put it into their Domain. If they do, Order the Coin zone.",
+      "text": "On Order — choose a player and a card from the Wares. They may put it into their Domain. If they do, Order Barter.",
       "reminder": "Buyer picks which Ware."
     },
     {
       "name": "Pawn Shop",
       "tags": [],
       "count": 3,
-      "text": "On Order — Order the Coin zone.\nOn Rumour — swap a card from your Domain with a card from the Wares."
+      "text": "On Order — Order Barter.\nOn Rumour — swap a card from your Domain with a card from the Wares."
     },
     {
       "name": "Stockpile",
       "tags": [],
       "count": 3,
-      "text": "On Order — put a card from your Domain into the Wares. Order the Coin zone."
+      "text": "On Order — put a card from your Domain into the Wares. Order Barter."
     },
     {
       "name": "Smuggler",
@@ -620,13 +620,13 @@
         "Discontent"
       ],
       "count": 3,
-      "text": "On Order (Coin card in your Domain) — put Forgery into Wares. Order the Coin zone."
+      "text": "On Order (Coin card in your Domain) — put Forgery into Wares. Order Barter."
     },
     {
       "name": "Usurer",
       "tags": [],
       "count": 3,
-      "text": "On Order — put a card from your Domain into the Wares.\nOn Rumour — Order the Coin zone."
+      "text": "On Order — put a card from your Domain into the Wares.\nOn Rumour — Order Barter."
     },
     {
       "name": "Highwaymen",
@@ -634,7 +634,7 @@
         "Mob"
       ],
       "count": 3,
-      "text": "On Brawl — put a card from your Domain into the Wares. The active player Orders the Coin zone."
+      "text": "On Brawl — put a card from your Domain into the Wares. The active player Orders Barter."
     },
     {
       "name": "Sellsword",
@@ -763,7 +763,7 @@
         "Religion"
       ],
       "count": 2,
-      "text": "On Order — each player Orders the Candle zone.",
+      "text": "On Order — each player Orders Worship.",
       "reminder": "In turn order, starting with you."
     },
     {
@@ -805,7 +805,7 @@
         "Chivalry"
       ],
       "count": 4,
-      "text": "On Brawl — Order the Sword zone."
+      "text": "On Brawl — Order Challenge."
     }
   ]
 }

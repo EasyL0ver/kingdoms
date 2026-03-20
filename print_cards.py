@@ -49,37 +49,37 @@ ZONE_CARDS = [
      "setupText": "Start with this card.\n"
                   "It cannot be discarded or moved.",
      "orderText": "On Dawn — choose one:\n"
-                  "• Order the Claw zone or Tree zone.\n"
+                  "• Order Prowl or Advice.\n"
                   "• Order a card in your Domain.",
      "endgameText": ""},
-    {"name": "Claw Zone",  "tags": ["Zone"], "deck": "claw",   "count": 1,
+    {"name": "Prowl",      "tags": ["Zone"], "deck": "claw",   "count": 1,
      "setupText": "",
      "orderText": "On Order — draw 2 cards from the Claw deck.",
      "endgameText": "Claw deck empty → most [Trophy] wins."},
-    {"name": "Tree Zone",  "tags": ["Zone"], "deck": "tree",   "count": 1,
+    {"name": "Advice",     "tags": ["Zone"], "deck": "tree",   "count": 1,
      "setupText": "Set aside 4 cards face-up — the Season.",
      "orderText": "On Order — put a card from the Season into your Domain.\n"
                   "If the Season is empty, refill it.",
      "endgameText": "Tree deck + Season empty → most [Nature] wins."},
-    {"name": "Wheat Zone", "tags": ["Zone"], "deck": "wheat",  "count": 1,
+    {"name": "Expand",     "tags": ["Zone"], "deck": "wheat",  "count": 1,
      "setupText": "Set aside 5 cards face-up in a column — the Village.\n"
                   "Draw from the bottom, refill from the top.",
      "orderText": "On Order — put 1–5 cards from the bottom of the Village into your Domain.\n"
                   "Draw cards from the Claw deck equal to the number of [Labour] tags taken. Put them into your Domain.\n"
                   "If you have 3+ [Discontent] in your Domain: Brawl every Domain with Wheat cards.",
      "endgameText": "Wheat deck + Village empty → most [Amenity] wins."},
-    {"name": "Coin Zone",  "tags": ["Zone"], "deck": "coin",   "count": 1,
+    {"name": "Barter",     "tags": ["Zone"], "deck": "coin",   "count": 1,
      "setupText": "Set aside 3 cards face-up — the Opportunities.\n"
                   "Leave an empty zone for the Wares.",
      "orderText": "On Order — choose one:\n"
                   "• *Buy* — put a card from the Wares into your Domain. If the Wares are empty, refill the Opportunities and Rumour every Domain.\n"
                   "• *Trade* — put a card from your Domain into the Wares. Put an Opportunity into your Domain.",
      "endgameText": "Coin deck + Opportunities empty → most [Wealth] wins."},
-    {"name": "Candle Zone","tags": ["Zone"], "deck": "candle", "count": 1,
+    {"name": "Worship",    "tags": ["Zone"], "deck": "candle", "count": 1,
      "setupText": "Place the Candle deck face-up so the top card is always visible.",
      "orderText": "On Order — draw a card from the Candle deck.",
      "endgameText": "Candle deck empty → most [Religion] wins."},
-    {"name": "Sword Zone", "tags": ["Zone"], "deck": "sword",  "count": 1,
+    {"name": "Challenge",  "tags": ["Zone"], "deck": "sword",  "count": 1,
      "setupText": "Set aside 2 cards face-up — the Tourney.",
      "orderText": "On Order (2+ [Mob] in any Domain) — put all [Unit] cards from the Tourney into the Domain with 2+ [Mob]. Put the rest into yours. Refill the Tourney to 2.\n"
                   "On Order (no 2+ [Mob] in any Domain) — pick a Tourney card and an opponent. They get the other. They choose:\n"
@@ -318,7 +318,7 @@ def render_card(card: dict) -> str:
     reminder = card.get("reminder", "")
     endgame = card.get("endgameText", "")
     icon = DECK_ICONS.get(deck, "")
-    is_zone = "Zone" in name or name == "Presence"
+    is_zone = "Zone" in tags or name == "Presence"
 
     tags_row = ""
     if not is_zone:
@@ -353,7 +353,7 @@ def render_card(card: dict) -> str:
     if endgame:
         endgame_html = f'<div class="card-endgame">{esc(endgame)}</div>'
 
-    deck_label = name if "Zone" in name else deck.title()
+    deck_label = name if "Zone" in tags else deck.title()
 
     footer_html = ""
     if not is_zone:
@@ -395,6 +395,7 @@ _BOLD_KEYWORDS = re.compile(
     r'\b('
     r'Brawl|Rite|Feast|Harvest|Rumour|Order'
     r'|Hunt|Season|Fields|Wares|Opportunities|Tourney|Village'
+    r'|Prowl|Advice|Expand|Barter|Worship|Challenge'
     r'|Requires'
     r')\b'
 )

@@ -12,7 +12,7 @@ All designed cards in one place, organised by deck.
 SETUP: Start with this card.
 It cannot be discarded or moved.
 On Dawn — choose one:
-• Order the Claw zone or Tree zone.
+• Order Prowl or Advice.
 • Order a card in your Domain.
 ```
 
@@ -23,19 +23,19 @@ On Dawn — choose one:
 One per deck. Placed next to their draw pile at setup.
 
 ```
-🐾  CLAW ZONE
+🐾  PROWL
 On Order — draw 2 cards from the Claw deck.
 ```
 
 ```
-🌳  TREE ZONE
+🌳  ADVICE
 SETUP: Set aside 4 cards face-up — the Season.
 On Order — put a card from the Season into your Domain.
 If the Season is empty, refill it.
 ```
 
 ```
-🌾  WHEAT ZONE
+🌾  EXPAND
 SETUP: Set aside 5 cards face-up in a column — the Village.
 Draw from the bottom, refill from the top.
 On Order — put 1–5 cards from the bottom of the Village into your Domain.
@@ -44,7 +44,7 @@ If you have 3+ [Discontent] in your Domain: Brawl every Domain with Wheat cards.
 ```
 
 ```
-🪙  COIN ZONE
+🪙  BARTER
 SETUP: Set aside 3 cards face-up — the Opportunities.
 Leave an empty zone for the Wares.
 On Order — choose one:
@@ -53,13 +53,13 @@ On Order — choose one:
 ```
 
 ```
-🕯️  CANDLE ZONE
+🕯️  WORSHIP
 SETUP: Place the Candle deck face-up so the top card is always visible.
 On Order — draw a card from the Candle deck.
 ```
 
 ```
-⚔️  SWORD ZONE
+⚔️  CHALLENGE
 SETUP: Set aside 2 cards face-up — the Tourney.
 On Order (2+ [Mob] in any Domain) — put all [Unit] cards from the Tourney into the Domain with 2+ [Mob]. Put the rest into yours. Refill the Tourney to 2.
 On Order (no 2+ [Mob] in any Domain) — pick a Tourney card and an opponent. They get the other. They choose:
@@ -137,7 +137,7 @@ On Dawn — move up to 2 [Mob] cards from your Domain or a Domain with Kinship t
 
 ```
 🐾  KINSHIP
-On Harvest — Order the Tree zone.
+On Harvest — Order Advice.
 ```
 
 ```
@@ -166,7 +166,7 @@ On Feast — draw a card from the Claw deck.
 ```
 🐾  MARTIAL EXCELLENCE
 [Chivalry] [Trophy]
-On Order ([Trophy] in your Domain) — Order the Sword zone.
+On Order ([Trophy] in your Domain) — Order Challenge.
 ```
 
 ```
@@ -195,7 +195,7 @@ On Dawn — the player with the most cards in their Domain discards 2 cards from
 ```
 🐾  IVORY
 [Trophy] [Wealth]
-On Order — Discard Ivory. Order the Coin zone.
+On Order — Discard Ivory. Order Barter.
 ```
 
 ```
@@ -250,7 +250,7 @@ On Brawl (*not your turn*) — you and the active player each draw 2 cards from 
 
 ```
 🌳  KINSHIP
-On Harvest — Order the Tree zone.
+On Harvest — Order Advice.
 ```
 
 ```
@@ -296,14 +296,14 @@ On Order — discard the top 2 cards from the Tree deck and the top 2 cards from
 ```
 🌳  SOWING
 [Knowledge]
-On Order (2+ [Nature] in your Domain) — Order the Wheat zone.
+On Order (2+ [Nature] in your Domain) — Order Expand.
 On Harvest — refill the Season, then put all [Nature] cards from the Season into your Domain.
 ```
 
 ```
 🌳  COMPOST
 On Order (Reaping card in your discard) — choose one:
-• Order the Wheat zone.
+• Order Expand.
 • Remove the Reaping card from your discard from the game, then Harvest your Domain.
 ```
 
@@ -364,8 +364,8 @@ On Order — choose a player with Kinship. You may Order a card in their Domain.
 🌾  ANIMAL HUSBANDRY
 [Labour]
 On Order — choose one:
-• Order the Wheat zone.
-• Order the Coin zone.
+• Order Expand.
+• Order Barter.
 • Feast your Domain.
 ```
 
@@ -397,7 +397,7 @@ On Order — put any card from the Village into your Domain. Put a card from you
 ```
 🌾  TURNIP PATCH
 [Labour]
-On Order, Harvest — Order the Wheat zone.
+On Order, Harvest — Order Expand.
 ```
 
 ```
@@ -422,7 +422,7 @@ On Harvest (*not your turn*) — discard 2 cards from your Domain, draw 2 cards 
 ```
 🌾  HERB GARDEN
 [Nature]
-On Harvest — Order the Tree zone or Wheat zone.
+On Harvest — Order Advice or Wheat zone.
 ```
 
 > *Your choice.*
@@ -448,14 +448,14 @@ On Rite — rearrange the Village belt.
 ```
 🌾  ORA ET LABORA
 [Labour] [Spiritual]
-On Harvest — Order the Candle zone.
-On Rite — Order the Wheat zone.
+On Harvest — Order Worship.
+On Rite — Order Expand.
 ```
 
 ```
 🌾  TAX COLLECTORS
 [Discontent] [Mob]
-On Order (3+ [Labour]) — Order the Coin zone. Rumour your Domain.
+On Order (3+ [Labour]) — Order Barter. Rumour your Domain.
 ```
 
 ```
@@ -476,7 +476,7 @@ Discard Tidings.
 🌾  PILGRIMAGE
 [Spiritual]
 On Order — choose a player. Move any number of cards from your Domain to theirs. They choose this card's effect:
-• *Pray* — Order the Candle zone once per card moved.
+• *Pray* — Order Worship once per card moved.
 • *Fight* — Brawl their Domain.
 
 Discard Pilgrimage.
@@ -497,20 +497,20 @@ Discard Pilgrimage.
 
 ```
 🪙  MARKET
-On Order — choose a player and a card from the Wares. They may put it into their Domain. If they do, Order the Coin zone.
+On Order — choose a player and a card from the Wares. They may put it into their Domain. If they do, Order Barter.
 ```
 
 > *Buyer picks which Ware.*
 
 ```
 🪙  PAWN SHOP
-On Order — Order the Coin zone.
+On Order — Order Barter.
 On Rumour — swap a card from your Domain with a card from the Wares.
 ```
 
 ```
 🪙  STOCKPILE
-On Order — put a card from your Domain into the Wares. Order the Coin zone.
+On Order — put a card from your Domain into the Wares. Order Barter.
 ```
 
 ```
@@ -522,19 +522,19 @@ On Brawl — choose a card from the Wares. Put it into the active player's Domai
 ```
 🪙  FORGERY
 [Discontent]
-On Order (Coin card in your Domain) — put Forgery into Wares. Order the Coin zone.
+On Order (Coin card in your Domain) — put Forgery into Wares. Order Barter.
 ```
 
 ```
 🪙  USURER
 On Order — put a card from your Domain into the Wares.
-On Rumour — Order the Coin zone.
+On Rumour — Order Barter.
 ```
 
 ```
 🪙  HIGHWAYMEN
 [Mob]
-On Brawl — put a card from your Domain into the Wares. The active player Orders the Coin zone.
+On Brawl — put a card from your Domain into the Wares. The active player Orders Barter.
 ```
 
 ```
@@ -635,7 +635,7 @@ On Rite — the active player may move Zealot to another Domain.
 ```
 🕯️  EVANGELISM
 [Religion]
-On Order — each player Orders the Candle zone.
+On Order — each player Orders Worship.
 ```
 
 > *In turn order, starting with you.*
@@ -667,7 +667,7 @@ On Order — move the top card of the Candle deck to the Wares.
 ```
 🕯️  PROTECT THE MEEK
 [Chivalry]
-On Brawl — Order the Sword zone.
+On Brawl — Order Challenge.
 ```
 
 ---
