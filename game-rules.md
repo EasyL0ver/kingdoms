@@ -73,7 +73,7 @@ A **zone** is any place that holds cards. There are two kinds:
 
 ### Deck Access
 
-Players do **not** automatically have access to all decks. Your Presence grants access to Claw and Tree. Other access is granted by cards (gateway cards like Sowing, Apprenticeship, etc.). Lose the card, lose the access.
+Players do **not** automatically have access to all decks. Your Presence grants access to Claw and Tree. Other access is granted by cards (gateway cards like Sowing, Mill, etc.). Lose the card, lose the access.
 
 ### The Discard
 
@@ -93,7 +93,6 @@ When an event fires in a zone, resolve it one Domain at a time in play order (cl
 
 - **Freeform.** Players may make any deal, alliance, threat, or promise at any time.
 - **Nothing is binding.** Verbal agreements have no mechanical enforcement. Betrayal is expected.
-- **Some cards require agreement.** (e.g. Apprenticeship requires another player's permission.)
 - **No formal alliance system.** Alliances exist only in the social space.
 
 ---

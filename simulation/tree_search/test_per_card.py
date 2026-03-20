@@ -35,7 +35,7 @@ ORDERABLE = [
     ("Granary", ["Labour"], "wheat"),
     ("Mill", ["Labour"], "wheat"),
     ("Animal Husbandry", ["Labour"], "wheat"),
-    ("Apprenticeship", ["Labour"], "wheat"),
+
     ("Militia", ["Unit"], "wheat"),
     ("Well", ["Amenity"], "wheat"),
     ("Orchard", ["Nature", "Land"], "wheat"),

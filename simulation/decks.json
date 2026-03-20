@@ -6,7 +6,7 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Order — you may move a [Mob] to the Domain with the most cards. Brawl there."
+      "text": "On Order — you may move a [Mob] to the Domain with the most cards. Brawl that Domain."
     },
     {
       "name": "Raid",
@@ -26,7 +26,7 @@
         "Discontent"
       ],
       "count": 3,
-      "text": "On Brawl (*your turn*) — remove a card from your discard from the game.\nOn Brawl (*not your turn*) — the active player takes a card from your discard."
+      "text": "On Brawl (*your turn*) — remove a card from your discard from the game.\nOn Brawl (*not your turn*) — the active player puts a card from your discard into their Domain."
     },
     {
       "name": "Blood Offering",
@@ -67,7 +67,7 @@
         "Spiritual"
       ],
       "count": 1,
-      "text": "On Rite — the active player Brawls in a Domain of their choice."
+      "text": "On Rite — the active player Brawls a Domain of their choice."
     },
     {
       "name": "Incite",
@@ -81,7 +81,7 @@
         "Trophy"
       ],
       "count": 2,
-      "text": "On Dawn — move up to 2 [Mob] cards from your Domain or a culture ally's to any other Domain."
+      "text": "On Dawn — move up to 2 [Mob] cards from your Domain or a Domain with Kinship to any other Domain."
     },
     {
       "name": "Kinship",
@@ -114,7 +114,7 @@
         "Discontent"
       ],
       "count": 2,
-      "text": "On Feast — discard Marauders. Draw a card from the Claw deck."
+      "text": "On Feast — Discard Marauders. Draw a card from the Claw deck."
     },
     {
       "name": "Share the Spoils",
@@ -135,7 +135,7 @@
       "name": "Outriders",
       "tags": [],
       "count": 2,
-      "text": "On Order — draw 3 cards from the Claw deck, then discard 1 of them."
+      "text": "On Order — draw 3 cards from the Claw deck, then discard one of them."
     },
     {
       "name": "Land Grab",
@@ -168,7 +168,7 @@
         "Wealth"
       ],
       "count": 2,
-      "text": "On Order — discard Ivory. Order the Coin zone."
+      "text": "On Order — Discard Ivory. Order the Coin zone."
     },
     {
       "name": "Hunger",
@@ -199,7 +199,7 @@
         "Mob"
       ],
       "count": 2,
-      "text": "On Dawn — place Spoils of War in another player's Domain.\nOn Brawl — moves to the active player. They draw cards from the Claw and Tree decks equal to their [Trophy] count."
+      "text": "On Dawn — move Spoils of War to another player's Domain.\nOn Brawl — moves to the active player's Domain. They draw cards from the Claw and Tree decks equal to their [Trophy] count."
     },
     {
       "name": "Veil Tear",
@@ -248,7 +248,7 @@
         "Wealth"
       ],
       "count": 2,
-      "text": "On Rumour, Brawl — discard a [Unit] anywhere. Gold Coat moves to that Domain."
+      "text": "On Rumour, Brawl — the active player chooses a Domain and discards a [Unit] of their choice there. Gold Coat moves to that Domain."
     },
     {
       "name": "Iron Crown",
@@ -258,7 +258,7 @@
         "Trophy"
       ],
       "count": 2,
-      "text": "On Dawn — discard a [Unit] anywhere. Iron Crown moves to that Domain."
+      "text": "On Dawn — the active player chooses a Domain and discards a [Unit] of their choice there. Iron Crown moves to that Domain."
     },
     {
       "name": "Green Mantle",
@@ -268,7 +268,7 @@
         "Nature"
       ],
       "count": 2,
-      "text": "On Harvest — discard a [Unit] anywhere. Green Mantle moves to that Domain."
+      "text": "On Harvest — the active player chooses a Domain and discards a [Unit] of their choice there. Green Mantle moves to that Domain."
     },
     {
       "name": "White Shield",
@@ -278,7 +278,7 @@
         "Amenity"
       ],
       "count": 2,
-      "text": "On Feast — discard a [Unit] anywhere. White Shield moves to that Domain."
+      "text": "On Feast — the active player chooses a Domain and discards a [Unit] of their choice there. White Shield moves to that Domain."
     },
     {
       "name": "Holy Cross",
@@ -288,7 +288,7 @@
         "Religion"
       ],
       "count": 2,
-      "text": "On Rite — discard a [Unit] anywhere. Holy Cross moves to that Domain."
+      "text": "On Rite — the active player chooses a Domain and discards a [Unit] of their choice there. Holy Cross moves to that Domain."
     }
   ],
   "tree": [
@@ -333,7 +333,7 @@
         "Spiritual"
       ],
       "count": 3,
-      "text": "On Order — Reveal the top 3 cards from the Tree deck. Put any [Spiritual] cards from the revealed and the Season into your Domain. Discard the rest of the revealed. Rite your Domain."
+      "text": "On Order — reveal the top 3 cards from the Tree deck. Put any [Spiritual] cards from the revealed and the Season into your Domain. Discard the rest of the revealed. Rite your Domain."
     },
     {
       "name": "Worship of the Hearth",
@@ -362,7 +362,7 @@
       "name": "Compost",
       "tags": [],
       "count": 2,
-      "text": "On Order (Reaping card in your discard) — choose one: • Order the Wheat zone. • Remove the Reaping card from your discard from the game, then Harvest your Domain."
+      "text": "On Order (Reaping card in your discard) — choose one:\n• Order the Wheat zone.\n• Remove the Reaping card from your discard from the game, then Harvest your Domain."
     },
     {
       "name": "Vigil",
@@ -430,7 +430,7 @@
         "Labour"
       ],
       "count": 2,
-      "text": "On Order — choose one: • Order the Wheat zone. • Order the Coin zone. • Feast your Domain."
+      "text": "On Order — choose one:\n• Order the Wheat zone.\n• Order the Coin zone.\n• Feast your Domain."
     },
     {
       "name": "Tavern",
@@ -446,7 +446,7 @@
         "Unit"
       ],
       "count": 2,
-      "text": "On Rumour — discard a [Mob] from your Domain.\nOn Brawl — discard Militia to cancel the Brawl in your Domain."
+      "text": "On Rumour — discard a [Mob] from your Domain.\nOn Brawl — Discard Militia to cancel the Brawl in your Domain."
     },
     {
       "name": "Crooked Inn",
@@ -490,7 +490,7 @@
         "Trophy"
       ],
       "count": 2,
-      "text": "On Dawn — move a [Mob], [Labour], or [Amenity] card between domains that have Wheat cards."
+      "text": "On Dawn — move a [Mob], [Labour], or [Amenity] card between Domains that have Wheat cards."
     },
     {
       "name": "Wolf Pack",
@@ -526,7 +526,7 @@
         "Unit"
       ],
       "count": 2,
-      "text": "On Dawn — Order 1 Wheat card in your Domain."
+      "text": "On Dawn — Order a Wheat card in your Domain."
     },
     {
       "name": "Worship of the Bread",
@@ -564,7 +564,7 @@
       "name": "Tidings",
       "tags": [],
       "count": 2,
-      "text": "On Rumour — choose one, then Discard Tidings. • *Panic* — draw 2 cards from the Claw deck. • *Fortify* — return a [Discontent] to top of the Claw deck."
+      "text": "On Rumour — choose one:\n• *Panic* — draw 2 cards from the Claw deck.\n• *Fortify* — return a [Discontent] to top of the Claw deck.\n\nDiscard Tidings."
     },
     {
       "name": "Pilgrimage",
@@ -572,7 +572,7 @@
         "Spiritual"
       ],
       "count": 3,
-      "text": "On Order — give 1+ cards from your Domain to another player. They decide: if they accept, draw that many cards from the Candle deck. If they refuse, no reward. Discard Pilgrimage."
+      "text": "On Order — choose a player. Move any number of cards from your Domain to theirs. They choose this card's effect:\n• *Pray* — Order the Candle zone once per card moved.\n• *Fight* — Brawl their Domain.\n\nDiscard Pilgrimage."
     }
   ],
   "coin": [
@@ -591,20 +591,20 @@
       "name": "Market",
       "tags": [],
       "count": 3,
-      "text": "On Order — offer a Ware to a player. If they accept, Order the Coin zone.",
+      "text": "On Order — choose a player and a card from the Wares. They may put it into their Domain. If they do, Order the Coin zone.",
       "reminder": "Buyer picks which Ware."
     },
     {
       "name": "Pawn Shop",
       "tags": [],
       "count": 3,
-      "text": "On Order — Order the Coin zone.\nOn Rumour — swap 1 Domain card with 1 Wares card."
+      "text": "On Order — Order the Coin zone.\nOn Rumour — swap a card from your Domain with a card from the Wares."
     },
     {
       "name": "Stockpile",
       "tags": [],
       "count": 3,
-      "text": "On Order — put 1 Domain card into Wares. Order the Coin zone."
+      "text": "On Order — put a card from your Domain into the Wares. Order the Coin zone."
     },
     {
       "name": "Smuggler",
@@ -612,7 +612,7 @@
         "Mob"
       ],
       "count": 3,
-      "text": "On Brawl — you pick 1 from Wares, the active player takes it. Smuggler moves to the active player's Domain."
+      "text": "On Brawl — choose a card from the Wares. Put it into the active player's Domain. Smuggler moves to the active player's Domain."
     },
     {
       "name": "Forgery",
@@ -620,13 +620,13 @@
         "Discontent"
       ],
       "count": 3,
-      "text": "On Order (Coin card in Domain) — put Forgery into Wares. Order the Coin zone."
+      "text": "On Order (Coin card in your Domain) — put Forgery into Wares. Order the Coin zone."
     },
     {
       "name": "Usurer",
       "tags": [],
       "count": 3,
-      "text": "On Order — put 1 Domain card into Wares.\nOn Rumour — Order the Coin zone."
+      "text": "On Order — put a card from your Domain into the Wares.\nOn Rumour — Order the Coin zone."
     },
     {
       "name": "Highwaymen",
@@ -634,7 +634,7 @@
         "Mob"
       ],
       "count": 3,
-      "text": "On Brawl — put 1 Domain card into Wares. active player Orders on the Coin zone."
+      "text": "On Brawl — put a card from your Domain into the Wares. The active player Orders the Coin zone."
     },
     {
       "name": "Sellsword",
@@ -642,13 +642,13 @@
         "Unit"
       ],
       "count": 2,
-      "text": "On Brawl — discard Sellsword to the Wares to cancel the Brawl your Domain."
+      "text": "On Brawl — move Sellsword to the Wares to cancel the Brawl in your Domain."
     },
     {
       "name": "Swindle",
       "tags": [],
       "count": 2,
-      "text": "On Order — give all Wares to a chosen opponent. Brawl their Domain. Discard Swindle."
+      "text": "On Order — move all Wares to a chosen opponent's Domain. Brawl their Domain. Discard Swindle."
     },
     {
       "name": "Prosperity",
@@ -656,7 +656,7 @@
         "Wealth"
       ],
       "count": 2,
-      "text": "On Dawn (Opportunities) — draw a card from the Coin deck."
+      "text": "On Dawn — draw a card from the Coin deck."
     },
     {
       "name": "Embassy",
@@ -664,7 +664,7 @@
         "Wealth"
       ],
       "count": 2,
-      "text": "On Dawn (Kinship and Wares) — you and each player with Kinship put a card from the Wares into your Domains."
+      "text": "On Dawn (Kinship) — you and each player with Kinship put a card from the Wares into your Domains."
     },
     {
       "name": "Efficiency",
@@ -684,7 +684,7 @@
       "name": "Commodities",
       "tags": [],
       "count": 2,
-      "text": "On Rumour — draw a card from a chosen deck. Add it to the Wares."
+      "text": "On Rumour — draw a card from a chosen deck. Put it into the Wares."
     },
     {
       "name": "Provisions",
@@ -700,7 +700,7 @@
         "Spiritual"
       ],
       "count": 1,
-      "text": "On Rite — the active player takes a card from the Wares."
+      "text": "On Rite — the active player puts a card from the Wares into their Domain."
     }
   ],
   "candle": [
@@ -711,7 +711,7 @@
         "Religion"
       ],
       "count": 1,
-      "text": "On Rite — the active player peeks at Candle cards, scales with [Spiritual]. Keep 1, remove the rest from the game."
+      "text": "On Rite — the active player looks at cards from the Candle deck equal to their [Spiritual] count. They keep one, remove the rest from the game."
     },
     {
       "name": "Worship of the Relic",
@@ -720,7 +720,7 @@
         "Religion"
       ],
       "count": 1,
-      "text": "On Rite — peek at cards from a chosen deck, scales with [Spiritual]. May replace the Revelation. Return rest to top."
+      "text": "On Rite — the active player looks at cards from a chosen deck equal to their [Spiritual] count. They may remove the top card of the Candle deck from the game and put one of the looked-at cards in its place. Return the rest to top of the deck."
     },
     {
       "name": "Worship of the Martyr",
@@ -729,7 +729,7 @@
         "Religion"
       ],
       "count": 1,
-      "text": "On Rite — the active player may discard cards from their Domain. All other players must discard from their Domain equal to [Spiritual] scaling."
+      "text": "On Rite — the active player may discard cards from their Domain equal to their [Spiritual] count. If they do, every other player must do the same."
     },
     {
       "name": "Clergy",
@@ -737,7 +737,7 @@
         "Religion"
       ],
       "count": 3,
-      "text": "On Order — Order the Candle zone. Peek at Candle cards, 1 per player with [Religion]. Keep 1, may set 1 as Revelation, remove the rest from the game."
+      "text": "On Order — look at cards from the Candle deck equal to the number of players with [Religion]. Put one into your Domain, put one on top of the Candle deck, remove the rest from the game."
     },
     {
       "name": "Sabbath",
@@ -755,15 +755,7 @@
         "Mob"
       ],
       "count": 2,
-      "text": "On Brawl — cancel if you have [Religion]; else discard a card from your Domain.\nOn Rite — active player may move Zealot to another Domain."
-    },
-    {
-      "name": "Alms",
-      "tags": [
-        "Religion"
-      ],
-      "count": 2,
-      "text": "On Feast — refill a Field. Return a [Discontent] to top of the Claw deck."
+      "text": "On Brawl ([Religion]) — cancel the Brawl in your Domain.\nOn Brawl (no [Religion]) — discard a card from your Domain.\nOn Rite — the active player may move Zealot to another Domain."
     },
     {
       "name": "Evangelism",
@@ -771,7 +763,8 @@
         "Religion"
       ],
       "count": 2,
-      "text": "On Order — each player in turn order claims 1 Revelation. Refill between each."
+      "text": "On Order — each player Orders the Candle zone.",
+      "reminder": "In turn order, starting with you."
     },
     {
       "name": "Purity",
@@ -779,7 +772,7 @@
         "Religion"
       ],
       "count": 2,
-      "text": "On Order — you may remove the Revelation from the game and reveal the next. Rite your Domain."
+      "text": "On Order — you may remove a card from the top of the Candle deck from the game. Rite your Domain."
     },
     {
       "name": "Flagellation",
@@ -804,7 +797,7 @@
         "Religion"
       ],
       "count": 2,
-      "text": "On Order — move the Revelation to the Wares. Reveal the next card."
+      "text": "On Order — move the top card of the Candle deck to the Wares."
     },
     {
       "name": "Protect the Meek",

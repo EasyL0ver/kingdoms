@@ -850,7 +850,7 @@ for ($t = 1; $t -le $Turns; $t++) {
                     if ($_.Name -eq "Granary") { $s = 5 }
                     if ($_.Name -eq "Mill") { $s = 5 }
                     if ($_.Name -eq "Feed the Commoners") { $s = 7 }
-                    if ($_.Name -eq "Apprenticeship") { $s = 4 }
+
                     if ($_.Name -eq "Famine") { $s = 3 }
                     $s
                 } -Descending | Select-Object -First 1

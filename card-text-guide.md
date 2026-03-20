@@ -60,10 +60,16 @@ every player discards a card from their Domain
 discard the top card of the Claw deck
 ```
 
-Self-discard uses card name:
+Self-discard uses card name, placed at the end of the ability:
 ```
 Discard Reaping.
 Discard Blood Feud, then ...
+```
+
+If the card has a choice or complex effect, put the self-discard on its own line after:
+```
+On Rumour — choose one: • *Panic* — draw 2 cards from the Claw deck. • *Fortify* — return a [Discontent] to top of the Claw deck.
+Discard Tidings.
 ```
 
 ## Returning
@@ -113,7 +119,7 @@ Order the Coin zone         (not "Order on the Coin zone")
 | `*text*` | *italic* | prereqs, mode names (Panic, Fortify) |
 | `[Tag]` | colored bold 🖨️ | tag references in text |
 | `\n` | line break | separating abilities |
-| `• option` | bullet | choice lists |
+| `• option` | bullet | choice lists (each on own line) |
 
 ## 🖨️ Bold Keywords (auto-bolded by renderer)
 
@@ -162,5 +168,7 @@ On Brawl (*not your turn*) — give a card from your Domain to the active player
 
 **Choice:**
 ```
-On Order — choose one: • Order the Wheat zone. • Remove the Reaping card from your discard from the game, then Harvest your Domain.
+On Order — choose one:
+• Order the Wheat zone.
+• Remove the Reaping card from your discard from the game, then Harvest your Domain.
 ```

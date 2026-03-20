@@ -55,42 +55,38 @@ ZONE_CARDS = [
     {"name": "Claw Zone",  "tags": ["Zone"], "deck": "claw",   "count": 1,
      "setupText": "",
      "orderText": "On Order — draw 2 cards from the Claw deck.",
-     "endgameText": "Player with most [Trophy] wins."},
+     "endgameText": "Claw deck empty → most [Trophy] wins."},
     {"name": "Tree Zone",  "tags": ["Zone"], "deck": "tree",   "count": 1,
-     "setupText": "4 cards face-up — the Season.",
+     "setupText": "Set aside 4 cards face-up — the Season.",
      "orderText": "On Order — put a card from the Season into your Domain.\n"
-                  "Refill the Season to 4.",
-     "endgameText": "Player with most [Nature] wins."},
+                  "If the Season is empty, refill it.",
+     "endgameText": "Tree deck + Season empty → most [Nature] wins."},
     {"name": "Wheat Zone", "tags": ["Zone"], "deck": "wheat",  "count": 1,
-     "setupText": "5 face-up cards — the Village (conveyor).",
-     "orderText": "On Order — put 1–5 from the bottom into your Domain.\n"
-                  "Reveal cards from the Claw deck equal to [Labour] tags\n"
-                  "taken → to your Domain.\n"
-                  "If [Discontent] in your Domain ≥ 3:\n"
-                  "Revolt — Brawl every Domain with Wheat.\n"
-                  "Refills to 5 after drawing.",
-     "endgameText": "Player with most [Amenity] wins."},
+     "setupText": "Set aside 5 cards face-up in a column — the Village.\n"
+                  "Draw from the bottom, refill from the top.",
+     "orderText": "On Order — put 1–5 cards from the bottom of the Village into your Domain.\n"
+                  "Draw cards from the Claw deck equal to the number of [Labour] tags taken. Put them into your Domain.\n"
+                  "If you have 3+ [Discontent] in your Domain: Brawl every Domain with Wheat cards.",
+     "endgameText": "Wheat deck + Village empty → most [Amenity] wins."},
     {"name": "Coin Zone",  "tags": ["Zone"], "deck": "coin",   "count": 1,
-     "setupText": "3 face-up cards — the Opportunities.\n"
-                  "Discarded cards go to the Wares.",
+     "setupText": "Set aside 3 cards face-up — the Opportunities.\n"
+                  "Leave an empty zone for the Wares.",
      "orderText": "On Order — choose one:\n"
-                  "• Buy — put a card from the Wares into your Domain.\n"
-                  "• Trade — give 1 Domain card to Wares,\n"
-                  "  put an Opportunity into your Domain. Rumour every Domain.",
-     "endgameText": "Player with most [Wealth] wins."},
+                  "• *Buy* — put a card from the Wares into your Domain. If the Wares are empty, refill the Opportunities and Rumour every Domain.\n"
+                  "• *Trade* — put a card from your Domain into the Wares. Put an Opportunity into your Domain.",
+     "endgameText": "Coin deck + Opportunities empty → most [Wealth] wins."},
     {"name": "Candle Zone","tags": ["Zone"], "deck": "candle", "count": 1,
-     "setupText": "1 face-up card — the Revelation.",
-     "orderText": "On Order — claim the Revelation.\n"
-                  "Reveal the next card.",
-     "endgameText": "Player with most [Religion] wins."},
+     "setupText": "Place the Candle deck face-up so the top card is always visible.",
+     "orderText": "On Order — draw a card from the Candle deck.",
+     "endgameText": "Candle deck empty → most [Religion] wins."},
     {"name": "Sword Zone", "tags": ["Zone"], "deck": "sword",  "count": 1,
-     "setupText": "2 face-up cards — the Tourney.",
-     "orderText": "On Order — Injustice (2+ [Mob] in any\n"
-                  "Domain): tyrant puts [Unit] in their Domain, you put rest in yours.\n"
-                  "Peace (Joust): challenge an opponent.\n"
-                  "Accept = both pick 1. Refuse = Brawl in\n"
-                  "both Domains. Refill Tourney to 2.",
-     "endgameText": "Player with most [Chivalry] wins."},
+     "setupText": "Set aside 2 cards face-up — the Tourney.",
+     "orderText": "On Order (2+ [Mob] in any Domain) — put all [Unit] cards from the Tourney into the Domain with 2+ [Mob]. Put the rest into yours. Refill the Tourney to 2.\n"
+                  "On Order (no 2+ [Mob] in any Domain) — pick a Tourney card and an opponent. They get the other. They choose:\n"
+                  "• *Honor* — keep your cards.\n"
+                  "• *Dishonor* — swap cards, then Brawl both Domains.\n"
+                  "Refill the Tourney to 2.",
+     "endgameText": "Sword deck + Tourney empty → most [Chivalry] wins."},
 ]
 
 # ---------------------------------------------------------------------------
@@ -262,7 +258,7 @@ body {
 
 .card-endgame {
   padding: 1.5mm 3mm;
-  font-size: 8.5pt;
+  font-size: 6.5pt;
   font-weight: 800;
   text-align: center;
   text-transform: uppercase;
@@ -298,7 +294,7 @@ body {
 
 .card-section-body {
   padding: 1mm 3mm 2mm;
-  font-size: 11pt;
+  font-size: 8pt;
   line-height: 1.25;
   color: #000;
   white-space: pre-wrap;
@@ -398,7 +394,7 @@ _EVENT_KEYWORD = re.compile(
 _BOLD_KEYWORDS = re.compile(
     r'\b('
     r'Brawl|Rite|Feast|Harvest|Rumour|Order'
-    r'|Hunt|Season|Fields|Wares|Opportunities|Revelation|Tourney'
+    r'|Hunt|Season|Fields|Wares|Opportunities|Tourney|Village'
     r'|Requires'
     r')\b'
 )
