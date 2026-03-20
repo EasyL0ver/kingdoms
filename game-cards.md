@@ -422,7 +422,7 @@ On Harvest (*not your turn*) — discard 2 cards from your Domain, draw 2 cards 
 ```
 🌾  HERB GARDEN
 [Nature]
-On Harvest — Order Advice or Wheat zone.
+On Harvest — Order Advice or Expand.
 ```
 
 > *Your choice.*
